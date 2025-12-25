@@ -1,0 +1,55 @@
+version: "3.8"
+
+services:
+  # Service สำหรับ Web Server (PHP + Apache)
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: skj2025_app
+    restart: always
+    ports:
+      - "8080:80" # เข้าเว็บผ่าน http://localhost:8080
+      - "443:443" # เข้าเว็บผ่าน https://localhost
+    volumes:
+      - .:/var/www/html:cached # เชื่อมไฟล์ในโฟลเดอร์ปัจจุบันเข้าไปใน Container (Added :cached for speed)
+      - /var/www/html/vendor # Trick: เก็บ vendor ไว้ใน Container เพื่อความเร็ว (ไม่ต้อง Sync กับ Windows)
+      - D:/librarie_skj:/domains/librarie_skj:cached # เชื่อม Library กลาง
+    environment:
+      - CI_ENVIRONMENT=development
+    depends_on:
+      - db
+
+  # Service สำหรับ Database (MySQL)
+  db:
+    image: mysql:5.7 # ใช้เวอร์ชั่น 5.7 เพื่อความเข้ากันได้กับโปรเจคเก่า (เปลี่ยนเป็น 8.0 ได้ถ้าต้องการ)
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --skip-character-set-client-handshake
+    container_name: skj2025_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword # รหัสผ่าน Root ของ Database
+      MYSQL_DATABASE: skjacth_skj # ชื่อ Database หลักที่จะถูกสร้างอัตโนมัติ
+      MYSQL_USER: user
+      MYSQL_PASSWORD: userpassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql # เก็บข้อมูลถาวรแม้ลบ Container
+
+  # Service สำหรับจัดการ Database ผ่านหน้าเว็บ (phpMyAdmin)
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: skj2025_pma
+    restart: always
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: rootpassword
+      UPLOAD_LIMIT: 128M
+    ports:
+      - "8081:80" # เข้าจัดการ DB ผ่าน http://localhost:8081
+    depends_on:
+      - db
+
+volumes:
+  db_data:
