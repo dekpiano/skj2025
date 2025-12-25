@@ -37,7 +37,10 @@ class ConAdminNews extends \App\Controllers\BaseController
         ]);
 
         if (!$validateImg) {           
-           print_r('กรุณาอัปโหลดไฟล์รูปภาพ (jpg, jpeg, png, gif)');
+            return $this->response->setJSON([
+                'status' => false,
+                'message' => 'กรุณาอัปโหลดไฟล์รูปภาพที่ถูกต้อง (jpg, jpeg, png, gif)'
+            ]);
         } else {
             
             $imageFile = $this->request->getFile('news_img'); 
@@ -61,8 +64,15 @@ class ConAdminNews extends \App\Controllers\BaseController
                    'news_category' => $this->request->getPost('news_category'),
                    'personnel_id' => session('AdminID')
                 ];
-                $save = $builder->insert($data);
-                echo $save;
+                $builder->insert($data);
+                $insertID = $database->getInsertID();
+                $newData = $builder->where('news_id', $NewsIdNew)->get()->getRowArray();
+
+                return $this->response->setJSON([
+                    'status' => true,
+                    'message' => 'บันทึกข่าวสำเร็จ!',
+                    'data' => $newData
+                ]);
             } else {
                 $data = [
                     'news_id' => $NewsIdNew,
@@ -72,8 +82,14 @@ class ConAdminNews extends \App\Controllers\BaseController
                     'news_category' => $this->request->getPost('news_category'),
                     'personnel_id' => session('AdminID')
                 ];
-                $save = $builder->insert($data);
-                echo $save;
+                $builder->insert($data);
+                $newData = $builder->where('news_id', $NewsIdNew)->get()->getRowArray();
+
+                return $this->response->setJSON([
+                    'status' => true,
+                    'message' => 'บันทึกข่าวสำเร็จ!',
+                    'data' => $newData
+                ]);
             }
         }
     }
@@ -128,8 +144,10 @@ class ConAdminNews extends \App\Controllers\BaseController
             ]);
 
             if (!$validateImg) {
-                print_r('กรุณาอัปโหลดไฟล์รูปภาพที่ถูกต้อง (jpg, jpeg, png, gif)');
-                return;
+                return $this->response->setJSON([
+                    'status' => false,
+                    'message' => 'กรุณาอัปโหลดไฟล์รูปภาพที่ถูกต้อง (jpg, jpeg, png, gif)'
+                ]);
             }
 
             // Delete the old cover image
@@ -150,7 +168,14 @@ class ConAdminNews extends \App\Controllers\BaseController
 
         $builder->where('news_id', $id);
         $save = $builder->update($updateData);
-        echo $save;
+
+        $updatedData = $builder->where('news_id', $id)->get()->getRowArray();
+
+        return $this->response->setJSON([
+            'status' => $save ? true : false,
+            'message' => $save ? 'อัปเดตข่าวสำเร็จ!' : 'อัปเดตข่าวไม่สำเร็จ!',
+            'data' => $updatedData
+        ]);
     }
 
     // Helper function to extract image URLs from HTML content
@@ -265,9 +290,15 @@ class ConAdminNews extends \App\Controllers\BaseController
 
             // 3. Delete the news record from the database
             $result = $this->NewsModel->delete(['news_id' => $id]);
-            echo $result;
+            return $this->response->setJSON([
+                'status' => $result ? true : false,
+                'message' => $result ? 'ลบข่าวสำเร็จ!' : 'ลบข่าวไม่สำเร็จ!'
+            ]);
         } else {
-            echo 0; // News item not found
+            return $this->response->setJSON([
+                'status' => false,
+                'message' => 'ไม่พบข้อมูลข่าว'
+            ]);
         }
     }
 
@@ -397,7 +428,14 @@ class ConAdminNews extends \App\Controllers\BaseController
             'news_category' => $this->request->getVar('news_category_facebook'),
             'personnel_id' => session('AdminID')
             ];
-        $save = $builder->insert($data);
+        $builder->insert($data);
+        $newData = $builder->where('news_id', $NewsIdNew)->get()->getRowArray();
+
+        return $this->response->setJSON([
+            'status' => true,
+            'message' => 'ดึงข้อมูลจาก Facebook สำเร็จ!',
+            'data' => $newData
+        ]);
        
     }
 

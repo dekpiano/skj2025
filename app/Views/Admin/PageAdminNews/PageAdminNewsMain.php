@@ -1,217 +1,144 @@
 <?= $this->extend('Admin/layout/AdminLayout') ?>
 
 <?= $this->section('content') ?>
-                <!-- Content -->
-                <style>
-                table td {
-                    word-break: break-word;
-                    vertical-align: top;
-                    white-space: normal !important;
-                }
-                </style>
-                <div class="container-xxl flex-grow-1 container-p-y">
-                    <div class="row">
-                        <div class="col-lg-12 mb-4 order-0">
-                            <div class="card p-3">
-                                <div class="d-flex justify-content-between align-content-center">
-                                    <h5 class="">ตารางข่าวประชาสัมพันธ์</h5>
-                                    <div>
-                                        <button class="btn btn-primary" id="AddNews">+ เพิ่มข่าวด้วยตนเอง</button>
-                                        <button class="btn btn-primary" id="AddFacebook">+ เพิ่มข่าวจาก
-                                            Facebook</button>
-                                    </div>
+<link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
+<link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 
+<div class="container-xxl flex-grow-1 container-p-y">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-bold py-3 mb-0">
+            <span class="text-muted fw-light">แดชบอร์ด /</span> ข่าวประชาสัมพันธ์
+        </h4>
+        <div class="d-flex gap-2">
+            <button class="btn btn-outline-primary" id="AddFacebook">
+                <i class="bx bxl-facebook-circle me-1"></i> ดึงข่าวจาก Facebook
+            </button>
+            <button class="btn btn-primary" id="AddNews">
+                <i class="bx bx-plus me-1"></i> เพิ่มข่าวสารใหม่
+            </button>
+        </div>
+    </div>
+
+    <!-- News List Card -->
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white py-3 d-flex align-items-center justify-content-between border-bottom">
+            <h5 class="mb-0 text-primary fw-bold">ตารางข่าวประชาสัมพันธ์</h5>
+            <small class="text-muted">รายการข่าวทั้งหมดที่แสดงบนเว็บไซต์</small>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive text-nowrap">
+                <table class="table table-hover align-middle mb-0" id="myTable">
+                    <thead class="table-light">
+                        <tr>
+                            <th width="45%">หัวข้อข่าว</th>
+                            <th width="20%">ประเภทข่าว</th>
+                            <th width="20%">วันที่สร้าง</th>
+                            <th width="15%">การจัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                        <?php foreach ($news as $v_news) : ?>
+                        <tr id="<?= $v_news->news_id ?>">
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <?php if($v_news->news_img): ?>
+                                        <img src="<?= base_url('uploads/news/'.$v_news->news_img) ?>" class="rounded me-3" width="50" height="30" style="object-fit: cover;">
+                                    <?php else: ?>
+                                        <div class="rounded bg-label-secondary me-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 30px;">
+                                            <i class="bx bx-image-alt small"></i>
+                                        </div>
+                                    <?php endif; ?>
+                                    <span class="fw-bold text-dark text-truncate" style="max-width: 350px;" title="<?= $v_news->news_topic ?>">
+                                        <?= $v_news->news_topic ?>
+                                    </span>
                                 </div>
-
-                                <div class="table-responsive text-nowrap">
-                                    <table
-                                        class="datatables-basic table border-top dataTable no-footer dtr-column collapsed"
-                                        id="myTable">
-                                        <colgroup>
-                                            <col style="width: 50%;"> <!-- หัวข้อ -->
-                                            <col style="width: 20%;"> <!-- ประเภทข่าว -->
-                                            <col style="width: 20%;"> <!-- วันที่สร้าง -->
-                                            <col style="width: 10%;"> <!-- คำสั่ง -->
-                                        </colgroup>
-                                        <thead>
-                                            <tr>
-                                                <th>หัวข้อ</th>
-                                                <th>ประเภทข่าว</th>
-                                                <th>วันที่สร้าง</th>
-                                                <th>คำสั่ง</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="table-border-bottom-0">
-                                            <?php foreach ($news as $key => $v_news) : ?>
-                                            <tr id="<?=$v_news->news_id?>">
-                                                <td>
-                                                    <strong><?=$v_news->news_topic?></strong>
-                                                </td>
-                                                <td><?=$v_news->news_category?></td>
-                                                <td><?=$v_news->news_date?></td>
-                                                <td>
-                                                    <div class="btn-group" role="group" aria-label="คำสั่ง">
-                                                        <a class="btn btn-outline-primary btn-sm EditNews" href="javascript:void(0);"
-                                                            key-newsid="<?=$v_news->news_id?>" title="แก้ไข">
-                                                            <i class="bx bx-edit-alt"></i>
-                                                        </a>
-                                                        <a class="btn btn-outline-danger btn-sm DeleteNews" href="javascript:void(0);"
-                                                            key-newsid="<?=$v_news->news_id?>" title="ลบ">
-                                                            <i class="bx bx-trash"></i>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <?php endforeach; ?>
-
-
-
-                                        </tbody>
-                                    </table>
+                            </td>
+                            <td>
+                                <span class="badge <?= $v_news->news_category == 'ข่าวรางวัล' ? 'bg-label-success' : ($v_news->news_category == 'ข่าวกิจกรรม' ? 'bg-label-info' : 'bg-label-primary') ?>">
+                                    <?= $v_news->news_category ?>
+                                </span>
+                            </td>
+                            <td>
+                                <small class="text-muted"><i class="bx bx-calendar me-1"></i><?= date('Y/m/d H:i', strtotime($v_news->news_date)) ?></small>
+                            </td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-sm btn-icon btn-outline-info EditNews" key-newsid="<?= $v_news->news_id ?>" title="แก้ไข">
+                                        <i class="bx bx-edit-alt"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-icon btn-outline-danger DeleteNews" key-newsid="<?= $v_news->news_id ?>" title="ลบ">
+                                        <i class="bx bx-trash"></i>
+                                    </button>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-
-                </div>
-                <!-- / Content -->
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 <?= $this->endSection() ?>
 
 <?= $this->section('modals') ?>
-
-<!-- Modal เพิ่มข่าว -->
-<div class="modal fade" id="ModalAddNews" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-99"
-    aria-labelledby="staticBackdropLabel" aria-hidden="false">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">เพิ่มข่าว</h5>
+<!-- Modal Manage News (Add/Edit) -->
+<div class="modal fade" id="ModalNews" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content shadow-lg border-0">
+            <div class="modal-header border-bottom">
+                <h5 class="modal-title text-primary fw-bold" id="ModalNewsTitle">จัดการข่าวสาร</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="form-news" method="post" action="<?=base_url('Admin/News/AddNews')?>"
-                enctype="multipart/form-data" class="needs-validation" novalidate>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <div class="mb-3">
-                                <label for="news_topic" class="form-label">หัวข้อข่าว</label>
-                                <input type="text" class="form-control" name="news_topic" id="news_topic"
-                                    placeholder="ใส่หัวข้อข่าว..." required>
-                                <div class="invalid-feedback">
-                                    กรุณาใส่หัวข้อข่าว
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="news_content_editor" class="form-label">เนื้อหาข่าว</label>
-                                <div id="news_content_editor" style="height: 300px;"></div>
-                                <input type="hidden" name="news_content" id="news_content">
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="mb-3">
-                                <label for="news_category" class="form-label">ประเภทข่าว</label>
-                                <select class="form-select" name="news_category" id="news_category" required>
-                                    <option selected disabled value="">เลือกประเภทข่าว...</option>
-                                    <option value="ข่าวประชาสัมพันธ์">ข่าวประชาสัมพันธ์</option>
-                                    <option value="ข่าวกิจกรรม">ข่าวกิจกรรม</option>
-                                    <option value="ข่าวรางวัล">ข่าวรางวัล</option>
-                                </select>
-                                <div class="invalid-feedback">
-                                    กรุณาเลือกประเภทข่าว
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="news_date" class="form-label">วันที่ลง</label>
-                                <input class="form-control" type="datetime-local"
-                                    value="<?=date('Y-m-d H:i:s')?>" id="news_date" name="news_date" required>
-                                <div class="invalid-feedback">
-                                    กรุณาเลือกวันที่ลง
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="news_img" class="form-label">รูปภาพหน้าปก</label>
-                                <input type="file" name="news_img" id="news_img">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
-                    <button type="submit" class="btn btn-primary" id="submitAddNewsBtn">
-                        <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                        <span class="btn-text">บันทึก</span>
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- Modal แก้ไขข่าว -->
-<div class="modal fade" id="ModalEditNews" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-99"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">แก้ไขข่าว</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form id="form-update-news" method="post" action="<?=base_url('Admin/News/UpdateNews')?>"
-                enctype="multipart/form-data" class="needs-validation" novalidate>
-                <input type="hidden" name="edit_news_id" id="edit_news_id">
+            <form id="form-news-manage" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="edit_news_id" id="news_id">
                 <input type="hidden" name="original_news_img" id="original_news_img">
-                <div class="modal-body">
+                <div class="modal-body p-4">
                     <div class="row">
-                        <div class="col-md-8">
-                            <div class="mb-3">
-                                <label for="edit_news_topic" class="form-label">หัวข้อข่าว</label>
-                                <input type="text" class="form-control" name="edit_news_topic" id="edit_news_topic"
-                                    placeholder="ใส่หัวข้อข่าว..." required>
-                                <div class="invalid-feedback">
-                                    กรุณาใส่หัวข้อข่าว
-                                </div>
+                        <div class="col-lg-8 border-end">
+                            <div class="form-floating form-floating-outline mb-4">
+                                <input type="text" class="form-control" name="news_topic" id="news_topic" placeholder="ใส่หัวข้อข่าว..." required>
+                                <label for="news_topic">หัวข้อข่าวประชาสัมพันธ์</label>
                             </div>
+
                             <div class="mb-3">
-                                <label for="edit_news_content_editor" class="form-label">เนื้อหาข่าว</label>
-                                <div id="edit_news_content_editor" style="height: 300px;"></div>
-                                <input type="hidden" name="edit_news_content" id="edit_news_content">
+                                <label class="form-label text-uppercase fw-bold small text-muted mb-2">เนื้อหาข่าวละเอียด</label>
+                                <div id="editor_wrapper" class="rounded border overflow-hidden">
+                                    <div id="news_editor" style="height: 450px; border: none;"></div>
+                                </div>
+                                <input type="hidden" name="news_content" id="news_content_val">
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="mb-3">
-                                <label for="edit_news_category" class="form-label">ประเภทข่าว</label>
-                                <select class="form-select" name="edit_news_category" id="edit_news_category" required>
-                                    <option selected disabled value="">เลือกประเภทข่าว...</option>
+                        <div class="col-lg-4">
+                            <div class="form-floating form-floating-outline mb-4">
+                                <select class="form-select" name="news_category" id="news_category" required>
                                     <option value="ข่าวประชาสัมพันธ์">ข่าวประชาสัมพันธ์</option>
                                     <option value="ข่าวกิจกรรม">ข่าวกิจกรรม</option>
                                     <option value="ข่าวรางวัล">ข่าวรางวัล</option>
                                 </select>
-                                <div class="invalid-feedback">
-                                    กรุณาเลือกประเภทข่าว
-                                </div>
+                                <label for="news_category">ประเภทข่าว</label>
                             </div>
-                            <div class="mb-3">
-                                <label for="edit_news_date" class="form-label">วันที่ลง</label>
-                                <input class="form-control" type="datetime-local" id="edit_news_date" name="edit_news_date" required>
-                                <div class="invalid-feedback">
-                                    กรุณาเลือกวันที่ลง
-                                </div>
+
+                            <div class="form-floating form-floating-outline mb-4">
+                                <input class="form-control" type="datetime-local" id="news_date" name="news_date" required>
+                                <label for="news_date">วันที่ประกาศ</label>
                             </div>
-                            <div class="mb-3">
-                                <label for="edit_news_img" class="form-label">รูปภาพหน้าปก</label>
-                                <input type="file" name="edit_news_img" id="edit_news_img">
+
+                            <div class="mb-0">
+                                <label class="form-label text-uppercase fw-bold small text-muted mb-2">รูปภาพหน้าปกข่าว</label>
+                                <input type="file" name="news_img" id="news_img_pond">
+                                <small class="text-muted mt-2 d-block">* ขนาดแนะนำ 1920x1080 px</small>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
-                    <button type="submit" class="btn btn-primary" id="submitEditNewsBtn">
-                        <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                        <span class="btn-text">บันทึกการเปลี่ยนแปลง</span>
+                <div class="modal-footer border-top">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                    <button type="submit" class="btn btn-primary px-4" id="submitNewsBtn">
+                        <span class="spinner-border spinner-border-sm d-none me-1" role="status" aria-hidden="true"></span>
+                        <i class="bx bx-save me-1"></i> บันทึกข้อมูล
                     </button>
                 </div>
             </form>
@@ -219,737 +146,340 @@
     </div>
 </div>
 
-
-<!-- Modal เพิ่มข่าว -->
-<div class="modal fade" id="ModalAddNewsFromFacebook" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-99"
-    aria-labelledby="staticBackdropLabel" aria-hidden="false">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">เพิ่มข่าวจาก Facebook</h5>
+<!-- Modal Facebook Import -->
+<div class="modal fade" id="ModalFacebook" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content shadow-lg border-0">
+            <div class="modal-header border-bottom">
+                <h5 class="modal-title text-primary fw-bold"><i class="bx bxl-facebook-square me-1"></i> ดึงข่าวจาก Facebook Page</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-
-            <form id="form-news-feacbook" method="post" action="<?=base_url('Admin/News/Add/NewsFeacbook')?>"
-                enctype="multipart/form-data" class="needs-validation" novalidate>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="news_topic" class="form-label">เลือกข่าวจาก Facebook</label>
-                        <select class="form-select form-select" name="sel_NewsFromFacebook" id="sel_NewsFromFacebook">
-                            <option value="">กรุณาเลือกข่าว</option>
+            <form id="form-news-facebook" method="post" action="<?=base_url('Admin/News/Add/NewsFeacbook')?>">
+                <div class="modal-body p-4">
+                    <div class="form-floating form-floating-outline mb-4">
+                        <select class="form-select" name="sel_NewsFromFacebook" id="sel_NewsFromFacebook">
+                            <option value="">-- กำลังโหลดข้อมูลจาก Facebook... --</option>
                         </select>
+                        <label for="sel_NewsFromFacebook">เลือกโพสต์ที่ต้องการ</label>
                     </div>
-                    <hr>
 
-                    <div class="mb-3">
-                        <label for="news_topic" class="form-label">หัวห้อข่าว</label>
-                        <input type="text" class="form-control mb-3" name="news_topic_facebook" id="news_topic_facebook"
-                            placeholder="ใส่หัวข้อข่าว..." aria-describedby="floatingInputHelp" required>
-                        <div class="invalid-feedback">
-                            ใส่หัวข้อข่าว
+                    <div id="fb_preview" class="d-none animate__animated animate__fadeIn">
+                        <div class="row">
+                            <div class="col-md-7 border-end">
+                                <div class="form-floating form-floating-outline mb-3">
+                                    <input type="text" class="form-control" name="news_topic_facebook" id="news_topic_facebook" required>
+                                    <label>หัวข้อข่าว</label>
+                                </div>
+                                <div class="form-floating form-floating-outline mb-3">
+                                    <input class="form-control" type="datetime-local" id="news_date_facebook" name="news_date_facebook" required>
+                                    <label>วันที่โพสต์</label>
+                                </div>
+                                <div class="form-floating form-floating-outline mb-3">
+                                    <select class="form-select" name="news_category_facebook" id="news_category_facebook">
+                                        <option value="ข่าวประชาสัมพันธ์">ข่าวประชาสัมพันธ์</option>
+                                        <option value="ข่าวกิจกรรม">ข่าวกิจกรรม</option>
+                                        <option value="ข่าวรางวัล">ข่าวรางวัล</option>
+                                    </select>
+                                    <label>ประเภทข่าว</label>
+                                </div>
+                                <div class="mb-0">
+                                    <label class="form-label small fw-bold text-muted">เนื้อหาโพสต์</label>
+                                    <div id="editor_facebook" style="height: 200px;" class="border rounded"></div>
+                                    <input type="hidden" name="news_content_facebook" id="news_content_facebook_val">
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="form-label small fw-bold text-muted d-block">รูปภาพจากโพสต์</label>
+                                <img src="" id="blah_facebook" class="img-fluid rounded shadow-sm border">
+                                <input type="hidden" name="news_img_facebook" id="news_img_facebook_url">
+                            </div>
                         </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="news_category" class="form-label">ประเภทข่าว</label>
-                        <select id="largeSelect" class="form-select form-select" name="news_category_facebook"
-                            id="news_category_facebook" required>
-                            <option value="ข่าวประชาสัมพันธ์">ข่าวประชาสัมพันธ์</option>
-                            <option value="ข่าวกิจกรรม">ข่าวกิจกรรม</option>
-                            <option value="ข่าวรางวัล">ข่าวรางวัล</option>
-                        </select>
-                        <div class="invalid-feedback">
-                            เลือกประเภทข่าว
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="exampleFormControlInput1" class="form-label">วันที่ลง</label>
-                        <input class="form-control" type="datetime-local" value="" id="news_date_facebook"
-                            name="news_date_facebook">
-                        <div class="invalid-feedback">
-                            เลือกวันที่ลง
-                        </div>
-                    </div>
-
-                    <!-- Create the editor container -->
-                    <div id="editor_facebook" class="mb-3">
-                        <p>ใส่เนื้อหาข่าวที่นี่....</p>
-                    </div>
-                    <div class="mb-3">
-                        <label for="news_img" class="form-label">รูปภาหน้าปก</label>
-
-                        <img src="" alt="" id="blah_facebook" class="img-fluid">
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" id="btn-submit-news-facebook">
-                        <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                        <span class="btn-text">บันทึก</span>
+                <div class="modal-footer border-top">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                    <button type="submit" class="btn btn-primary px-4 d-none" id="btn-submit-news-facebook">
+                        <span class="spinner-border spinner-border-sm d-none me-1" role="status" aria-hidden="true"></span>
+                        <i class="bx bx-import me-1"></i> ดึงข้อมูลข่าว
                     </button>
                 </div>
-
             </form>
-
         </div>
     </div>
 </div>
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
-<link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
-<link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
-<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-<script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
-<script src="https://unpkg.com/filepond/dist/filepond.js"></script>
+<script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.min.js"></script>
+<script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.js"></script>
+<script src="https://unpkg.com/filepond/dist/filepond.min.js"></script>
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-<script>
-    // Register the FilePond plugin
-    FilePond.registerPlugin(FilePondPluginImagePreview);
-</script>
 <script src="https://unpkg.com/quill-image-resize-module@3.0.0/image-resize.min.js"></script>
+
 <script>
+    FilePond.registerPlugin(FilePondPluginImagePreview, FilePondPluginFileValidateType);
     Quill.register('modules/imageResize', ImageResize.default);
-</script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<script>
-    // All page-specific JS is now inlined
-    $('#myTable').DataTable({
-        "columnDefs": [{
-            "width": "20%",
-            "targets": 0
-        }],
-        order: [
-            [3, 'desc']
-        ],
-        autoWidth: false,
-        columns: [
-            { width: '5px' },
-            { width: '300px' },
-            { width: '50px' },
-            { width: '50px' }
-        ]
-    });
-    let editPond;
-    let addPond; // Declare addPond here
+    let pond;
+    let quill;
+    let quillFB;
+    const BASE_URL = "<?= base_url() ?>";
 
-    $(document).on("click", "#AddNews", function() {
-        var myModal = new bootstrap.Modal(document.getElementById("ModalAddNews"), {});
-        myModal.show();
-
-        // Initialize FilePond for add form
-        const addInputElement = document.querySelector('input[name="news_img"]');
-        addPond = FilePond.create(addInputElement, {
-            labelIdle: `ลากและวางไฟล์ หรือ <span class="filepond--label-action">เลือกไฟล์</span>`,
-            imagePreviewHeight: 170,
+    $(document).ready(function() {
+        const dataTable = $('#myTable').DataTable({
+            order: [[2, 'desc']],
+            language: {
+                search: "_INPUT_",
+                searchPlaceholder: "ค้นหาข่าว...",
+            }
         });
-    });
 
-    // Destroy FilePond instance when Add modal is hidden
-    $('#ModalAddNews').on('hidden.bs.modal', function () {
-        if (addPond) {
-            addPond.destroy();
-            addPond = null;
-        }
-    });
+        // Initialize Quill Editor
+        const toolbarOptions = [
+            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+            ['bold', 'italic', 'underline', 'strike'],
+            [{ 'color': [] }, { 'background': [] }],
+            [{ 'align': [] }],
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+            ['link', 'image', 'video'],
+            ['clean']
+        ];
 
-    $(document).on("submit", "#form-news", function(e) {
-        e.preventDefault();
-
-        const form = $(this);
-        const submitBtn = $('#submitAddNewsBtn');
-        const spinner = submitBtn.find('.spinner-border');
-        const btnText = submitBtn.find('.btn-text');
-
-        // Show spinner and disable button
-        spinner.removeClass('d-none');
-        btnText.text('กำลังบันทึก...');
-        submitBtn.prop('disabled', true);
-
-        // Get the first file from FilePond (using addPond for the add form)
-        const file = addPond.getFile();
-
-        const formData = new FormData(this);
-        formData.append("news_content", quill.root.innerHTML);
-
-        // Add the file to the form data if it exists
-        if (file) {
-            formData.append('news_img', file.file);
-        }
-
-        $.ajax({
-            url: form.attr('action'),
-            type: "post",
-            data: formData,
-            processData: false,
-            contentType: false,
-            cache: false,
-            async: true, // Changed to async: true for better UX with spinner
-            success: function(data) {
-                // Hide spinner and enable button
-                spinner.addClass('d-none');
-                btnText.text('บันทึก');
-                submitBtn.prop('disabled', false);
-
-                $('#ModalAddNews').modal('hide');
-                if (data == 1) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'บันทึกข้อมูลสำเร็จ',
-                        showConfirmButton: false,
-                        timer: 1500
-                    }).then(() => {
-                        location.reload();
-                    });
-                } else {
-                    Swal.fire(
-                        'แจ้งเตือน!',
-                        data + '!',
-                        'error'
-                    );
-                }
+        quill = new Quill('#news_editor', {
+            modules: {
+                toolbar: {
+                    container: toolbarOptions,
+                    handlers: { image: quillImageHandler }
+                },
+                imageResize: { modules: ['Resize', 'DisplaySize', 'Toolbar'] }
             },
-            error: function(xhr, status, error) {
-                // Hide spinner and enable button
-                spinner.addClass('d-none');
-                btnText.text('บันทึก');
-                submitBtn.prop('disabled', false);
-
-                Swal.fire({
-                    icon: 'error',
-                    title: 'เกิดข้อผิดพลาด!',
-                    text: 'ไม่สามารถบันทึกข้อมูลได้: ' + error,
-                });
-            }
+            theme: 'snow',
+            placeholder: 'เขียนข่าวของคุณที่นี่...'
         });
-    });
 
-    $(document).on("click", ".EditNews", function() {
-        var myModal = new bootstrap.Modal(document.getElementById("ModalEditNews"), {});
-        myModal.show();
+        quillFB = new Quill('#editor_facebook', { theme: 'snow', placeholder: 'เนื้อหาจาก Facebook...' });
 
-        const editInputElement = document.querySelector('#edit_news_img');
-
-        $.post("../Admin/News/EditNews", {
-            KeyNewsid: $(this).attr('key-newsid')
-        }, function(data, status) {
-            const news = data[0];
-            
-            // Populate form fields
-            $('#edit_news_id').val(news.news_id);
-            $('#edit_news_topic').val(news.news_topic);
-            $('#edit_news_date').val(news.news_date.slice(0, 16)); // Format for datetime-local
-            $('#edit_news_category').val(news.news_category);
-            $('#original_news_img').val(news.news_img);
-
-            // Set content for Quill editor
-            const delta = Editquill.clipboard.convert(news.news_content);
-            Editquill.setContents(delta, 'silent');
-
-            // Initialize FilePond with the existing image
-            let filePondOptions = {
-                labelIdle: `ลากไฟล์มาเพื่อเปลี่ยน หรือ <span class="filepond--label-action">คลิกเพื่อเปลี่ยนรูปภาพ</span>`,
-                imagePreviewHeight: 170,
-            };
-
-            if (news.news_img) {
-                filePondOptions.files = [{
-                    source: `${BASE_URL}/uploads/news/${news.news_img}`,
-                }];
-            }
-
-            editPond = FilePond.create(editInputElement, filePondOptions);
-
-        }, 'json');
-    });
-
-    // Destroy FilePond instance when Edit modal is hidden
-    $('#ModalEditNews').on('hidden.bs.modal', function () {
-        if (editPond) {
-            editPond.destroy();
-            editPond = null;
-        }
-    });
-
-    $(document).on("submit", "#form-update-news", function(e) {
-        e.preventDefault();
-
-        const form = $(this);
-        const submitBtn = $('#submitEditNewsBtn');
-        const spinner = submitBtn.find('.spinner-border');
-        const btnText = submitBtn.find('.btn-text');
-
-        // Show spinner and disable button
-        spinner.removeClass('d-none');
-        btnText.text('กำลังบันทึก...');
-        submitBtn.prop('disabled', true);
-
-        const formData = new FormData(this);
-        formData.append("edit_news_content", Editquill.root.innerHTML);
-
-        // Get file from FilePond instance for the edit form
-        const file = editPond.getFile();
-        if (file) {
-            formData.append('edit_news_img', file.file);
-        }
-
-        $.ajax({
-            url: form.attr('action'),
-            type: "post",
-            data: formData,
-            processData: false,
-            contentType: false,
-            cache: false,
-            async: true, // Changed to async: true for better UX with spinner
-            success: function(data) {
-                // Hide spinner and enable button
-                spinner.addClass('d-none');
-                btnText.text('บันทึกการเปลี่ยนแปลง');
-                submitBtn.prop('disabled', false);
-
-                $('#ModalEditNews').modal('hide');
-                if (data == 1) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'บันทึกการเปลี่ยนแปลงสำเร็จ',
-                        showConfirmButton: false,
-                        timer: 1500
-                    }).then(() => {
-                        location.reload();
-                    });
-                } else {
-                    Swal.fire(
-                        'แจ้งเตือน!',
-                        data + '!',
-                        'error'
-                    );
-                }
-            },
-            error: function(xhr, status, error) {
-                // Hide spinner and enable button
-                spinner.addClass('d-none');
-                btnText.text('บันทึกการเปลี่ยนแปลง');
-                submitBtn.prop('disabled', false);
-
-                Swal.fire({
-                    icon: 'error',
-                    title: 'เกิดข้อผิดพลาด!',
-                    text: 'ไม่สามารถบันทึกข้อมูลได้: ' + error,
-                });
-            }
-        });
-    });
-
-    $(document).on("click", ".DeleteNews", function() {
-        let newsid = $(this).attr('key-newsid');
-        Swal.fire({
-            title: 'แจ้งเตือน?',
-            text: "ต้องการลบข้อมูลข่าวหรือไม่!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.post("../Admin/News/DeleteNews", {
-                    KeyNewsid: $(this).attr('key-newsid')
-                }, function(data, status) {
-                    console.log(data);
-                    if (data == 1) {
-                        $('#' + newsid).remove();
-                    }
-                });
-            }
-        })
-
-    });
-
-    $(document).on("click", "#AddFacebook", function() {
-        var myModal = new bootstrap.Modal(document.getElementById("ModalAddNewsFromFacebook"), {});
-        myModal.show();
-        
-        $.post('../Admin/News/View/Facebook',function(data){
-            data = JSON.parse( data );
-
-            $.each(data['data'], function (i, item) {
-                if(item.message){
-                    $('#sel_NewsFromFacebook').append($('<option>', { 
-                        value: item.id,
-                        text : item.message.substr(0, 50)
-                    }));
-                }
-                
-            });
-                
-        },'json');
-    });
-
-    $(document).on("change", "#sel_NewsFromFacebook", function() {
-
-        $.post('../Admin/News/Select/Facebook',{KeyNewsFB:$(this).val()},function(data){
-            data = JSON.parse( data );
-            var formattedDateTime = convertISOToDateTimeInput(data.created_time);
-            $('#news_topic_facebook').val(data.message.substr(0, 100));
-            $('#news_date_facebook').val(formattedDateTime);
-            $('#blah_facebook').attr('src',data.full_picture)
-            const delta = quill.clipboard.convert(data.message);
-            quillFacebook.setContents(delta, 'silent');
-
-           // console.log(data);
-
-        },'json');
-    });
-
-    $(document).on("submit", "#form-news-feacbook", function(e) {
-        e.preventDefault();
-        const formData = new FormData(this);
-        formData.append("news_content_facebook", quillFacebook.root.innerHTML);
-        formData.append("news_img_facebook", $('#blah_facebook').attr('src'));
-
-         // ปุ่ม submit
-        const $btn = $('#btn-submit-news-facebook');
-        $btn.prop('disabled', true);
-        $btn.find('.spinner-border').removeClass('d-none');
-        $btn.find('.btn-text').text('กำลังบันทึก...');
-
-        $.ajax({
-            url: $('#form-news-feacbook').attr('action'),
-            type: "post",
-            data: formData,
-            processData: false,
-            contentType: false,
-            cache: false,
-            async: false,
-            success: function(data) {
-                console.log(data);
-                $('#ModalAddNewsFromFacebook').hide();
-                $('.modal-backdrop').remove();
-                if (data) {
-                    // คืนปุ่มเป็นปกติ
-                $btn.prop('disabled', false);
-                $btn.find('.spinner-border').addClass('d-none');
-                $btn.find('.btn-text').text('บันทึก');
-
-                    Swal.fire({
-                        position: 'top-end',
-                        icon: 'success',
-                        title: 'บันทึกข้อมูลสำเร็จ',
-                        showConfirmButton: false,
-                        timer: 3000
-                    }).then((result) => {
-                        if (result.dismiss === Swal.DismissReason.timer) {
-                            window.location.reload();
-                        }
-                    })
-                } else {
-                    Swal.fire(
-                        'แจ้งเตือน!',
-                        (data && data.message) ? data.message : 'บันทึกข้อมูลไม่สำเร็จ!',
-                        'error'
-                    );
-                }
-            },
-            error: function (jqXHR, exception) {
-                $btn.prop('disabled', false);
-                $btn.find('.spinner-border').addClass('d-none');
-                $btn.find('.btn-text').text('บันทึก');
-
-                Swal.fire(
-                    'เกิดข้อผิดพลาด!',
-                    jqXHR.responseText || 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้',
-                    'error'
-                );
-            }
-        });
-    });
-
-
-    function convertISOToDateTimeInput(isoDate) {
-        var date = new Date(isoDate);
-
-        // ดึงค่า ปี, เดือน, วัน
-        var year = date.getFullYear();
-        var month = date.getMonth() + 1; // เดือนใน JavaScript เริ่มจาก 0
-        var day = date.getDate();
-
-        // ดึงค่า ชั่วโมง และ นาที
-        var hours = date.getHours();
-        var minutes = date.getMinutes();
-
-        // ตรวจสอบให้เดือน, วัน, ชั่วโมง, นาทีมี 2 หลักเสมอ
-        if (month < 10) month = '0' + month;
-        if (day < 10) day = '0' + day;
-        if (hours < 10) hours = '0' + hours;
-        if (minutes < 10) minutes = '0' + minutes;
-
-        // คืนค่าที่เป็น 'ปี-เดือน-วันTHH:MM'
-        return year + '-' + month + '-' + day + 'T' + hours + ':' + minutes;
-    }
-</script>
-
-
-<script>
-    // This script block is now local to the News admin page.
-    const uploadedImageUrls = new Map(); 
-
-    function imageHandler() {
-        const input = document.createElement('input');
-        input.setAttribute('type', 'file');
-        input.setAttribute('accept', 'image/*');
-        input.click();
-
-        input.onchange = () => {
-            const file = input.files[0];
-            if (/^image\//.test(file.type)) {
+        // Image Handler for Quill (Upload to server)
+        function quillImageHandler() {
+            const input = document.createElement('input');
+            input.setAttribute('type', 'file');
+            input.setAttribute('accept', 'image/*');
+            input.click();
+            input.onchange = async () => {
+                const file = input.files[0];
                 const formData = new FormData();
                 formData.append('image', file);
-
-                const quillInstance = this.quill;
-
-                fetch(`${BASE_URL}/Admin/News/uploadImage`, {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        return response.json().then(err => { 
-                            throw new Error(err.error || `HTTP error! status: ${response.status}`);
-                        });
-                    }
-                    return response.json();
-                })
-                .then(result => {
+                
+                try {
+                    const response = await fetch(`${BASE_URL}/Admin/News/uploadImage`, { method: 'POST', body: formData });
+                    const result = await response.json();
                     if (result.url) {
-                        const range = quillInstance.getSelection();
-                        quillInstance.insertEmbed(range.index, 'image', result.url);
-
-                        if (!uploadedImageUrls.has(quillInstance)) {
-                            uploadedImageUrls.set(quillInstance, new Set());
-                        }
-                        uploadedImageUrls.get(quillInstance).add(result.url);
-                    } else if (result.error) {
-                        throw new Error(result.error);
+                        const range = quill.getSelection();
+                        quill.insertEmbed(range.index, 'image', result.url);
                     }
-                })
-                .catch(error => {
-                    console.error('Error uploading image:', error);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'อัปโหลดรูปภาพไม่สำเร็จ',
-                        text: 'เกิดข้อผิดพลาดในการอัปโหลดรูปภาพ: ' + error.message,
-                    });
-                });
-            } else {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'ไฟล์ไม่ถูกต้อง',
-                    text: 'กรุณาเลือกไฟล์รูปภาพเท่านั้น',
-                });
-            }
-        };
-    }
-
-    var toolbarOptions = [
-        ['bold', 'italic', 'underline', 'strike'],
-        ['blockquote', 'code-block'],
-        [{'header': 1}, {'header': 2}],
-        [{'list': 'ordered'}, {'list': 'bullet'}],
-        [{'script': 'sub'}, {'script': 'super'}],
-        [{'indent': '-1'}, {'indent': '+1'}],
-        [{'direction': 'rtl'}],
-        [{'size': ['small', false, 'large', 'huge']}],
-        [{'header': [1, 2, 3, 4, 5, 6, false]}],
-        [{'color': []}, {'background': []}],
-        [{'font': []}],
-        [{'align': []}],
-        ['clean'],
-        ['link', 'image']
-    ];
-
-    function addQuillDeleteListener(quillInstance) {
-        quillInstance.on('text-change', (delta, oldDelta, source) => {
-            if (source === 'user') {
-                const currentContent = quillInstance.getContents();
-                const currentImageUrls = new Set();
-                currentContent.ops.forEach(op => {
-                    if (op.insert && op.insert.image) {
-                        currentImageUrls.add(op.insert.image);
-                    }
-                });
-
-                const uploadedUrlsForThisQuill = uploadedImageUrls.get(quillInstance) || new Set();
-
-                uploadedUrlsForThisQuill.forEach(url => {
-                    if (!currentImageUrls.has(url)) {
-                        console.log('Image deleted from editor:', url);
-                        fetch(`${BASE_URL}/Admin/News/deleteImage`, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({ imageUrl: url }),
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                console.log('Image deleted from server:', url);
-                                uploadedUrlsForThisQuill.delete(url);
-                            } else {
-                                console.error('Failed to delete image from server:', data.message);
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error deleting image from server:', error);
-                        });
-                    }
-                });
-            }
-        });
-    }
-
-    function handleImageClick(event) {
-        const img = event.target;
-        const quill = Quill.find(img); 
-
-        if (quill && img.tagName === 'IMG' && img.classList.contains('ql-image')) {
-            // Deselect any other selected image
-            const currentlySelected = document.querySelector('.ql-image-selected');
-            if (currentlySelected) {
-                currentlySelected.classList.remove('ql-image-selected');
-            }
-            // Select the clicked image
-            img.classList.add('ql-image-selected');
-
-            // --- Delete Button ---
-            let deleteButton = document.querySelector('.ql-image-delete-button');
-            if (!deleteButton) {
-                deleteButton = document.createElement('button');
-                deleteButton.className = 'ql-image-delete-button';
-                deleteButton.innerHTML = '&#128465;'; // Trash can icon
-                Object.assign(deleteButton.style, {
-                    position: 'absolute',
-                    background: '#d9534f',
-                    color: 'white',
-                    border: 'none', borderRadius: '50%',
-                    width: '24px', height: '24px',
-                    cursor: 'pointer', zIndex: '1001',
-                    display: 'none', lineHeight: '24px', textAlign: 'center'
-                });
-                document.body.appendChild(deleteButton);
-
-                deleteButton.onclick = () => {
-                    const imageToDelete = document.querySelector('.ql-image-selected');
-                    if (imageToDelete) {
-                        const blot = Quill.find(imageToDelete);
-                        if (blot) {
-                            const index = quill.getIndex(blot);
-                            quill.deleteText(index, 1);
-                        }
-                    }
-                    deleteButton.style.display = 'none';
-                    document.querySelector('.ql-image-rotate-button').style.display = 'none';
-                };
-            }
-
-            // --- Rotate Button ---
-            let rotateButton = document.querySelector('.ql-image-rotate-button');
-            if (!rotateButton) {
-                rotateButton = document.createElement('button');
-                rotateButton.className = 'ql-image-rotate-button';
-                rotateButton.innerHTML = '&#8635;'; // Rotate icon
-                Object.assign(rotateButton.style, {
-                    position: 'absolute',
-                    background: '#5bc0de',
-                    color: 'white',
-                    border: 'none', borderRadius: '50%',
-                    width: '24px', height: '24px',
-                    cursor: 'pointer', zIndex: '1001',
-                    display: 'none', lineHeight: '24px', textAlign: 'center', fontWeight: 'bold'
-                });
-                document.body.appendChild(rotateButton);
-
-                rotateButton.onclick = () => {
-                    const imageToRotate = document.querySelector('.ql-image-selected');
-                    if (imageToRotate) {
-                        let currentRotation = imageToRotate.style.transform.match(/rotate\((\d+)deg\)/);
-                        currentRotation = currentRotation ? parseInt(currentRotation[1], 10) : 0;
-                        const newRotation = (currentRotation + 90) % 360;
-                        imageToRotate.style.transform = `rotate(${newRotation}deg)`;
-                    }
-                };
-            }
-
-            // Position and show buttons
-            const imgRect = img.getBoundingClientRect();
-            deleteButton.style.top = `${imgRect.top + window.scrollY}px`;
-            deleteButton.style.left = `${imgRect.right + window.scrollX - 24}px`;
-            deleteButton.style.display = 'block';
-
-            rotateButton.style.top = `${imgRect.top + window.scrollY}px`;
-            rotateButton.style.left = `${imgRect.right + window.scrollX - 52}px`;
-            rotateButton.style.display = 'block';
-
-            // Hide buttons when clicking elsewhere
-            document.addEventListener('click', (e) => {
-                if (e.target !== img && e.target !== deleteButton && e.target !== rotateButton) {
-                    deleteButton.style.display = 'none';
-                    rotateButton.style.display = 'none';
-                    img.classList.remove('ql-image-selected');
+                } catch (error) {
+                    console.error('Upload failed:', error);
                 }
-            }, { once: true });
+            };
         }
-    }
+
+        // Manage News (Add/Edit)
+        $('#AddNews').click(function() {
+            $('#ModalNewsTitle').text('เพิ่มข่าวสารใหม่');
+            $('#form-news-manage').attr('action', '<?= base_url('Admin/News/AddNews') ?>').trigger('reset');
+            $('#news_id').val('');
+            quill.setContents([]);
+            $('#news_date').val(new Date().toISOString().slice(0, 16));
+            initFilePond();
+            new bootstrap.Modal(document.getElementById("ModalNews")).show();
+        });
+
+        $(document).on("click", ".EditNews", function() {
+            const newsId = $(this).attr('key-newsid');
+            $('#ModalNewsTitle').text('แก้ไขข้อมูลข่าวสาร');
+            $('#form-news-manage').attr('action', '<?= base_url('Admin/News/UpdateNews') ?>');
+            
+            $.post('<?= base_url('Admin/News/EditNews') ?>', { KeyNewsid: newsId }, function(data) {
+                if(data && data[0]) {
+                    const news = data[0];
+                    $('#news_id').val(news.news_id);
+                    $('#news_topic').val(news.news_topic);
+                    $('#news_category').val(news.news_category);
+                    $('#news_date').val(news.news_date.replace(' ', 'T').slice(0, 16));
+                    $('#original_news_img').val(news.news_img);
+                    quill.root.innerHTML = news.news_content;
+                    initFilePond(news.news_img);
+                    new bootstrap.Modal(document.getElementById("ModalNews")).show();
+                }
+            }, 'json');
+        });
+
+        $('#form-news-manage').submit(function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const isUpdate = $('#news_id').val() !== '';
+            
+            // Set value for Add and Update fields specifically due to old controller structure
+            if(isUpdate) {
+                formData.set('edit_news_topic', $('#news_topic').val());
+                formData.set('edit_news_content', quill.root.innerHTML);
+                formData.set('edit_news_date', $('#news_date').val());
+                formData.set('edit_news_category', $('#news_category').val());
+                formData.set('edit_news_id', $('#news_id').val());
+            } else {
+                formData.set("news_content", quill.root.innerHTML);
+            }
+
+            const pondFile = pond ? pond.getFile() : null;
+            if (pondFile) {
+                formData.append(isUpdate ? 'edit_news_img' : 'news_img', pondFile.file);
+            }
+
+            $.ajax({
+                url: $(this).attr('action'),
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                beforeSend: function() {
+                    $('#submitNewsBtn').prop('disabled', true).find('.spinner-border').removeClass('d-none');
+                    Swal.fire({ title: 'กำลังประมวลผล...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); } });
+                },
+                complete: function() {
+                    $('#submitNewsBtn').prop('disabled', false).find('.spinner-border').addClass('d-none');
+                },
+                success: function(response) {
+                    if (response.status) {
+                        $('#ModalNews').modal('hide');
+                        Swal.fire({ icon: 'success', title: 'สำเร็จ!', text: response.message, timer: 1500, showConfirmButton: false });
+                        
+                        // Dynamically update UI or stay
+                        if (isUpdate) {
+                            const newsId = response.data.news_id;
+                            const row = $(`#${newsId}`);
+                            row.find('td:nth-child(1) .fw-bold').text(response.data.news_topic);
+                            if(response.data.news_img) {
+                                row.find('td:nth-child(1) img').attr('src', `${BASE_URL}/uploads/news/${response.data.news_img}`);
+                            }
+                            const catBadge = row.find('td:nth-child(2) .badge');
+                            catBadge.text(response.data.news_category);
+                            // Update badge color
+                            catBadge.removeClass().addClass('badge ' + (response.data.news_category == 'ข่าวรางวัล' ? 'bg-label-success' : (response.data.news_category == 'ข่าวกิจกรรม' ? 'bg-label-info' : 'bg-label-primary')));
+                        } else {
+                            // Stay but reload is easier for complex datatables
+                            window.location.reload();
+                        }
+                    }
+                }
+            });
+        });
+
+        // Facebook Import
+        $('#AddFacebook').click(function() {
+            new bootstrap.Modal(document.getElementById("ModalFacebook")).show();
+            $('#sel_NewsFromFacebook').html('<option value="">-- กำลังโหลดข้อมูล... --</option>');
+            $.post('<?= base_url('Admin/News/View/Facebook') ?>', function(data) {
+                data = JSON.parse(data);
+                let options = '<option value="">-- กรุณาเลือกโพสต์ที่ต้องการ --</option>';
+                data.data.forEach(item => {
+                    if(item.message) options += `<option value="${item.id}">${item.message.substr(0, 80)}...</option>`;
+                });
+                $('#sel_NewsFromFacebook').html(options);
+            }, 'json');
+        });
+
+        $('#sel_NewsFromFacebook').change(function() {
+            const val = $(this).val();
+            if(!val) return;
+            $.post('<?= base_url('Admin/News/Select/Facebook') ?>', { KeyNewsFB: val }, function(data) {
+                data = JSON.parse(data);
+                $('#fb_preview').removeClass('d-none');
+                $('#btn-submit-news-facebook').removeClass('d-none');
+                $('#news_topic_facebook').val(data.message.substr(0, 100));
+                $('#news_date_facebook').val(data.created_time.replace(' ', 'T').slice(0, 16));
+                $('#blah_facebook').attr('src', data.full_picture);
+                $('#news_img_facebook_url').val(data.full_picture);
+                quillFB.root.innerText = data.message;
+            }, 'json');
+        });
+
+        $('#form-news-facebook').submit(function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            formData.set("news_content_facebook", quillFB.root.innerHTML);
+            
+            $.ajax({
+                url: $(this).attr('action'),
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                beforeSend: function() {
+                    $('#btn-submit-news-facebook').prop('disabled', true).find('.spinner-border').removeClass('d-none');
+                    Swal.fire({ title: 'กำลังดึงข้อมูล...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); } });
+                },
+                complete: function() {
+                    $('#btn-submit-news-facebook').prop('disabled', false).find('.spinner-border').addClass('d-none');
+                },
+                success: function(response) {
+                    if(response.status) {
+                        $('#ModalFacebook').modal('hide');
+                        Swal.fire({ icon: 'success', title: 'สำเร็จ!', text: response.message, timer: 1500 });
+                        window.location.reload();
+                    }
+                }
+            });
+        });
+
+        // Delete News
+        $(document).on("click", ".DeleteNews", function() {
+            const newsId = $(this).attr('key-newsid');
+            Swal.fire({
+                title: 'ยืนยันการลบข่าว?',
+                text: "รูปภาพและเนื้อหาจะถูกลบออกอย่างถาวร!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ff3e1d',
+                confirmButtonText: 'ลบข้อมูล'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.post('<?= base_url('Admin/News/DeleteNews') ?>', { KeyNewsid: newsId }, function(response) {
+                        if (response.status) {
+                            $(`#${newsId}`).fadeOut(function() { $(this).remove(); });
+                            Swal.fire({ icon: 'success', title: 'ลบเรียบร้อย!', timer: 1000, showConfirmButton: false });
+                        }
+                    }, 'json');
+                }
+            });
+        });
+
+        function initFilePond(imgName = null) {
+            const inputElement = document.querySelector('#news_img_pond');
+            if (pond) pond.destroy();
+            let options = {
+                labelIdle: 'ลากไฟล์มาวาง หรือ <span class="filepond--label-action">คลิกเพื่ออัปโหลด</span>',
+                imagePreviewHeight: 150,
+                credits: false
+            };
+            if (imgName) {
+                options.files = [{ source: `${BASE_URL}/uploads/news/${imgName}` }];
+            }
+            pond = FilePond.create(inputElement, options);
+        }
+
+        $('#ModalNews').on('hidden.bs.modal', function() {
+            if (pond) pond.destroy();
+            pond = null;
+        });
+    });
 </script>
 
-<script>
-    // โค้ด Quill instance สำหรับ news_content_editor
-    if (document.getElementById('news_content_editor') && !Quill.find(document.getElementById('news_content_editor'))) {
-        window.quill = new Quill('#news_content_editor', {
-            modules: {
-                toolbar: {
-                    container: toolbarOptions,
-                    handlers: {
-                        'image': imageHandler
-                    }
-                },
-                imageResize: {
-                    modules: [ 'Resize', 'DisplaySize', 'Toolbar' ]
-                }
-            },
-            theme: 'snow'
-        });
-        addQuillDeleteListener(window.quill);
-        window.quill.root.addEventListener('click', handleImageClick);
-    }
-
-    // โค้ด Quill instance สำหรับ edit_news_content_editor
-    if (document.getElementById('edit_news_content_editor') && !Quill.find(document.getElementById('edit_news_content_editor'))) {
-        window.Editquill = new Quill('#edit_news_content_editor', {
-            modules: {
-                toolbar: {
-                    container: toolbarOptions,
-                    handlers: {
-                        'image': imageHandler
-                    }
-                },
-                imageResize: {
-                    modules: [ 'Resize', 'DisplaySize', 'Toolbar' ]
-                }
-            },
-            theme: 'snow'
-        });
-        addQuillDeleteListener(window.Editquill);
-        window.Editquill.root.addEventListener('click', handleImageClick);
-    }
-
-    // โค้ด Quill instance สำหรับ editor_facebook
-    if (document.getElementById('editor_facebook') && !Quill.find(document.getElementById('editor_facebook'))) {
-        var quillFacebook = new Quill('#editor_facebook', {
-            modules: { toolbar: toolbarOptions },
-            theme: 'snow'
-        });
-    }
-</script>
+<style>
+    .card { border-radius: 0.75rem; }
+    .table thead th { font-weight: 600; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.5px; }
+    .btn-icon { width: 32px; height: 32px; padding: 0; display: inline-flex; align-items: center; justify-content: center; border-radius: 0.375rem; }
+    .ql-toolbar.ql-snow { border: none !important; border-bottom: 1px solid #d9dee3 !important; padding: 10px 15px !important; background: #f8f9fa; }
+    .ql-container.ql-snow { border: none !important; font-family: 'Sarabun', sans-serif; font-size: 1rem; }
+    .form-floating-outline .form-control:focus ~ label { color: #696cff; }
+</style>
 <?= $this->endSection() ?>

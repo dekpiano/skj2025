@@ -18,7 +18,7 @@ class RoleController extends \App\Controllers\BaseController
         $builder->select('tb_admin.admin_id, tb_admin.admin_username, tb_roles.role_name, tb_personnel.pers_firstname, tb_personnel.pers_lastname');
         $builder->join('tb_roles', 'tb_roles.role_id = tb_admin.role_id', 'left');
         $builder->join('skjacth_personnel.tb_personnel', 'skjacth_personnel.tb_personnel.pers_id = tb_admin.pers_id', 'left');
-        $data['admin_users'] = $builder->get()->getResultArray();
+        $data['admin_users'] = $builder->orderBy('tb_admin.admin_id', 'DESC')->get()->getResultArray();
 
         // Fetch all roles
         $data['roles'] = $roleModel->findAll();
@@ -42,6 +42,9 @@ class RoleController extends \App\Controllers\BaseController
         ];
 
         if (!$this->validate($rules)) {
+            if ($this->request->isAJAX()) {
+                return $this->response->setJSON(['status' => false, 'message' => $this->validator->getError('admin_username') ?: 'กรุณากรอกข้อมูลให้ครบถ้วนและถูกต้อง']);
+            }
             return redirect()->back()->withInput()->with('error', $this->validator->listErrors());
         }
 
@@ -52,12 +55,18 @@ class RoleController extends \App\Controllers\BaseController
             'pers_id' => $this->request->getPost('pers_id'),
             'admin_username' => $this->request->getPost('admin_username'),
             'role_id' => $this->request->getPost('role_id'),
-            'admin_password' => null, // Set password to null as it's not provided
+            'admin_password' => null,
         ];
 
         if ($builder->insert($data)) {
+            if ($this->request->isAJAX()) {
+                return $this->response->setJSON(['status' => true, 'message' => 'เพิ่มผู้ดูแลระบบเรียบร้อยแล้ว']);
+            }
             return redirect()->to('Admin/roles')->with('success', 'เพิ่มผู้ดูแลระบบเรียบร้อยแล้ว');
         } else {
+            if ($this->request->isAJAX()) {
+                return $this->response->setJSON(['status' => false, 'message' => 'เกิดข้อผิดพลาดในการบันทึกข้อมูล']);
+            }
             return redirect()->back()->withInput()->with('error', 'เกิดข้อผิดพลาดในการบันทึกข้อมูล');
         }
     }
@@ -65,6 +74,9 @@ class RoleController extends \App\Controllers\BaseController
     public function deleteUser($id)
     {
         if ($id == session('AdminID')) {
+            if ($this->request->isAJAX()) {
+                return $this->response->setJSON(['status' => false, 'message' => 'คุณไม่สามารถลบบัญชีของตัวเองได้']);
+            }
             return redirect()->to('Admin/roles')->with('error', 'คุณไม่สามารถลบบัญชีของตัวเองได้');
         }
 
@@ -72,8 +84,14 @@ class RoleController extends \App\Controllers\BaseController
         $builder = $db->table('tb_admin');
         
         if ($builder->where('admin_id', $id)->delete()) {
+            if ($this->request->isAJAX()) {
+                return $this->response->setJSON(['status' => true, 'message' => 'ลบผู้ดูแลระบบเรียบร้อยแล้ว']);
+            }
             return redirect()->to('Admin/roles')->with('success', 'ลบผู้ดูแลระบบเรียบร้อยแล้ว');
         } else {
+            if ($this->request->isAJAX()) {
+                return $this->response->setJSON(['status' => false, 'message' => 'เกิดข้อผิดพลาดในการลบข้อมูล']);
+            }
             return redirect()->to('Admin/roles')->with('error', 'เกิดข้อผิดพลาดในการลบข้อมูล');
         }
     }

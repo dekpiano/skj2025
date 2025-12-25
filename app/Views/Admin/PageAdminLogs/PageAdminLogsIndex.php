@@ -7,7 +7,8 @@
             <span class="text-muted fw-light">Admin /</span> บันทึกการใช้งาน (Log)
         </h4>
         <div class="d-flex gap-2">
-            <a href="<?= base_url('Admin/Logs/Clean') ?>" class="btn btn-outline-danger" onclick="return confirm('ยืนยันการลบ Log ที่เก่ากว่า 90 วัน?')">
+            <a href="<?= base_url('Admin/Logs/Clean') ?>" id="btn-clean-logs" class="btn btn-outline-danger">
+                <span class="spinner-border spinner-border-sm d-none me-1" role="status" aria-hidden="true"></span>
                 <i class="bi bi-trash me-1"></i> ลบข้อมูลเก่า (>90 วัน)
             </a>
         </div>
@@ -55,7 +56,7 @@
                         <?php foreach ($logs as $log): ?>
                             <tr>
                                 <td>
-                                    <span class="fw-medium"><?= date('d/m/Y', strtotime($log['log_created_at'])) ?></span><br>
+                                    <span class="fw-medium"><?= date('Y/m/d', strtotime($log['log_created_at'])) ?></span><br>
                                     <small class="text-muted"><?= date('H:i:s', strtotime($log['log_created_at'])) ?></small>
                                 </td>
                                 <td>
@@ -114,4 +115,29 @@
     .avatar-initial { font-size: 1.2rem; }
     .bg-label-primary { background-color: #e7e7ff !important; color: #696cff !important; }
 </style>
+<?= $this->endSection() ?>
+
+<?= $this->section('scripts') ?>
+<script>
+    $('#btn-clean-logs').on('click', function(e) {
+        e.preventDefault();
+        const url = $(this).attr('href');
+        const $btn = $(this);
+
+        Swal.fire({
+            title: 'ยืนยันการลบ?',
+            text: "ระบบจะลบ Log ที่เก่ากว่า 90 วันออกอย่างถาวร!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ff3e1d',
+            confirmButtonText: 'ยืนยันลบข้อมูล',
+            cancelButtonText: 'ยกเลิก'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $btn.addClass('disabled').find('.spinner-border').removeClass('d-none');
+                window.location.href = url;
+            }
+        });
+    });
+</script>
 <?= $this->endSection() ?>

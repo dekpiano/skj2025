@@ -70,12 +70,14 @@ class ConAdminBanner extends \App\Controllers\BaseController
                     'banner_status' => 'on',
                     'banner_personnel_id' => session('AdminID')
                 ];
-                $save = $builder->insert($dataSave);
+                $builder->insert($dataSave);
+                $insertID = $database->getInsertID();
 
                 // ส่งกลับเป็น json
                 return $this->response->setJSON([
                     'status' => true,
                     'message' => 'บันทึกแบนเนอร์สำเร็จ!',
+                    'banner_id' => $insertID,
                     'data' => $dataSave
                 ]);
             } else {
@@ -222,9 +224,13 @@ class ConAdminBanner extends \App\Controllers\BaseController
         $builder->where('banner_id', $id);
         $update = $builder->update($dataUpdate);
 
+        // Fetch fresh data for UI update
+        $updatedData = $database->table('tb_banner')->where('banner_id', $id)->get()->getRowArray();
+
         return $this->response->setJSON([
             'status' => $update ? true : false,
             'message' => $update ? 'อัปเดตแบนเนอร์สำเร็จ!' : 'อัปเดตแบนเนอร์ไม่สำเร็จ!',
+            'data' => $updatedData
         ]);
     }
 
