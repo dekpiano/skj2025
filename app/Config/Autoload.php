@@ -88,6 +88,6 @@ class Autoload extends AutoloadConfig
        // $path = (dirname(dirname(dirname(dirname((dirname(__FILE__)))))));
 	//	$path . '/librarie_skj/google_sheet/vendor/autoload.php';
     public $files = [
-          ROOTPATH . '../librarie_skj/google_sheet/vendor/autoload.php'
+          SHARED_LIB_PATH . 'google_sheet/vendor/autoload.php'
     ];
 }

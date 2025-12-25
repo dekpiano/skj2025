@@ -7,7 +7,7 @@ use App\Models\LoginModel;
 use App\Models\PersonnalModel;
 
 
-require_once '/domains/librarie_skj/google_sheet/vendor/autoload.php';
+require_once SHARED_LIB_PATH . 'google_sheet/vendor/autoload.php';
 use Google_Client;
 use Google_Service_Oauth2;
 
@@ -104,6 +104,12 @@ class ConLogin extends BaseController
         $username = $this->request->getVar('Username');
         $password = $this->request->getVar('Password');
         $pass = $this->LoginModel->where('admin_username', $username)->first();
+
+        // ตรวจสอบว่าพบผู้ใช้ในระบบหรือไม่
+        if (!$pass) {
+            $session->setFlashdata('msg', 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
+            return redirect()->to('/');
+        }
 
         $authenticatePassword = password_verify($password, $pass['admin_password']);
         if($authenticatePassword){

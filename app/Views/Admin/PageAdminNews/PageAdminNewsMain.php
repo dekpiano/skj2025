@@ -4,6 +4,7 @@
 <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
 <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"></script>
 
 <div class="container-xxl flex-grow-1 container-p-y">
     <!-- Header -->
@@ -12,7 +13,10 @@
             <span class="text-muted fw-light">แดชบอร์ด /</span> ข่าวประชาสัมพันธ์
         </h4>
         <div class="d-flex gap-2">
-            <button class="btn btn-outline-primary" id="AddFacebook">
+            <button class="btn btn-outline-danger" id="CleanImages" type="button" data-bs-toggle="tooltip" title="ลบรูปภาพที่ไม่ได้ใช้งาน">
+                <i class="bx bx-trash me-1"></i> ล้างไฟล์ขยะ
+            </button>
+            <button class="btn btn-outline-primary" id="AddFacebook" type="button" data-bs-toggle="modal" data-bs-target="#ModalFacebook">
                 <i class="bx bxl-facebook-circle me-1"></i> ดึงข่าวจาก Facebook
             </button>
             <button class="btn btn-primary" id="AddNews">
@@ -44,7 +48,9 @@
                             <td>
                                 <div class="d-flex align-items-center">
                                     <?php if($v_news->news_img): ?>
-                                        <img src="<?= base_url('uploads/news/'.$v_news->news_img) ?>" class="rounded me-3" width="50" height="30" style="object-fit: cover;">
+                                        <img data-src="<?= base_url('uploads/news/'.$v_news->news_img) ?>" 
+                                             class="lozad rounded me-3" width="50" height="30" style="object-fit: cover; background: #f0f0f0;"
+                                             onerror="this.onerror=null;this.src='https://placehold.co/100x60?text=No+Image';">
                                     <?php else: ?>
                                         <div class="rounded bg-label-secondary me-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 30px;">
                                             <i class="bx bx-image-alt small"></i>
@@ -95,8 +101,22 @@
             <form id="form-news-manage" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="edit_news_id" id="news_id">
                 <input type="hidden" name="original_news_img" id="original_news_img">
-                <div class="modal-body p-4">
-                    <div class="row">
+                <div class="modal-body p-0">
+                    <ul class="nav nav-tabs nav-fill" role="tablist">
+                        <li class="nav-item">
+                            <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#navs-news-info">
+                                <i class="tf-icons bx bx-info-circle me-1"></i> ข้อมูลข่าวสาร
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-news-album" id="tab-album">
+                                <i class="tf-icons bx bx-images me-1"></i> อัลบั้มรูปภาพ
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="tab-content border-0 shadow-none p-4">
+                        <div class="tab-pane fade show active" id="navs-news-info" role="tabpanel">
+                            <div class="row">
                         <div class="col-lg-8 border-end">
                             <div class="form-floating form-floating-outline mb-4">
                                 <input type="text" class="form-control" name="news_topic" id="news_topic" placeholder="ใส่หัวข้อข่าว..." required>
@@ -128,8 +148,40 @@
 
                             <div class="mb-0">
                                 <label class="form-label text-uppercase fw-bold small text-muted mb-2">รูปภาพหน้าปกข่าว</label>
+                                
+                                <!-- Preview Image Section -->
+                                <div id="preview_container" class="mb-2 d-none text-center bg-light rounded p-2">
+                                    <label class="small text-muted d-block mb-1 text-start">รูปภาพปัจจุบัน:</label>
+                                    <img id="current_news_img_preview" src="" class="img-fluid rounded shadow-sm" style="max-height: 200px;">
+                                </div>
+
                                 <input type="file" name="news_img" id="news_img_pond">
                                 <small class="text-muted mt-2 d-block">* ขนาดแนะนำ 1920x1080 px</small>
+                            </div>
+                        </div>
+                            </div>
+                        </div>
+                        <!-- Album Tab -->
+                        <div class="tab-pane fade" id="navs-news-album" role="tabpanel">
+                            <div class="alert alert-info d-flex align-items-center mb-4" role="alert">
+                                <span class="badge badge-center rounded-pill bg-info me-3"><i class="bx bx-info-circle"></i></span>
+                                <div>
+                                    คุณสามารถเลือกอัปโหลดรูปภาพพร้อมกันได้หลายรูปภาพ เพื่อสร้างเป็นอัลบั้มแสดงท้ายข่าว
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label text-uppercase fw-bold small text-muted mb-2">อัปโหลดรูปภาพเข้าอัลบั้ม</label>
+                                <input type="file" name="news_album[]" id="news_album_pond" multiple>
+                            </div>
+                            
+                            <hr>
+                            <h6 class="fw-bold mb-3">รายการรูปภาพในอัลบั้ม</h6>
+                            <div id="album-preview-container" class="row g-3">
+                                <!-- Existing album images will be loaded here -->
+                                <div class="col-12 text-center py-4 text-muted" id="no-album-msg">
+                                    <i class="bx bx-image-alt display-4 d-block mb-2"></i>
+                                    ยังไม่มีรูปภาพในอัลบั้ม
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -221,16 +273,26 @@
     Quill.register('modules/imageResize', ImageResize.default);
 
     let pond;
+    let pondAlbum;
     let quill;
     let quillFB;
     const BASE_URL = "<?= base_url() ?>";
 
     $(document).ready(function() {
+        const observer = lozad(); // Initialize Lozad
+        
         const dataTable = $('#myTable').DataTable({
             order: [[2, 'desc']],
+            processing: true, // เปิดใช้งานตัว Loading ของ DataTable เอง
+            deferRender: true, // เพิ่มประสิทธิภาพ: โหลดเฉพาะหน้าที่แสดง
             language: {
                 search: "_INPUT_",
                 searchPlaceholder: "ค้นหาข่าว...",
+                processing: '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>', // ใส่ Spinner ในตัว Loading
+            },
+            drawCallback: function() {
+                // ทำงานทุกครั้งที่เปลี่ยนหน้า หรือค้นหา เพื่อให้ Lozad ทำงานกับรูปใหม่ๆ
+                observer.observe();
             }
         });
 
@@ -283,7 +345,6 @@
             };
         }
 
-        // Manage News (Add/Edit)
         $('#AddNews').click(function() {
             $('#ModalNewsTitle').text('เพิ่มข่าวสารใหม่');
             $('#form-news-manage').attr('action', '<?= base_url('Admin/News/AddNews') ?>').trigger('reset');
@@ -291,6 +352,15 @@
             quill.setContents([]);
             $('#news_date').val(new Date().toISOString().slice(0, 16));
             initFilePond();
+            initFilePondAlbum();
+            $('#album-preview-container').html('<div class="col-12 text-center py-4 text-muted" id="no-album-msg"><i class="bx bx-image-alt display-4 d-block mb-2"></i>ยังไม่มีรูปภาพในอัลบั้ม</div>');
+            
+            $('#preview_container').addClass('d-none'); // Hide preview for add mode
+            
+            // Switch to first tab
+            const tabEl = document.querySelector('button[data-bs-target="#navs-news-info"]');
+            const tab = bootstrap.Tab.getOrCreateInstance(tabEl);
+            tab.show();
             new bootstrap.Modal(document.getElementById("ModalNews")).show();
         });
 
@@ -298,6 +368,7 @@
             const newsId = $(this).attr('key-newsid');
             $('#ModalNewsTitle').text('แก้ไขข้อมูลข่าวสาร');
             $('#form-news-manage').attr('action', '<?= base_url('Admin/News/UpdateNews') ?>');
+            $('#preview_container').addClass('d-none'); // Reset first
             
             $.post('<?= base_url('Admin/News/EditNews') ?>', { KeyNewsid: newsId }, function(data) {
                 if(data && data[0]) {
@@ -308,7 +379,20 @@
                     $('#news_date').val(news.news_date.replace(' ', 'T').slice(0, 16));
                     $('#original_news_img').val(news.news_img);
                     quill.root.innerHTML = news.news_content;
-                    initFilePond(news.news_img);
+                    
+                    // Show current image preview if exists
+                    if(news.news_img) {
+                        $('#current_news_img_preview').attr('src', `${BASE_URL}/uploads/news/${news.news_img}`);
+                        $('#preview_container').removeClass('d-none');
+                    }
+
+                    initFilePond(null); // Initialize empty FilePond (user uses preview to see current img)
+                    initFilePondAlbum();
+                    loadAlbumImages(news.news_id);
+                    // Switch to first tab
+                    const tabEl = document.querySelector('button[data-bs-target="#navs-news-info"]');
+                    const tab = bootstrap.Tab.getOrCreateInstance(tabEl);
+                    tab.show();
                     new bootstrap.Modal(document.getElementById("ModalNews")).show();
                 }
             }, 'json');
@@ -333,6 +417,14 @@
             const pondFile = pond ? pond.getFile() : null;
             if (pondFile) {
                 formData.append(isUpdate ? 'edit_news_img' : 'news_img', pondFile.file);
+            }
+
+            // Append Album Files
+            if (pondAlbum) {
+                const albumFiles = pondAlbum.getFiles();
+                albumFiles.forEach(fileItem => {
+                    formData.append('news_album[]', fileItem.file);
+                });
             }
 
             $.ajax({
@@ -374,32 +466,58 @@
             });
         });
 
-        // Facebook Import
-        $('#AddFacebook').click(function() {
-            new bootstrap.Modal(document.getElementById("ModalFacebook")).show();
+        // Facebook Import - Load data when modal is shown
+        $('#ModalFacebook').on('shown.bs.modal', function() {
+            $('#fb_preview').addClass('d-none');
+            $('#btn-submit-news-facebook').addClass('d-none');
             $('#sel_NewsFromFacebook').html('<option value="">-- กำลังโหลดข้อมูล... --</option>');
             $.post('<?= base_url('Admin/News/View/Facebook') ?>', function(data) {
-                data = JSON.parse(data);
+                // jQuery intelligent enough to parse JSON if content-type is correct, but let's be safe
+                if (typeof data === 'string') {
+                    try { data = JSON.parse(data); } catch(e) {}
+                }
+                
+                if (data.error) {
+                    console.error('Facebook API Error:', data.error);
+                    $('#sel_NewsFromFacebook').html(`<option value="">-- เกิดข้อผิดพลาด: ${data.error.message || data.error} --</option>`);
+                    return;
+                }
+
                 let options = '<option value="">-- กรุณาเลือกโพสต์ที่ต้องการ --</option>';
-                data.data.forEach(item => {
-                    if(item.message) options += `<option value="${item.id}">${item.message.substr(0, 80)}...</option>`;
-                });
-                $('#sel_NewsFromFacebook').html(options);
-            }, 'json');
+                if (data && data.data) {
+                    data.data.forEach(item => {
+                        if(item.message) options += `<option value="${item.id}">${item.message.substr(0, 80)}...</option>`;
+                    });
+                    $('#sel_NewsFromFacebook').html(options);
+                } else {
+                    $('#sel_NewsFromFacebook').html('<option value="">-- ไม่พบข้อมูลโพสต์ --</option>');
+                }
+            }).fail(function(xhr, status, error) {
+                console.error('AJAX Error:', error);
+                $('#sel_NewsFromFacebook').html('<option value="">-- ไม่สามารถดึงข้อมูลได้ (Server Error) --</option>');
+            });
         });
 
         $('#sel_NewsFromFacebook').change(function() {
             const val = $(this).val();
             if(!val) return;
             $.post('<?= base_url('Admin/News/Select/Facebook') ?>', { KeyNewsFB: val }, function(data) {
-                data = JSON.parse(data);
+                if (typeof data === 'string') {
+                    try { data = JSON.parse(data); } catch(e) {}
+                }
+
+                if(data.error) {
+                    Swal.fire('Error', 'ไม่สามารถดึงข้อมูลโพสต์ได้', 'error');
+                    return;
+                }
+
                 $('#fb_preview').removeClass('d-none');
                 $('#btn-submit-news-facebook').removeClass('d-none');
-                $('#news_topic_facebook').val(data.message.substr(0, 100));
-                $('#news_date_facebook').val(data.created_time.replace(' ', 'T').slice(0, 16));
+                $('#news_topic_facebook').val(data.message ? data.message.substr(0, 100) : '');
+                $('#news_date_facebook').val(data.created_time ? data.created_time.replace(' ', 'T').slice(0, 16) : '');
                 $('#blah_facebook').attr('src', data.full_picture);
                 $('#news_img_facebook_url').val(data.full_picture);
-                quillFB.root.innerText = data.message;
+                quillFB.root.innerText = data.message || '';
             }, 'json');
         });
 
@@ -455,21 +573,146 @@
 
         function initFilePond(imgName = null) {
             const inputElement = document.querySelector('#news_img_pond');
-            if (pond) pond.destroy();
+            if (!inputElement) return; // ป้องกัน Error ถ้าหา element ไม่เจอ
+
+            if (pond) {
+                try {
+                    pond.destroy();
+                } catch (e) { console.error('Error destroying FilePond:', e); }
+            }
+            
             let options = {
                 labelIdle: 'ลากไฟล์มาวาง หรือ <span class="filepond--label-action">คลิกเพื่ออัปโหลด</span>',
                 imagePreviewHeight: 150,
-                credits: false
+                credits: false,
+                storeAsFile: true, // สำคัญ: เพื่อให้ส่งไฟล์ไปเป็น File object ปกติ
             };
             if (imgName) {
                 options.files = [{ source: `${BASE_URL}/uploads/news/${imgName}` }];
             }
-            pond = FilePond.create(inputElement, options);
+            
+            try {
+                pond = FilePond.create(inputElement, options);
+            } catch (e) {
+                console.error('Error creating FilePond:', e);
+            }
         }
+
+        function initFilePondAlbum() {
+            const inputElement = document.querySelector('#news_album_pond');
+            if (!inputElement) return;
+
+            if (pondAlbum) {
+                try {
+                    pondAlbum.destroy();
+                } catch (e) { console.error('Error destroying Album FilePond:', e); }
+            }
+            
+            try {
+                pondAlbum = FilePond.create(inputElement, {
+                    labelIdle: 'ลากรูปภาพอัลบั้มมาวาง หรือ <span class="filepond--label-action">คลิกเพื่ออัปโหลด</span>',
+                    imagePreviewHeight: 120,
+                    allowMultiple: true,
+                    acceptedFileTypes: ['image/*'],
+                    credits: false,
+                    storeAsFile: true
+                });
+            } catch (e) {
+                console.error('Error creating Album FilePond:', e);
+            }
+        }
+
+        function loadAlbumImages(newsId) {
+            $.post('<?= base_url('Admin/News/Album/Get') ?>', { news_id: newsId }, function(data) {
+                const container = $('#album-preview-container');
+                container.empty();
+                if (data && data.length > 0) {
+                    data.forEach(img => {
+                        container.append(`
+                            <div class="col-md-3 col-6 album-item" id="album-img-${img.news_img_id}">
+                                <div class="position-relative">
+                                    <img src="<?= base_url('uploads/news/album/') ?>/${img.news_img_name}" class="img-fluid rounded shadow-sm" style="height: 120px; width: 100%; object-fit: cover;">
+                                    <button type="button" class="btn btn-sm btn-icon btn-danger position-absolute top-0 end-0 m-1 delete-album-img" data-img-id="${img.news_img_id}">
+                                        <i class="bx bx-x"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `);
+                    });
+                } else {
+                    container.html('<div class="col-12 text-center py-4 text-muted" id="no-album-msg"><i class="bx bx-image-alt display-4 d-block mb-2"></i>ยังไม่มีรูปภาพในอัลบั้ม</div>');
+                }
+            }, 'json');
+        }
+
+        $(document).on('click', '.delete-album-img', function() {
+            const imgId = $(this).data('img-id');
+            const btn = $(this);
+            
+            Swal.fire({
+                title: 'ลบรูปภาพ?',
+                text: "รูปภาพนี้จะถูกลบออกจากอัลบั้มอย่างถาวร",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'ลบ',
+                cancelButtonText: 'ยกเลิก'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.post('<?= base_url('Admin/News/Album/Delete') ?>', { img_id: imgId }, function(res) {
+                        if (res.status) {
+                            $(`#album-img-${imgId}`).fadeOut(function() {
+                                $(this).remove();
+                                if ($('.album-item').length === 0) {
+                                    $('#album-preview-container').html('<div class="col-12 text-center py-4 text-muted" id="no-album-msg"><i class="bx bx-image-alt display-4 d-block mb-2"></i>ยังไม่มีรูปภาพในอัลบั้ม</div>');
+                                }
+                            });
+                        }
+                    }, 'json');
+                }
+            });
+        });
+
+        // ล้างรูปภาพที่ไม่ได้ใช้งาน
+        $(document).on('click', '#CleanImages', function() {
+            Swal.fire({
+                title: 'ยืนยันการล้างไฟล์ขยะ?',
+                text: "ระบบจะลบรูปภาพทั้งหมดที่ไม่ได้ถูกใช้งานในข่าวสารจริงๆ การกระทำนี้ไม่สามารถย้อนกลับได้",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ff3e1d',
+                confirmButtonText: 'ยืนยัน ลบเลย!',
+                cancelButtonText: 'ยกเลิก'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'กำลังทำงาน...',
+                        text: 'กรุณารอสักครู่ ระบบกำลังตรวจสอบไฟล์',
+                        allowOutsideClick: false,
+                        didOpen: () => { Swal.showLoading(); }
+                    });
+
+                    $.post('<?= base_url('Admin/News/CleanUnusedImages') ?>', function(response) {
+                        if (response.status) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'เสร็จสิ้น!',
+                                text: response.message
+                            });
+                        } else {
+                            Swal.fire('Error', 'เกิดข้อผิดพลาดในการลบไฟล์', 'error');
+                        }
+                    }, 'json').fail(function() {
+                        Swal.fire('Error', 'การเชื่อมต่อเซิร์ฟเวอร์ผิดพลาด', 'error');
+                    });
+                }
+            });
+        });
 
         $('#ModalNews').on('hidden.bs.modal', function() {
             if (pond) pond.destroy();
+            if (pondAlbum) pondAlbum.destroy();
             pond = null;
+            pondAlbum = null;
         });
     });
 </script>
@@ -481,5 +724,30 @@
     .ql-toolbar.ql-snow { border: none !important; border-bottom: 1px solid #d9dee3 !important; padding: 10px 15px !important; background: #f8f9fa; }
     .ql-container.ql-snow { border: none !important; font-family: 'Sarabun', sans-serif; font-size: 1rem; }
     .form-floating-outline .form-control:focus ~ label { color: #696cff; }
+
+    /* Lozad Fade-in effect */
+    .lozad {
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+    .lozad[data-loaded="true"] {
+        opacity: 1;
+    }
+
+    /* ตกแต่งตัว Loading ของ DataTables */
+    .dataTables_wrapper .dataTables_processing {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100%;
+        height: 100%;
+        margin-left: -50%;
+        margin-top: -25px;
+        padding-top: 20px;
+        text-align: center;
+        background-color: rgba(255, 255, 255, 0.8);
+        z-index: 999;
+        border: none;
+    }
 </style>
 <?= $this->endSection() ?>

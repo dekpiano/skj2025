@@ -22,6 +22,7 @@ class ConNews extends BaseController
         $this->PersModel = new PersonnalModel();
         $this->AboutModel = new AboutModel();
         $this->BannerModel = new BannerModel();
+        $this->NewsImageModel = new \App\Models\NewsImageModel();
        
     }
 
@@ -125,6 +126,7 @@ class ConNews extends BaseController
        
         $page_data['news'] = $this->NewsModel->where('news_id',$KeyNews)->orderBy('news_date', 'DESC')->get()->getRow();
         $page_data['NewsLatest'] = $this->NewsModel->limit(3)->orderBy('news_date', 'DESC')->get()->getResult();
+        $page_data['NewsAlbum'] = $this->NewsImageModel->where('news_id', $KeyNews)->orderBy('news_img_id', 'ASC')->findAll();
 
         $page_data['title'] = $page_data['news']->news_topic ." | สกจ. ประชาสัมพันธ์";
         $page_data['description'] = mb_strimwidth(strip_tags($page_data['news']->news_content),0,100,'...');

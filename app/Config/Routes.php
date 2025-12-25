@@ -81,6 +81,9 @@ $routes->group('Admin', ['filter' => 'permission', 'namespace' => 'App\Controlle
     $routes->match(['post'], 'News/deleteImage', 'ConAdminNews::deleteImage', ['filter' => 'permission:Admin']);
     $routes->match(['get', 'post'], 'News/View/Facebook', 'ConAdminNews::ViewNewsFormFacebook', ['filter' => 'permission:Admin']);
     $routes->match(['get', 'post'], 'News/Select/Facebook', 'ConAdminNews::SelectNewsFormFacebook', ['filter' => 'permission:Admin']);
+    $routes->match(['post'], 'News/Album/Get', 'ConAdminNews::NewsAlbumGet', ['filter' => 'permission:Admin']);
+    $routes->match(['post'], 'News/Album/Delete', 'ConAdminNews::NewsAlbumDelete', ['filter' => 'permission:Admin']);
+    $routes->match(['get', 'post'], 'News/CleanUnusedImages', 'ConAdminNews::CleanUnusedImages', ['filter' => 'permission:Admin']);
     
     // Admin Banner
     // TEMPORARY DEBUG ROUTE

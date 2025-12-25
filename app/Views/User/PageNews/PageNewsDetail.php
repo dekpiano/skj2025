@@ -1,3 +1,6 @@
+<!-- Add Quill CSS for proper content rendering -->
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
 <!-- Page Header Start -->
 <div class="container-fluid page-header py-5 mb-5 wow fadeIn" data-wow-delay="0.1s"
     style="background: linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .5)), url(<?= base_url('uploads/news/'.$news->news_img) ?>) center center no-repeat; background-size: cover;">
@@ -23,7 +26,9 @@
                 <article class="news-article">
                     <!-- News Image -->
                     <div class="mb-4">
-                        <img class="img-fluid rounded w-100" src="<?= base_url('../../uploads/news/'.$news->news_img) ?>" alt="<?= esc($news->news_topic) ?>">
+                        <img class="img-fluid rounded w-100" src="<?= base_url('uploads/news/'.$news->news_img) ?>" 
+                             onerror="this.onerror=null;this.src='https://placehold.co/800x450?text=No+Image';this.classList.add('d-none');" 
+                             alt="<?= esc($news->news_topic) ?>">
                     </div>
 
                     <!-- News Meta -->
@@ -32,10 +37,44 @@
                         <span><i class="fa fa-eye me-2"></i><?= $news->news_view ?> Views</span>
                     </div>
 
-                    <!-- News Content -->
-                    <div class="news-content">
-                        <?= $news->news_content; ?>
+                    <!-- News Content - Wrapped in ql-editor/ql-snow class for Quill styles -->
+                    <div class="news-content ql-snow">
+                        <div class="ql-editor" style="padding: 0; white-space: normal;">
+                            <?php 
+                                // แปลงเว้นวรรค 2 ตัวขึ้นไป ให้เป็น &nbsp; เพื่อรักษาย่อหน้า
+                                $content = $news->news_content;
+                                // แทนที่ Tab (\t) ด้วย &nbsp; 4 ตัว
+                                $content = str_replace("\t", '&nbsp;&nbsp;&nbsp;&nbsp;', $content);
+                                // แทนที่ Space 2 ตัวติดกัน ด้วย &nbsp; 2 ตัว (ทำซ้ำเผื่อมีหลายอัน)
+                                $content = str_replace("  ", "&nbsp;&nbsp;", $content);
+                                
+                                echo $content;
+                            ?>
+                        </div>
                     </div>
+
+                    <?php if (!empty($NewsAlbum)): ?>
+                        <div class="mt-5 pt-4 border-top">
+                            <h4 class="mb-4"><i class="fa fa-images text-primary me-2"></i> อัลบั้มรูปภาพ</h4>
+                            <div class="row g-3">
+                                <?php foreach ($NewsAlbum as $img): ?>
+                                    <div class="col-md-4 col-6">
+                                        <a href="<?= base_url('uploads/news/album/'.$img['news_img_name']) ?>" 
+                                           data-lightbox="news-album" 
+                                           data-title="<?= esc($news->news_topic) ?>">
+                                            <div class="album-img-wrapper rounded overflow-hidden shadow-sm">
+                                                <img src="<?= base_url('uploads/news/album/'.$img['news_img_name']) ?>" 
+                                                     class="img-fluid w-100 h-100" 
+                                                     style="object-fit: cover; min-height: 180px;"
+                                                     loading="lazy"
+                                                     alt="<?= esc($news->news_topic) ?>">
+                                            </div>
+                                        </a>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    <?php endif; ?>
                 </article>
             </div>
 
@@ -104,18 +143,65 @@
     .news-content {
         font-family: 'Sarabun', sans-serif; 
         font-size: 1.1rem; 
-        line-height: 1.8; 
+        line-height: 1.5; /* ลดลงจาก 1.8 */
         color: #333; 
     }
 
     .news-content h1, .news-content h2, .news-content h3 {
-        margin-top: 1.5em;
-        margin-bottom: 0.8em;
+        margin-top: 1em;
+        margin-bottom: 0.5em;
         color: #111;
     }
 
     .news-content p {
-        margin-bottom: 1.2em;
+        margin-top: 0;
+        margin-bottom: 0.5em; /* ลดลงจาก 1.2em ให้กระชับขึ้น */
+        
+        /* จัดข้อความให้ชิดซ้ายขวาพอดีกัน (Justify) */
+        text-align: justify;
+        text-justify: inter-word;
+    }
+
+    /* แก้ปัญหากด Enter รัวๆ แล้วมันห่างเกินไป */
+    .news-content p:empty {
+        display: none;
+    }
+    
+    /* Responsive Video Embeds */
+    .ql-editor iframe {
+        width: 100%;
+        min-height: 350px;
+        border: none;
+        border-radius: 8px;
+        margin: 1rem 0;
+    }
+    
+    /* Quill Alignment & Indentation Classes */
+    .ql-align-center { text-align: center; }
+    .ql-align-right { text-align: right; }
+    .ql-align-justify { text-align: justify; }
+    
+    /* Force Quill Indent styles */
+    .ql-editor .ql-indent-1 { padding-left: 3em !important; }
+    .ql-editor .ql-indent-2 { padding-left: 6em !important; }
+    .ql-editor .ql-indent-3 { padding-left: 9em !important; }
+    .ql-editor .ql-indent-4 { padding-left: 12em !important; }
+    .ql-editor .ql-indent-5 { padding-left: 15em !important; }
+    .ql-editor .ql-indent-6 { padding-left: 18em !important; }
+    .ql-editor .ql-indent-7 { padding-left: 21em !important; }
+    .ql-editor .ql-indent-8 { padding-left: 24em !important; }
+    
+    /* ถ้าต้องการให้ย่อหน้าแรกของทุก p ขยับ (แบบหนังสือไทย) */
+    /* .news-content p { text-indent: 2.5em; } */
+    
+    .ql-editor blockquote {
+        border-left: 4px solid #ccc;
+        margin-bottom: 5px;
+        margin-top: 5px;
+        padding-left: 16px;
+        font-style: italic;
+        background: #f9f9f9;
+        padding: 1rem;
     }
 
     .news-content img {
@@ -138,5 +224,16 @@
     .highlight {
         background-color: #fff3cd;
         font-weight: bold;
+    }
+
+    .album-img-wrapper {
+        position: relative;
+        transition: 0.3s;
+        cursor: pointer;
+    }
+    .album-img-wrapper:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+        z-index: 1;
     }
 </style>

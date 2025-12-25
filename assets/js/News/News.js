@@ -70,7 +70,7 @@ function fetchData(page) {
                         <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
                             <div class="card h-100 shadow-sm">
                                 <a href="News/Detail/${item.news_id}" class="CountReadNews" data_view="${item.news_view}" news_id="${item.news_id}">
-                                    <img class="card-img-top" src="uploads/news/${item.news_img}" alt="${item.news_topic}">
+                                    <img class="card-img-top" src="uploads/news/${item.news_img}" alt="${item.news_topic}" loading="lazy">
                                 </a>
                                 <div class="card-body d-flex flex-column">
                                     <h5 class="card-title">
