@@ -99,5 +99,11 @@ if (DIRECTORY_SEPARATOR === '\\') {
     defined('SHARED_LIB_PATH') OR define('SHARED_LIB_PATH', 'D:\xampp\librarie_skj' . DIRECTORY_SEPARATOR);
 } else {
     // โค้ดกำลังรันบน Linux (Docker หรือ Production Server)
-    defined('SHARED_LIB_PATH') OR define('SHARED_LIB_PATH', '/home/skjacth/domains/skj.ac.th/public_html/librarie_skj' . DIRECTORY_SEPARATOR);
+    if (is_dir('/domains/librarie_skj')) {
+        // Docker Path (ตามที่ map volume ไว้ใน docker-compose.yml)
+        defined('SHARED_LIB_PATH') OR define('SHARED_LIB_PATH', '/domains/librarie_skj' . DIRECTORY_SEPARATOR);
+    } else {
+        // Production Server Path
+        defined('SHARED_LIB_PATH') OR define('SHARED_LIB_PATH', '/home/skjacth/domains/skj.ac.th/public_html/librarie_skj' . DIRECTORY_SEPARATOR);
+    }
 }

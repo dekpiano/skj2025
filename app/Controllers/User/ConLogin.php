@@ -6,7 +6,6 @@ use CodeIgniter\Controller;
 use App\Models\LoginModel;
 use App\Models\PersonnalModel;
 
-
 require_once SHARED_LIB_PATH . 'google_sheet/vendor/autoload.php';
 use Google_Client;
 use Google_Service_Oauth2;

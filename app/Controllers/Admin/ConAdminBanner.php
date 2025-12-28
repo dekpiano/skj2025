@@ -33,27 +33,21 @@ class ConAdminBanner extends \App\Controllers\BaseController
         $database = \Config\Database::connect();
         $builder = $database->table('tb_banner');
 
-        // จุดที่ 1: แก้ validate จาก 'file' เป็น 'banner_img'
-        $validateImg = $this->validate([
-            'banner_img' => [
-                'uploaded[banner_img]',
-                'mime_in[banner_img,image/jpg,image/jpeg,image/png,image/gif]',
-                
-            ]
-        ]);
-
-        if (!$validateImg) {
-            // ส่งกลับเป็น json (Dropzone ใช้ได้)
-            return $this->response->setJSON([
+        // ตรวจสอบว่ามี Banner Name ส่งมาหรือไม่ (ถ้าไฟล์ใหญ่เกิน limit ค่า POST จะหายไป)
+        if (empty($this->request->getPost('banner_name'))) {
+             return $this->response->setJSON([
                 'status' => false,
-                'message' => 'ไฟล์สกุลไม่ถูกต้อง หรือ ขนาดไฟล์เกิน 2 mb'
+                'message' => 'ไม่สามารถบันทึกได้: ข้อมูลไม่ครบถ้วน หรือไฟล์อาจมีขนาดใหญ่เกินกว่าที่เซิร์ฟเวอร์กำหนด'
             ]);
-        } else {
-            $imageFile = $this->request->getFile('banner_img');
+        }
 
-            if ($imageFile && $imageFile->getError() == 0) {
-                $RandomName = $imageFile->getRandomName();
+        $imageFile = $this->request->getFile('banner_img');
 
+        // กรณีมีไฟล์และถูกต้อง
+        if ($imageFile && $imageFile->isValid() && !$imageFile->hasMoved()) {
+            $RandomName = $imageFile->getRandomName();
+
+            try {
                 // Resize และบันทึกไฟล์
                 \Config\Services::image()
                     ->withFile($imageFile)
@@ -71,32 +65,47 @@ class ConAdminBanner extends \App\Controllers\BaseController
                     'banner_personnel_id' => session('AdminID')
                 ];
                 $builder->insert($dataSave);
-                $insertID = $database->getInsertID();
+                $insertID = $database->insertID();
 
-                // ส่งกลับเป็น json
                 return $this->response->setJSON([
                     'status' => true,
                     'message' => 'บันทึกแบนเนอร์สำเร็จ!',
                     'banner_id' => $insertID,
                     'data' => $dataSave
                 ]);
-            } else {
-                // ไม่มีไฟล์ภาพก็ยังสามารถบันทึกข้อความอื่นได้
-                $dataSave = [
-                    'banner_name' => $this->request->getPost('banner_name'),
-                    'banner_linkweb' => $this->request->getPost('banner_linkweb'),
-                    'banner_date' => $this->request->getPost('banner_date'),
-                    'banner_status' => 'on',
-                    'banner_personnel_id' => session('AdminID')
-                ];
-                $save = $builder->insert($dataSave);
-
+            } catch (\Exception $e) {
                 return $this->response->setJSON([
-                    'status' => true,
-                    'message' => 'บันทึกแบนเนอร์ (ไม่มีรูป) สำเร็จ!',
-                    'data' => $dataSave
+                    'status' => false,
+                    'message' => 'เกิดข้อผิดพลาดในการบันทึกภาพ: ' . $e->getMessage()
                 ]);
             }
+        } 
+        
+        // กรณีไม่มีไฟล์หรือไฟล์ไม่ถูกต้อง
+        else {
+            // ตรวจสอบว่า Error เพราะอะไร
+            if ($imageFile && $imageFile->getError() !== UPLOAD_ERR_NO_FILE) {
+                return $this->response->setJSON([
+                    'status' => false,
+                    'message' => 'ไม่สามารถอัปโหลดไฟล์ได้ (Error Code: ' . $imageFile->getError() . ')'
+                ]);
+            }
+
+            // ถ้าแค่นี้ไม่มีไฟล์ ก็บันทึกเฉพาะข้อมูล
+            $dataSave = [
+                'banner_name' => $this->request->getPost('banner_name'),
+                'banner_linkweb' => $this->request->getPost('banner_linkweb'),
+                'banner_date' => $this->request->getPost('banner_date'),
+                'banner_status' => 'on',
+                'banner_personnel_id' => session('AdminID')
+            ];
+            $builder->insert($dataSave);
+
+            return $this->response->setJSON([
+                'status' => true,
+                'message' => 'บันทึกแบนเนอร์ (ไม่มีรูป) สำเร็จ!',
+                'data' => $dataSave
+            ]);
         }
     }
 
@@ -177,6 +186,14 @@ class ConAdminBanner extends \App\Controllers\BaseController
 
     public function Updatebanner()
     {
+        // ตรวจสอบข้อมูล POST
+        if (empty($this->request->getPost())) {
+            return $this->response->setJSON([
+                'status' => false,
+                'message' => 'ข้อมูลมีขนาดใหญ่เกินกว่าที่ Server กำหนด (post_max_size) กรุณาลดขนาดไฟล์'
+            ]);
+        }
+
         $database = \Config\Database::connect();
         $builder = $database->table('tb_banner');
 
@@ -193,32 +210,31 @@ class ConAdminBanner extends \App\Controllers\BaseController
 
         // Check if a new image is uploaded
         if ($imageFile && $imageFile->isValid() && !$imageFile->hasMoved()) {
-            $validateImg = $this->validate([
-                'banner_img' => [
-                    'uploaded[banner_img]',
-                    'mime_in[banner_img,image/jpg,image/jpeg,image/png,image/gif]',
-                ]
-            ]);
-
-            if (!$validateImg) {
-                return $this->response->setJSON([
-                    'status' => false,
-                    'message' => 'ไฟล์สกุลไม่ถูกต้อง หรือ ขนาดไฟล์เกิน 2 mb'
-                ]);
-            }
-
+            
             // Delete old image if it exists
             if ($originalImg && file_exists(FCPATH . 'uploads/banner/all/' . $originalImg)) {
                 @unlink(FCPATH . 'uploads/banner/all/' . $originalImg);
             }
 
             $RandomName = $imageFile->getRandomName();
-            \Config\Services::image()
-                ->withFile($imageFile)
-                ->resize(1920, 720, false, 'auto')
-                ->save(FCPATH . '/uploads/banner/all/' . $RandomName);
-            
-            $dataUpdate['banner_img'] = $RandomName;
+            try {
+                \Config\Services::image()
+                    ->withFile($imageFile)
+                    ->resize(1920, 720, false, 'auto')
+                    ->save(FCPATH . '/uploads/banner/all/' . $RandomName);
+                
+                $dataUpdate['banner_img'] = $RandomName;
+            } catch (\Exception $e) {
+                // กรณีรูปพัง บันทึก Log ไว้ แต่ยังให้ทำการ Update ข้อมูลอื่นต่อไป
+                log_message('error', 'Update Banner Image Error: ' . $e->getMessage());
+            }
+        } 
+        // เพิ่มการตรวจสอบ Error กรณีอัปเดต
+        else if ($imageFile && $imageFile->getError() !== UPLOAD_ERR_NO_FILE) {
+             return $this->response->setJSON([
+                'status' => false,
+                'message' => 'ไม่สามารถอัปโหลดรูปภาพได้ (Error Code: ' . $imageFile->getError() . ') - ไฟล์อาจมีขนาดใหญ่เกินไป'
+            ]);
         }
 
         $builder->where('banner_id', $id);
@@ -231,6 +247,44 @@ class ConAdminBanner extends \App\Controllers\BaseController
             'status' => $update ? true : false,
             'message' => $update ? 'อัปเดตแบนเนอร์สำเร็จ!' : 'อัปเดตแบนเนอร์ไม่สำเร็จ!',
             'data' => $updatedData
+        ]);
+    }
+
+    public function CleanupImages()
+    {
+        $database = \Config\Database::connect();
+        $builder = $database->table('tb_banner');
+        
+        $query = $builder->select('banner_img')->get()->getResultArray();
+        $usedImages = [];
+        foreach ($query as $row) {
+            if (!empty($row['banner_img'])) {
+                $usedImages[] = $row['banner_img'];
+            }
+        }
+
+        $folderPath = FCPATH . 'uploads/banner/all/';
+        if (!is_dir($folderPath)) {
+            return $this->response->setJSON(['status' => false, 'message' => 'ไม่พบโฟลเดอร์เก็บรูปภาพ']);
+        }
+
+        $allFiles = array_diff(scandir($folderPath), array('.', '..', 'index.html')); 
+        $deletedCount = 0;
+
+        foreach ($allFiles as $file) {
+            if (is_file($folderPath . $file)) {
+                if (!in_array($file, $usedImages)) {
+                    if (@unlink($folderPath . $file)) {
+                        $deletedCount++;
+                    }
+                }
+            }
+        }
+
+        return $this->response->setJSON([
+            'status' => true,
+            'message' => "ดำเนินการเสร็จสิ้น! พบไฟล์ขยะและลบไปทั้งหมด {$deletedCount} ไฟล์",
+            'deleted_count' => $deletedCount
         ]);
     }
 

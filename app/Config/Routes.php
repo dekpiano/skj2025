@@ -86,15 +86,13 @@ $routes->group('Admin', ['filter' => 'permission', 'namespace' => 'App\Controlle
     $routes->match(['get', 'post'], 'News/CleanUnusedImages', 'ConAdminNews::CleanUnusedImages', ['filter' => 'permission:Admin']);
     
     // Admin Banner
-    // TEMPORARY DEBUG ROUTE
-    $routes->get('Banner/Updatebanner', function() { die('Reached Updatebanner GET route!'); });
-    // END TEMPORARY DEBUG ROUTE
     $routes->get('Banner','ConAdminBanner::BannerMain', ['filter' => 'permission:Admin']);
     $routes->post('Banner/BannerOnoff','ConAdminBanner::BannerOnoff', ['filter' => 'permission:Admin']);
     $routes->match(['get', 'post'], 'Banner/Addbanner', 'ConAdminBanner::AddBanner', ['filter' => 'permission:Admin']);
     $routes->match(['get', 'post'], 'Banner/EditBanner', 'ConAdminBanner::EditBanner', ['filter' => 'permission:Admin']);
     $routes->match(['get', 'post'], 'Banner/Updatebanner', 'ConAdminBanner::Updatebanner', ['filter' => 'permission:Admin']);
     $routes->post('Banner/DeleteBanner', 'ConAdminBanner::DeleteBanner', ['filter' => 'permission:Admin']);
+    $routes->post('Banner/CleanupImages', 'ConAdminBanner::CleanupImages', ['filter' => 'permission:Admin']);
 
     //Admin About
     $routes->match(['get', 'post'], 'AboutSchool/Detail/(:any)', 'ConAdminAboutSchool::AboutSchoolDetail/$1', ['filter' => 'permission:Admin']);

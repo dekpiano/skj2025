@@ -10,9 +10,14 @@
         <h4 class="fw-bold py-3 mb-0">
             <span class="text-muted fw-light">แดชบอร์ด /</span> แบนเนอร์ประชาสัมพันธ์
         </h4>
-        <button class="btn btn-primary" id="AddBanner">
-            <i class="bx bx-plus me-1"></i> เพิ่มแบนเนอร์ใหม่
-        </button>
+        <div class="d-flex gap-2">
+            <button class="btn btn-outline-danger" id="CleanupBanner">
+                <i class="bx bx-trash-alt me-1"></i> ล้างไฟล์ขยะ
+            </button>
+            <button class="btn btn-primary" id="AddBanner">
+                <i class="bx bx-plus me-1"></i> เพิ่มแบนเนอร์ใหม่
+            </button>
+        </div>
     </div>
 
     <!-- Banner List Card -->
@@ -239,6 +244,52 @@
                     } else {
                         Swal.fire({ icon: 'error', title: 'ไม่สำเร็จ', text: response.message });
                     }
+                }
+            });
+        });
+
+        $(document).on("click", "#CleanupBanner", function() {
+            Swal.fire({
+                title: 'ยืนยันการล้างไฟล์ขยะ?',
+                text: "ระบบจะทำการตรวจสอบและลบไฟล์รูปภาพที่ไม่ได้ใช้งานออกจากเซิร์ฟเวอร์",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ff3e1d',
+                cancelButtonColor: '#8592a3',
+                confirmButtonText: 'ยืนยันการลบ',
+                cancelButtonText: 'ยกเลิก'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'กำลังประมวลผล...',
+                        html: 'กรุณารอสักครู่ ระบบกำลังตรวจสอบไฟล์...',
+                        allowOutsideClick: false,
+                        didOpen: () => { Swal.showLoading(); }
+                    });
+
+                    $.post('<?=base_url('Admin/Banner/CleanupImages')?>', function(response) {
+                        Swal.close();
+                        if (response.status) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'เสร็จสิ้น!',
+                                text: response.message,
+                                timer: 3000
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'เกิดข้อผิดพลาด',
+                                text: response.message
+                            });
+                        }
+                    }, 'json').fail(function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'เกิดข้อผิดพลาด',
+                            text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้'
+                        });
+                    });
                 }
             });
         });

@@ -55,6 +55,9 @@ RUN sed -i 's!/etc/ssl/private/ssl-cert-snakeoil.key!/etc/ssl/private/apache-sel
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/default-ssl.conf
 RUN a2ensite default-ssl
 
+# Copy custom PHP configuration
+COPY custom.ini /usr/local/etc/php/conf.d/custom.ini
+
 # กำหนด Working Directory
 WORKDIR /var/www/html
 
