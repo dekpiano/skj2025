@@ -49,6 +49,12 @@
     <!-- Template Stylesheet -->
     <link href="<?=base_url()?>/assets/css/style.css?v=10" rel="stylesheet">
     <link href="<?=base_url()?>/assets/css/media.css?v=5" rel="stylesheet">
+    
+    <?php if(isset($festival_status) && $festival_status == 'on'): ?>
+    <!-- New Year Theme -->
+    <link href="<?=base_url()?>/assets/css/newyear_snow.css" rel="stylesheet">
+    <script src="<?=base_url()?>/assets/js/newyear_snow.js" defer></script>
+    <?php endif; ?>
 
     <!-- Cookie Consent by https://www.cookiewow.com -->
     <!-- <script type="text/javascript" src="https://cookiecdn.com/cwc.js"></script>

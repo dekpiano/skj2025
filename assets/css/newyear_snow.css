@@ -1,0 +1,390 @@
+/* --- New Year & Christmas Theme Fixes --- */
+
+:root {
+    --snow-white: #ffffff;
+    --festive-glow: rgba(255, 255, 255, 0.4);
+}
+
+/* Snowfall Container */
+#snow-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+    overflow: hidden;
+}
+
+.snowflake {
+    position: absolute;
+    top: -20px;
+    color: var(--snow-white);
+    user-select: none;
+    pointer-events: none;
+    z-index: 9999;
+    filter: drop-shadow(0 0 3px var(--festive-glow));
+    animation: fall linear forwards;
+}
+
+@keyframes fall {
+    0% { transform: translateY(-20px) translateX(0) rotate(0deg); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(105vh) translateX(30px) rotate(360deg); opacity: 0; }
+}
+
+/* --- Snow Cap Decoration --- */
+.snow-cap {
+    position: relative; /* Ensure container can hold absolute snow */
+}
+
+/* Decoration layer below content but above background */
+.snow-cap::before {
+    content: '';
+    position: absolute;
+    top: -15px; /* Adjust for footer */
+    left: 0;
+    width: 100%;
+    height: 30px;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 40" preserveAspectRatio="none"><path d="M0,40 L0,20 C50,0 100,30 150,20 C200,10 250,40 300,20 C350,0 400,30 450,20 C500,10 550,40 600,20 C650,0 700,30 750,20 C800,10 850,40 900,20 C950,0 1000,30 1000,20 L1000,40 Z" fill="white"/></svg>');
+    background-size: 400px 30px;
+    background-repeat: repeat-x;
+    z-index: 10;
+    pointer-events: none;
+    filter: drop-shadow(0 -4px 6px rgba(255,255,255,0.3)); /* Glow for dark footer */
+}
+
+/* Ensure navbar content is always on top */
+.navbar > div {
+    z-index: 20;
+    position: relative;
+}
+
+/* --- Light String (Fairy Lights) --- */
+.fairy-lights {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 30px;
+    z-index: 10001; /* Highest layer at the very top */
+    pointer-events: none;
+    display: flex;
+    justify-content: space-around;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    background: rgba(0,0,0,0.05); /* Subtle wire look */
+}
+
+.light-bulb {
+    width: 12px;
+    height: 18px;
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    position: relative;
+    top: -2px;
+    animation-duration: 1.2s;
+    animation-iteration-count: infinite;
+}
+
+.light-bulb::after {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: 4px;
+    width: 4px;
+    height: 3px;
+    background: #444;
+}
+@keyframes glow-red { 0%, 100% { background: #ff4d4d; box-shadow: 0 0 8px #ff4d4d; } 50% { background: #800000; } }
+@keyframes glow-gold { 0%, 100% { background: #ffd700; box-shadow: 0 0 8px #ffd700; } 50% { background: #b8860b; } }
+@keyframes glow-blue { 0%, 100% { background: #00bfff; box-shadow: 0 0 8px #00bfff; } 50% { background: #00008b; } }
+@keyframes glow-green { 0%, 100% { background: #32cd32; box-shadow: 0 0 8px #32cd32; } 50% { background: #006400; } }
+
+.light-red { animation-name: glow-red; }
+.light-gold { animation-name: glow-gold; animation-delay: 0.3s; }
+.light-blue { animation-name: glow-blue; animation-delay: 0.6s; }
+.light-green { animation-name: glow-green; animation-delay: 0.9s; }
+
+/* --- Winter Snow & Fireworks Overlay --- */
+.festive-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Deep Night Blue to Purple Gradient - Perfect text contrast */
+    background: radial-gradient(circle at center, 
+                rgba(25, 42, 86, 0.85) 0%, 
+                rgba(13, 27, 62, 0.90) 40%, 
+                rgba(27, 20, 100, 0.92) 70%, 
+                rgba(16, 12, 63, 0.95) 100%);
+    backdrop-filter: blur(12px) saturate(130%);
+    -webkit-backdrop-filter: blur(12px) saturate(130%);
+    z-index: 25000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 1.2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* Add subtle stars/sparkle pattern */
+.festive-overlay::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(2px 2px at 20% 30%, white, transparent),
+        radial-gradient(2px 2px at 60% 70%, white, transparent),
+        radial-gradient(1px 1px at 50% 50%, white, transparent),
+        radial-gradient(1px 1px at 80% 10%, white, transparent),
+        radial-gradient(2px 2px at 90% 60%, white, transparent),
+        radial-gradient(1px 1px at 33% 85%, white, transparent),
+        radial-gradient(1px 1px at 15% 95%, white, transparent);
+    background-size: 200% 200%;
+    background-position: 0% 0%;
+    opacity: 0.4;
+    pointer-events: none;
+    animation: twinkle 3s ease-in-out infinite;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.6; }
+}
+
+.festive-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.new-year-greeting {
+    z-index: 25002;
+    text-align: center;
+    pointer-events: none;
+    transform: scale(0.5);
+    transition: all 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.festive-overlay.show .new-year-greeting {
+    transform: scale(1);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 3rem;
+    border-radius: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.greeting-text {
+    font-family: 'Pattaya', 'K2D', sans-serif;
+    font-size: 6rem;
+    font-weight: 700;
+    /* Ultra-Vibrant Festive Gradient */
+    background: linear-gradient(to bottom, #fff000 0%, #ffcc00 25%, #ff3300 75%, #cc0000 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    /* Multi-layered glow for visibility */
+    filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.8))
+            drop-shadow(0 0 25px rgba(255, 204, 0, 0.6))
+            drop-shadow(0 0 50px rgba(255, 51, 0, 0.4));
+    white-space: nowrap;
+    animation: text-pulse 2s infinite alternate;
+    letter-spacing: 2px;
+}
+
+@keyframes text-pulse {
+    from { transform: scale(1); filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.8)) drop-shadow(0 0 20px rgba(255, 204, 0, 0.5)); }
+    to { transform: scale(1.02); filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.8)) drop-shadow(0 0 40px rgba(255, 51, 0, 0.7)); }
+}
+
+.blessing-text {
+    font-size: 2.2rem;
+    font-weight: 600;
+    margin-top: 1.5rem;
+    /* Bright Festive Green/Gold */
+    background: linear-gradient(to bottom, #ffffff 0%, #00ff88 50%, #00cc66 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.8))
+            drop-shadow(0 0 15px rgba(0, 255, 136, 0.5));
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 1s ease 0.5s;
+}
+
+.festive-overlay.show .blessing-text {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.blessing-text-sub {
+    font-size: 1.8rem;
+    font-weight: 500;
+    color: #ffd700;
+    margin-top: 1rem;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.9),
+                 0 0 10px rgba(255, 215, 0, 0.4);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 1s ease 0.8s;
+}
+
+.festive-overlay.show .blessing-text-sub {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.school-text {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-top: 2rem;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.8),
+                 0 0 20px rgba(255, 215, 0, 0.4);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 1s ease 1.2s;
+    line-height: 1.6;
+    background: linear-gradient(to right, #ffd700, #fff, #ffd700);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.festive-overlay.show .school-text {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Firework Canvas */
+#firework-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 25001;
+    pointer-events: none;
+}
+
+/* Floating Festive Elements */
+.festive-float {
+    position: absolute;
+    font-size: 3rem;
+    opacity: 0.8;
+    z-index: 25003;
+    pointer-events: none;
+    animation: float-around 8s ease-in-out infinite;
+    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
+}
+
+@keyframes float-around {
+    0%, 100% { 
+        transform: translateY(0) rotate(0deg); 
+    }
+    25% { 
+        transform: translateY(-15px) rotate(5deg); 
+    }
+    50% { 
+        transform: translateY(0) rotate(0deg); 
+    }
+    75% { 
+        transform: translateY(-10px) rotate(-5deg); 
+    }
+}
+
+.festive-float:nth-child(odd) {
+    animation-duration: 6s;
+}
+
+.festive-float:nth-child(even) {
+    animation-duration: 10s;
+    animation-direction: reverse;
+}
+
+/* --- Mobile & Tablet Adjustments --- */
+@media (max-width: 768px) {
+    .new-year-greeting {
+        width: 90%;
+        max-width: 95%;
+        padding: 1.5rem !important;
+        border-radius: 1rem !important;
+    }
+
+    .greeting-text {
+        font-size: 2.2rem;
+        letter-spacing: 1px;
+        padding: 0;
+        line-height: 1.2;
+        filter: drop-shadow(2px 2px 0 #000) 
+                drop-shadow(0 0 15px rgba(255, 215, 0, 0.6));
+    }
+    
+    .blessing-text {
+        font-size: 1.1rem;
+        margin-top: 0.8rem;
+        padding: 0;
+        line-height: 1.4;
+    }
+    
+    .blessing-text-sub {
+        font-size: 0.9rem;
+        padding: 0;
+    }
+    
+    .school-text {
+        font-size: 0.85rem;
+        padding: 0;
+        margin-top: 1rem;
+    }
+    
+    .fairy-lights {
+        height: 20px;
+    }
+    
+    .light-bulb {
+        width: 8px;
+        height: 12px;
+    }
+    
+    .snowflake {
+        font-size: 12px !important;
+    }
+    
+    .festive-float {
+        font-size: 2rem;
+        opacity: 0.6;
+    }
+}
+
+/* Extra small phones */
+@media (max-width: 480px) {
+    .greeting-text {
+        font-size: 1.8rem;
+        letter-spacing: 0;
+    }
+    
+    .blessing-text {
+        font-size: 1rem;
+        padding: 0 15px;
+    }
+    
+    .festive-overlay {
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+}
+
+

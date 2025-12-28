@@ -108,6 +108,13 @@ $routes->group('Admin', ['filter' => 'permission', 'namespace' => 'App\Controlle
     // Admin Logs
     $routes->get('Logs', 'AdminLogs::index', ['filter' => 'permission:Super Admin']);
     $routes->get('Logs/Clean', 'AdminLogs::deleteOldLogs', ['filter' => 'permission:Super Admin']);
+
+    // Admin Settings
+    $routes->get('Settings', 'ConAdminSettings::index', ['filter' => 'permission:Admin']);
+    $routes->post('Settings/Update', 'ConAdminSettings::updateSetting', ['filter' => 'permission:Admin']);
+    
+    // Admin Settings (Festival Toggle - keeping compatibility or moving)
+    $routes->post('toggleFestival', 'ConAdminSettings::toggleFestival', ['filter' => 'permission:Admin']);
 });
 // 
 

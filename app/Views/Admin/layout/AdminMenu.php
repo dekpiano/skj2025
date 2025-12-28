@@ -80,6 +80,12 @@
                 <div data-i18n="Analytics">บันทึกการใช้งาน (Log)</div>
             </a>
         </li>
+        <li class="menu-item <?=$uri->getSegment(2) == 'Settings'?"active":""?>">
+            <a href="<?=base_url('Admin/Settings');?>" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-cog"></i>
+                <div data-i18n="Analytics">ตั้งค่าระบบ</div>
+            </a>
+        </li>
         <?php endif; ?>
 
     </ul>

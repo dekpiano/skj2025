@@ -63,10 +63,22 @@ abstract class BaseController extends Controller
         // The footer view expects a variable named '$v'
         $this->data['v'] = $visitorModel->getStats();
 
+// App/Models/WebSettingsModel.php
+        $webSettingsModel = new \App\Models\WebSettingsModel();
+        
         // Pass the uri object to the view as well, as it's used in the footer
         $this->data['uri'] = $this->request->uri;
         
         // Pass AboutSchool data to all views
         $this->data['AboutSchool'] = $aboutModel->get()->getResult();
+
+        // Pass Festival Theme Status
+        // Check if table exists first to avoid error if not initialized
+        $db = \Config\Database::connect();
+        if ($db->tableExists('tb_web_settings')) {
+            $this->data['festival_status'] = $webSettingsModel->getStatus('festival_theme');
+        } else {
+            $this->data['festival_status'] = 'off';
+        }
     }
 }

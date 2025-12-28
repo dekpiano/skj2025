@@ -123,6 +123,23 @@
                             </div>
                         </li>
                         <hr>
+                        <h6 class="text-muted mb-3">ตั้งค่าหน้าเว็บไซต์</h6>
+                        <li class="d-flex mb-4 pb-1">
+                            <div class="avatar flex-shrink-0 me-3">
+                                <span class="avatar-initial rounded bg-label-success"><i class="bx bx-party"></i></span>
+                            </div>
+                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                                <div class="me-2">
+                                    <h6 class="mb-0">จัดการธีมเทศกาล</h6>
+                                    <small class="text-muted">เปิด-ปิด หิมะและตกแต่งต่างๆ</small>
+                                </div>
+                                <div class="user-progress">
+                                    <a href="<?= base_url('Admin/Settings') ?>" class="btn btn-xs btn-outline-success">ไปที่หน้าตั้งค่า</a>
+                                </div>
+                            </div>
+                        </li>
+
+                        <hr>
                         <h6 class="text-muted mb-3">เกี่ยวกับโรงเรียน</h6>
                         <?php if (!empty($AboutSchool)) : ?>
                             <?php foreach (array_slice($AboutSchool, 0, 4) as $v_AboutSchool) : ?>
