@@ -68,21 +68,26 @@ function fetchData(page) {
                 data.items.forEach(item => {
                     const gridItem = `
                         <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-                            <div class="card h-100 shadow-sm">
-                                <a href="News/Detail/${item.news_id}" class="CountReadNews" data_view="${item.news_view}" news_id="${item.news_id}">
-                                    <img class="card-img-top" src="uploads/news/${item.news_img}" alt="${item.news_topic}" loading="lazy">
-                                </a>
-                                <div class="card-body d-flex flex-column">
-                                    <h5 class="card-title">
-                                        <a href="News/Detail/${item.news_id}" class="CountReadNews" data_view="${item.news_view}" news_id="${item.news_id}">${item.news_topic}</a>
-                                    </h5>
-                                    <div class="mt-auto">
-                                        <div class="d-flex justify-content-between text-muted small">
-                                            <span><i class="fa fa-user me-2"></i>Admin</span>
-                                            <span><i class="fa fa-calendar-alt me-2"></i>${item.news_date}</span>
-                                            <span><i class="fa fa-eye me-2"></i>${item.news_view}</span>
-                                        </div>
-                                        <a class="btn btn-primary mt-3 CountReadNews" data_view="${item.news_view}" news_id="${item.news_id}" href="News/Detail/${item.news_id}">อ่านต่อ</a>
+                            <div class="news-card shadow-sm">
+                                <div class="news-card-img-wrapper">
+                                    <span class="news-card-badge">PR News</span>
+                                    <a href="News/Detail/${item.news_id}" class="CountReadNews" data_view="${item.news_view}" news_id="${item.news_id}">
+                                        <img class="news-card-img" src="uploads/news/${item.news_img}" alt="${item.news_topic}" loading="lazy">
+                                    </a>
+                                </div>
+                                <div class="news-card-body">
+                                    <div class="news-meta">
+                                        <span><i class="bi bi-person me-1"></i> Admin</span>
+                                        <span><i class="bi bi-calendar3 me-1"></i> ${item.news_date}</span>
+                                        <span><i class="bi bi-eye me-1"></i> ${item.news_view}</span>
+                                    </div>
+                                    <a href="News/Detail/${item.news_id}" class="news-card-title CountReadNews" data_view="${item.news_view}" news_id="${item.news_id}">
+                                        ${item.news_topic}
+                                    </a>
+                                    <div class="news-card-footer">
+                                        <a class="read-more-link CountReadNews" data_view="${item.news_view}" news_id="${item.news_id}" href="News/Detail/${item.news_id}">
+                                            อ่านต่อ <i class="bi bi-arrow-right"></i>
+                                        </a>
                                     </div>
                                 </div>
                             </div>

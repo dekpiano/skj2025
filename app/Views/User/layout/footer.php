@@ -1,33 +1,203 @@
 <!-- Footer Start -->
 
 <style>
-    .messenger-fab {
-        position: fixed;
-        bottom: 10px; /* At the bottom, slightly raised */
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 30000; /* Extremely high to stay ON TOP of snow piles */
-        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    .footer-main {
+        background: linear-gradient(135deg, #177fce 0%, #249ffd 200%);
+        color: #fff;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .footer-main::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 6px;
+        background: linear-gradient(90deg, #ff69b4 0%, #249ffd 50%, #ff69b4 100%);
+    }
+
+    .footer-title {
+        color: #fff;
+        font-weight: 800;
+        font-size: 1.4rem;
+        margin-bottom: 30px;
+        position: relative;
+        padding-bottom: 12px;
+    }
+
+    .footer-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 40px;
+        height: 3px;
+        background: #ff69b4;
+        border-radius: 2px;
+    }
+
+    .footer-link {
+        color: rgba(255, 255, 255, 0.7);
+        text-decoration: none;
         transition: all 0.3s ease;
-        animation: chat-pulse 2s infinite;
+        display: block;
+        margin-bottom: 12px;
+        font-size: 0.95rem;
     }
-    .messenger-fab:hover {
-        transform: translateX(-50%) translateY(-5px);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+
+    .footer-link:hover {
+        color: #ff69b4;
+        padding-left: 8px;
     }
-    @keyframes chat-pulse {
-        0% { box-shadow: 0 0 0 0 rgba(56, 184, 245, 0.7); }
-        70% { box-shadow: 0 0 0 15px rgba(56, 184, 245, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(56, 184, 245, 0); }
-    }
-    .back-to-top {
-        z-index: 30000 !important;
-        width: 30px !important;
-        height: 30px !important;
-        display: flex !important;
+
+    .social-btn {
+        width: 45px;
+        height: 45px;
+        display: inline-flex;
         align-items: center;
         justify-content: center;
-        bottom: 10px !important;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #fff;
+        margin-right: 12px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+
+    .social-btn:hover {
+        background: linear-gradient(45deg, #ff69b4, #249ffd);
+        color: #fff;
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(36, 159, 253, 0.3);
+    }
+
+    .visitor-card {
+        background: rgb(255 255 255 / 25%);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 12px 18px;
+        margin-bottom: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        transition: all 0.3s ease;
+    }
+
+    .visitor-card:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 105, 180, 0.3);
+        transform: translateX(5px);
+    }
+
+    .visitor-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        background: rgba(255, 105, 180, 0.1);
+        color: #ff69b4;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+    }
+
+    .visitor-info h6 {
+        margin: 0;
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.5);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .visitor-info span {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #fff;
+    }
+
+    .newsletter-form {
+        position: relative;
+        margin-top: 20px;
+    }
+
+    .newsletter-input {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 30px;
+        color: #fff;
+        padding: 15px 25px;
+        width: 100%;
+        outline: none;
+        transition: all 0.3s ease;
+    }
+
+    .newsletter-input:focus {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: #ff69b4;
+    }
+
+    .newsletter-btn {
+        position: absolute;
+        right: 5px;
+        top: 5px;
+        bottom: 5px;
+        background: linear-gradient(45deg, #ff69b4, #249ffd);
+        color: #fff;
+        border: none;
+        border-radius: 25px;
+        padding: 0 25px;
+        font-weight: 700;
+        transition: all 0.3s ease;
+    }
+
+    .newsletter-btn:hover {
+        opacity: 0.9;
+        transform: scale(1.02);
+    }
+
+    .footer-bottom {
+        background: rgba(0, 0, 0, 0.4);
+        padding: 25px 0;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .messenger-fab {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 30000;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        transition: all 0.3s ease;
+        animation: chat-pulse 2s infinite;
+        border: none;
+        background: linear-gradient(45deg, #ff69b4, #249ffd) !important;
+    }
+
+    .messenger-fab:hover {
+        transform: translateX(-50%) translateY(-5px);
+        box-shadow: 0 15px 35px rgba(255, 105, 180, 0.4);
+    }
+
+    @keyframes chat-pulse {
+        0% { box-shadow: 0 0 0 0 rgba(255, 105, 180, 0.7); }
+        70% { box-shadow: 0 0 0 15px rgba(255, 105, 180, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(255, 105, 180, 0); }
+    }
+
+    .back-to-top {
+        z-index: 30000 !important;
+        width: 45px !important;
+        height: 45px !important;
+        bottom: 20px !important;
+        right: 20px !important;
+        border: none;
+        background: #ff69b4 !important;
+        box-shadow: 0 10px 20px rgba(255, 105, 180, 0.3);
     }
 </style>
 <a href="http://m.me/230288483730783" target="_blank" class="btn btn-primary messenger-fab px-3 py-1 rounded-pill d-flex align-items-center shadow-lg">
@@ -35,87 +205,97 @@
     <span class="fw-bold" style="font-size: 13px;">ติดต่อสอบถามที่นี่</span>
 </a>
 
-<div class="container-fluid bg-primary2 text-body footer mt-5 pt-5 wow fadeIn <?= (isset($festival_status) && $festival_status == 'on') ? 'snow-cap' : '' ?>" data-wow-delay="0.1s">
+<div class="footer-main mt-5 pt-5 wow fadeIn <?= (isset($festival_status) && $festival_status == 'on') ? 'snow-cap' : '' ?>" data-wow-delay="0.1s">
     <div class="container py-5">
         <div class="row g-5">
             <div class="col-lg-3 col-md-6">
-                <h5 class="text-primary mb-4">ที่อยู่</h5>
-                <p class="mb-2 text-white"><i class="fa fa-map-marker-alt me-3"></i>160 ม.1 ต.นครสวรรค์ออก อ.เมือง
-                    จ.นครสวรรค์ 60000</p>
-                <p class="mb-2 text-white"><i class="fa fa-phone-alt me-3"></i>056-009-667</p>
-                <p class="mb-2 text-white"><i class="fa fa-envelope me-3"></i>skjns160@skj.ac.th</p>
-                <div class="d-flex pt-2">
-
-                    <a class="text-white btn btn-square btn-outline-secondary rounded-circle me-1"
-                        href="https://www.facebook.com/SKJNS160"><i class="fab fa-facebook-f"></i></a>
-                    <a class="text-white btn btn-square btn-outline-secondary rounded-circle me-1"
-                        href="https://www.youtube.com/channel/UC7p4cQQuIFLyrF68p7JbWDw"><i
-                            class="fab fa-youtube"></i></a>
-
+                <h5 class="footer-title">ติดต่อเรา</h5>
+                <p class="mb-3 text-white-50"><i class="bi bi-geo-alt-fill text-primary me-2"></i> 160 ม.1 ต.นครสวรรค์ออก อ.เมือง จ.นครสวรรค์ 60000</p>
+                <p class="mb-3 text-white-50"><i class="bi bi-telephone-fill text-primary me-2"></i> 056-009-667</p>
+                <p class="mb-4 text-white-50"><i class="bi bi-envelope-fill text-primary me-2"></i> skjns160@skj.ac.th</p>
+                
+                <h6 class="text-white mb-3 fw-bold">Social Media</h6>
+                <div class="d-flex">
+                    <a class="social-btn" href="https://www.facebook.com/SKJNS160"><i class="fab fa-facebook-f"></i></a>
+                    <a class="social-btn" href="https://www.youtube.com/channel/UC7p4cQQuIFLyrF68p7JbWDw"><i class="fab fa-youtube"></i></a>
                 </div>
-                <!-- <p class="mt-4">
-                    <script type="text/javascript" src="https://www.counters-free.net/count/7r1m"></script><br>
-                    <a href='http://www.counter-zaehler.de'>เยี่ยมชม</a>
-                    <script type='text/javascript'
-                        src='https://www.whomania.com/ctr?id=f2a759e919e693827d52f2dbf02835d8c9576ede'></script>
-                </p> -->
-
-            </div>
-            <div class="col-lg-6 col-md-6">
-                <h5 class="text-primary mb-4">โรงเรียนเครือสวนกุหลาบวิทยาลัย</h5>
-                <a class="btn btn-link text-white" target="_blank" href="http://www.sk.ac.th/">สวนกุหลาบวิทยาลัย</a>
-                <a class="btn btn-link text-white" target="_blank" href="http://www.skn.ac.th/">สวนกุหลาบวิทยาลัย
-                    นนทบุรี</a>
-                <a class="btn btn-link text-white" target="_blank" href="http://www.skr.ac.th/">สวนกุหลาบวิทยาลัย
-                    รังสิต</a>
-                <a class="btn btn-link text-white" target="_blank" href="http://www.sks.ac.th/">นวมินทราชินูทิศ
-                    สวนกุหลาบวิทยาลัย สมุทรปราการ</a>
-                <a class="btn btn-link text-white" target="_blank" href="http://www.skp.ac.th/">นวมินทราชินูทิศ
-                    สวนกุหลาบวิทยาลัย ปทุมธานี</a>
-                <a class="btn btn-link text-white" target="_blank" href="http://www.skpb.ac.th/">สวนกุหลาบวิทยาลัย
-                    เพชรบูรณ์</a>
-                <a class="btn btn-link text-white" target="_blank" href="https://www.sksb.ac.th/">สวนกุหลาบวิทยาลัย
-                    สระบุรี</a>
-                <a class="btn btn-link text-white" target="_blank" href="http://www.suanchon.ac.th/">สวนกุหลาบวิทยาลัย
-                    ชลบุรี</a>
-                <a class="btn btn-link text-white" target="_blank" href="https://www.skj.ac.th/">สวนกุหลาบวิทยาลัย
-                    (จิรประวัติ) นครสวรรค์</a>
-                <a class="btn btn-link text-white" target="_blank"
-                    href="http://www.sk-thonburi.ac.th/">สวนกุหลาบวิทยาลัย ธนบุรี</a>
-                <a class="btn btn-link text-white" target="_blank" href="http://www.skns.ac.th/">สวนกุหลาบวิทยาลัย
-                    นครศรีธรรมราช</a>
-
             </div>
 
+            <div class="col-lg-6 col-md-6 border-start border-white border-opacity-10 ps-lg-5">
+                <h5 class="footer-title">โรงเรียนเครือสวนกุหลาบวิทยาลัย</h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <a class="footer-link" target="_blank" href="http://www.sk.ac.th/"><i class="bi bi-link-45deg me-1"></i> สวนกุหลาบวิทยาลัย</a>
+                        <a class="footer-link" target="_blank" href="http://www.skn.ac.th/"><i class="bi bi-link-45deg me-1"></i> สวนกุหลาบวิทยาลัย นนทบุรี</a>
+                        <a class="footer-link" target="_blank" href="http://www.skr.ac.th/"><i class="bi bi-link-45deg me-1"></i> สวนกุหลาบวิทยาลัย รังสิต</a>
+                        <a class="footer-link" target="_blank" href="http://www.sks.ac.th/"><i class="bi bi-link-45deg me-1"></i> นวมินทราชินูทิศ สวนกุหลาบวิทยาลัย สมุทรปราการ</a>
+                        <a class="footer-link" target="_blank" href="http://www.skp.ac.th/"><i class="bi bi-link-45deg me-1"></i> นวมินทราชินูทิศ สวนกุหลาบวิทยาลัย ปทุมธานี</a>
+                    </div>
+                    <div class="col-md-6">
+                        <a class="footer-link" target="_blank" href="http://www.skpb.ac.th/"><i class="bi bi-link-45deg me-1"></i> สวนกุหลาบวิทยาลัย เพชรบูรณ์</a>
+                        <a class="footer-link" target="_blank" href="https://www.sksb.ac.th/"><i class="bi bi-link-45deg me-1"></i> สวนกุหลาบวิทยาลัย สระบุรี</a>
+                        <a class="footer-link" target="_blank" href="http://www.suanchon.ac.th/"><i class="bi bi-link-45deg me-1"></i> สวนกุหลาบวิทยาลัย ชลบุรี</a>
+                        <a class="footer-link" target="_blank" href="http://www.skns.ac.th/"><i class="bi bi-link-45deg me-1"></i> สวนกุหลาบวิทยาลัย นครศรีธรรมราช</a>
+                        <a class="footer-link" target="_blank" href="http://www.sk-thonburi.ac.th/"><i class="bi bi-link-45deg me-1"></i> สวนกุหลาบวิทยาลัย ธนบุรี</a>
+                    </div>
+                </div>
+            </div>
 
             <div class="col-lg-3 col-md-6">
-                <h5 class="mb-4 text-primary">ติดตามข่าวสารโรงเรียน สกจ</h5>
-                <div class="position-relative mx-auto" style="max-width: 400px;">
-                    <input class="form-control  w-100 py-3 ps-4 pe-5" type="text" placeholder="Your email">
-                    <button type="button"
-                        class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">ติดตาม</button>
+                <h5 class="footer-title">สถิติผู้เข้าชม</h5>
+                
+                <div class="visitor-card">
+                    <div class="visitor-icon"><i class="bi bi-eye-fill"></i></div>
+                    <div class="visitor-info">
+                        <h6>ทั้งหมด</h6>
+                        <span><?= number_format($v['visitAll']) ?></span>
+                    </div>
                 </div>
-<br>
-                <h5 class="text-primary mb-4">ผู้เข้าชมเว็บไซต์</h5>
-                <p class="mb-2 text-white"><i class="fa-solid fa-eye me-3"></i>ทั้งหมด : <?=$v['visitAll']?></p>
-                <p class="mb-2 text-white"><i class="fa-solid fa-user me-3"></i>วันนี้ : <?=$v['VisitToday']?></p>
-                <p class="mb-2 text-white"><i class="fa-solid fa-users me-3"></i>เดือนนี้ : <?=$v['visitMouth']?></p>
-                <p class="mb-2 text-white"><i class="fa-solid fa-users-rays me-3"></i>ปีนี้ : <?=$v['visitYear']?></p>
+                
+                <div class="visitor-card">
+                    <div class="visitor-icon"><i class="bi bi-person-fill"></i></div>
+                    <div class="visitor-info">
+                        <h6>วันนี้</h6>
+                        <span><?= number_format($v['VisitToday']) ?></span>
+                    </div>
+                </div>
 
+                <div class="visitor-card">
+                    <div class="visitor-icon"><i class="bi bi-calendar-event-fill"></i></div>
+                    <div class="visitor-info">
+                        <h6>เดือนนี้</h6>
+                        <span><?= number_format($v['visitMouth']) ?></span>
+                    </div>
+                </div>
+
+                <div class="visitor-card">
+                    <div class="visitor-icon"><i class="bi bi-graph-up-arrow"></i></div>
+                    <div class="visitor-info">
+                        <h6>ปีนี้</h6>
+                        <span><?= number_format($v['visitYear']) ?></span>
+                    </div>
+                </div>
+
+                <div class="newsletter-form mt-4">
+                    <h6 class="text-white mb-3 fw-bold">รับข่าวสารทางอีเมล</h6>
+                    <div class="position-relative">
+                        <input type="email" class="newsletter-input" placeholder="Your Email">
+                        <button class="newsletter-btn">ตกลง</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="container-fluid copyright">
+
+    <div class="footer-bottom">
         <div class="container">
-            <div class="row">
-                <div class="col-md-6 text-center text-md-start mb-3 mb-md-0 text-white">
-                    &copy; <a href="#">โรงเรียนเครือสวนกุหลาบวิทยาลัย (จิรประวัติ) นครสวรรค์</a>, All Right Reserved.
-                    2022 V.1
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start mb-3 mb-md-0 fw-light text-white-50 small">
+                    &copy; <span class="text-white fw-bold">โรงเรียนเครือสวนกุหลาบวิทยาลัย (จิรประวัติ) นครสวรรค์</span>. All Rights Reserved.
                 </div>
-                <div class="col-md-6 text-center text-md-end text-white">
-                    <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
-                    Author By <a href="https://www.facebook.com/dekpiano">Dekpiano</a> : <a href="#"
-                        data-bs-toggle="modal" data-bs-target="#loginModal">Login Admim</a>
+                <div class="col-md-6 text-center text-md-end text-white-50 small">
+                    Author By <a href="https://www.facebook.com/dekpiano" class="text-primary text-decoration-none fw-bold">Dekpiano</a> | 
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal" class="text-white-50 text-decoration-none ms-2">Admin Login</a>
                 </div>
             </div>
         </div>
