@@ -1,3 +1,4 @@
+<div style="background-color: #ffffff; padding: 40px 0;">
 <div class="container py-5">
     <div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s"
         style="max-width: 600px; visibility: visible; animation-delay: 0.1s; animation-name: fadeInUp;">
@@ -33,4 +34,5 @@
             
         </div>
     </div>
+</div>
 </div>

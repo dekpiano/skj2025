@@ -1,64 +1,45 @@
 <!-- Brand & Contact Start -->
-<div class="container-fluid py-4 px-3 wow fadeIn d-none d-lg-block" data-wow-delay="0.1s">
-    <div class="row align-items-center top-bar">
-        <div class="col-lg-6 col-md-12 text-center text-lg-start">
-            <a href="<?=base_url('/');?>" class="navbar-brand m-0 p-0 d-none d-lg-block">
-                <h3 class="fw-bold text-primary m-0" style="font-family:'Pattaya'">
-
-                    <div class="row  con-header">
-                        <div class="d-flex align-items-center justify-content-lg-start justify-content-md-center">
-                            <div class="mx-3">
-                                <img data-src="<?=base_url()?>/assets/img/logo/Logo-nav.png" alt="Logo">
-                            </div>
-                            <div class="text-header" style="font-family: 'K2D', sans-serif;">
-                                <div class="text-thai">
-                                    สวนกุหลาบวิทยาลัย (จิรประวัติ) นครสวรรค์
-                                </div>
-                                <div class="text-eng">
-                                    Suankularb Wittayalai (Jiraprawat) Nakhon Sawan
-                                </div>
-                            </div>
-                        </div>
-
+<div class="container-fluid py-3 px-4 wow fadeIn d-none d-lg-block top-bar-premium" data-wow-delay="0.1s">
+    <div class="row align-items-center">
+        <div class="col-lg-6">
+            <a href="<?= base_url('/'); ?>" class="navbar-brand-premium">
+                <div class="d-flex align-items-center">
+                    <div class="logo-wrapper-nav">
+                        <img src="<?= base_url() ?>/assets/img/logo/Logo-nav.png" alt="SKJ Logo" class="img-fluid">
                     </div>
-
-
-                </h3>
-                <!-- <img data-src="<?=base_url()?>/assets/img/logo.png" alt="Logo"> -->
+                    <div class="brand-text-nav ms-3">
+                        <div class="text-thai-nav">สวนกุหลาบวิทยาลัย (จิรประวัติ) นครสวรรค์</div>
+                        <div class="text-eng-nav">Suankularb Wittayalai (Jiraprawat) Nakhon Sawan</div>
+                    </div>
+                </div>
             </a>
         </div>
-        <div class="col-lg-6 col-md-7 d-none d-lg-block">
-            <div class="row header-content">
-                <div class="col-4">
-                    <div class="d-flex align-items-center justify-content-end">
-                        <div class="flex-shrink-0 btn-lg-square border rounded-circle">
-                            <i class="far fa-clock text-primary"></i>
-                        </div>
-                        <div class="ps-3">
-                            <p class="mb-2">เวลาทำการ</p>
-                            <h6 class="mb-0">จันทร์ - ศุกร์, 8:30 - 16:30</h6>
+        <div class="col-lg-6">
+            <div class="row g-0 justify-content-end top-info-wrapper">
+                <div class="col-auto px-4 border-end border-light-subtle">
+                    <div class="d-flex align-items-center">
+                        <div class="info-icon-nav pink"><i class="bi bi-clock"></i></div>
+                        <div class="ms-3">
+                            <div class="info-label-nav">เวลาทำการ</div>
+                            <div class="info-value-nav">จันทร์ - ศุกร์, 08:30 - 16:30</div>
                         </div>
                     </div>
                 </div>
-                <div class="col-4">
-                    <div class="d-flex align-items-center justify-content-end">
-                        <div class="flex-shrink-0 btn-lg-square border rounded-circle">
-                            <i class="fa fa-phone text-primary"></i>
-                        </div>
-                        <div class="ps-3">
-                            <p class="mb-2">ติดต่อ</p>
-                            <h6 class="mb-0">056-009-667</h6>
+                <div class="col-auto px-4 border-end border-light-subtle">
+                    <div class="d-flex align-items-center">
+                        <div class="info-icon-nav blue"><i class="bi bi-telephone"></i></div>
+                        <div class="ms-3">
+                            <div class="info-label-nav">ติดต่อเรา</div>
+                            <div class="info-value-nav">056-009-667</div>
                         </div>
                     </div>
                 </div>
-                <div class="col-4">
-                    <div class="d-flex align-items-center justify-content-end">
-                        <div class="flex-shrink-0 btn-lg-square border rounded-circle">
-                            <i class="far fa-envelope text-primary"></i>
-                        </div>
-                        <div class="ps-3">
-                            <p class="mb-2">Email Us</p>
-                            <h6 class="mb-0">skjns160@skj.ac.th</h6>
+                <div class="col-auto ps-4">
+                    <div class="d-flex align-items-center">
+                        <div class="info-icon-nav pink"><i class="bi bi-envelope"></i></div>
+                        <div class="ms-3">
+                            <div class="info-label-nav">อีเมล</div>
+                            <div class="info-value-nav">skjns160@skj.ac.th</div>
                         </div>
                     </div>
                 </div>
@@ -69,249 +50,468 @@
 <!-- Brand & Contact End -->
 
 <style>
-.dropdown-menu .dropdown-item {
-    margin-bottom: 10px;
-}
-
-.dropdown-menu .dropdown-item:hover {
-    background-color: #38b8f5;
-    color: #fff;
-}
-
-.dropdown-mega .dropdown-menu {
-    width: 100%;
-}
-
-.dropdown-mega h5 {
-    padding-bottom: 12px;
-    border-bottom: 1px solid rgba(0, 0, 0, .125);
-    margin: 0;
-}
-
-.list-group-item {
-    font-size: 16px;
-    color: #3F3B51;
-    border: 0;
-    border-bottom: 1px solid rgba(0, 0, 0, .125);
-    padding: 12px 0;
-}
-
-.list-group-item:hover {
-    color: #008489;
-}
-
-/* Custom CSS for Bootstrap Mega Menu - From codingyaar.com, adapted for SKJ theme */
-@media only screen and (min-width: 992px) {
-  .navbar .dropdown:hover .mega-dropdown-menu {
-    display: flex;
-  }
-}
-.navbar .mega-dropdown-menu {
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-  border: none;
-  border-radius: 0;
-  padding: 0.7em;
-}
-.navbar .mega-dropdown-menu ul {
-  list-style: none;
-  padding: 0;
-}
-.navbar .mega-dropdown-menu li .dropdown-item {
-  color: var(--dark); /* Use theme's dark color */
-  font-size: 1em;
-  padding: 0.5em 1em;
-}
-.navbar .mega-dropdown-menu li .dropdown-item:hover {
-  background-color: var(--light); /* Use theme's light color */
-}
-.navbar .mega-dropdown-menu li:first-child a {
-  font-weight: bold;
-  font-size: 1.1em; /* Slightly adjusted for consistency with other nav items */
-  text-transform: uppercase;
-  color: var(--secondary); /* Use theme's secondary color */
-}
-.navbar .mega-dropdown-menu li:first-child a:hover {
-  background-color: var(--light); /* Use theme's light color */
-}
-@media only screen and (min-width: 992px) and (max-width: 1140px) {
-  .navbar .dropdown:hover .mega-dropdown-menu {
-    width: 40vw;
-    flex-wrap: wrap;
-  }
-}
-
-
-
-/* Responsive */
-@media(max-width: 991.5px) {
-    .navbar-brand {
-        font-size: 1rem; /* Adjusted font size for mobile */
-        padding-top: 0.2rem; /* Adjust padding to move it up */
-        padding-bottom: 0.2rem;
-        white-space: nowrap; /* Prevent text wrapping */
-        overflow: hidden;
-        text-overflow: ellipsis;
-        flex-shrink: 1;
-        display: flex; /* Use flexbox for alignment */
-        align-items: center; /* Vertically align items */
-    }
-    .navbar-brand img {
-        height: 1.5rem; /* Adjust logo size */
-        margin-right: 0.5rem; /* Space between logo and text */
-        vertical-align: middle;
+    /* Premium Top Bar Styles */
+    .top-bar-premium {
+        background: #fff;
+        border-bottom: 2px solid #FB7E9C;
     }
 
-    .navbar-nav .nav-item {
-        margin: 5px 10px;
+    .logo-wrapper-nav img {
+        height: 65px;
+        transition: transform 0.3s ease;
     }
 
-    form {
-        margin: 30px 0;
+    .navbar-brand-premium:hover .logo-wrapper-nav img {
+        transform: scale(1.05);
     }
-}
+
+    .brand-text-nav {
+        font-family: 'K2D', sans-serif;
+    }
+
+    .text-thai-nav {
+        color: #FB7E9C;
+        font-weight: 800;
+        font-size: 1.25rem;
+        line-height: 1.2;
+    }
+
+    .text-eng-nav {
+        color: #249ffd;
+        font-size: 0.85rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+
+    .info-icon-nav {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+    }
+
+    .info-icon-nav.blue { background: rgba(251, 126, 156, 0.1); color: #FB7E9C; }
+    .info-icon-nav.pink { background: rgba(36, 159, 253, 0.1); color: #249ffd; }
+
+    .info-label-nav {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #888;
+        font-weight: 700;
+        margin-bottom: 2px;
+    }
+
+    .info-value-nav {
+        font-size: 0.9rem;
+        color: #FB7E9C;
+        font-weight: 700;
+    }
+
+    /* Navbar Modern Styles */
+    .navbar-skj {
+        background: #FB7E9C !important;
+        padding: 0;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        border-top: 4px solid #249ffd;
+    }
+
+    @media (max-width: 991px) {
+        .navbar-skj {
+            padding: 10px 0;
+            border-top: none;
+        }
+    }
+
+    .navbar-skj .nav-link {
+        color: rgba(255,255,255,0.8) !important;
+        font-weight: 600;
+        padding: 25px 12px !important; /* Reduced padding */
+        position: relative;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        white-space: nowrap; /* Prevent text wrap */
+    }
+
+    /* Screen size specific adjustments to prevent wrapping */
+    @media (min-width: 992px) and (max-width: 1400px) {
+        .navbar-skj .nav-link {
+            padding: 25px 8px !important;
+            font-size: 0.85rem;
+        }
+        .navbar-skj .nav-link i {
+            font-size: 0.9rem;
+        }
+    }
+
+    .navbar-skj .nav-link i {
+        font-size: 1rem;
+        transition: transform 0.3s ease;
+    }
+
+    .navbar-skj .nav-link:hover {
+        color: #fff !important;
+    }
+
+    .navbar-skj .nav-link:hover i {
+        transform: translateY(-2px);
+        color: #249ffd;
+    }
+
+    .navbar-skj .nav-link::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 3px;
+        background: #249ffd;
+        transition: all 0.3s ease;
+        transform: translateX(-50%);
+    }
+
+    .navbar-skj .nav-link:hover::after,
+    .navbar-skj .nav-link.active::after {
+        width: 100%;
+    }
+
+    /* Dropdown Premium */
+    .dropdown-menu-skj {
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        padding: 15px;
+        margin-top: 0;
+        background: #fff;
+        animation: fadeInDown 0.3s ease;
+    }
+
+    .dropdown-item-skj {
+        border-radius: 10px;
+        padding: 10px 15px;
+        font-weight: 600;
+        color: #444;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 5px;
+    }
+
+    .dropdown-item-skj:last-child { margin-bottom: 0; }
+
+    .dropdown-item-skj:hover {
+        background: rgba(251, 126, 156, 0.1);
+        color: #FB7E9C;
+        transform: translateX(5px);
+    }
+
+    .dropdown-item-skj i {
+        font-size: 1.1rem;
+        color: #FB7E9C;
+    }
+
+    /* Mega Menu Premium */
+    @media (min-width: 992px) {
+        .navbar-skj .nav-item.dropdown {
+            position: static !important;
+        }
+    }
+
+    .mega-menu-premium {
+        width: 100%;
+        max-width: 1200px;
+        padding: 35px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        border-radius: 0 0 30px 30px !important;
+    }
+
+    .mega-column-title {
+        font-weight: 800;
+        color: #1a2a4d;
+        font-size: 0.95rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #f8f9fa;
+    }
+
+    .mega-column-title i { color: #249ffd; }
+
+    /* Mobile Brand & Menu */
+    .navbar-skj .container-fluid {
+        display: flex !important;
+        flex-wrap: wrap !important; /* Allow wrapping for the collapse menu */
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    @media (max-width: 991px) {
+        .navbar-skj .navbar-brand {
+            flex-grow: 1;
+            min-width: 0;
+            max-width: calc(100% - 60px); /* Ensure space for toggler on the same line */
+            margin-right: 0;
+        }
+
+        .navbar-collapse {
+            flex-basis: 100%; /* Force collapse menu to take full width and wrap to next line */
+            margin-top: 10px;
+        }
+    }
+
+    .navbar-brand-mobile {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        min-width: 0;
+    }
+
+    .navbar-brand-mobile img {
+        height: 45px;
+        flex-shrink: 0;
+    }
+
+    @media (max-width: 375px) {
+        .navbar-brand-mobile img {
+            height: 30px; /* Further reduced */
+        }
+    }
+
+    .brand-text-mobile {
+        color: #fff;
+        font-weight: 700;
+        font-size: clamp(0.6rem, 3.5vw, 0.9rem);
+        line-height: 1;
+        white-space: normal;
+        display: block;
+    }
+
+    .brand-text-mobile .thai-name {
+        display: block;
+        margin-bottom: 1px;
+    }
+
+    .brand-text-mobile .eng-name {
+        display: block;
+        font-size: 0.6em;
+        font-weight: 500;
+        opacity: 0.8;
+        letter-spacing: 0.3px;
+        text-transform: uppercase;
+    }
+
+    .navbar-toggler-skj {
+        border: none;
+        padding: 5px;
+        outline: none !important;
+        box-shadow: none !important;
+        flex-shrink: 0; /* Keep toggler from shrinking */
+    }
+
+    .toggler-icon-premium {
+        width: 30px;
+        height: 2px;
+        background: #fff;
+        display: block;
+        margin: 6px 0;
+        transition: all 0.3s ease;
+        border-radius: 2px;
+    }
+
+    @media (max-width: 991px) {
+        .navbar-collapse {
+            background: #249ffd !important; /* Changed from navy to theme blue */
+            margin-top: 15px;
+            border-radius: 20px;
+            padding: 20px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .navbar-skj .nav-link {
+            padding: 15px 10px !important;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            color: #fff !important;
+        }
+
+        .navbar-skj .nav-link::after { display: none; }
+
+        .mega-menu-premium {
+            min-width: 100%;
+            left: 0 !important;
+            transform: none !important;
+            background: transparent;
+            box-shadow: none;
+            padding: 0 !important;
+        }
+
+        .mega-column-title {
+            color: #fff !important; /* Changed from blue to white for visibility */
+            margin-top: 20px;
+            border-bottom-color: rgba(255,255,255,0.2);
+            font-size: 1.1rem;
+        }
+
+        .mega-column-title i {
+            color: #fff !important;
+        }
+
+        .dropdown-item-skj {
+            color: rgba(255,255,255,0.9);
+        }
+
+        .dropdown-item-skj:hover {
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+        }
+
+        .dropdown-item-skj i {
+            color: #fff;
+        }
+    }
+
+    /* Countdown Styling - Using styles from newyear_snow.css */
+    #nav-countdown {
+        flex-shrink: 0; /* Prevent countdown from shrinking or taking too much space */
+    }
+
+    @media (max-width: 991px) {
+        #nav-countdown {
+            margin: 20px 0;
+            justify-content: center;
+        }
+    }
+
+    @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
 </style>
-<!-- Navbar Start -->
-<nav class="navbar navbar-expand-lg bg-primary navbar-dark sticky-top py-2 wow fadeIn" data-wow-delay="0.1s"
-    style="font-size: 14px;border-top: 5px solid #38B8F5;">
-    <div class="container-fluid px-3 px-lg-5">
-        <a href="<?=base_url('/');?>" class="navbar-brand d-lg-none"><img src="<?=base_url()?>/assets/img/logo/Logo-nav.png" alt="Logo">สวนกุหลาบวิทยาลัย (จิรประวัติ) นครสวรรค์</a>
-        <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-            <div class="navbar-nav me-auto p-3 p-lg-0">
 
+<!-- Navbar Start -->
+<nav class="navbar navbar-expand-lg navbar-skj sticky-top wow fadeIn" data-wow-delay="0.1s">
+    <div class="container-fluid px-4 px-lg-5">
+        <a href="<?= base_url('/'); ?>" class="navbar-brand d-lg-none">
+            <div class="navbar-brand-mobile">
+                <img src="<?= base_url() ?>/assets/img/logo/Logo-nav.png" alt="Logo">
+                <div class="brand-text-mobile">
+                    <span class="thai-name">สวนกุหลาบวิทยาลัย (จิรประวัติ) นครสวรรค์</span>
+                    <span class="eng-name">Suankularb Wittayalai (Jiraprawat) Nakhon Sawan</span>
+                </div>
+            </div>
+        </a>
+
+        <button type="button" class="navbar-toggler navbar-toggler-skj" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="toggler-icon-premium"></span>
+            <span class="toggler-icon-premium" style="width: 20px;"></span>
+            <span class="toggler-icon-premium"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav me-auto py-0">
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                        <i class="fa-solid fa-house"></i> เกี่ยวกับ สกจ
+                        <i class="bi bi-house-door"></i> เกี่ยวกับ สกจ
                     </a>
-                    <div class="dropdown-menu border-0 rounded-0 rounded-bottom m-0">
+                    <div class="dropdown-menu dropdown-menu-skj">
                         <?php foreach ($AboutSchool as $key => $v_AboutSchool) : ?>
-                        <a href="<?=base_url('About/'. urlencode($v_AboutSchool->about_menu))?>" class="dropdown-item"><i
-                                class="fa-solid fa-info-circle me-2"></i> <?=$v_AboutSchool->about_menu?></a>
+                        <a href="<?= base_url('About/' . urlencode($v_AboutSchool->about_menu)) ?>" class="dropdown-item dropdown-item-skj">
+                            <i class="bi bi-info-circle"></i> <?= $v_AboutSchool->about_menu ?>
+                        </a>
                         <?php endforeach; ?>
                     </div>
                 </div>
+
                 <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPersonnel" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fa-solid fa-users"></i> หน่วยงาน
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                        <i class="bi bi-people"></i> หน่วยงาน
                     </a>
-                    <div class="dropdown-menu shadow border-0 rounded-0 rounded-bottom m-0 mega-dropdown-menu" aria-labelledby="navbarDropdownPersonnel">
-                        <ul>
-                            <li><a class="dropdown-item" href="#"><i class="fa-solid fa-user-tie me-2"></i>ฝ่ายบริหาร</a></li>
-                            <li><a class="dropdown-item" href="https://academic.skj.ac.th/"><b><i class="fa-solid fa-book-open me-2"></i>วิชาการ</b></a></li>
-                             <li><a class="dropdown-item" href="https://general.skj.ac.th/"><b><i class="fa-solid fa-briefcase me-2"></i>งานทั่วไป</b></a></li>
-                             <li><a class="dropdown-item" href="https://personnel.skj.ac.th/"><b><i class="fa-solid fa-users-cog me-2"></i>งานบุคคล</b></a></li>
-                             <li><a class="dropdown-item" href="https://budgetplan.skj.ac.th/"><b><i class="fa-solid fa-chart-line me-2"></i>งบประมาณและแผน</b></a></li>
-                        </ul>
-                        <ul>
-                            <li><a class="dropdown-item" href="<?=base_url('Personnal/'.urlencode("สายการสอน"))?>"><b><i class="fa-solid fa-chalkboard-teacher me-2"></i>บุคลากร</b></a></li>
-                            <li><a class="dropdown-item" href="<?=base_url('Personnal/'.urlencode("สายบริหาร/ผู้บริหารสถานศึกษา"))?>"><i class="fa-solid fa-user-tie me-2"></i>ฝ่ายบริหาร</a></li>
-                            <?php foreach ($Lear as $key => $v_Lear) : ?>
-                                <li><a class="dropdown-item" href="<?=base_url('Personnal/'.urlencode("สายการสอน/").str_replace(" ", "-", urlencode($v_Lear->lear_namethai)))?>"><i class="fa-solid fa-user-graduate me-2"></i> <?=$v_Lear->lear_namethai;?></a></li>
-                            <?php endforeach; ?>
-                        </ul>
-                        <ul>
-                            <li><a class="dropdown-item" href="<?=base_url('Personnal/'.urlencode("สายสนับสนุน"))?>"><b><i class="fa-solid fa-people-carry me-2"></i>สายสนับสนุน</b></a></li>
-                            <?php foreach ($PosiOther as $key => $v_PosiOther) : ?>
-                                <li><a class="dropdown-item" href="<?=base_url('Personnal/สายสนับสนุน/'.str_replace(" ", "-", urlencode($v_PosiOther->posi_name)))?>"><i class="fa-solid fa-user-tag me-2"></i> <?=$v_PosiOther->posi_name;?></a></li>
-                            <?php endforeach; ?>
-                        </ul>
+                    <div class="dropdown-menu dropdown-menu-skj mega-menu-premium">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <h6 class="mega-column-title"><i class="bi bi-briefcase"></i> ฝ่ายบริหารงาน</h6>
+                                <a href="https://academic.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i class="bi bi-book"></i> วิชาการ</a>
+                                <a href="https://general.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i class="bi bi-gear"></i> งานทั่วไป</a>
+                                <a href="https://personnel.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i class="bi bi-person-badge"></i> งานบุคคล</a>
+                                <a href="https://budgetplan.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i class="bi bi-bar-chart-line"></i> งบประมาณและแผน</a>
+                            </div>
+                            <div class="col-lg-4">
+                                <h6 class="mega-column-title"><i class="bi bi-mortarboard"></i> บุคลากรสายการสอน</h6>
+                                <a href="<?= base_url('Personnal/' . urlencode("สายการสอน")) ?>" class="dropdown-item dropdown-item-skj"><b><i class="bi bi-people-fill"></i> บุคลากรทั้งหมด</b></a>
+                                <?php foreach ($Lear as $key => $v_Lear) : ?>
+                                    <a href="<?= base_url('Personnal/' . urlencode("สายการสอน/") . str_replace(" ", "-", urlencode($v_Lear->lear_namethai))) ?>" class="dropdown-item dropdown-item-skj">
+                                        <i class="bi bi-chevron-right small"></i> <?= $v_Lear->lear_namethai; ?>
+                                    </a>
+                                <?php endforeach; ?>
+                            </div>
+                            <div class="col-lg-4">
+                                <h6 class="mega-column-title"><i class="bi bi-tools"></i> สายสนับสนุน</h6>
+                                <a href="<?= base_url('Personnal/' . urlencode("สายสนับสนุน")) ?>" class="dropdown-item dropdown-item-skj"><b><i class="bi bi-person-gear"></i> สายสนับสนุนทั้งหมด</b></a>
+                                <?php foreach ($PosiOther as $key => $v_PosiOther) : ?>
+                                    <a href="<?= base_url('Personnal/สายสนับสนุน/' . str_replace(" ", "-", urlencode($v_PosiOther->posi_name))) ?>" class="dropdown-item dropdown-item-skj">
+                                        <i class="bi bi-chevron-right small"></i> <?= $v_PosiOther->posi_name; ?>
+                                    </a>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <a href="<?=base_url('News')?>" class="nav-item nav-link"><i class="fa-solid fa-newspaper"></i>
-                    ประชาสัมพันธ์</a>
+                <a href="<?= base_url('News') ?>" class="nav-item nav-link">
+                    <i class="bi bi-newspaper"></i> ประชาสัมพันธ์
+                </a>
 
+                <a href="<?= base_url('Course') ?>" class="nav-item nav-link">
+                    <i class="bi bi-mortarboard-fill"></i> หลักสูตรความเป็นเลิศ
+                </a>
 
-
-                <!-- <a href="<?=base_url('Contact')?>" class="nav-item nav-link"><i class="fa-solid fa-address-book"></i>
-                    ติดต่อ</a> -->
-                <a href="<?=base_url('Course')?>" class="nav-item nav-link"><i class="fa-solid fa-address-book"></i>
-                    หลักสูตรความเป็นเลิศ</a>
-
-                    
                 <div class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownAdmin" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fa-solid fa-layer-group"></i> SKJ บริการ
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                        <i class="bi bi-grid-3x3-gap"></i> SKJ บริการ
                     </a>
-                    <div class="dropdown-menu shadow border-0 rounded-0 rounded-bottom m-0 mega-dropdown-menu" aria-labelledby="navbarDropdownAdmin">
-                        <ul>
-                            <li><a class="dropdown-item" href="https://academic.skj.ac.th/"><b><i class="fa-solid fa-book-open me-2"></i>วิชาการ</b></a></li>
-                            <li><a href="https://admission.skj.ac.th/" class="dropdown-item">
-                            <i class="fa-solid fa-user-plus"></i>
-                            รับสมัครนักเรียน</a></li>
-                            <li>
-                                 <a href="https://academic.skj.ac.th/LearningOnline" class="dropdown-item">
-                                    <i class="fa-solid fa-globe"></i> ห้องเรียนออนไลน์
-                                </a>
-                            </li>
-                            <li>
-                                <a href="https://learnsuan.skj.ac.th/" class="dropdown-item">
-                                                    <i class="fa-solid fa-book"></i>
-                                                    สวนกุหลาบศึกษา
-                                                 </a>                        <a href="<?=base_url('guidance')?>" class="dropdown-item">
-                            <i class="fa-solid fa-graduation-cap"></i>
-                            ทุนการศึกษา
-                        </a>
-                            </li>
-                            <li>
-                                <a href="<?=base_url('Yearbook')?>" class="dropdown-item">
-                                    <i class="fa-solid fa-book-open"></i>
-                                    หนังสือรุ่น ส.ก.จ.
-                                </a>
-                            </li>
-                            <li>
-                                <a href="https://sites.google.com/skj.ac.th/skj68/home" target="_blank" class="dropdown-item">
-                                    <i class="fa-solid fa-file-export"></i>
-                                    การประกันคุณภาพภายนอก
-                                </a>
-                            </li>
-                        </ul>
-                        <ul>
-                            <li><a class="dropdown-item" href="https://general.skj.ac.th/"><b><i class="fa-solid fa-briefcase me-2"></i>งานทั่วไป</b></a></li>
-                            <li><a class="dropdown-item" href="https://general.skj.ac.th/Booking"><i class="fa-solid fa-house-user me-2"></i>จองอาคารสถานที่</a></li>
-                            <li><a class="dropdown-item" href="https://general.skj.ac.th/CarBooking"><i class="fa-solid fa-car-side me-2"></i>จองยานพาหนะ</a></li>
-                            <li><a class="dropdown-item" href="https://general.skj.ac.th/Repair"><i class="fa-solid fa-screwdriver-wrench me-2"></i>แจ้งซ่อมออนไลน์</a></li>
-                            <li><a class="dropdown-item" href="https://general.skj.ac.th/FoodReport"><i class="fa-solid fa-utensils me-2"></i>รายงานอาหาร</a></li>
-                            
-                        </ul>
-                        <ul>
-                             <li><a class="dropdown-item" href="https://personnel.skj.ac.th/"><b><i class="fa-solid fa-users-cog me-2"></i>งานบุคคล</b></a></li>
-                            <li><a class="dropdown-item" href="https://personnel.skj.ac.th/"><i class="fa-solid fa-user-friends me-2"></i>งานบุคคล</a></li>
-                        </ul>
-                        <ul>
-                            <li><a class="dropdown-item" href="https://budgetplan.skj.ac.th/"><b><i class="fa-solid fa-chart-line me-2"></i>งบประมาณและแผน</b></a></li>
-                            <li>
-                                <a href="https://general.skj.ac.th/Procurements" class="dropdown-item">
-                            <i class="fa-solid fa-shopping-cart"></i>
-                            การจัดซื้อจัดจ้าง
-                        </a>
-                            </li>
-                        </ul>
-                        <ul>
-                            <li><a class="dropdown-item" href="#"><b><i class="fa-solid fa-chart-line me-2"></i>สารสนเทศ</b></a></li>
-                            <li>
-                                 <a href="<?=base_url('PageGroup')?>" class="dropdown-item">
-                            <i class="fa-brands fa-facebook"></i>
-                            Fecebook กลุ่ม
-                        </a>
-                            </li>
-                            <li>    <a href="<?=base_url('Email')?>" class="dropdown-item">
-                            <i class="fa-solid fa-envelope"></i> Email
-                            โรงเรียน
-                        </a>
-                            </li>
-                            <li>
-                                <a href="https://documentcenter.skj.ac.th/" class="dropdown-item">
-                                    <i class="bi bi-file-earmark-arrow-down"></i> โหลดเอกสาร
-                                </a>
-                            </li>
-                        </ul>
+                    <div class="dropdown-menu dropdown-menu-skj mega-menu-premium">
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <h6 class="mega-column-title">นักเรียน & การเรียน</h6>
+                                <a href="https://admission.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i class="bi bi-person-plus"></i> รับสมัครนักเรียน</a>
+                                <a href="https://academic.skj.ac.th/LearningOnline" class="dropdown-item dropdown-item-skj"><i class="bi bi-globe"></i> ห้องเรียนออนไลน์</a>
+                                <a href="https://learnsuan.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i class="bi bi-journal-text"></i> สวนกุหลาบศึกษา</a>
+                                <a href="<?= base_url('guidance') ?>" class="dropdown-item dropdown-item-skj"><i class="bi bi-mortarboard"></i> ทุนการศึกษา</a>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="mega-column-title">ระบบจอง & แจ้งซ่อม</h6>
+                                <a href="https://general.skj.ac.th/Booking" class="dropdown-item dropdown-item-skj"><i class="bi bi-building-up"></i> จองอาคารสถานที่</a>
+                                <a href="https://general.skj.ac.th/CarBooking" class="dropdown-item dropdown-item-skj"><i class="bi bi-car-front"></i> จองยานพาหนะ</a>
+                                <a href="https://general.skj.ac.th/Repair" class="dropdown-item dropdown-item-skj"><i class="bi bi-tools"></i> แจ้งซ่อมออนไลน์</a>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="mega-column-title">ข้อมูล & เอกสาร</h6>
+                                <a href="<?= base_url('Yearbook') ?>" class="dropdown-item dropdown-item-skj"><i class="bi bi-book"></i> หนังสือรุ่นดิจิทัล</a>
+                                <a href="<?= base_url('PageGroup') ?>" class="dropdown-item dropdown-item-skj"><i class="bi bi-facebook"></i> Facebook กลุ่ม</a>
+                                <a href="<?= base_url('Email') ?>" class="dropdown-item dropdown-item-skj"><i class="bi bi-envelope-at"></i> อีเมลโรงเรียน</a>
+                                <a href="https://documentcenter.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i class="bi bi-file-earmark-arrow-down"></i> โหลดเอกสาร</a>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="mega-column-title">อื่นๆ</h6>
+                                <a href="<?= base_url('Procurements') ?>" class="dropdown-item dropdown-item-skj"><i class="bi bi-cart-check"></i> จัดซื้อจัดจ้าง</a>
+                                <a href="https://sites.google.com/skj.ac.th/skj68/home" class="dropdown-item dropdown-item-skj"><i class="bi bi-shield-check"></i> ประกันคุณภาพฯ</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-
             </div>
 
             <!-- New Year Countdown -->
@@ -328,23 +528,25 @@
             </div>
             <?php endif; ?>
 
-            <button id="grayscaleToggle" class="btn btn-sm btn-outline-light border-2 py-2 px-3 me-2" style="font-size: 16px;" onclick="toggleGrayscale()">
-                <i class="fa-solid fa-adjust"></i>
-            </button>
-            <div class="nav-item dropdown ">
-                <a href="#" class="dropdown-toggle btn btn-sm btn-outline-light border-2 py-2 px-4"
-                    data-bs-toggle="dropdown" style="font-size: 16px;"><i class="fa-solid fa-right-to-bracket"></i>
-                    เข้าสู่ระบบ</a>
-                <div class="dropdown-menu border-0 rounded-0 rounded-bottom m-0">
-                    <a href="https://student.skj.ac.th/" class="dropdown-item">นักเรียน</a>
-                    <a href="https://teacher.skj.ac.th/" class="dropdown-item">ครูผู้สอน</a>
+            <div class="d-flex align-items-center gap-2 py-3 py-lg-0">
+                <button id="grayscaleToggle" class="btn btn-outline-light btn-sm rounded-circle" style="width: 38px; height: 38px;" onclick="toggleGrayscale()">
+                    <i class="bi bi-circle-half"></i>
+                </button>
+                <div class="dropdown">
+                    <button class="btn btn-outline-light btn-sm rounded-pill px-4 dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-box-arrow-in-right"></i> เข้าสู่ระบบ
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end dropdown-menu-skj mt-2">
+                        <a href="https://student.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i class="bi bi-person-fill"></i> สำหรับนักเรียน</a>
+                        <a href="https://teacher.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i class="bi bi-person-workspace"></i> สำหรับครูผู้สอน</a>
+                    </div>
                 </div>
             </div>
-
         </div>
     </div>
 </nav>
 <!-- Navbar End -->
+
 <script>
     function toggleGrayscale() {
         const html = document.documentElement;

@@ -1,65 +1,135 @@
 <style>
-.video {
-    background-image: url(uploads/background/bg-video1.jpg);
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center center;
-    padding: 100px 0px 250px 0px;
-    position: relative;
-}
+    .stdio-section {
+        padding: 100px 0;
+        background: #1a2a4d; /* Deep Navy for Cinema feel */
+        position: relative;
+        overflow: hidden;
+    }
 
-.section-heading h2 {
-    font-size: 55px;
-    font-weight: 700;
-    text-transform: capitalize;
-    margin-top: 20px;
-    line-height: 56px;
-    color: #fff;
-}
+    .stdio-section::before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background: url('<?= base_url('uploads/background/bg-video1.jpg') ?>') center center no-repeat;
+        background-size: cover;
+        opacity: 0.15;
+        filter: grayscale(100%);
+    }
 
-.section-heading h6 {
-    color: #ee626b;
-    font-size: 15px;
-    text-transform: uppercase;
-    font-weight: 700;
-}
-.section-heading p{
-    color: #fff;
-}
+    .stdio-container {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+    }
 
-.video-content .video-frame {
-    position: relative;
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.15);
-    border-radius: 10px;
-    margin-top: -216px;
-}
+    .stdio-subtitle {
+        color: #FB7E9C;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        margin-bottom: 15px;
+        display: block;
+        font-size: 0.9rem;
+    }
+
+    .stdio-title {
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        font-weight: 900;
+        color: #fff;
+        margin-bottom: 20px;
+        font-family: 'K2D', sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+
+    .stdio-desc {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1.2rem;
+        max-width: 600px;
+        margin: 0 auto 40px;
+    }
+
+    .stdio-video-wrapper {
+        position: relative;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 15px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 30px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    .stdio-video-frame {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        border-radius: 20px;
+        overflow: hidden;
+        border: 2px solid #249ffd;
+        box-shadow: 0 0 30px rgba(36, 159, 253, 0.3);
+    }
+
+    .youtube-btn {
+        margin-top: 50px;
+        padding: 15px 40px;
+        border-radius: 50px;
+        background: #ff0000; /* YouTube Red */
+        color: #fff;
+        font-weight: 700;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        transition: all 0.3s ease;
+        box-shadow: 0 10px 20px rgba(255, 0, 0, 0.3);
+    }
+
+    .youtube-btn:hover {
+        background: #cc0000;
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(255, 0, 0, 0.5);
+        color: #fff;
+    }
+
+    .youtube-btn i {
+        font-size: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+        .stdio-section { padding: 60px 0; }
+        .stdio-title { font-size: 2rem; }
+        .stdio-desc { font-size: 1rem; }
+        .stdio-video-wrapper { padding: 8px; border-radius: 20px; }
+    }
 </style>
-<div class="video section wow fadeInUp" data-wow-delay="0.1s">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-4 offset-lg-4">
-                <div class="section-heading text-center">
-                    <h6>| งานโสต สวนจิ</h6>
-                    <h2>SKJ STUDIOS</h2>
-                    <p>งานประชาสัมพันธ์ทางด้านมัลติมีเดีย</p>
-                    <a href="https://www.youtube.com/@user-qb9js9ed6v" target="_blank"
-                        class="btn btn-primary mt-3">ติดตามช่อง Youtube</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="video-content wow fadeInUp" data-wow-delay="0.1s">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-10 offset-lg-1">
-                <div class="video-frame">
-                <iframe style="width:100%;height: 400px;" src="https://www.youtube.com/embed/RxdQ2-0scEQ" frameborder="0" loading="lazy"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen=""></iframe>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
+<div class="stdio-section wow fadeIn" data-wow-delay="0.1s">
+    <div class="container stdio-container">
+        <div class="row">
+            <div class="col-12">
+                <span class="stdio-subtitle wow fadeInUp" data-wow-delay="0.2s">| งานโสต สวนจิ</span>
+                <h2 class="stdio-title wow fadeInUp" data-wow-delay="0.3s">SKJ STUDIOS</h2>
+                <p class="stdio-desc wow fadeInUp" data-wow-delay="0.4s">ศูนย์กลางงานประชาสัมพันธ์และมัลติมีเดียที่ทันสมัย ผลิตผลงานสร้างสรรค์โดยทีมงานคุณภาพ</p>
+                
+                <div class="stdio-video-wrapper wow zoomIn" data-wow-delay="0.5s">
+                    <div class="stdio-video-frame">
+                        <iframe width="100%" height="100%" 
+                                src="https://www.youtube.com/embed/RxdQ2-0scEQ" 
+                                frameborder="0" loading="lazy"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen="">
+                        </iframe>
+                    </div>
+                </div>
+
+                <a href="https://www.youtube.com/@user-qb9js9ed6v" target="_blank" class="youtube-btn wow fadeInUp" data-wow-delay="0.6s">
+                    <i class="bi bi-youtube"></i> ติดตามช่อง YouTube
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -205,7 +205,7 @@
     <span class="fw-bold" style="font-size: 13px;">ติดต่อสอบถามที่นี่</span>
 </a>
 
-<div class="footer-main mt-5 pt-5 wow fadeIn <?= (isset($festival_status) && $festival_status == 'on') ? 'snow-cap' : '' ?>" data-wow-delay="0.1s">
+<div class="footer-main pt-5 wow fadeIn <?= (isset($festival_status) && $festival_status == 'on') ? 'snow-cap' : '' ?>" data-wow-delay="0.1s">
     <div class="container py-5">
         <div class="row g-5">
             <div class="col-lg-3 col-md-6">

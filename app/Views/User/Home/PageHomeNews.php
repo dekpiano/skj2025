@@ -1,4 +1,4 @@
-<div class="" style="background-color: #e9ecef;">
+<div class="" style="background-color: #ffffff;">
 
 <div class="container py-5">
     <div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s"

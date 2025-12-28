@@ -51,7 +51,7 @@
 <?= $this->include('User/Home/PageHomeNews') ?>
 <!-- News End -->
 
-<section>
+<section style="background: linear-gradient(135deg, rgba(251, 126, 156, 0.05) 0%, rgba(251, 126, 156, 0.1) 100%); padding: 80px 0;">
 <div class="container">
 <div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 600px; visibility: visible; animation-delay: 0.1s; animation-name: fadeInUp;">
         <h6 class="section-title bg-white text-center text-primary px-3">SKJ Director</h6>
