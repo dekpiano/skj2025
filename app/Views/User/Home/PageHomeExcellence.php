@@ -1,7 +1,8 @@
 <style>
     .excellence-section {
         padding: 80px 0;
-        background-color: #fff;
+        background: linear-gradient(135deg, #fff5f7 0%, #fff 100%);
+        position: relative;
     }
 
     .excellence-card {
@@ -115,7 +116,7 @@
 <div class="excellence-section">
     <div class="container">
         <div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 700px;">
-            <h6 class="section-title bg-white text-center px-3" style="color: #FB7E9C;">หลักสูตรที่เปิดสอน</h6>
+            <h6 class="section-title px-3" style="color: #FB7E9C; background: rgba(255, 255, 255, 0.5); backdrop-filter: blur(5px);">หลักสูตรที่เปิดสอน</h6>
             <h1 class="display-6 mb-4" style="font-weight: 800; color: #1a2a4d;">หลักสูตรพัฒนาผู้เรียนสู่ความเป็นเลิศ</h1>
             <p class="text-muted">มุ่งเน้นการพัฒนา เพื่อส่งเสริมศักยภาพของนักเรียนตามความถนัดและความสนใจ</p>
         </div>

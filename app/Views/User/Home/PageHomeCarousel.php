@@ -1,11 +1,36 @@
 <style>
-    @media screen and (max-width: 768px) {
-   
-    #header-carousel .carousel-item {
+    #header-carousel {
         position: relative;
-        min-height: 200px;
     }
-}
+
+    #header-carousel::after {
+        position: absolute;
+        content: "";
+        width: 100%;
+        height: 85px;
+        left: 0;
+        bottom: -1px; /* Overlap slightly with next section */
+        z-index: 10;
+        background: url('<?= base_url('uploads/home/overlay-bottom.png') ?>') bottom center no-repeat;
+        background-size: 100% 100%;
+        pointer-events: none;
+    }
+
+    /* Prevent indicators from being covered */
+    #header-carousel .carousel-indicators {
+        margin-bottom: 90px;
+        z-index: 11;
+    }
+
+    @media screen and (max-width: 768px) {
+        #header-carousel .carousel-item {
+            position: relative;
+            min-height: 200px;
+        }
+        #header-carousel::after {
+            height: 40px; /* Adjust height for mobile */
+        }
+    }
 </style>
 
 <div class="wow fadeIn" data-wow-delay="0.1s">

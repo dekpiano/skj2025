@@ -94,11 +94,16 @@ gtag('config', 'G-4XVY09LWJ8');
     </div>
     <!-- Spinner End -->
     <style>
+    /* html, body {
+        max-width: 100%;
+        overflow-x: hidden;
+        position: relative;
+    } */
     /* body {
   -webkit-filter: grayscale(100%); /* Chrome, Safari, Opera */
-    filter: grayscale(100%);
+    /* filter: grayscale(100%);
 
-    }
+    } */
 
     .ribbon {
         position: absolute;

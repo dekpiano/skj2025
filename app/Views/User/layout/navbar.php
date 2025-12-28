@@ -53,7 +53,7 @@
     /* Premium Top Bar Styles */
     .top-bar-premium {
         background: #fff;
-        border-bottom: 2px solid #FB7E9C;
+        /* border-bottom removed - navbar border-top provides the accent */
     }
 
     .logo-wrapper-nav img {
@@ -111,12 +111,73 @@
         font-weight: 700;
     }
 
+    /* Responsive Top Bar Info for Medium Screens */
+    @media (min-width: 992px) and (max-width: 1500px) {
+        .top-info-wrapper .col-auto {
+            padding-left: 10px !important;
+            padding-right: 10px !important;
+        }
+        .info-icon-nav {
+            width: 32px;
+            height: 32px;
+            font-size: 0.9rem;
+        }
+        .info-label-nav {
+            font-size: 0.65rem;
+            letter-spacing: 0.5px;
+        }
+        .info-value-nav {
+            font-size: 0.75rem;
+        }
+        .logo-wrapper-nav img {
+            height: 50px;
+        }
+        .text-thai-nav {
+            font-size: 1rem;
+        }
+        .text-eng-nav {
+            font-size: 0.7rem;
+        }
+    }
+
+    @media (min-width: 992px) and (max-width: 1200px) {
+        .top-info-wrapper .col-auto {
+            padding-left: 6px !important;
+            padding-right: 6px !important;
+        }
+        .info-icon-nav {
+            width: 28px;
+            height: 28px;
+            font-size: 0.8rem;
+            border-radius: 8px;
+        }
+        .info-label-nav {
+            font-size: 0.55rem;
+        }
+        .info-value-nav {
+            font-size: 0.68rem;
+        }
+        .logo-wrapper-nav img {
+            height: 45px;
+        }
+        .text-thai-nav {
+            font-size: 0.9rem;
+        }
+        .text-eng-nav {
+            font-size: 0.65rem;
+        }
+    }
+
     /* Navbar Modern Styles */
     .navbar-skj {
         background: #FB7E9C !important;
         padding: 0;
         box-shadow: 0 5px 20px rgba(0,0,0,0.1);
         border-top: 4px solid #249ffd;
+        margin-top: 0;
+        z-index: 10000; 
+        top: 0 !important;
+        position: sticky !important;
     }
 
     @media (max-width: 991px) {
@@ -139,13 +200,35 @@
     }
 
     /* Screen size specific adjustments to prevent wrapping */
-    @media (min-width: 992px) and (max-width: 1400px) {
+    @media (min-width: 992px) and (max-width: 1600px) {
         .navbar-skj .nav-link {
             padding: 25px 8px !important;
             font-size: 0.85rem;
         }
         .navbar-skj .nav-link i {
             font-size: 0.9rem;
+        }
+    }
+
+    @media (min-width: 992px) and (max-width: 1300px) {
+        .navbar-skj .nav-link {
+            padding: 25px 5px !important;
+            font-size: 0.78rem;
+            gap: 4px;
+        }
+        .navbar-skj .nav-link i {
+            font-size: 0.8rem;
+        }
+    }
+
+    @media (min-width: 992px) and (max-width: 1100px) {
+        .navbar-skj .nav-link {
+            padding: 20px 4px !important;
+            font-size: 0.72rem;
+            gap: 3px;
+        }
+        .navbar-skj .nav-link i {
+            font-size: 0.75rem;
         }
     }
 
@@ -216,20 +299,37 @@
         color: #FB7E9C;
     }
 
-    /* Mega Menu Premium */
+    /* Mega Menu Premium - Desktop Specific */
     @media (min-width: 992px) {
         .navbar-skj .nav-item.dropdown {
-            position: static !important;
+            position: relative; 
         }
-    }
 
-    .mega-menu-premium {
-        width: 100%;
-        max-width: 1200px;
-        padding: 35px !important;
-        left: 50% !important;
-        transform: translateX(-50%) !important;
-        border-radius: 0 0 30px 30px !important;
+        .mega-menu-premium {
+            width: max-content;
+            min-width: 800px;
+            max-width: calc(100vw - 40px);
+            padding: 35px !important;
+            left: 0; /* Default alignment */
+            transform: none;
+            border-radius: 0 20px 20px 20px !important;
+            margin-top: 0 !important;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        /* Class to shift menu if it overflows to the right */
+        .mega-menu-premium.shift-left {
+            left: auto !important;
+            right: 0 !important;
+            border-radius: 20px 0 20px 20px !important;
+        }
+
+        /* Class to shift menu if it overflows to the left */
+        .mega-menu-premium.shift-right {
+            left: 0 !important;
+            right: auto !important;
+            border-radius: 0 20px 20px 20px !important;
+        }
     }
 
     .mega-column-title {
@@ -399,10 +499,71 @@
         from { opacity: 0; transform: translateY(-10px); }
         to { opacity: 1; transform: translateY(0); }
     }
+
+    /* Desktop Hover Fix */
+    @media (min-width: 992px) {
+        .navbar-skj .nav-item.dropdown:hover > .dropdown-menu-skj {
+            display: block !important;
+            margin-top: 0 !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+
+        /* Bridge the gap to prevent menu closing - ENHANCED for local alignment */
+        .dropdown-menu-skj::before {
+            content: '';
+            position: absolute;
+            top: -30px; 
+            left: 0; 
+            right: 0;
+            height: 40px;
+            background: transparent;
+            z-index: -1;
+        }
+    }
+
+    /* Sticky Shrink Effect */
+    .navbar-skj {
+        transition: all 0.3s ease;
+    }
+
+    .navbar-skj.navbar-shrink {
+        padding: 0 !important;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    }
+
+    .navbar-skj.navbar-shrink .nav-link {
+        padding: 15px 10px !important;
+        font-size: 0.9rem; /* Slightly smaller text when shrunk */
+    }
+
+    /* Shrink mobile brand */
+    .navbar-skj.navbar-shrink .navbar-brand-mobile img {
+        height: 35px;
+        transition: all 0.3s ease;
+    }
+
+    .navbar-skj.navbar-shrink .brand-text-mobile {
+        font-size: clamp(0.5rem, 3vw, 0.8rem);
+    }
+
+    @media (min-width: 992px) and (max-width: 1600px) {
+        .navbar-skj.navbar-shrink .nav-link {
+            padding: 15px 6px !important;
+            font-size: 0.8rem;
+        }
+    }
+
+    @media (min-width: 992px) and (max-width: 1300px) {
+        .navbar-skj.navbar-shrink .nav-link {
+            padding: 12px 4px !important;
+            font-size: 0.75rem;
+        }
+    }
 </style>
 
 <!-- Navbar Start -->
-<nav class="navbar navbar-expand-lg navbar-skj sticky-top wow fadeIn" data-wow-delay="0.1s">
+<nav class="navbar navbar-expand-lg navbar-skj sticky-top">
     <div class="container-fluid px-4 px-lg-5">
         <a href="<?= base_url('/'); ?>" class="navbar-brand d-lg-none">
             <div class="navbar-brand-mobile">
@@ -496,6 +657,7 @@
                                 <a href="https://general.skj.ac.th/Booking" class="dropdown-item dropdown-item-skj"><i class="bi bi-building-up"></i> จองอาคารสถานที่</a>
                                 <a href="https://general.skj.ac.th/CarBooking" class="dropdown-item dropdown-item-skj"><i class="bi bi-car-front"></i> จองยานพาหนะ</a>
                                 <a href="https://general.skj.ac.th/Repair" class="dropdown-item dropdown-item-skj"><i class="bi bi-tools"></i> แจ้งซ่อมออนไลน์</a>
+                                <a href="https://general.skj.ac.th/FoodReport" class="dropdown-item dropdown-item-skj"><i class="bi bi-pie-chart"></i> รายงานอาหาร</a>
                             </div>
                             <div class="col-lg-3">
                                 <h6 class="mega-column-title">ข้อมูล & เอกสาร</h6>
@@ -554,4 +716,55 @@
         const isGrayscale = html.classList.contains('grayscale-mode');
         localStorage.setItem('grayscale-mode', isGrayscale);
     }
+
+    // Smart Mega Menu Positioning
+    document.addEventListener('DOMContentLoaded', () => {
+        const megaMenus = document.querySelectorAll('.mega-menu-premium');
+        const navItems = document.querySelectorAll('.nav-item.dropdown');
+
+        const adjustPosition = (menu) => {
+            // Reset positions first
+            menu.classList.remove('shift-left', 'shift-right');
+            
+            const rect = menu.getBoundingClientRect();
+            const viewportWidth = window.innerWidth;
+
+            if (rect.right > viewportWidth) {
+                // Overflowing right side
+                menu.classList.add('shift-left');
+            } else if (rect.left < 0) {
+                // Overflowing left side
+                menu.classList.add('shift-right');
+            }
+        };
+
+        navItems.forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                const menu = item.querySelector('.mega-menu-premium');
+                if (menu) {
+                    requestAnimationFrame(() => adjustPosition(menu));
+                }
+            });
+        });
+
+        window.addEventListener('resize', () => {
+            megaMenus.forEach(menu => {
+                if (window.getComputedStyle(menu).display !== 'none') {
+                    adjustPosition(menu);
+                }
+            });
+        });
+
+        // Sticky Shrink Navbar on Scroll
+        const navbar = document.querySelector('.navbar-skj');
+        if (navbar) {
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 100) {
+                    navbar.classList.add('navbar-shrink');
+                } else {
+                    navbar.classList.remove('navbar-shrink');
+                }
+            });
+        }
+    });
 </script>

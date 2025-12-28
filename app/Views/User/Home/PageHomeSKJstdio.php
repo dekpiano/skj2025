@@ -1,7 +1,7 @@
 <style>
     .stdio-section {
         padding: 100px 0;
-        background: #1a2a4d; /* Deep Navy for Cinema feel */
+        background: #ffffff;
         position: relative;
         overflow: hidden;
     }
@@ -15,7 +15,7 @@
         left: 0;
         background: url('<?= base_url('uploads/background/bg-video1.jpg') ?>') center center no-repeat;
         background-size: cover;
-        opacity: 0.15;
+        opacity: 0.03; /* Much lower for white background */
         filter: grayscale(100%);
     }
 
@@ -26,7 +26,7 @@
     }
 
     .stdio-subtitle {
-        color: #FB7E9C;
+        color: #249ffd; /* Blue for visibility on white */
         font-weight: 800;
         text-transform: uppercase;
         letter-spacing: 4px;
@@ -38,7 +38,7 @@
     .stdio-title {
         font-size: clamp(2.5rem, 5vw, 4rem);
         font-weight: 900;
-        color: #fff;
+        color: #1a2a4d; /* Dark Navy for white background */
         margin-bottom: 20px;
         font-family: 'K2D', sans-serif;
         text-transform: uppercase;
@@ -46,7 +46,7 @@
     }
 
     .stdio-desc {
-        color: rgba(255, 255, 255, 0.7);
+        color: #555555; /* Dark gray for white background */
         font-size: 1.2rem;
         max-width: 600px;
         margin: 0 auto 40px;
@@ -57,11 +57,10 @@
         max-width: 900px;
         margin: 0 auto;
         padding: 15px;
-        background: rgba(255, 255, 255, 0.05);
+        background: #fff;
         border-radius: 30px;
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
     }
 
     .stdio-video-frame {

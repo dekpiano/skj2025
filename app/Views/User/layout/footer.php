@@ -9,13 +9,16 @@
     }
 
     .footer-main::before {
-        content: '';
         position: absolute;
-        top: 0;
+        content: "";
+        width: 100%;
+        height: 85px;
         left: 0;
-        right: 0;
-        height: 6px;
-        background: linear-gradient(90deg, #ff69b4 0%, #249ffd 50%, #ff69b4 100%);
+        top: -1px; /* Overlap slightly with previous section */
+        z-index: 1;
+        background: url('<?= base_url('uploads/home/overlay-bottom.png') ?>') top center no-repeat;
+        background-size: 100% 100%;
+        transform: scaleY(-1);
     }
 
     .footer-title {
@@ -188,7 +191,6 @@
         70% { box-shadow: 0 0 0 15px rgba(255, 105, 180, 0); }
         100% { box-shadow: 0 0 0 0 rgba(255, 105, 180, 0); }
     }
-
     .back-to-top {
         z-index: 30000 !important;
         width: 45px !important;
@@ -205,7 +207,7 @@
     <span class="fw-bold" style="font-size: 13px;">ติดต่อสอบถามที่นี่</span>
 </a>
 
-<div class="footer-main pt-5 wow fadeIn <?= (isset($festival_status) && $festival_status == 'on') ? 'snow-cap' : '' ?>" data-wow-delay="0.1s">
+<div class="footer-main pt-5 wow fadeIn <?= (isset($festival_status) && $festival_status == 'on') ? 'snow-cap' : '' ?>" data-wow-delay="0.1s" style="padding-top: 100px !important;">
     <div class="container py-5">
         <div class="row g-5">
             <div class="col-lg-3 col-md-6">
