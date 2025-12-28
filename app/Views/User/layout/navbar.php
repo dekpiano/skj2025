@@ -314,6 +314,20 @@
 
             </div>
 
+            <!-- New Year Countdown -->
+            <?php if (isset($festival_status) && $festival_status == 'on') : ?>
+            <div id="nav-countdown" class="d-none d-xl-flex">
+                <span class="cd-label">Countdown to 2026:</span>
+                <div class="cd-time-box"><span class="cd-number" id="cd-days">00</span><span class="cd-unit">Days</span></div>
+                <span class="cd-sep">:</span>
+                <div class="cd-time-box"><span class="cd-number" id="cd-hours">00</span><span class="cd-unit">Hours</span></div>
+                <span class="cd-sep">:</span>
+                <div class="cd-time-box"><span class="cd-number" id="cd-mins">00</span><span class="cd-unit">Mins</span></div>
+                <span class="cd-sep">:</span>
+                <div class="cd-time-box"><span class="cd-number" id="cd-secs">00</span><span class="cd-unit">Secs</span></div>
+            </div>
+            <?php endif; ?>
+
             <button id="grayscaleToggle" class="btn btn-sm btn-outline-light border-2 py-2 px-3 me-2" style="font-size: 16px;" onclick="toggleGrayscale()">
                 <i class="fa-solid fa-adjust"></i>
             </button>

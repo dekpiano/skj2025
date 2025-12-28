@@ -35,26 +35,70 @@
     100% { transform: translateY(105vh) translateX(30px) rotate(360deg); opacity: 0; }
 }
 
-/* --- Snow Cap Decoration --- */
-.snow-cap {
-    position: relative; /* Ensure container can hold absolute snow */
-}
-
-/* Decoration layer below content but above background */
-.snow-cap::before {
-    content: '';
-    position: absolute;
-    top: -15px; /* Adjust for footer */
+/* --- Big Snow Pile at Bottom (Multi-layered) --- */
+.snow-ground {
+    position: fixed;
+    bottom: 0;
     left: 0;
     width: 100%;
-    height: 30px;
-    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 40" preserveAspectRatio="none"><path d="M0,40 L0,20 C50,0 100,30 150,20 C200,10 250,40 300,20 C350,0 400,30 450,20 C500,10 550,40 600,20 C650,0 700,30 750,20 C800,10 850,40 900,20 C950,0 1000,30 1000,20 L1000,40 Z" fill="white"/></svg>');
-    background-size: 400px 30px;
-    background-repeat: repeat-x;
-    z-index: 10;
+    height: 100px; /* Much taller for big heaps */
+    z-index: 9998;
     pointer-events: none;
-    filter: drop-shadow(0 -4px 6px rgba(255,255,255,0.3)); /* Glow for dark footer */
 }
+
+/* Layer 1: Thick Base */
+.snow-ground::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 80" preserveAspectRatio="none"><path d="M0,80 L0,40 C100,20 200,60 300,40 C400,20 500,60 600,40 C700,20 800,60 900,40 C1000,20 1000,40 1000,80 Z" fill="white" opacity="0.6"/></svg>');
+    background-size: 800px 80px;
+    filter: blur(8px);
+    opacity: 0.7;
+}
+
+/* Layer 2: Middle Pile */
+.snow-ground::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 60" preserveAspectRatio="none"><path d="M0,60 L0,30 C150,10 300,50 450,30 C600,10 750,50 900,30 C1000,10 1000,30 1000,60 Z" fill="white" opacity="0.8"/></svg>');
+    background-size: 600px 60px;
+    filter: blur(4px);
+    opacity: 0.9;
+}
+
+/* Layer 3: Top Sharp Edge */
+.snow-pile-top {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 40" preserveAspectRatio="none"><path d="M0,40 L0,20 C50,0 150,30 250,20 C350,10 450,40 550,20 C650,0 750,30 850,20 C950,10 1000,30 1000,40 Z" fill="white"/></svg>');
+    background-size: 400px 40px;
+    z-index: 10;
+    filter: drop-shadow(0 -5px 10px rgba(255,255,255,0.8));
+}
+
+.snowflake.landed {
+    animation: none !important;
+    position: absolute !important;
+    top: auto !important;
+    transition: opacity 3s ease;
+    opacity: 0.95 !important;
+    filter: blur(1px);
+    z-index: 11; /* Above the SVG layers */
+}
+
+
+
 
 /* Ensure navbar content is always on top */
 .navbar > div {
@@ -76,7 +120,7 @@
     padding: 0;
     margin: 0;
     list-style: none;
-    background: rgba(0,0,0,0.05); /* Subtle wire look */
+    background: transparent; /* Clean transparent look */
 }
 
 .light-bulb {
@@ -106,7 +150,80 @@
 .light-red { animation-name: glow-red; }
 .light-gold { animation-name: glow-gold; animation-delay: 0.3s; }
 .light-blue { animation-name: glow-blue; animation-delay: 0.6s; }
+/* --- High-Impact Navbar Countdown Styling --- */
+#nav-countdown {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 18px;
+    background: rgba(13, 27, 62, 0.85); /* Deep contrast */
+    border: 2px solid transparent;
+    background-image: linear-gradient(rgba(13, 27, 62, 0.85), rgba(13, 27, 62, 0.85)), 
+                      linear-gradient(to right, #ffd700, #ff4d4d, #ffd700);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    border-radius: 50px;
+    color: #fff;
+    font-family: 'K2D', sans-serif;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4),
+                inset 0 0 10px rgba(255, 215, 0, 0.1);
+    margin: 0 15px;
+    animation: countdown-pulse 2s infinite ease-in-out;
+}
+
+@keyframes countdown-pulse {
+    0%, 100% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.4); border-color: rgba(255, 215, 0, 0.5); }
+    50% { box-shadow: 0 0 25px rgba(255, 77, 77, 0.6); border-color: rgba(255, 77, 77, 0.8); }
+}
+
+#nav-countdown .cd-label {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #ffd700;
+    margin-right: 8px;
+    white-space: nowrap;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+}
+
+#nav-countdown .cd-time-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 42px;
+}
+
+#nav-countdown .cd-number {
+    font-size: 20px;
+    font-weight: 900;
+    line-height: 1;
+    color: #fff;
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.8),
+                 0 0 15px rgba(255, 77, 77, 0.4);
+}
+
+#nav-countdown .cd-unit {
+    font-size: 9px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #00d4ff;
+    letter-spacing: 0.5px;
+}
+
+#nav-countdown .cd-sep {
+    font-size: 18px;
+    font-weight: 900;
+    color: #ffd700;
+    margin-top: -8px;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0.3; }
+}
+
 .light-green { animation-name: glow-green; animation-delay: 0.9s; }
+
 
 /* --- Winter Snow & Fireworks Overlay --- */
 .festive-overlay {
@@ -164,6 +281,85 @@
 .festive-overlay.show {
     opacity: 1;
     visibility: visible;
+}
+
+/* Intro auto-close countdown */
+.intro-close-countdown {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 25005;
+    color: #000;
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    opacity: 0;
+    transition: opacity 1s ease 2s;
+    white-space: nowrap;
+}
+
+.festive-overlay.show .intro-close-countdown {
+    opacity: 1;
+}
+
+#intro-cd-value {
+    color: #ffd700;
+    font-weight: bold;
+}
+
+/* --- Grand Snow Pile for Intro Overlay --- */
+.festive-intro-snow {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 15rem; /* Massive height for the intro */
+    z-index: 25002; /* Above the canvas but behind text */
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(100px);
+    transition: all 1.5s ease 0.5s;
+}
+
+.festive-overlay.show .festive-intro-snow {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.intro-snow-heap {
+    position: absolute;
+    bottom: -20px;
+    left: -10%;
+    width: 120%;
+    height: 12rem;
+    background: radial-gradient(ellipse at top, #fff 0%, rgba(255,255,255,0.8) 50%, transparent 100%);
+    border-radius: 50% 50% 0 0;
+    filter: blur(15px);
+    box-shadow: 0 -10px 50px rgba(255, 255, 255, 0.4);
+}
+
+.intro-snow-heap-2 {
+    position: absolute;
+    bottom: -10px;
+    left: -5%;
+    width: 110%;
+    height: 8rem;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" preserveAspectRatio="none"><path d="M0,100 L0,50 C100,20 200,80 300,50 C450,10 600,90 750,50 C850,30 1000,70 1000,50 L1000,100 Z" fill="white"/></svg>');
+    background-size: 100% 100%;
+    filter: drop-shadow(0 -5px 15px rgba(255, 255, 255, 0.6));
+}
+
+/* Add a third layer for more "fluffiness" */
+.festive-intro-snow::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 5rem;
+    background: linear-gradient(to top, #fff 0%, rgba(255, 255, 255, 0.7) 100%);
+    filter: blur(5px);
 }
 
 .new-year-greeting {
@@ -321,6 +517,8 @@
         max-width: 95%;
         padding: 1.5rem !important;
         border-radius: 1rem !important;
+        backdrop-filter: blur(5px); /* Reduced for performance */
+        -webkit-backdrop-filter: blur(5px);
     }
 
     .greeting-text {
@@ -328,44 +526,25 @@
         letter-spacing: 1px;
         padding: 0;
         line-height: 1.2;
-        filter: drop-shadow(2px 2px 0 #000) 
-                drop-shadow(0 0 15px rgba(255, 215, 0, 0.6));
+        filter: drop-shadow(2px 2px 0 #000); /* Simplified */
+        will-change: transform, opacity;
     }
     
-    .blessing-text {
-        font-size: 1.1rem;
-        margin-top: 0.8rem;
-        padding: 0;
-        line-height: 1.4;
+    .festive-overlay {
+        backdrop-filter: blur(5px); /* Much lower for mobile */
+        -webkit-backdrop-filter: blur(5px);
     }
-    
-    .blessing-text-sub {
-        font-size: 0.9rem;
-        padding: 0;
-    }
-    
-    .school-text {
-        font-size: 0.85rem;
-        padding: 0;
-        margin-top: 1rem;
-    }
-    
-    .fairy-lights {
-        height: 20px;
-    }
-    
-    .light-bulb {
-        width: 8px;
-        height: 12px;
-    }
-    
-    .snowflake {
-        font-size: 12px !important;
-    }
-    
+
     .festive-float {
         font-size: 2rem;
         opacity: 0.6;
+        animation-duration: 10s; /* Slower = lighter */
+        filter: none; /* Disable shadow */
+        will-change: transform;
+    }
+
+    .intro-snow-heap, .intro-snow-heap-2 {
+        filter: blur(5px); /* Lower blur */
     }
 }
 
@@ -377,13 +556,12 @@
     }
     
     .blessing-text {
-        font-size: 1rem;
-        padding: 0 15px;
+        font-size: 0.95rem;
+        padding: 0 10px;
     }
-    
-    .festive-overlay {
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
+
+    .school-text {
+        font-size: 0.8rem;
     }
 }
 

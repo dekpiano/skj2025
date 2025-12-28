@@ -3,13 +3,36 @@
 <style>
     .messenger-fab {
         position: fixed;
-        bottom: 20px;
-        right: 20px;
-        z-index: 100;
+        bottom: 10px; /* At the bottom, slightly raised */
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 30000; /* Extremely high to stay ON TOP of snow piles */
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        transition: all 0.3s ease;
+        animation: chat-pulse 2s infinite;
+    }
+    .messenger-fab:hover {
+        transform: translateX(-50%) translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    }
+    @keyframes chat-pulse {
+        0% { box-shadow: 0 0 0 0 rgba(56, 184, 245, 0.7); }
+        70% { box-shadow: 0 0 0 15px rgba(56, 184, 245, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(56, 184, 245, 0); }
+    }
+    .back-to-top {
+        z-index: 30000 !important;
+        width: 30px !important;
+        height: 30px !important;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        bottom: 10px !important;
     }
 </style>
-<a href="http://m.me/230288483730783" target="_blank" class="btn btn-primary btn-lg-square rounded-circle messenger-fab">
-    <i class="fab fa-facebook-messenger" style="font-size: 24px;"></i>
+<a href="http://m.me/230288483730783" target="_blank" class="btn btn-primary messenger-fab px-3 py-1 rounded-pill d-flex align-items-center shadow-lg">
+    <i class="fab fa-facebook-messenger me-2" style="font-size: 18px;"></i>
+    <span class="fw-bold" style="font-size: 13px;">ติดต่อสอบถามที่นี่</span>
 </a>
 
 <div class="container-fluid bg-primary2 text-body footer mt-5 pt-5 wow fadeIn <?= (isset($festival_status) && $festival_status == 'on') ? 'snow-cap' : '' ?>" data-wow-delay="0.1s">
