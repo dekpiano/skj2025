@@ -175,7 +175,7 @@
         box-shadow: 0 5px 20px rgba(0,0,0,0.1);
         border-top: 4px solid #249ffd;
         margin-top: 0;
-        z-index: 10000; 
+        z-index: 1030; 
         top: 0 !important;
         position: sticky !important;
     }
