@@ -74,7 +74,7 @@ $routes->group('Admin', ['filter' => 'permission', 'namespace' => 'App\Controlle
     //Admin News
     $routes->get('News','ConAdminNews::NewsMain', ['filter' => 'permission:Admin']);
     $routes->match(['get', 'post'], 'News/AddNews', 'ConAdminNews::NewsAdd', ['filter' => 'permission:Admin']);
-    $routes->match(['get', 'post'], 'News/Add/NewsFeacbook', 'ConAdminNews::NewsAddFeacbook', ['filter' => 'permission:Admin']);
+    $routes->match(['get', 'post'], 'News/Add/NewsFacebook', 'ConAdminNews::NewsAddFacebook', ['filter' => 'permission:Admin']);
     $routes->match(['get', 'post'], 'News/EditNews', 'ConAdminNews::NewsEdit', ['filter' => 'permission:Admin']);
     $routes->match(['get', 'post'], 'News/UpdateNews', 'ConAdminNews::NewsUpdate', ['filter' => 'permission:Admin']);
     $routes->match(['get', 'post'], 'News/DeleteNews', 'ConAdminNews::NewsDelete', ['filter' => 'permission:Admin']);

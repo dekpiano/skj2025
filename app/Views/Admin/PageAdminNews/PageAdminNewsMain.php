@@ -206,13 +206,18 @@
                 <h5 class="modal-title text-primary fw-bold"><i class="bx bxl-facebook-square me-1"></i> ดึงข่าวจาก Facebook Page</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="form-news-facebook" method="post" action="<?=base_url('Admin/News/Add/NewsFeacbook')?>">
+            <form id="form-news-facebook" method="post" action="<?=base_url('Admin/News/Add/NewsFacebook')?>">
                 <div class="modal-body p-4">
-                    <div class="form-floating form-floating-outline mb-4">
+                    <div class="form-floating form-floating-outline mb-4 position-relative">
                         <select class="form-select" name="sel_NewsFromFacebook" id="sel_NewsFromFacebook">
                             <option value="">-- กำลังโหลดข้อมูลจาก Facebook... --</option>
                         </select>
                         <label for="sel_NewsFromFacebook">เลือกโพสต์ที่ต้องการ</label>
+                        <div id="fb_loading_spinner" class="position-absolute end-0 top-50 translate-middle-y me-5 d-none">
+                            <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
                     </div>
 
                     <div id="fb_preview" class="d-none animate__animated animate__fadeIn">
@@ -470,7 +475,9 @@
         $('#ModalFacebook').on('shown.bs.modal', function() {
             $('#fb_preview').addClass('d-none');
             $('#btn-submit-news-facebook').addClass('d-none');
-            $('#sel_NewsFromFacebook').html('<option value="">-- กำลังโหลดข้อมูล... --</option>');
+            $('#sel_NewsFromFacebook').prop('disabled', true).html('<option value="">-- กำลังโหลดข้อมูล... --</option>');
+            $('#fb_loading_spinner').removeClass('d-none');
+            
             $.post('<?= base_url('Admin/News/View/Facebook') ?>', function(data) {
                 // jQuery intelligent enough to parse JSON if content-type is correct, but let's be safe
                 if (typeof data === 'string') {
@@ -480,21 +487,28 @@
                 if (data.error) {
                     console.error('Facebook API Error:', data.error);
                     $('#sel_NewsFromFacebook').html(`<option value="">-- เกิดข้อผิดพลาด: ${data.error.message || data.error} --</option>`);
+                    $('#fb_loading_spinner').addClass('d-none');
                     return;
                 }
 
                 let options = '<option value="">-- กรุณาเลือกโพสต์ที่ต้องการ --</option>';
                 if (data && data.data) {
                     data.data.forEach(item => {
-                        if(item.message) options += `<option value="${item.id}">${item.message.substr(0, 80)}...</option>`;
+                        if(item.message) {
+                            let savedText = item.is_saved ? ' (บันทึกแล้ว)' : '';
+                            let disabled = item.is_saved ? ' disabled style="color: #ccc;"' : '';
+                            options += `<option value="${item.id}"${disabled}>${item.message.substr(0, 80)}...${savedText}</option>`;
+                        }
                     });
-                    $('#sel_NewsFromFacebook').html(options);
+                    $('#sel_NewsFromFacebook').html(options).prop('disabled', false);
                 } else {
                     $('#sel_NewsFromFacebook').html('<option value="">-- ไม่พบข้อมูลโพสต์ --</option>');
                 }
+                $('#fb_loading_spinner').addClass('d-none');
             }).fail(function(xhr, status, error) {
                 console.error('AJAX Error:', error);
                 $('#sel_NewsFromFacebook').html('<option value="">-- ไม่สามารถดึงข้อมูลได้ (Server Error) --</option>');
+                $('#fb_loading_spinner').addClass('d-none');
             });
         });
 

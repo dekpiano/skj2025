@@ -437,47 +437,64 @@ class ConAdminNews extends \App\Controllers\BaseController
 
 
     public function ViewNewsFormFacebook(){
-        // ดึงโพสต์จาก Facebook Graph API ถาวร
-        $access_token = "EAADjhb2HZCFABO8GJfcN3oL964ZAtJUWt9WbpfvGqIgxnXroVx7OXNSb7ySYMZCOMnh20ymyXLoH6dxtQYtG9oInZAugNqMuddOdOFNtutZBpdqgA7WbvR175W5sOX4CsZACvnQbQNynPLsZAPXZCZBHaJugVxiO2P0XrCeYyVIH5XfUfiRZBLJkqNZB0X5xPg2OvEerELGhtqcWhpZCSZC4ZD";
-        $page_id = "230288483730783";
+        $access_token = env('facebook.access_token');
+        $page_id = env('facebook.page_id');
         $url = "https://graph.facebook.com/v18.0/$page_id/posts?fields=id,message,created_time,full_picture,attachments&access_token=$access_token";
         
-        // ตรวจสอบการดึงข้อมูล
-        $response = @file_get_contents($url);
-        if ($response === FALSE) {
-            // ส่ง JSON error กลับไปแทนการ echo ข้อความ เพื่อให้ JS จัดการได้
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        $response = curl_exec($ch);
+        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($http_code !== 200) {
+            $error_data = json_decode($response, true);
+            $fb_error = isset($error_data['error']['message']) ? $error_data['error']['message'] : 'Unknown Facebook API Error';
             return $this->response->setJSON([
-                'error' => 'Error fetching data from Facebook. Please check your Access Token and Page ID.'
+                'error' => 'Facebook API Error: ' . $fb_error . ' (HTTP ' . $http_code . '). Please check your Access Token and Page ID.'
             ]);
-        } else {
-            // $response เป็น JSON String จาก Facebook
-            // เพื่อความปลอดภัยและ Compatibility สูงสุด ให้ decode เป็น array ก่อนแล้วให้ CI4 encode กลับเป็น JSON
-            // วิธีนี้ช่วยจัดการ header และ charset ให้ถูกต้องอัตโนมัติ
-            $data = json_decode($response, true);
-            return $this->response->setJSON($data);
         }
+        
+        $fb_data = json_decode($response, true);
+        
+        // check existing posts in database
+        if (isset($fb_data['data']) && is_array($fb_data['data'])) {
+            $db = \Config\Database::connect();
+            $existing_ids = $db->table('tb_news')->select('news_facebook')->where('news_facebook !=', null)->get()->getResultArray();
+            $saved_ids = array_column($existing_ids, 'news_facebook');
+            
+            foreach ($fb_data['data'] as &$item) {
+                $item['is_saved'] = in_array($item['id'], $saved_ids);
+            }
+        }
+        
+        return $this->response->setJSON($fb_data);
     }
 
     public function SelectNewsFormFacebook(){
-
-        $access_token = "EAADjhb2HZCFABO8GJfcN3oL964ZAtJUWt9WbpfvGqIgxnXroVx7OXNSb7ySYMZCOMnh20ymyXLoH6dxtQYtG9oInZAugNqMuddOdOFNtutZBpdqgA7WbvR175W5sOX4CsZACvnQbQNynPLsZAPXZCZBHaJugVxiO2P0XrCeYyVIH5XfUfiRZBLJkqNZB0X5xPg2OvEerELGhtqcWhpZCSZC4ZD";
+        $access_token = env('facebook.access_token');
         $page_id = $this->request->getVar('KeyNewsFB');
         $url = "https://graph.facebook.com/v18.0/{$page_id}?fields=id,message,created_time,full_picture,attachments&access_token={$access_token}";
 
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        $response = curl_exec($ch);
+        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
         
-        // ตรวจสอบการดึงข้อมูล
-        $response = @file_get_contents($url);
-        if ($response === FALSE) {
-            // ส่ง JSON error กลับไปแทนการ echo ข้อความ
+        if ($http_code !== 200) {
+            $error_data = json_decode($response, true);
+            $fb_error = isset($error_data['error']['message']) ? $error_data['error']['message'] : 'Unknown Facebook API Error';
             return $this->response->setJSON([
-                'error' => 'Error fetching data from Facebook. Please check your Access Token and Page ID.'
+                'error' => 'Facebook API Error: ' . $fb_error . ' (HTTP ' . $http_code . ').'
             ]);
-        } else {
-             // Decode ก่อนแล้วส่งผ่าน setJSON
-             $data = json_decode($response, true);
-             return $this->response->setJSON($data);
         }
 
+        return $this->response->setJSON(json_decode($response, true));
     }
 
      function utf8ize($mixed) {
@@ -505,7 +522,7 @@ class ConAdminNews extends \App\Controllers\BaseController
         return file_put_contents($savePath, $imageContent);
     }
 
-    public function NewsAddFeacbook(){
+    public function NewsAddFacebook(){
         $database = \Config\Database::connect();
         $builder = $database->table('tb_news');
         $checkID = $builder->select('news_id')->orderBy('news_id','DESC')->get()->getRow();
