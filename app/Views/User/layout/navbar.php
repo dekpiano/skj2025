@@ -449,13 +449,17 @@
 
         .navbar-skj .nav-link::after { display: none; }
 
+        .dropdown-menu-skj,
         .mega-menu-premium {
             min-width: 100%;
             left: 0 !important;
             transform: none !important;
-            background: transparent;
-            box-shadow: none;
+            background: transparent !important;
+            box-shadow: none !important;
             padding: 0 !important;
+            position: static !important; /* Stack normally on mobile */
+            animation: none !important; /* Disable animations on mobile for better performance and visibility */
+            margin-top: 0 !important;
         }
 
         .mega-column-title {
@@ -691,9 +695,7 @@
             <?php endif; ?>
 
             <div class="d-flex align-items-center gap-2 py-3 py-lg-0">
-                <button id="grayscaleToggle" class="btn btn-outline-light btn-sm rounded-circle" style="width: 38px; height: 38px;" onclick="toggleGrayscale()">
-                    <i class="bi bi-circle-half"></i>
-                </button>
+
                 <div class="dropdown">
                     <button class="btn btn-outline-light btn-sm rounded-pill px-4 dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
                         <i class="bi bi-box-arrow-in-right"></i> เข้าสู่ระบบ
@@ -710,12 +712,7 @@
 <!-- Navbar End -->
 
 <script>
-    function toggleGrayscale() {
-        const html = document.documentElement;
-        html.classList.toggle('grayscale-mode');
-        const isGrayscale = html.classList.contains('grayscale-mode');
-        localStorage.setItem('grayscale-mode', isGrayscale);
-    }
+
 
     // Smart Mega Menu Positioning
     document.addEventListener('DOMContentLoaded', () => {

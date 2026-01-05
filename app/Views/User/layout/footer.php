@@ -335,42 +335,10 @@
 
 <script>
 $(document).ready(function() {
-    const htmlElement = $('html');
-    const grayscaleToggleBtn = $('#grayscaleToggle');
-    const toggleIcon = grayscaleToggleBtn.find('i');
-
-    function applyGrayscaleState(isGrayscale) {
-        if (isGrayscale) {
-            htmlElement.css('filter', 'grayscale(0.7)');
-            // Optionally change icon if user wants visual feedback, otherwise keep it as is.
-            // For now, assume the user wants the icon to remain 'fa-solid fa-adjust' as they specified.
-            // toggleIcon.removeClass('fa-adjust').addClass('fa-color-adjust'); // Example for a different icon
-        } else {
-            htmlElement.css('filter', 'none');
-            // toggleIcon.removeClass('fa-color-adjust').addClass('fa-adjust'); // Example for a different icon
-        }
-        localStorage.setItem('grayscaleEnabled', isGrayscale);
-    }
-
-    // Initialize grayscale state on page load
-    let savedGrayscaleState = localStorage.getItem('grayscaleEnabled');
-    if (savedGrayscaleState === null) { // If no state is saved, default to grayscale
-        savedGrayscaleState = 'true';
-        localStorage.setItem('grayscaleEnabled', 'true');
-    }
-    
-    if (savedGrayscaleState === 'true') {
-        applyGrayscaleState(true);
-    } else {
-        applyGrayscaleState(false);
-    }
-
-    // Attach click handler to the button
-    grayscaleToggleBtn.on('click', function(e) {
-        e.preventDefault();
-        const currentGrayscaleState = htmlElement.css('filter') === 'grayscale(0.7)';
-        applyGrayscaleState(!currentGrayscaleState);
-    });
+    // Cleanup grayscale states
+    localStorage.removeItem('grayscaleEnabled');
+    localStorage.removeItem('grayscale-mode');
+    $('html').css('filter', 'none').removeClass('grayscale-mode');
 
     const observer = lozad('img[data-src]'); 
     observer.observe();
