@@ -676,6 +676,14 @@
                                 <a href="https://sites.google.com/skj.ac.th/skj68/home" class="dropdown-item dropdown-item-skj"><i class="bi bi-shield-check"></i> ประกันคุณภาพฯ</a>
                             </div>
                         </div>
+                         <div class="row mt-3">
+                            <div class="col-lg-3">
+                                <h6 class="mega-column-title">กีฬา</h6>
+                                <a href="https://sportbase.skj.ac.th/User/Match" class="dropdown-item dropdown-item-skj"><i class="bi bi-calendar-event"></i> ตารางแข่งขัน</a>
+                                <a href="https://sportbase.skj.ac.th/User/Athlete" class="dropdown-item dropdown-item-skj"><i class="bi bi-people"></i> ทำเนียบนักกีฬา</a>
+                                <a href="https://sportbase.skj.ac.th/User/Attendance" class="dropdown-item dropdown-item-skj"><i class="bi bi-clipboard-check"></i> สถานะภาพนักกีฬาประจำวัน</a>
+                            </div>
+                            </div>
                     </div>
                 </div>
             </div>
