@@ -53,7 +53,7 @@
         <li class="menu-item <?= ($uri->getSegment(2) == 'General') ? 'active' : '' ?>">
             <a href="<?= base_url('Manager/General') ?>" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-cog"></i>
-                <div data-i18n="General">ภาพรวมงานบริหาร</div>
+                <div data-i18n="General">ภาพรวมงานบริหารทั่วไป</div>
             </a>
         </li>
 

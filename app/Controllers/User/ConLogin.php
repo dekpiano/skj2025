@@ -55,14 +55,38 @@ class ConLogin extends BaseController
                 $userData = $googleService->userinfo->get();
 
                 $db = \Config\Database::connect();
+                $personnelDb = \Config\Database::connect('personnal');
+
+                // 1. ตรวจสอบจากตารางบุคลากรโดยตรงสำหรับระดับผู้อำนวยการและรองฯ (posi_001, posi_002)
+                $personnelData = $personnelDb->table('tb_personnel')
+                    ->groupStart()
+                        ->where('pers_username', $userData->email)
+                        ->orWhere('login_oauth_uid', $userData->id)
+                    ->groupEnd()
+                    ->where('pers_status', 'กำลังใช้งาน')
+                    ->get()->getRowArray();
+                
+                if ($personnelData && in_array($personnelData['pers_position'], ['posi_001', 'posi_002'])) {
+                    session()->set([
+                        'AdminID'       => 'P' . $personnelData['pers_id'], // Virtual ID
+                        'AdminFullname' => $personnelData['pers_firstname'] . ' ' . $personnelData['pers_lastname'],
+                        'AdminUsername' => $userData->email,
+                        'AdminImage'    => $personnelData['pers_img'] ?? '',
+                        'isLoggedIn'    => true,
+                        'roles'         => ['Manager'],
+                        'personnel'     => $personnelData
+                    ]);
+                    return redirect()->to('/Manager/Dashboard');
+                }
+
+                // 2. ถ้าไม่ใช่ผู้บริหารระดับสูง ให้ตรวจสอบตามสิทธิ์ใน tb_admin ปกติ
                 $adminUser = $db->table('tb_admin')->where('admin_username', $userData->email)->get()->getRowArray();
 
                 if($adminUser){
                     // Get Role
                     $role = $db->table('tb_roles')->where('role_id', $adminUser['role_id'])->get()->getRowArray();
                     
-                    // Get Personnel Data
-                    $personnelDb = \Config\Database::connect('personnal');
+                    // Get Personnel Data (already fetched above but we need to ensure it matches admin entry)
                     $personnelData = $personnelDb->table('tb_personnel')->where('pers_id', $adminUser['pers_id'])->get()->getRowArray();
 
                     if (!$role || !$personnelData) {
@@ -114,9 +138,31 @@ class ConLogin extends BaseController
         $username = $this->request->getVar('Username');
         $password = $this->request->getVar('Password');
         $pass = $this->LoginModel->where('admin_username', $username)->first();
+        $personnelDb = \Config\Database::connect('personnal');
 
-        // ตรวจสอบว่าพบผู้ใช้ในระบบหรือไม่
+        // ถ้าไม่พบใน tb_admin ให้ตรวจสอบใน tb_personnel สำหรับกลุ่มผู้บริหาร (Director/Deputy)
         if (!$pass) {
+            $personnelData = $personnelDb->table('tb_personnel')
+                ->where('pers_username', $username)
+                ->where('pers_status', 'กำลังใช้งาน')
+                ->get()->getRowArray();
+                
+            if ($personnelData && in_array($personnelData['pers_position'], ['posi_001', 'posi_002'])) {
+                // ตรวจสอบรหัสผ่านจากตารางบุคลากร (ถ้ามีการตั้งไว้)
+                if (password_verify($password, $personnelData['pers_password'])) {
+                    $session->set([
+                        'AdminID'       => 'P' . $personnelData['pers_id'],
+                        'AdminFullname' => $personnelData['pers_firstname'] . ' ' . $personnelData['pers_lastname'],
+                        'AdminUsername' => $username,
+                        'AdminImage'    => $personnelData['pers_img'] ?? '',
+                        'isLoggedIn'    => true,
+                        'roles'         => ['Manager'],
+                        'personnel'     => $personnelData
+                    ]);
+                    return redirect()->to('/Manager/Dashboard');
+                }
+            }
+            
             $session->setFlashdata('msg', 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
             return redirect()->to('/');
         }
@@ -129,7 +175,6 @@ class ConLogin extends BaseController
             $role = $db->table('tb_roles')->where('role_id', $pass['role_id'])->get()->getRowArray();
             
             // Get Personnel Data
-            $personnelDb = \Config\Database::connect('personnal');
             $personnelData = $personnelDb->table('tb_personnel')->where('pers_id', $pass['pers_id'])->get()->getRowArray();
 
             if (!$role || !$personnelData) {

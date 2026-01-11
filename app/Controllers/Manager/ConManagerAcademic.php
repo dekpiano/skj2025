@@ -22,7 +22,7 @@ class ConManagerAcademic extends BaseController
                      SUM(CASE WHEN StudentClass LIKE "ม.4%" OR StudentClass LIKE "ม.5%" OR StudentClass LIKE "ม.6%" THEN 1 ELSE 0 END) as senior,
                      SUM(CASE WHEN StudentPrefix IN ("นาย", "เด็กชาย") THEN 1 ELSE 0 END) as male,
                      SUM(CASE WHEN StudentPrefix IN ("นางสาว", "เด็กหญิง") THEN 1 ELSE 0 END) as female')
-            ->where('StudentStatus LIKE', '1/%')
+            ->like('StudentStatus', '1/', 'after')
             ->get()->getRowArray();
 
         foreach($student_stats as $key => $val) $student_stats[$key] = (int)$val;
@@ -43,7 +43,7 @@ class ConManagerAcademic extends BaseController
 
         $students_raw = $db_academic->table('tb_students')
             ->select('StudentPrefix, StudentFirstName, StudentLastName, StudentClass, StudentNumber, StudentStatus, StudentID')
-            ->where('StudentStatus LIKE', '1/%')
+            ->like('StudentStatus', '1/', 'after')
             ->orderBy('StudentClass', 'ASC')
             ->orderBy('StudentNumber', 'ASC')
             ->get()->getResult();
