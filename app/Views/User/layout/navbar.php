@@ -711,6 +711,7 @@
                     <div class="dropdown-menu dropdown-menu-end dropdown-menu-skj mt-2">
                         <a href="https://student.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i class="bi bi-person-fill"></i> สำหรับนักเรียน</a>
                         <a href="https://teacher.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i class="bi bi-person-workspace"></i> สำหรับครูผู้สอน</a>
+                        <a href="<?= base_url('Manager/Dashboard') ?>" class="dropdown-item dropdown-item-skj"><i class="bi bi-bar-chart-line-fill"></i> สำหรับผู้บริหาร</a>
                     </div>
                 </div>
             </div>

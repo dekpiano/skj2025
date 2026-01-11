@@ -74,11 +74,20 @@ class ConLogin extends BaseController
                         'AdminID'       => $adminUser['admin_id'],
                         'AdminFullname' => $personnelData['pers_firstname'] . ' ' . $personnelData['pers_lastname'],
                         'AdminUsername' => $adminUser['admin_username'],
+                        'AdminImage'    => $personnelData['pers_img'] ?? '',
                         'isLoggedIn'    => true,
                         'roles'         => [$role['role_name']],
                         'personnel'     => $personnelData
                     ]);
         
+                    // Redirect based on Role
+                    if ($role['role_name'] === 'Super Admin') {
+                        // Super Admin can access both systems - redirect to selection
+                        return redirect()->to('/SelectSystem');
+                    } elseif (in_array($role['role_name'], ['Manager', 'ผู้บริหาร', 'Executive'])) {
+                        return redirect()->to('/Manager/Dashboard');
+                    }
+
                     return redirect()->to('/Admin/Dashboard'); // เปลี่ยนเส้นทางหลังจากล็อกอินสำเร็จ
                 }else{
                     session()->setFlashdata('msg', 'ไม่พบบัญชีผู้ใช้นี้ในระบบ หรือ ไม่เป็นผู้ดูแลระบบ');
@@ -95,10 +104,12 @@ class ConLogin extends BaseController
     }
 
     public function LoginAdmin(){
-        
         $session = session();
-        // $data = $this->DataMain(); // REMOVED
-        $pass = $this->LoginModel->findAll();
+        
+        // ถ้าไม่ใช่ POST ให้แสดงหน้า Login (รองรับ Google Login)
+        if ($this->request->getMethod() !== 'post') {
+            return view('User/PageLogin');
+        }
 
         $username = $this->request->getVar('Username');
         $password = $this->request->getVar('Password');
@@ -130,11 +141,21 @@ class ConLogin extends BaseController
                 'AdminID'       => $pass['admin_id'],
                 'AdminFullname' => $personnelData['pers_firstname'] . ' ' . $personnelData['pers_lastname'],
                 'AdminUsername' => $pass['admin_username'],
+                'AdminImage'    => $personnelData['pers_img'] ?? '',
                 'isLoggedIn'    => true,
                 'roles'         => [$role['role_name']],
                 'personnel'     => $personnelData
             ];
             $session->set($set_data);
+
+            // Redirect based on Role
+            if ($role['role_name'] === 'Super Admin') {
+                // Super Admin can access both systems - redirect to selection
+                return redirect()->to('/SelectSystem');
+            } elseif (in_array($role['role_name'], ['Manager', 'ผู้บริหาร', 'Executive'])) {
+                return redirect()->to('/Manager/Dashboard');
+            }
+            
             return redirect()->to('/Admin/Dashboard');
         }else{
             $session->setFlashdata('msg', 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
@@ -147,6 +168,26 @@ class ConLogin extends BaseController
         $session = session();
         $session->destroy();
         return redirect()->to('/');
+    }
+
+    public function selectSystem()
+    {
+        // Check if logged in
+        if (!session('isLoggedIn')) {
+            return redirect()->to('/');
+        }
+        
+        // Check if Super Admin
+        $roles = session('roles') ?? [];
+        if (!in_array('Super Admin', $roles)) {
+            return redirect()->to('/Admin/Dashboard');
+        }
+        
+        return view('User/UserSelectSystem/PageSelectSystem', [
+            'title' => 'เลือกระบบ',
+            'description' => 'เลือกระบบที่ต้องการเข้าใช้งาน',
+            'userName' => session('AdminFullname')
+        ]);
     }
 
 }

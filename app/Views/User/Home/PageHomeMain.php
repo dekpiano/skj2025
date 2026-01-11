@@ -68,6 +68,14 @@
         <img src="<?=base_url();?>/uploads/director/pa.png" class="img-fluid" alt="" loading="lazy" style="width: 100%;">
         </div>
     </div>
+    </div>
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-6 text-center">
+            <a href="<?= base_url('Manager/Dashboard') ?>" class="btn btn-outline-danger rounded-pill px-5 py-2">
+                <i class="bi bi-bar-chart-line-fill me-2"></i> เข้าสู่ระบบสารสนเทศผู้บริหาร (EIS)
+            </a>
+        </div>
+    </div>
 </div>
 
 </section>

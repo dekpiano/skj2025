@@ -40,6 +40,7 @@ $routes->set404Override();
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
 $routes->get('/', 'User\ConHome::index');
+$routes->get('SelectSystem', 'User\ConLogin::selectSystem');
 $routes->post('/Admin/News/uploadImage', 'Admin\ConAdminNews::uploadImage');
 $routes->get('/Admin/News/uploadImage', 'Admin\ConAdminNews::uploadImage');
 $routes->get('About/(:any)', 'User\ConAboutSchool::AboutDetail/$1');
@@ -115,6 +116,20 @@ $routes->group('Admin', ['filter' => 'permission', 'namespace' => 'App\Controlle
     
     // Admin Settings (Festival Toggle - keeping compatibility or moving)
     $routes->post('toggleFestival', 'ConAdminSettings::toggleFestival', ['filter' => 'permission:Admin']);
+});
+
+$routes->group('Manager', ['filter' => 'permission:Manager,ผู้บริหาร', 'namespace' => 'App\Controllers\Manager'], function ($routes) {
+    $routes->get('Dashboard', 'ConManagerDashboard::index');
+    $routes->get('Personnel', 'ConManagerPersonnel::index');
+    $routes->get('Academic/student', 'ConManagerAcademic::index');
+    $routes->get('Academic/Teacher', 'ConManagerAcademic::teacherIndex');
+    $routes->get('Personnel/Detail/(:any)', 'ConManagerPersonnel::getPersonnelDetail/$1');
+    $routes->get('Personnel/AttendanceAnalysis', 'ConManagerPersonnel::getAttendanceAnalysis');
+    $routes->get('Academic/Analysis', 'ConManagerAcademic::getAcademicAnalysis');
+    $routes->get('Academic/StudentAnalysis', 'ConManagerAcademic::getStudentAnalysis');
+    $routes->get('Academic/TeacherAnalysis', 'ConManagerAcademic::getTeacherAnalysis');
+    $routes->get('General', 'ConManagerGeneral::index');
+    $routes->get('General/Analysis', 'ConManagerGeneral::getAnalysis');
 });
 // 
 
