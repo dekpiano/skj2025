@@ -602,31 +602,35 @@
 
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                        <i class="bi bi-people"></i> หน่วยงาน
+                        <i class="bi bi-people"></i> หน่วยงานภายใน
                     </a>
                     <div class="dropdown-menu dropdown-menu-skj mega-menu-premium">
                         <div class="row">
-                            <div class="col-lg-4">
+                            <div class="col-lg-3">
                                 <h6 class="mega-column-title"><i class="bi bi-briefcase"></i> ฝ่ายบริหารงาน</h6>
-                                <a href="https://academic.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i class="bi bi-book"></i> วิชาการ</a>
+                                <a href="https://academic.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i class="bi bi-book"></i> งานวิชาการ</a>
                                 <a href="https://general.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i class="bi bi-gear"></i> งานทั่วไป</a>
                                 <a href="https://personnel.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i class="bi bi-person-badge"></i> งานบุคคล</a>
-                                <a href="https://budgetplan.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i class="bi bi-bar-chart-line"></i> งบประมาณและแผน</a>
+                                <a href="https://budgetplan.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i class="bi bi-bar-chart-line"></i> งานงบประมาณและแผน</a>
                             </div>
-                            <div class="col-lg-4">
+                            <div class="col-lg-3">
+                                <h6 class="mega-column-title"><i class="bi bi-person-badge"></i> คณะผู้บริหาร</h6>
+                                <a href="<?= base_url('Personnal/Executive') ?>" class="dropdown-item dropdown-item-skj"><i class="bi bi-person-video2"></i> ผู้บริหารสถานศึกษา</a>
+                            </div>
+                            <div class="col-lg-3">
                                 <h6 class="mega-column-title"><i class="bi bi-mortarboard"></i> บุคลากรสายการสอน</h6>
-                                <a href="<?= base_url('Personnal/' . urlencode("สายการสอน")) ?>" class="dropdown-item dropdown-item-skj"><b><i class="bi bi-people-fill"></i> บุคลากรทั้งหมด</b></a>
+                                <a href="https://personnel.skj.ac.th/directory" class="dropdown-item dropdown-item-skj"><b><i class="bi bi-people-fill"></i> บุคลากรทั้งหมด</b></a>
                                 <?php foreach ($Lear as $key => $v_Lear) : ?>
-                                    <a href="<?= base_url('Personnal/' . urlencode("สายการสอน/") . str_replace(" ", "-", urlencode($v_Lear->lear_namethai))) ?>" class="dropdown-item dropdown-item-skj">
+                                    <a href="<?= base_url('Personnal/' . urlencode("สายการสอน") . '/' . str_replace(" ", "-", urlencode($v_Lear->lear_namethai))) ?>" class="dropdown-item dropdown-item-skj">
                                         <i class="bi bi-chevron-right small"></i> <?= $v_Lear->lear_namethai; ?>
                                     </a>
                                 <?php endforeach; ?>
                             </div>
-                            <div class="col-lg-4">
+                            <div class="col-lg-3">
                                 <h6 class="mega-column-title"><i class="bi bi-tools"></i> สายสนับสนุน</h6>
                                 <a href="<?= base_url('Personnal/' . urlencode("สายสนับสนุน")) ?>" class="dropdown-item dropdown-item-skj"><b><i class="bi bi-person-gear"></i> สายสนับสนุนทั้งหมด</b></a>
                                 <?php foreach ($PosiOther as $key => $v_PosiOther) : ?>
-                                    <a href="<?= base_url('Personnal/สายสนับสนุน/' . str_replace(" ", "-", urlencode($v_PosiOther->posi_name))) ?>" class="dropdown-item dropdown-item-skj">
+                                    <a href="<?= base_url('Personnal/' . urlencode("สายสนับสนุน") . '/' . str_replace(" ", "-", urlencode($v_PosiOther->posi_name))) ?>" class="dropdown-item dropdown-item-skj">
                                         <i class="bi bi-chevron-right small"></i> <?= $v_PosiOther->posi_name; ?>
                                     </a>
                                 <?php endforeach; ?>

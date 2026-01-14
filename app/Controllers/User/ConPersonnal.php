@@ -37,14 +37,21 @@ class ConPersonnal extends BaseController
         $page_data['banner'] = '';
         
         if($Key === "ผู้บริหารสถานศึกษา"){
-            $CheckPosi = "pers_status='กำลังใช้งาน' && pers_position='posi_001' OR pers_position='posi_002'";
+            $CheckPosi = "pers_status='กำลังใช้งาน' AND (pers_position='posi_001' OR pers_position='posi_002')";
         }elseif($PoisO === 'สายการสอน'){
-            $CheckLear = $this->LearModel->where('lear_namethai',str_replace("-", " ", $Key))->get()->getResult();
-            $CheckPosi = ['pers_learning' => $CheckLear[0]->lear_id];           
+            if($Key){
+                $CheckLear = $this->LearModel->where('lear_namethai',str_replace("-", " ", $Key))->get()->getResult();
+                $CheckPosi = ['pers_learning' => $CheckLear[0]->lear_id];           
+            } else {
+                $CheckPosi = "pers_position IN ('posi_003', 'posi_004', 'posi_005', 'posi_006')";
+            }
         }elseif($PoisO === 'สายสนับสนุน'){
-            $CheckLear = $this->PosiModel->where('posi_name',str_replace("-", " ", $Key))->get()->getResult();
-            $CheckPosi = ['pers_position' => $CheckLear[0]->posi_id];
-           
+            if($Key){
+                $CheckLear = $this->PosiModel->where('posi_name',str_replace("-", " ", $Key))->get()->getResult();
+                $CheckPosi = ['pers_position' => $CheckLear[0]->posi_id];
+            } else {
+                $CheckPosi = "pers_position BETWEEN 'posi_007' AND 'posi_012'";
+            }
         }
         $page_data['Pers'] = $this->PersModel->select('
             skjacth_personnel.tb_personnel.pers_position,

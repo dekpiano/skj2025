@@ -52,7 +52,9 @@ $routes->match(['get', 'post'],'CountReadNews','User\ConNews::NewsCountRead');
 $routes->get('news-suggestions', 'User\ConNews::newsSuggestions');
 $routes->get('pr', 'User\ConNews::pr');
 
+$routes->get('Personnal/Executive', 'User\ConPersonnal::PersonnalMain/Management/ผู้บริหารสถานศึกษา');
 $routes->get('Personnal/(:any)/(:any)','User\ConPersonnal::PersonnalMain/$1/$2');
+$routes->get('Personnal/(:any)','User\ConPersonnal::PersonnalMain/$1');
 
 $routes->get('Contact', 'User\ConContact::index');
 $routes->get('PageGroup', 'User\ConHome::PageGroup');
