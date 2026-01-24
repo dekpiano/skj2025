@@ -37,7 +37,7 @@
         left: 0;
         width: 40px;
         height: 3px;
-        background: #ff69b4;
+        background: var(--primary);
         border-radius: 2px;
     }
 
@@ -51,7 +51,7 @@
     }
 
     .footer-link:hover {
-        color: #ff69b4;
+        color: var(--primary);
         padding-left: 8px;
     }
 
@@ -71,7 +71,7 @@
     }
 
     .social-btn:hover {
-        background: linear-gradient(45deg, #ff69b4, #249ffd);
+        background: linear-gradient(45deg, var(--primary), var(--secondary));
         color: #fff;
         transform: translateY(-5px);
         box-shadow: 0 10px 20px rgba(36, 159, 253, 0.3);
@@ -92,7 +92,7 @@
 
     .visitor-card:hover {
         background: rgba(255, 255, 255, 0.08);
-        border-color: rgba(255, 105, 180, 0.3);
+        border-color: rgba(251, 126, 156, 0.3);
         transform: translateX(5px);
     }
 
@@ -100,8 +100,8 @@
         width: 40px;
         height: 40px;
         border-radius: 10px;
-        background: rgba(255, 105, 180, 0.1);
-        color: #ff69b4;
+        background: rgba(251, 126, 156, 0.1);
+        color: var(--primary);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -140,7 +140,7 @@
 
     .newsletter-input:focus {
         background: rgba(255, 255, 255, 0.1);
-        border-color: #ff69b4;
+        border-color: var(--primary);
     }
 
     .newsletter-btn {
@@ -148,7 +148,7 @@
         right: 5px;
         top: 5px;
         bottom: 5px;
-        background: linear-gradient(45deg, #ff69b4, #249ffd);
+        background: linear-gradient(45deg, var(--primary), var(--secondary));
         color: #fff;
         border: none;
         border-radius: 25px;
@@ -178,7 +178,7 @@
         transition: all 0.3s ease;
         animation: chat-pulse 2s infinite;
         border: none;
-        background: linear-gradient(45deg, #ff69b4, #249ffd) !important;
+        background: linear-gradient(45deg, var(--primary), var(--secondary)) !important;
     }
 
     .messenger-fab:hover {
@@ -198,8 +198,8 @@
         bottom: 20px !important;
         right: 20px !important;
         border: none;
-        background: #ff69b4 !important;
-        box-shadow: 0 10px 20px rgba(255, 105, 180, 0.3);
+        background: var(--primary) !important;
+        box-shadow: 0 10px 20px rgba(251, 126, 156, 0.3);
     }
 </style>
 <a href="http://m.me/230288483730783" target="_blank" class="btn btn-primary messenger-fab px-3 py-1 rounded-pill d-flex align-items-center shadow-lg">
@@ -328,6 +328,7 @@
 <script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap5.min.js"></script>
 <!-- Template Javascript -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 <script src="<?=base_url()?>/assets/js/main.js?v=3"></script>
 <?php if($uri->getSegment(1) === "News"):?>
 <script src="<?=base_url()?>/assets/js/News/News.js?v=10.2"></script>
@@ -344,14 +345,129 @@ $(document).ready(function() {
     observer.observe();
 
 
-    $(".news-slider").owlCarousel({
-        items : 3,
-        itemsDesktop:[1199,3],
-        itemsDesktopSmall:[980,2],
-        itemsMobile : [600,1],
-        pagination:true,
-        autoPlay:true
-    });
+    // SKJ News Slick Slider (Home Page)
+    if ($('#news-slick-slider').length) {
+        $('#news-slick-slider').slick({
+            centerMode: true,
+            centerPadding: '40px', 
+            slidesToShow: 5,
+            infinite: true,
+            autoplay: true,
+            autoplaySpeed: 3000,
+            pauseOnHover: true,
+            dots: true,
+            arrows: true,
+            responsive: [
+                {
+                    breakpoint: 1600,
+                    settings: {
+                        slidesToShow: 4,
+                        centerPadding: '40px'
+                    }
+                },
+                {
+                    breakpoint: 1300,
+                    settings: {
+                        slidesToShow: 3,
+                        centerPadding: '40px'
+                    }
+                },
+                {
+                    breakpoint: 992,
+                    settings: {
+                        slidesToShow: 2,
+                        centerPadding: '40px'
+                    }
+                },
+                {
+                    breakpoint: 768,
+                    settings: {
+                        arrows: false,
+                        centerMode: true,
+                        centerPadding: '40px',
+                        slidesToShow: 2
+                    }
+                },
+                {
+                    breakpoint: 480,
+                    settings: {
+                        arrows: false,
+                        centerMode: true,
+                        centerPadding: '30px',
+                        slidesToShow: 1
+                    }
+                }
+            ]
+        });
+    }
+
+    // SKJ News Reward Slick Slider
+    if ($('#news-reward-slick-slider').length) {
+        $('#news-reward-slick-slider').slick({
+            centerMode: true,
+            centerPadding: '40px',
+            slidesToShow: 5,
+            infinite: true,
+            autoplay: true,
+            autoplaySpeed: 3500,
+            pauseOnHover: true,
+            dots: true,
+            arrows: true,
+            responsive: [
+                {
+                    breakpoint: 1600,
+                    settings: {
+                        slidesToShow: 4,
+                        centerPadding: '40px'
+                    }
+                },
+                {
+                    breakpoint: 1300,
+                    settings: {
+                        slidesToShow: 3,
+                        centerPadding: '40px'
+                    }
+                },
+                {
+                    breakpoint: 992,
+                    settings: {
+                        slidesToShow: 2,
+                        centerPadding: '40px'
+                    }
+                },
+                {
+                    breakpoint: 768,
+                    settings: {
+                        arrows: false,
+                        centerMode: true,
+                        centerPadding: '40px',
+                        slidesToShow: 2
+                    }
+                },
+                {
+                    breakpoint: 480,
+                    settings: {
+                        arrows: false,
+                        centerMode: true,
+                        centerPadding: '30px',
+                        slidesToShow: 1
+                    }
+                }
+            ]
+        });
+    }
+
+    // fallback for other news sliders using the class if any
+    if ($(".news-slider").not('#news-slick-slider, #news-reward-slick-slider').length) {
+        $(".news-slider").not('#news-slick-slider, #news-reward-slick-slider').owlCarousel({
+            items : 3,
+            itemsDesktop:[1199,3],
+            itemsDesktopSmall:[980,2],
+            itemsMobile : [600,1],
+            pagination:true,
+            autoPlay:true
+        });
+    }
 });
 
 $('#TBProcurements').DataTable(

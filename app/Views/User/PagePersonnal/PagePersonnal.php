@@ -239,20 +239,26 @@
 
         <div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 800px;">
             <h6 class="section-title bg-white text-center text-primary px-3">แผนกงาน / กลุ่มสาระ</h6>
-            <h1 class="display-6 mb-4"><?= str_replace("-", " ", urldecode($uri->getSegment(3))); ?></h1>
+            <h1 class="display-6 mb-4"><?php 
+                $title = str_replace("-", " ", urldecode($uri->getSegment(3)));
+                if(empty($title) && urldecode($uri->getSegment(2)) === "Executive") $title = "ผู้บริหารสถานศึกษา";
+                echo $title;
+            ?></h1>
             <div class="section-divider"></div>
         </div>
 
         <div class="row g-4 justify-content-center" id="personnelContainer">
             <?php 
-            // Separate Director, Heads, and Others for organized layout
             $director = null;
+            $deputies = [];
             $heads = [];
             $others = [];
 
             foreach ($Pers as $p) {
-                if (urldecode($uri->getSegment(3)) === "ผู้บริหารสถานศึกษา" && $p->pers_position === "posi_001") {
+                if ($p->pers_position === "posi_001") {
                     $director = $p;
+                } elseif ($p->pers_position === "posi_002") {
+                    $deputies[] = $p;
                 } elseif ($p->pers_groupleade == 'หัวหน้ากลุ่มสาระ') {
                     $heads[] = $p;
                 } elseif ($p->pers_status == "กำลังใช้งาน") {
@@ -281,6 +287,31 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            <?php endif; ?>
+
+            <!-- Render Deputies -->
+            <?php if (!empty($deputies)): ?>
+                <div class="col-12 mb-5">
+                    <div class="row g-4 justify-content-center">
+                        <?php foreach ($deputies as $deputy): ?>
+                            <div class="col-lg-3 col-md-6 personnel-item" data-name="<?= $deputy->pers_firstname . ' ' . $deputy->pers_lastname ?>">
+                                <div class="team-card text-center wow fadeInUp" data-wow-delay="0.2s">
+                                    <div class="team-image-wrapper">
+                                        <img class="team-img" 
+                                             src="<?= !empty($deputy->pers_img) ? 'https://personnel.skj.ac.th/uploads/admin/Personnal/' . $deputy->pers_img : base_url('uploads/presonnal/man.png') ?>" 
+                                             alt="<?= $deputy->pers_firstname ?>"
+                                             loading="lazy">
+                                    </div>
+                                    <div class="team-content">
+                                        <h5 class="team-name"><?= $deputy->pers_prefix . $deputy->pers_firstname . ' ' . $deputy->pers_lastname ?></h5>
+                                        <span class="team-pos"><?= $deputy->posi_name . ' ' . $deputy->pers_academic ?></span>
+                                        <?= renderSocialLinks($deputy) ?>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
                 </div>
             <?php endif; ?>

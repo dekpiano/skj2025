@@ -1,7 +1,7 @@
 <style>
     .robot-honor-section {
         padding: 80px 0;
-        background: linear-gradient(135deg, rgba(36, 159, 253, 0.02) 0%, rgba(36, 159, 253, 0.08) 100%);
+        background: #ffffff;
         position: relative;
         overflow: hidden;
     }
