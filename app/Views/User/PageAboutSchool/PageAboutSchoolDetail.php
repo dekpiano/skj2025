@@ -154,13 +154,13 @@
     }
 </style>
 
-<div class="about-header wow fadeIn" data-wow-delay="0.1s">
-    <div class="container py-5">
-        <h1 class="display-4 text-white slideInDown mb-3"><?= esc($AboutDetail->about_menu) ?></h1>
+<div class="skj-page-header header-about wow fadeIn" data-wow-delay="0.1s">
+    <div class="container">
+        <h1 class="slideInDown mb-3"><?= esc($AboutDetail->about_menu) ?></h1>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb justify-content-center mb-0 mt-4">
-                <li class="breadcrumb-item"><a class="text-white-50" href="<?= base_url('/') ?>">หน้าแรก</a></li>
-                <li class="breadcrumb-item text-white active" aria-current="page">เกี่ยวกับเรา</li>
+                <li class="breadcrumb-item"><a href="<?= base_url('/') ?>">หน้าแรก</a></li>
+                <li class="breadcrumb-item active" aria-current="page">เกี่ยวกับเรา</li>
             </ol>
         </nav>
     </div>

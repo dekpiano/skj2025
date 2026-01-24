@@ -198,14 +198,14 @@
     }
 </style>
 
-<div class="detail-header wow fadeIn" data-wow-delay="0.1s">
-    <div class="container pb-5">
-        <h1 class="display-5 text-white fw-bold slideInDown mb-4"><?= esc($news->news_topic) ?></h1>
+<div class="skj-page-header detail-header wow fadeIn" data-wow-delay="0.1s">
+    <div class="container">
+        <h1 class="slideInDown mb-4"><?= esc($news->news_topic) ?></h1>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb justify-content-center mb-0 mt-4">
-                <li class="breadcrumb-item"><a class="text-white-50" href="<?= base_url('/') ?>">หน้าแรก</a></li>
-                <li class="breadcrumb-item"><a class="text-white-50" href="<?= base_url('News') ?>">ข่าวประชาสัมพันธ์</a></li>
-                <li class="breadcrumb-item text-white active" aria-current="page">รายละเอียดข่าว</li>
+                <li class="breadcrumb-item"><a href="<?= base_url('/') ?>">หน้าแรก</a></li>
+                <li class="breadcrumb-item"><a href="<?= base_url('News') ?>">ข่าวประชาสัมพันธ์</a></li>
+                <li class="breadcrumb-item active" aria-current="page">รายละเอียดข่าว</li>
             </ol>
         </nav>
     </div>

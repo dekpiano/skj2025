@@ -201,4 +201,59 @@ gtag('config', 'G-4XVY09LWJ8');
             font-size: .875em !important;
         }
     }
+    /* Global SKJ Page Headers */
+    .skj-page-header {
+        position: relative;
+        padding: 120px 0 100px;
+        background-attachment: fixed;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        border-radius: 0 0 60px 60px;
+        text-align: center;
+        margin-bottom: 50px;
+        color: #fff;
+        overflow: hidden;
+        z-index: 1;
+    }
+
+    .skj-page-header::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: linear-gradient(rgba(26, 42, 77, 0.75), rgba(26, 42, 77, 0.85));
+        z-index: -1;
+    }
+
+    .skj-page-header h1 {
+        font-weight: 900 !important;
+        letter-spacing: 1px;
+        font-size: clamp(2.2rem, 5vw, 3.5rem);
+        margin-bottom: 20px;
+        color: #fff !important;
+        text-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+
+    .skj-page-header .breadcrumb-item {
+        font-weight: 600;
+        font-size: 0.95rem;
+    }
+
+    .skj-page-header .breadcrumb-item a { color: rgba(255,255,255,0.7) !important; }
+    .skj-page-header .breadcrumb-item.active { color: #fff !important; }
+
+    /* Specific Backgrounds for Sections */
+    .header-about { background-image: url('<?= base_url('uploads/background/bg-about.jpg') ?>'); }
+    .header-news { background-image: url('<?= base_url('uploads/background/bg-news.jpg') ?>'); }
+    .header-personnel { background-image: url('<?= base_url('uploads/background/bg-personnal.jpg') ?>'); }
+    .header-guidance { background-image: url('<?= base_url('uploads/background/bg-guidance.jpg') ?>'); }
+    .header-academic { background-image: url('<?= base_url('uploads/background/bg-academic.jpg') ?>'); }
+
+    @media (max-width: 767px) {
+        .skj-page-header {
+            padding: 80px 20px;
+            border-radius: 0 0 40px 40px;
+            background-attachment: scroll;
+        }
+    }
     </style>

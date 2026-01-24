@@ -1,19 +1,24 @@
 <style>
     .news-reward-section {
-        padding: 80px 0;
-        background-color: #f0f7ff; /* Subtle blue */
+        padding: 120px 0;
+        background: linear-gradient(rgba(1, 33, 67, 0.85), rgba(1, 33, 67, 0.9)), url('<?= base_url('uploads/background/campus_view_55.jpg') ?>');
+        background-attachment: fixed;
+        background-position: center;
+        background-size: cover;
         overflow: hidden;
+        position: relative;
     }
 
-    /* Reuse the same stable card design */
+    /* Glassmorphism News Card */
     .news-reward-section .skj-news-card {
-        background: #fff;
-        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border-radius: 25px;
         overflow: hidden;
-        margin: 8px;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.05);
-        transition: all 0.4s ease;
-        border: 1px solid rgba(0,0,0,0.03);
+        margin: 15px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         height: 100%;
         display: flex !important;
         flex-direction: column;
@@ -21,24 +26,26 @@
 
     .news-reward-section .slick-track {
         display: flex !important;
+        padding: 40px 0;
     }
 
     .news-reward-section .slick-slide {
         height: auto !important;
+        transition: all 0.5s ease;
     }
 
     .news-reward-section .slick-center .skj-news-card {
-        transform: scale(1.05);
-        box-shadow: 0 15px 40px rgba(0,0,0,0.1);
-        border-color: rgba(36, 159, 253, 0.2);
+        transform: scale(1.1);
+        background: rgba(255, 255, 255, 0.1);
+        border-color: var(--secondary);
+        box-shadow: 0 30px 60px rgba(0,0,0,0.4);
         z-index: 5;
     }
 
     .news-reward-section .skj-news-card .post-img {
         position: relative;
-        height: 160px;
+        height: 180px;
         overflow: hidden;
-        background-color: #eee;
     }
 
     .news-reward-section .skj-news-card .post-img img {
@@ -48,69 +55,70 @@
         transition: transform 0.6s ease;
     }
 
-    .news-reward-section .slick-center .skj-news-card:hover .post-img img {
-        transform: scale(1.1);
-    }
-
     .news-reward-section .skj-news-card .post-content {
-        padding: 15px;
+        padding: 25px;
         flex-grow: 1;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
     }
 
     .news-reward-section .skj-news-card .post-title {
-        font-size: 1rem;
+        font-size: 1.1rem;
         font-weight: 800;
-        margin-bottom: 12px;
-        color: #1a2a4d;
+        margin-bottom: 15px;
+        color: #fff;
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
-        min-height: 2.8rem;
-        line-height: 1.4;
+        line-height: 1.5;
     }
 
     .news-reward-section .skj-news-card .post-title a {
-        color: inherit;
+        color: #fff;
         text-decoration: none;
     }
 
     .news-reward-section .skj-news-card .post-meta {
-        margin-bottom: 10px;
-        font-size: 0.75rem;
+        margin-bottom: 12px;
+        font-size: 0.8rem;
         font-weight: 700;
         color: var(--secondary);
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: 10px;
     }
 
     .news-reward-section .skj-news-card .read-more {
         display: inline-flex;
         align-items: center;
-        gap: 5px;
+        gap: 8px;
         color: var(--primary);
         font-weight: 800;
         text-decoration: none;
-        font-size: 0.8rem;
+        font-size: 0.85rem;
         transition: all 0.3s ease;
         margin-top: auto;
     }
 
+    .news-reward-section .skj-news-card .read-more:hover {
+        gap: 12px;
+        color: #fff;
+    }
+
     @media (max-width: 768px) {
-        .news-reward-section .skj-news-card .post-img { height: 140px; }
-        .news-reward-section .skj-news-card .post-content { padding: 12px; }
+        .news-reward-section { padding: 80px 0; }
+        .news-reward-section .skj-news-card { margin: 10px; }
+        .news-reward-section .skj-news-card .post-img { height: 150px; }
+        .news-reward-section .skj-news-card .post-content { padding: 15px; }
     }
 </style>
 
 <section class="news-reward-section">
     <div class="container-fluid px-0">
-        <div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 700px;">
-            <span class="section-subtitle">SKJ Proud & Rewards</span>
-            <h1 class="display-5 mb-4" style="font-weight: 800; color: #1a2a4d;">รางวัลและความภูมิใจ</h1>
+        <div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 700px; position: relative; z-index: 1;">
+            <span class="section-subtitle text-white opacity-75">SKJ Proud & Rewards</span>
+            <h1 class="display-5 mb-4" style="font-weight: 800; color: #ffffff;">รางวัลและความภูมิใจ</h1>
             <div class="mx-auto" style="width: 100px; height: 5px; background: linear-gradient(to right, var(--primary), var(--secondary)); border-radius: 5px;"></div>
         </div>
         

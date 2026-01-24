@@ -1,11 +1,11 @@
-<div class="news-header wow fadeIn" data-wow-delay="0.1s">
-    <div class="container text-center">
-        <h1 class="display-3 text-white fw-bold slideInDown mb-3">ข่าวประชาสัมพันธ์</h1>
+<div class="skj-page-header header-news wow fadeIn" data-wow-delay="0.1s">
+    <div class="container">
+        <h1 class="slideInDown mb-3">ข่าวประชาสัมพันธ์</h1>
         <p class="text-white-50 fs-5 mb-0">เกาะติดข่าวสารและกิจกรรมล่าสุดจาก สวนกุหลาบวิทยาลัย (จิรประวัติ)</p>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb justify-content-center mb-0 mt-4">
-                <li class="breadcrumb-item"><a class="text-white" href="<?= base_url('/') ?>">หน้าแรก</a></li>
-                <li class="breadcrumb-item text-white-50 active" aria-current="page">ข่าวสาร</li>
+                <li class="breadcrumb-item"><a href="<?= base_url('/') ?>">หน้าแรก</a></li>
+                <li class="breadcrumb-item active" aria-current="page">ข่าวสาร</li>
             </ol>
         </nav>
     </div>

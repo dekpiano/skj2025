@@ -457,6 +457,37 @@ $(document).ready(function() {
         });
     }
 
+    // SKJ Main Banner Slick Slider (Wider Luxurious Peek Mode)
+    if ($('#main-banner-slick').length) {
+        $('#main-banner-slick').slick({
+            centerMode: true,
+            centerPadding: '5%',
+            slidesToShow: 1,
+            dots: true,
+            infinite: true,
+            speed: 800,
+            autoplay: true,
+            autoplaySpeed: 4000,
+            pauseOnHover: false,
+            arrows: true,
+            responsive: [
+                {
+                    breakpoint: 1200,
+                    settings: {
+                        centerPadding: '4%'
+                    }
+                },
+                {
+                    breakpoint: 768,
+                    settings: {
+                        centerPadding: '30px',
+                        arrows: false
+                    }
+                }
+            ]
+        });
+    }
+
     // fallback for other news sliders using the class if any
     if ($(".news-slider").not('#news-slick-slider, #news-reward-slick-slider').length) {
         $(".news-slider").not('#news-slick-slider, #news-reward-slick-slider').owlCarousel({

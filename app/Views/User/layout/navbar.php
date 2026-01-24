@@ -184,6 +184,7 @@
         .navbar-skj {
             padding: 10px 0;
             border-top: none;
+            border-bottom: 4px solid #249ffd; /* เพิ่มขอบล่างสีฟ้าสำหรับมือถือ */
         }
     }
 
