@@ -74,7 +74,7 @@
     }
 
     @media screen and (max-width: 991px) {
-        .hero-carousel-wrapper { padding: 20px 0 40px; }
+        .hero-carousel-wrapper { padding: 80px 0 40px; }
         .slider-img-container { border-radius: 30px; }
         .main-slider .slider-item { padding: 0 8px; }
         #main-banner-slick .slick-prev { left: 20px; }

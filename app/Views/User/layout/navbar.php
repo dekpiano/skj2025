@@ -1,7 +1,7 @@
 <!-- Brand & Contact Start -->
 <div class="container-fluid py-3 px-4 wow fadeIn d-none d-lg-block top-bar-premium" data-wow-delay="0.1s">
     <div class="row align-items-center">
-        <div class="col-lg-6">
+        <div class="col-lg-5">
             <a href="<?= base_url('/'); ?>" class="navbar-brand-premium">
                 <div class="d-flex align-items-center">
                     <div class="logo-wrapper-nav">
@@ -14,34 +14,35 @@
                 </div>
             </a>
         </div>
-        <div class="col-lg-6">
-            <div class="row g-0 justify-content-end top-info-wrapper">
-                <div class="col-auto px-4 border-end border-light-subtle">
-                    <div class="d-flex align-items-center">
-                        <div class="info-icon-nav pink"><i class="bi bi-clock"></i></div>
+        <div class="col-lg-7">
+            <div class="d-flex justify-content-end align-items-center top-info-container">
+                <div class="top-info-wrapper d-flex align-items-center me-4">
+                    <div class="info-item-nav">
+                        <div class="info-icon-nav email-grad"><i class="bi bi-clock"></i></div>
                         <div class="ms-3">
                             <div class="info-label-nav">เวลาทำการ</div>
                             <div class="info-value-nav">จันทร์ - ศุกร์, 08:30 - 16:30</div>
                         </div>
                     </div>
-                </div>
-                <div class="col-auto px-4 border-end border-light-subtle">
-                    <div class="d-flex align-items-center">
-                        <div class="info-icon-nav blue"><i class="bi bi-telephone"></i></div>
+                    <div class="info-item-nav">
+                        <div class="info-icon-nav phone-grad"><i class="bi bi-telephone"></i></div>
                         <div class="ms-3">
                             <div class="info-label-nav">ติดต่อเรา</div>
                             <div class="info-value-nav">056-009-667</div>
                         </div>
                     </div>
-                </div>
-                <div class="col-auto ps-4">
-                    <div class="d-flex align-items-center">
-                        <div class="info-icon-nav pink"><i class="bi bi-envelope"></i></div>
+                    <div class="info-item-nav border-0">
+                        <div class="info-icon-nav email-grad"><i class="bi bi-envelope"></i></div>
                         <div class="ms-3">
                             <div class="info-label-nav">อีเมล</div>
                             <div class="info-value-nav">skjns160@skj.ac.th</div>
                         </div>
                     </div>
+                </div>
+                <!-- Social Links -->
+                <div class="social-links-nav d-flex gap-2">
+                    <a href="https://www.facebook.com/SKJNS160" target="_blank" class="social-btn-nav fb" title="Facebook"><i class="bi bi-facebook"></i></a>
+                    <a href="https://youtube.com/channel/UC7p4cQQuIFLyrF68p7JbWDw?si=qOHoQSymoleB3ntP" target="_blank" class="social-btn-nav yt" title="YouTube"><i class="bi bi-youtube"></i></a>
                 </div>
             </div>
         </div>
@@ -50,17 +51,52 @@
 <!-- Brand & Contact End -->
 
 <style>
-    /* Premium Top Bar Styles */
+    /* Premium Top Bar Styles Redesigned */
     .top-bar-premium {
+        background-color: #f0f7ff;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 800 800'%3E%3Cg fill='none' stroke='%23249ffd' stroke-width='1' stroke-opacity='0.05'%3E%3Cpath d='M769 229L1037 260.9M927 880L731 737 520 660 309 538 40 599 232 801 556 347 896 400 116 146 102 516'/%3E%3Cpath d='M91 63L119 146 222 173 119 200 63 356l116 156 35 156-116-35-156-116 35-156-35-156-156-35-156 116-35 156-116 35-156 116-156 35-156-116-35-156-116-35-156-116-156-35-156 116-35 156-116 35-156 116'/%3E%3Cpath d='M252 1L21 20 40 209 251 169 501 20 1 1'/%3E%3Cpath d='M232 801L163 768 394 547 273 103 428 103 232 801z'/%3E%3Cpath d='M632 192L623 18 386 159 632 192z'/%3E%3Cpath d='M64 506L232 801 556 347 64 506z'/%3E%3Cpath d='M535 40L347 896l550-131 56-550L535 40z'/%3E%3Cpath d='M443 289L403 69l304 31L443 289z'/%3E%3Cpath d='M822 56L686 289l136 550L822 56z'/%3E%3Cpath d='M556 347L731 737 520 660 309 538 40 599 232 801 556 347z'/%3E%3Cpath d='M273 103L428 103 350 300 273 103z'/%3E%3Cpath d='M401 623L163 768 394 547 401 623z'/%3E%3Cpath d='M403 69L350 300 443 289 403 69z'/%3E%3Cpath d='M386 159L642 165 443 289 386 159z'/%3E%3Cpath d='M642 165L632 192 443 289 642 165z'/%3E%3Cpath d='M632 192L822 56 443 289 632 192z'/%3E%3Cpath d='M822 56L686 289 443 289 822 56z'/%3E%3Cpath d='M21 20L40 209 173 173 21 20z'/%3E%3Cpath d='M40 209L251 169 173 173 40 209z'/%3E%3Cpath d='M251 169L501 20 173 173 251 169z'/%3E%3Cpath d='M501 20L1 1 173 173 501 20z'/%3E%3Cpath d='M1 1L21 20 173 173 1 1z'/%3E%3Cpath d='M163 768L232 801 401 623 163 768z'/%3E%3Cpath d='M232 801L394 547 401 623 232 801z'/%3E%3Cpath d='M394 547L401 623 232 801 394 547z'/%3E%3Cpath d='M394 547L102 516 401 623 394 547z'/%3E%3Cpath d='M102 516L163 768 401 623 102 516z'/%3E%3Cpath d='M102 516L116 146 394 547 102 516z'/%3E%3Cpath d='M116 146L350 300 394 547 116 146z'/%3E%3Cpath d='M350 300L443 289 394 547 350 300z'/%3E%3Cpath d='M443 289L642 165 394 547 443 289z'/%3E%3Cpath d='M642 165L632 192 394 547 642 165z'/%3E%3Cpath d='M632 192L822 56 394 547 632 192z'/%3E%3Cpath d='M822 56L686 289 394 547 822 56z'/%3E%3Cpath d='M686 289L350 300 394 547 686 289z'/%3E%3C/g%3E%3C/svg%3E");
+        background-size: cover;
+        background-attachment: fixed;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Decorative background blobs */
+    .top-bar-premium::before {
+        content: '';
+        position: absolute;
+        top: -50px;
+        right: -50px;
+        width: 150px;
+        height: 150px;
+        background: radial-gradient(circle, rgba(251, 126, 156, 0.05) 0%, transparent 70%);
+        z-index: 0;
+    }
+
+    .top-bar-premium .row {
+        position: relative;
+        z-index: 1;
+    }
+
+    .logo-wrapper-nav {
         background: #fff;
-        /* border-bottom removed - navbar border-top provides the accent */
+        padding: 8px;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(251, 126, 156, 0.1);
+        transition: all 0.3s ease;
     }
 
     .logo-wrapper-nav img {
-        height: 65px;
+        height: 60px;
         transition: transform 0.3s ease;
     }
 
+    .navbar-brand-premium:hover .logo-wrapper-nav {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(251, 126, 156, 0.2);
+    }
+    
     .navbar-brand-premium:hover .logo-wrapper-nav img {
         transform: scale(1.05);
     }
@@ -70,198 +106,178 @@
     }
 
     .text-thai-nav {
-        color: #FB7E9C;
+        color: #1a2a4d; /* Darker for better contrast on colorful bg */
         font-weight: 800;
-        font-size: 1.25rem;
-        line-height: 1.2;
+        font-size: 1.35rem;
+        line-height: 1.1;
+        background: linear-gradient(45deg, #FB7E9C, #d44d6e);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
 
     .text-eng-nav {
         color: #249ffd;
         font-size: 0.85rem;
-        font-weight: 600;
-        letter-spacing: 0.5px;
+        font-weight: 700;
+        letter-spacing: 0.8px;
+        margin-top: 2px;
+    }
+
+    .top-info-container {
+        gap: 1.5rem;
+    }
+
+    .info-item-nav {
+        display: flex;
+        align-items: center;
+        padding: 0 20px;
+        border-right: 1px solid rgba(0,0,0,0.08);
     }
 
     .info-icon-nav {
-        width: 40px;
-        height: 40px;
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        color: #fff;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+    }
+
+    .info-item-nav:hover .info-icon-nav {
+        transform: scale(1.1) rotate(5deg);
+    }
+
+    .time-grad { background: linear-gradient(135deg, #249ffd 0%, #1a2a4d 100%); }
+    .phone-grad { background: linear-gradient(135deg, #FB7E9C 0%, #ff5e62 100%); }
+    .email-grad { background: linear-gradient(135deg, #3ab5ff 0%, #249ffd 100%); }
+
+    .info-label-nav {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #777;
+        font-weight: 800;
+        margin-bottom: 0px;
+    }
+
+    .info-value-nav {
+        font-size: 0.95rem;
+        color: #1a2a4d;
+        font-weight: 700;
+    }
+
+    /* Social Buttons */
+    .social-btn-nav {
+        width: 38px;
+        height: 38px;
         border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 1.1rem;
+        color: #fff;
+        transition: all 0.3s ease;
+        text-decoration: none;
     }
 
-    .info-icon-nav.blue { background: rgba(251, 126, 156, 0.1); color: #FB7E9C; }
-    .info-icon-nav.pink { background: rgba(36, 159, 253, 0.1); color: #249ffd; }
+    .social-btn-nav.fb { background: #1877F2; box-shadow: 0 4px 10px rgba(24, 119, 242, 0.3); }
+    .social-btn-nav.yt { background: #FF0000; box-shadow: 0 4px 10px rgba(255, 0, 0, 0.3); }
+    .social-btn-nav.line { background: #06C755; box-shadow: 0 4px 10px rgba(6, 199, 85, 0.3); }
 
-    .info-label-nav {
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        color: #888;
-        font-weight: 700;
-        margin-bottom: 2px;
+    .social-btn-nav:hover {
+        transform: translateY(-3px);
+        color: #fff;
+        filter: brightness(1.1);
     }
 
-    .info-value-nav {
-        font-size: 0.9rem;
-        color: #FB7E9C;
-        font-weight: 700;
+    /* Responsive Top Bar Info Adjustments */
+    @media (min-width: 992px) and (max-width: 1400px) {
+        .info-item-nav { padding: 0 10px; }
+        .text-thai-nav { font-size: 1.1rem; }
+        .text-eng-nav { font-size: 0.7rem; }
+        .logo-wrapper-nav img { height: 45px; }
+        .logo-wrapper-nav { padding: 5px; }
+        .info-icon-nav { width: 32px; height: 32px; font-size: 0.9rem; border-radius: 10px; }
+        .info-value-nav { font-size: 0.75rem; }
+        .info-label-nav { font-size: 0.6rem; letter-spacing: 0.5px; }
+        .top-info-container { gap: 0.8rem; }
     }
 
-    /* Responsive Top Bar Info for Medium Screens */
-    @media (min-width: 992px) and (max-width: 1500px) {
-        .top-info-wrapper .col-auto {
-            padding-left: 10px !important;
-            padding-right: 10px !important;
-        }
-        .info-icon-nav {
-            width: 32px;
-            height: 32px;
-            font-size: 0.9rem;
-        }
-        .info-label-nav {
-            font-size: 0.65rem;
-            letter-spacing: 0.5px;
-        }
-        .info-value-nav {
-            font-size: 0.75rem;
-        }
-        .logo-wrapper-nav img {
-            height: 50px;
-        }
-        .text-thai-nav {
-            font-size: 1rem;
-        }
-        .text-eng-nav {
-            font-size: 0.7rem;
-        }
+    @media (max-width: 1250px) {
+        .social-links-nav { display: none !important; }
     }
 
-    @media (min-width: 992px) and (max-width: 1200px) {
-        .top-info-wrapper .col-auto {
-            padding-left: 6px !important;
-            padding-right: 6px !important;
-        }
-        .info-icon-nav {
-            width: 28px;
-            height: 28px;
-            font-size: 0.8rem;
-            border-radius: 8px;
-        }
-        .info-label-nav {
-            font-size: 0.55rem;
-        }
-        .info-value-nav {
-            font-size: 0.68rem;
-        }
-        .logo-wrapper-nav img {
-            height: 45px;
-        }
-        .text-thai-nav {
-            font-size: 0.9rem;
-        }
-        .text-eng-nav {
-            font-size: 0.65rem;
-        }
-    }
 
-    /* Navbar Modern Styles */
+    /* --- Minimal & Floating Navbar (Base for both) --- */
     .navbar-skj {
-        background: #FB7E9C !important;
-        padding: 0;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-        border-top: 4px solid #249ffd;
-        margin-top: 0;
-        z-index: 1030; 
-        top: 0 !important;
+        background: rgba(251, 126, 156, 0.95) !important;
+        backdrop-filter: blur(15px);
+        margin: 10px 15px;
+        padding: 5px 25px !important;
+        border-radius: 50px;
+        box-shadow: 0 10px 40px rgba(251, 126, 156, 0.25);
+        border: 1.5px solid rgba(255, 255, 255, 0.25);
+        z-index: 1030;
+        transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
         position: sticky !important;
-    }
-
-    @media (max-width: 991px) {
-        .navbar-skj {
-            padding: 10px 0;
-            border-top: none;
-            border-bottom: 4px solid #249ffd; /* เพิ่มขอบล่างสีฟ้าสำหรับมือถือ */
-        }
+        top: 10px !important;
     }
 
     .navbar-skj .nav-link {
-        color: rgba(255,255,255,0.8) !important;
-        font-weight: 600;
-        padding: 25px 12px !important; /* Reduced padding */
+        color: rgba(255,255,255,0.95) !important;
+        font-weight: 700;
+        padding: 20px 15px !important; /* Standard large padding for desktop */
+        border-radius: 50px;
+        margin: 2px;
         position: relative;
         transition: all 0.3s ease;
         display: flex;
         align-items: center;
-        gap: 6px;
-        white-space: nowrap; /* Prevent text wrap */
+        gap: 8px;
+        white-space: nowrap;
     }
 
-    /* Screen size specific adjustments to prevent wrapping */
-    @media (min-width: 992px) and (max-width: 1600px) {
-        .navbar-skj .nav-link {
-            padding: 25px 8px !important;
-            font-size: 0.85rem;
-        }
-        .navbar-skj .nav-link i {
-            font-size: 0.9rem;
-        }
-    }
-
-    @media (min-width: 992px) and (max-width: 1300px) {
-        .navbar-skj .nav-link {
-            padding: 25px 5px !important;
-            font-size: 0.78rem;
-            gap: 4px;
-        }
-        .navbar-skj .nav-link i {
-            font-size: 0.8rem;
-        }
-    }
-
-    @media (min-width: 992px) and (max-width: 1100px) {
-        .navbar-skj .nav-link {
-            padding: 20px 4px !important;
-            font-size: 0.72rem;
-            gap: 3px;
-        }
-        .navbar-skj .nav-link i {
-            font-size: 0.75rem;
-        }
-    }
-
-    .navbar-skj .nav-link i {
-        font-size: 1rem;
-        transition: transform 0.3s ease;
-    }
-
-    .navbar-skj .nav-link:hover {
+    .navbar-skj .nav-link:hover,
+    .navbar-skj .nav-link.active {
+        background: rgba(255, 255, 255, 0.2);
         color: #fff !important;
     }
 
-    .navbar-skj .nav-link:hover i {
-        transform: translateY(-2px);
-        color: #249ffd;
+    /* Desktop Shrink on Scroll */
+    .navbar-skj.navbar-scrolled {
+        margin-top: 5px;
+        padding: 2px 25px !important;
+        background: rgba(251, 126, 156, 0.98) !important;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+    }
+    
+    .navbar-skj.navbar-scrolled .nav-link {
+        padding: 10px 15px !important;
+        font-size: 0.9rem;
     }
 
-    .navbar-skj .nav-link::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 50%;
-        width: 0;
-        height: 3px;
-        background: #249ffd;
-        transition: all 0.3s ease;
-        transform: translateX(-50%);
-    }
+    /* --- Mobile Specific Minimal Look (Always Compact) --- */
+    @media (max-width: 991px) {
+        .navbar-skj {
+            margin: 5px 5px !important;
+            border-radius: 20px !important;
+            padding: 2px 12px !important;
+            top: 5px !important;
+            position: fixed !important;
+            width: calc(100% - 10px);
+        }
 
-    .navbar-skj .nav-link:hover::after,
-    .navbar-skj .nav-link.active::after {
-        width: 100%;
+        .navbar-skj .nav-link {
+            padding: 10px 15px !important; /* Compact by default for mobile */
+            font-size: 0.9rem !important;
+            border-radius: 0;
+            margin: 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
     }
 
     /* Dropdown Premium */
@@ -380,8 +396,9 @@
     }
 
     .navbar-brand-mobile img {
-        height: 45px;
+        height: 32px; /* Smaller default for mobile */
         flex-shrink: 0;
+        transition: all 0.3s ease;
     }
 
     @media (max-width: 375px) {
@@ -395,13 +412,19 @@
         font-weight: 700;
         font-size: clamp(0.6rem, 3.5vw, 0.9rem);
         line-height: 1;
-        white-space: normal;
-        display: block;
+        white-space: nowrap;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-width: 0;
     }
 
     .brand-text-mobile .thai-name {
         display: block;
-        margin-bottom: 1px;
+        margin-bottom: 2px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .brand-text-mobile .eng-name {
@@ -411,6 +434,9 @@
         opacity: 0.8;
         letter-spacing: 0.3px;
         text-transform: uppercase;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .navbar-toggler-skj {
@@ -568,7 +594,7 @@
 </style>
 
 <!-- Navbar Start -->
-<nav class="navbar navbar-expand-lg navbar-skj sticky-top">
+<nav class="navbar navbar-expand-lg navbar-skj sticky-top navbar-shrink">
     <div class="container-fluid px-4 px-lg-5">
         <a href="<?= base_url('/'); ?>" class="navbar-brand d-lg-none">
             <div class="navbar-brand-mobile">
@@ -766,14 +792,14 @@
             });
         });
 
-        // Sticky Shrink Navbar on Scroll
+        // Sticky Effects on Scroll
         const navbar = document.querySelector('.navbar-skj');
         if (navbar) {
             window.addEventListener('scroll', () => {
-                if (window.scrollY > 100) {
-                    navbar.classList.add('navbar-shrink');
+                if (window.scrollY > 50) {
+                    navbar.classList.add('navbar-scrolled');
                 } else {
-                    navbar.classList.remove('navbar-shrink');
+                    navbar.classList.remove('navbar-scrolled');
                 }
             });
         }

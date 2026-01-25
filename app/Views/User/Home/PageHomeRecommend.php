@@ -1,6 +1,5 @@
 <style>
     .recommend-section {
-        padding: 100px 0;
         background: linear-gradient(rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.95)), url('<?= base_url('uploads/background/campus_view_16.jpg') ?>');
         background-attachment: fixed;
         background-position: center;

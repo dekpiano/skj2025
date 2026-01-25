@@ -125,7 +125,7 @@
                     </div>
                 </div>
 
-                <a href="https://www.youtube.com/@user-qb9js9ed6v" target="_blank" class="youtube-btn wow fadeInUp" data-wow-delay="0.6s">
+                <a href="https://youtube.com/channel/UC7p4cQQuIFLyrF68p7JbWDw?si=qOHoQSymoleB3ntP" target="_blank" class="youtube-btn wow fadeInUp" data-wow-delay="0.6s">
                     <i class="bi bi-youtube"></i> ติดตามช่อง YouTube
                 </a>
             </div>
