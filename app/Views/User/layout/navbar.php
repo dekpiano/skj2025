@@ -51,13 +51,20 @@
 <!-- Brand & Contact End -->
 
 <style>
-    /* Premium Top Bar Styles Redesigned */
+    /* Premium Top Bar Styles - Meteor Shower Line Art */
     .top-bar-premium {
-        background-color: #f0f7ff;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 800 800'%3E%3Cg fill='none' stroke='%23249ffd' stroke-width='1' stroke-opacity='0.05'%3E%3Cpath d='M769 229L1037 260.9M927 880L731 737 520 660 309 538 40 599 232 801 556 347 896 400 116 146 102 516'/%3E%3Cpath d='M91 63L119 146 222 173 119 200 63 356l116 156 35 156-116-35-156-116 35-156-35-156-156-35-156 116-35 156-116 35-156 116-156 35-156-116-35-156-116-35-156-116-156-35-156 116-35 156-116 35-156 116'/%3E%3Cpath d='M252 1L21 20 40 209 251 169 501 20 1 1'/%3E%3Cpath d='M232 801L163 768 394 547 273 103 428 103 232 801z'/%3E%3Cpath d='M632 192L623 18 386 159 632 192z'/%3E%3Cpath d='M64 506L232 801 556 347 64 506z'/%3E%3Cpath d='M535 40L347 896l550-131 56-550L535 40z'/%3E%3Cpath d='M443 289L403 69l304 31L443 289z'/%3E%3Cpath d='M822 56L686 289l136 550L822 56z'/%3E%3Cpath d='M556 347L731 737 520 660 309 538 40 599 232 801 556 347z'/%3E%3Cpath d='M273 103L428 103 350 300 273 103z'/%3E%3Cpath d='M401 623L163 768 394 547 401 623z'/%3E%3Cpath d='M403 69L350 300 443 289 403 69z'/%3E%3Cpath d='M386 159L642 165 443 289 386 159z'/%3E%3Cpath d='M642 165L632 192 443 289 642 165z'/%3E%3Cpath d='M632 192L822 56 443 289 632 192z'/%3E%3Cpath d='M822 56L686 289 443 289 822 56z'/%3E%3Cpath d='M21 20L40 209 173 173 21 20z'/%3E%3Cpath d='M40 209L251 169 173 173 40 209z'/%3E%3Cpath d='M251 169L501 20 173 173 251 169z'/%3E%3Cpath d='M501 20L1 1 173 173 501 20z'/%3E%3Cpath d='M1 1L21 20 173 173 1 1z'/%3E%3Cpath d='M163 768L232 801 401 623 163 768z'/%3E%3Cpath d='M232 801L394 547 401 623 232 801z'/%3E%3Cpath d='M394 547L401 623 232 801 394 547z'/%3E%3Cpath d='M394 547L102 516 401 623 394 547z'/%3E%3Cpath d='M102 516L163 768 401 623 102 516z'/%3E%3Cpath d='M102 516L116 146 394 547 102 516z'/%3E%3Cpath d='M116 146L350 300 394 547 116 146z'/%3E%3Cpath d='M350 300L443 289 394 547 350 300z'/%3E%3Cpath d='M443 289L642 165 394 547 443 289z'/%3E%3Cpath d='M642 165L632 192 394 547 642 165z'/%3E%3Cpath d='M632 192L822 56 394 547 632 192z'/%3E%3Cpath d='M822 56L686 289 394 547 822 56z'/%3E%3Cpath d='M686 289L350 300 394 547 686 289z'/%3E%3C/g%3E%3C/svg%3E");
-        background-size: cover;
+        background-color: #ffffff;
+        background-image: 
+            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200' viewBox='0 0 400 200'%3E%3Cg stroke='%23249ffd' stroke-width='1.5' stroke-opacity='0.15' stroke-linecap='round'%3E%3Cline x1='350' y1='-20' x2='300' y2='80' /%3E%3Cline x1='150' y1='20' x2='100' y2='120' /%3E%3Cline x1='420' y1='50' x2='380' y2='130' /%3E%3C/g%3E%3Cg stroke='%23000000' stroke-width='1' stroke-opacity='0.1' stroke-linecap='round'%3E%3Cline x1='250' y1='10' x2='220' y2='70' /%3E%3Cline x1='50' y1='100' x2='20' y2='160' /%3E%3Cline x1='380' y1='150' x2='360' y2='190' /%3E%3Cline x1='120' y1='-10' x2='100' y2='30' /%3E%3C/g%3E%3C/svg%3E"),
+            linear-gradient(135deg, rgba(251, 126, 156, 0.05) 0%, rgba(36, 159, 253, 0.05) 100%);
+        background-size: 400px 200px, cover;
         background-attachment: fixed;
-        border-bottom: 1px solid rgba(0,0,0,0.05);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        position: relative;
+        overflow: hidden;
+    }
+        background-attachment: fixed;
+        border-bottom: 1px solid rgba(251, 126, 156, 0.1);
         position: relative;
         overflow: hidden;
     }
@@ -212,52 +219,61 @@
     }
 
 
-    /* --- Minimal & Floating Navbar (Base for both) --- */
+    /* Header Style: Large & Floating */
     .navbar-skj {
-        background: rgba(251, 126, 156, 0.95) !important;
-        backdrop-filter: blur(15px);
-        margin: 10px 15px;
-        padding: 5px 25px !important;
-        border-radius: 50px;
-        box-shadow: 0 10px 40px rgba(251, 126, 156, 0.25);
-        border: 1.5px solid rgba(255, 255, 255, 0.25);
+        background: rgba(251, 126, 156, 0.85) !important;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        margin: 15px 25px;
+        padding: 12px 30px !important;
+        border-radius: 60px;
+        box-shadow: 0 15px 35px rgba(251, 126, 156, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.3);
         z-index: 1030;
-        transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+        transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
         position: sticky !important;
-        top: 10px !important;
+        top: 15px !important;
     }
 
     .navbar-skj .nav-link {
-        color: rgba(255,255,255,0.95) !important;
+        color: #fff !important;
         font-weight: 700;
-        padding: 20px 15px !important; /* Standard large padding for desktop */
+        padding: 12px 20px !important;
         border-radius: 50px;
-        margin: 2px;
-        position: relative;
+        margin: 0 4px;
         transition: all 0.3s ease;
         display: flex;
         align-items: center;
         gap: 8px;
-        white-space: nowrap;
+        font-size: 1.05rem;
     }
 
-    .navbar-skj .nav-link:hover,
-    .navbar-skj .nav-link.active {
-        background: rgba(255, 255, 255, 0.2);
-        color: #fff !important;
-    }
-
-    /* Desktop Shrink on Scroll */
+    /* Scrolled Style: Compact & High Tech */
     .navbar-skj.navbar-scrolled {
-        margin-top: 5px;
-        padding: 2px 25px !important;
+        margin: 8px 15px;
+        padding: 5px 25px !important;
         background: rgba(251, 126, 156, 0.98) !important;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        box-shadow: 
+            0 10px 30px rgba(0, 0, 0, 0.1),
+            0 1px 3px rgba(0, 0, 0, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        top: 8px !important;
+        transform: scale(0.995);
     }
     
     .navbar-skj.navbar-scrolled .nav-link {
-        padding: 10px 15px !important;
-        font-size: 0.9rem;
+        padding: 8px 15px !important;
+        font-size: 0.92rem;
+    }
+
+    /* Shrink Mobile Brand proportionally */
+    .navbar-skj.navbar-scrolled .navbar-brand-mobile img {
+        height: 28px;
+    }
+
+    .navbar-skj.navbar-scrolled .brand-text-mobile {
+        transform: scale(0.9);
+        transform-origin: left center;
     }
 
     /* --- Mobile Specific Minimal Look (Always Compact) --- */
@@ -265,10 +281,15 @@
         .navbar-skj {
             margin: 5px 5px !important;
             border-radius: 20px !important;
-            padding: 2px 12px !important;
+            padding: 5px 8px !important; /* Reduced padding to push items outward */
             top: 5px !important;
             position: fixed !important;
             width: calc(100% - 10px);
+        }
+
+        .navbar-skj .container-fluid {
+            padding-left: 2px !important;
+            padding-right: 2px !important;
         }
 
         .navbar-skj .nav-link {
@@ -375,10 +396,9 @@
 
     @media (max-width: 991px) {
         .navbar-skj .navbar-brand {
-            flex-grow: 1;
+            flex: 1;
             min-width: 0;
-            max-width: calc(100% - 60px); /* Ensure space for toggler on the same line */
-            margin-right: 0;
+            margin-right: 10px;
         }
 
         .navbar-collapse {
@@ -390,53 +410,57 @@
     .navbar-brand-mobile {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 8px; /* Balanced gap */
         text-decoration: none;
         min-width: 0;
     }
 
     .navbar-brand-mobile img {
-        height: 32px; /* Smaller default for mobile */
+        height: 45px; /* Increased from 32px */
         flex-shrink: 0;
         transition: all 0.3s ease;
     }
 
     @media (max-width: 375px) {
         .navbar-brand-mobile img {
-            height: 30px; /* Further reduced */
+            height: 40px; /* Slightly smaller on very narrow screens but still large */
         }
     }
 
     .brand-text-mobile {
         color: #fff;
         font-weight: 700;
-        font-size: clamp(0.6rem, 3.5vw, 0.9rem);
+        font-size: clamp(0.5rem, 3.9vw, 0.95rem); /* Default mobile scaling */
         line-height: 1;
-        white-space: nowrap;
         display: flex;
         flex-direction: column;
         justify-content: center;
         min-width: 0;
+        flex: 1;
+    }
+
+    /* Tablet Specific: Boost size when there is more room */
+    @media (min-width: 768px) and (max-width: 991px) {
+        .brand-text-mobile {
+            font-size: 1.2rem; /* Larger font for tablets */
+        }
     }
 
     .brand-text-mobile .thai-name {
         display: block;
-        margin-bottom: 2px;
+        margin-bottom: 1px;
         white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        overflow: visible;
     }
 
     .brand-text-mobile .eng-name {
         display: block;
-        font-size: 0.6em;
+        font-size: 0.55em;
         font-weight: 500;
-        opacity: 0.8;
-        letter-spacing: 0.3px;
+        opacity: 0.9;
+        letter-spacing: 0.1px;
         text-transform: uppercase;
         white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
     }
 
     .navbar-toggler-skj {
@@ -448,13 +472,13 @@
     }
 
     .toggler-icon-premium {
-        width: 30px;
-        height: 2px;
+        width: 35px; /* Increased from 30px */
+        height: 3px; /* Slightly thicker */
         background: #fff;
         display: block;
-        margin: 6px 0;
+        margin: 7px 0; /* More spacing */
         transition: all 0.3s ease;
-        border-radius: 2px;
+        border-radius: 3px;
     }
 
     @media (max-width: 991px) {
@@ -533,69 +557,76 @@
 
     /* Desktop Hover Fix */
     @media (min-width: 992px) {
-        .navbar-skj .nav-item.dropdown:hover > .dropdown-menu-skj {
+        /* --- Absolute Fix for Login Dropdown --- */
+    .login-container-nav .dropdown-menu-skj {
+        display: none; 
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+        z-index: 9999 !important;
+        margin-top: 5px !important;
+        background: #ffffff !important;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2) !important;
+        pointer-events: auto !important;
+    }
+
+    .login-container-nav .dropdown.show .dropdown-menu-skj,
+    .login-container-nav .dropdown-menu-skj.show,
+    .login-container-nav .dropdown:hover > .dropdown-menu-skj {
+        display: block !important;
+    }
+
+    /* Keep other dropdowns with premium effect */
+    @media (min-width: 992px) {
+        .navbar-nav .nav-item.dropdown:hover > .dropdown-menu-skj {
             display: block !important;
-            margin-top: 0 !important;
             opacity: 1 !important;
             visibility: visible !important;
+            transform: translateY(0) !important;
+            margin-top: 5px !important;
         }
+        
+        .navbar-nav .dropdown-menu-skj {
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            display: block;
+            visibility: hidden;
+            opacity: 0;
+        }
+    }
 
-        /* Bridge the gap to prevent menu closing - ENHANCED for local alignment */
-        .dropdown-menu-skj::before {
+    .login-container-nav {
+        position: relative;
+        z-index: 1080 !important;
+    }
+    .dropdown-menu-skj::before {
             content: '';
             position: absolute;
-            top: -30px; 
-            left: 0; 
+            top: -15px;
+            left: 0;
             right: 0;
-            height: 40px;
+            height: 15px;
             background: transparent;
             z-index: -1;
         }
     }
 
-    /* Sticky Shrink Effect */
-    .navbar-skj {
-        transition: all 0.3s ease;
+    /* Ensure navbar internal clicks work and nothing blocks them */
+    .login-container-nav {
+        position: relative;
+        z-index: 1060 !important; /* Extremely high to be on top */
+        pointer-events: auto !important;
+        cursor: pointer;
     }
 
-    .navbar-skj.navbar-shrink {
-        padding: 0 !important;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.15);
-    }
-
-    .navbar-skj.navbar-shrink .nav-link {
-        padding: 15px 10px !important;
-        font-size: 0.9rem; /* Slightly smaller text when shrunk */
-    }
-
-    /* Shrink mobile brand */
-    .navbar-skj.navbar-shrink .navbar-brand-mobile img {
-        height: 35px;
-        transition: all 0.3s ease;
-    }
-
-    .navbar-skj.navbar-shrink .brand-text-mobile {
-        font-size: clamp(0.5rem, 3vw, 0.8rem);
-    }
-
-    @media (min-width: 992px) and (max-width: 1600px) {
-        .navbar-skj.navbar-shrink .nav-link {
-            padding: 15px 6px !important;
-            font-size: 0.8rem;
-        }
-    }
-
-    @media (min-width: 992px) and (max-width: 1300px) {
-        .navbar-skj.navbar-shrink .nav-link {
-            padding: 12px 4px !important;
-            font-size: 0.75rem;
-        }
+    .login-container-nav button {
+        cursor: pointer !important;
     }
 </style>
 
 <!-- Navbar Start -->
-<nav class="navbar navbar-expand-lg navbar-skj sticky-top navbar-shrink">
-    <div class="container-fluid px-4 px-lg-5">
+<nav class="navbar navbar-expand-lg navbar-skj sticky-top">
+    <div class="container-fluid px-2 px-lg-5">
         <a href="<?= base_url('/'); ?>" class="navbar-brand d-lg-none">
             <div class="navbar-brand-mobile">
                 <img src="<?= base_url() ?>/assets/img/logo/Logo-nav.png" alt="Logo">
@@ -716,37 +747,23 @@
                             </div>
                             </div>
                     </div>
-                </div>
             </div>
+        </div>
 
-            <!-- New Year Countdown -->
-            <?php if (isset($festival_status) && $festival_status == 'on') : ?>
-            <div id="nav-countdown" class="d-none d-xl-flex">
-                <span class="cd-label">Countdown to 2026:</span>
-                <div class="cd-time-box"><span class="cd-number" id="cd-days">00</span><span class="cd-unit">Days</span></div>
-                <span class="cd-sep">:</span>
-                <div class="cd-time-box"><span class="cd-number" id="cd-hours">00</span><span class="cd-unit">Hours</span></div>
-                <span class="cd-sep">:</span>
-                <div class="cd-time-box"><span class="cd-number" id="cd-mins">00</span><span class="cd-unit">Mins</span></div>
-                <span class="cd-sep">:</span>
-                <div class="cd-time-box"><span class="cd-number" id="cd-secs">00</span><span class="cd-unit">Secs</span></div>
-            </div>
-            <?php endif; ?>
-
-            <div class="d-flex align-items-center gap-2 py-3 py-lg-0">
-
-                <div class="dropdown">
-                    <button class="btn btn-outline-light btn-sm rounded-pill px-4 dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
-                        <i class="bi bi-box-arrow-in-right"></i> เข้าสู่ระบบ
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-end dropdown-menu-skj mt-2">
-                        <a href="https://student.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i class="bi bi-person-fill"></i> สำหรับนักเรียน</a>
-                        <a href="https://teacher.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i class="bi bi-person-workspace"></i> สำหรับครูผู้สอน</a>
-                        <a href="<?= base_url('Manager/Dashboard') ?>" class="dropdown-item dropdown-item-skj"><i class="bi bi-bar-chart-line-fill"></i> สำหรับผู้บริหาร</a>
-                    </div>
+        <!-- Moved Outside Collapse to ensure clickable/hoverable -->
+        <div class="d-flex align-items-center gap-2 py-3 py-lg-0 login-container-nav ms-lg-3">
+            <div class="dropdown">
+                <button class="btn btn-outline-light btn-sm rounded-pill px-4 dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
+                    <i class="bi bi-box-arrow-in-right"></i> เข้าสู่ระบบ
+                </button>
+                <div class="dropdown-menu dropdown-menu-end dropdown-menu-skj mt-2">
+                    <a href="https://student.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i class="bi bi-person-fill"></i> สำหรับนักเรียน</a>
+                    <a href="https://teacher.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i class="bi bi-person-workspace"></i> สำหรับครูผู้สอน</a>
+                    <a href="<?= base_url('Manager/Dashboard') ?>" class="dropdown-item dropdown-item-skj"><i class="bi bi-bar-chart-line-fill"></i> สำหรับผู้บริหาร</a>
                 </div>
             </div>
         </div>
+
     </div>
 </nav>
 <!-- Navbar End -->
