@@ -20,21 +20,21 @@ services:
     depends_on:
       - db
 
-  # Service สำหรับ Database (MySQL)
+  # Service สำหรับ Database (MariaDB 10.6 - ตรงกับ Server จริง)
   db:
-    image: mysql:5.7 # ใช้เวอร์ชั่น 5.7 เพื่อความเข้ากันได้กับโปรเจคเก่า (เปลี่ยนเป็น 8.0 ได้ถ้าต้องการ)
+    image: mariadb:10.6
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --skip-character-set-client-handshake
     container_name: skj2025_db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword # รหัสผ่าน Root ของ Database
-      MYSQL_DATABASE: skjacth_skj # ชื่อ Database หลักที่จะถูกสร้างอัตโนมัติ
-      MYSQL_USER: user
-      MYSQL_PASSWORD: userpassword
+      MARIADB_ROOT_PASSWORD: rootpassword # รหัสผ่าน Root ของ Database
+      MARIADB_DATABASE: skjacth_skj # ชื่อ Database หลักที่จะถูกสร้างอัตโนมัติ
+      MARIADB_USER: user
+      MARIADB_PASSWORD: userpassword
     ports:
       - "3306:3306"
     volumes:
-      - db_data:/var/lib/mysql # เก็บข้อมูลถาวรแม้ลบ Container
+      - ./mysql_data:/var/lib/mysql # เก็บข้อมูลไว้ในโฟลเดอร์โปรเจค (แก้ปัญหาข้อมูลหายเมื่อลง Windows ใหม่)
 
   # Service สำหรับจัดการ Database ผ่านหน้าเว็บ (phpMyAdmin)
   phpmyadmin:
@@ -46,10 +46,8 @@ services:
       PMA_USER: root
       PMA_PASSWORD: rootpassword
       UPLOAD_LIMIT: 128M
+      PMA_ARBITRARY: 1
     ports:
       - "8081:80" # เข้าจัดการ DB ผ่าน http://localhost:8081
     depends_on:
       - db
-
-volumes:
-  db_data:

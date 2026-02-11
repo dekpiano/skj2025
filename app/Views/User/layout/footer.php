@@ -2,10 +2,11 @@
 
 <style>
     .footer-main {
-        background: linear-gradient(135deg, #177fce 0%, #249ffd 200%);
-        color: #fff;
-        position: relative;
-        overflow: hidden;
+        background: linear-gradient(4deg, rgb(0 0 0 / 85%) 0%, rgb(0 145 255 / 85%) 100%), url(<?= base_url('uploads/background/bg-footer.png') ?>) center bottom no-repeat;
+    background-size: cover;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
     }
 
     .footer-main::before {
