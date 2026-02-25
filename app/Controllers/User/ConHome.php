@@ -10,7 +10,7 @@ use App\Models\LearningModel;
 use App\Models\PersonnalModel;
 use App\Models\AboutModel;
 use App\Models\StudentModels;
-
+use App\Models\SpotlightModel;
 
 class ConHome extends BaseController
 {
@@ -23,6 +23,7 @@ class ConHome extends BaseController
         $this->BannerModel = new BannerModel();
         $this->AboutModel = new AboutModel();
         $this->StudentModel = new StudentModels();
+        $this->spotlightModel = new SpotlightModel();
     }
 
     public function DataMain(){
@@ -45,6 +46,8 @@ class ConHome extends BaseController
         $page_data['news'] = $this->NewsModel->where('news_category !=' , 'ข่าวรางวัล')->limit(6)->orderBy('news_date', 'DESC')->get()->getResult();
         $page_data['NewsReward'] = $this->NewsModel->where('news_category','ข่าวรางวัล')->limit(6)->orderBy('news_date', 'DESC')->get()->getResult();
         $page_data['Director'] = $this->PersModel->where('pers_position','posi_001')->where('pers_status','กำลังใช้งาน')->get()->getRow();
+        
+        $page_data['spotlights'] = $this->spotlightModel->where('spotlight_status', 'on')->orderBy('spotlight_date', 'DESC')->findAll();
       
         $page_data['banner'] = $this->BannerModel->select('banner_id,banner_name,banner_img,banner_linkweb,banner_status')
                                         ->where('banner_status','on')

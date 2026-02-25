@@ -57,10 +57,14 @@
                                 </div>
                             </td>
                             <td>
-                                <div class="form-check form-switch custom-switch">
-                                    <input class="form-check-input" type="checkbox" status-key="<?= $v_banner->banner_id ?>" 
+                                <label class="switch-toggle" title="ล็อก/ปลดล็อก">
+                                    <input type="checkbox" class="form-check-input-toggle" status-key="<?= $v_banner->banner_id ?>" 
                                         <?= $v_banner->banner_status == "on" ? "checked" : "" ?>>
-                                </div>
+                                    <span class="slider-toggle">
+                                        <span class="label-on">เปิด</span>
+                                        <span class="label-off">ปิด</span>
+                                    </span>
+                                </label>
                             </td>
                             <td>
                                 <div class="d-flex flex-column">
@@ -327,7 +331,7 @@
             }, 'json');
         });
 
-        $(document).on("change", ".form-check-input", function() {
+        $(document).on("change", ".form-check-input-toggle", function() {
             const status = $(this).is(":checked") ? "on" : "off";
             const key = $(this).attr('status-key');
 
@@ -392,7 +396,20 @@
 <style>
     .card { border-radius: 0.75rem; }
     .table thead th { font-weight: 600; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.5px; }
-    .custom-switch .form-check-input { width: 3rem; height: 1.5rem; cursor: pointer; }
+
+    /* Custom Switch ON/OFF */
+    .switch-toggle { position: relative; display: inline-block; width: 65px; height: 32px; margin: 0; }
+    .switch-toggle input { opacity: 0; width: 0; height: 0; }
+    .slider-toggle { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ff3e1d; transition: .4s; border-radius: 34px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); }
+    .slider-toggle:before { position: absolute; content: ""; height: 24px; width: 24px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 2; }
+    .switch-toggle input:checked + .slider-toggle { background-color: #71dd37; }
+    .switch-toggle input:checked + .slider-toggle:before { transform: translateX(33px); }
+    .slider-toggle .label-on, .slider-toggle .label-off { position: absolute; top: 50%; transform: translateY(-50%); color: white; font-size: 11px; font-weight: bold; z-index: 1; transition: opacity 0.3s; }
+    .slider-toggle .label-on { left: 8px; opacity: 0; }
+    .slider-toggle .label-off { right: 10px; opacity: 1; }
+    .switch-toggle input:checked + .slider-toggle .label-on { opacity: 1; }
+    .switch-toggle input:checked + .slider-toggle .label-off { opacity: 0; }
+    
     .banner-preview { transition: transform 0.2s; cursor: pointer; }
     .banner-preview:hover { transform: scale(1.05); }
     .dataTables_wrapper .dataTables_filter input { border: 1px solid #d9dee3; border-radius: 0.375rem; padding: 0.422rem 0.875rem; }

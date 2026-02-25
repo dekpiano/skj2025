@@ -40,6 +40,10 @@
 <?= $this->include('User/Home/PageHomeCarousel') ?>
 <!-- Carousel End -->
 
+<!-- Spotlight Feature Start -->
+<?= $this->include('User/Home/PageHomeSpotlight') ?>
+<!-- Spotlight Feature End -->
+
 <!-- Excellence Start -->
 <?= $this->include('User/Home/PageHomeRecommend')?>
 <!-- Excellence End -->
@@ -55,6 +59,7 @@
 <!-- News Start -->
 <?= $this->include('User/Home/PageHomeNews') ?>
 <!-- News End -->
+
 
 <style>
     .management-section {
@@ -309,9 +314,7 @@
 <!-- NewsReward End -->
 
 
-<!-- PageHomeDirector Start -->
-<?= $this->include('User/Home/PageHomeRobot') ?>
-<!-- PageHomeDirector End -->
+
 
 <?= $this->include('User/Home/PageGroupSKJ') ?>
 

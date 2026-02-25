@@ -97,6 +97,14 @@ $routes->group('Admin', ['filter' => 'permission', 'namespace' => 'App\Controlle
     $routes->post('Banner/DeleteBanner', 'ConAdminBanner::DeleteBanner', ['filter' => 'permission:Admin']);
     $routes->post('Banner/CleanupImages', 'ConAdminBanner::CleanupImages', ['filter' => 'permission:Admin']);
 
+    // Admin Spotlight
+    $routes->get('Spotlight', 'ConAdminSpotlight::index', ['filter' => 'permission:Admin']);
+    $routes->post('Spotlight/SpotlightOnoff', 'ConAdminSpotlight::SpotlightOnoff', ['filter' => 'permission:Admin']);
+    $routes->match(['get', 'post'], 'Spotlight/AddSpotlight', 'ConAdminSpotlight::AddSpotlight', ['filter' => 'permission:Admin']);
+    $routes->match(['get', 'post'], 'Spotlight/EditSpotlight', 'ConAdminSpotlight::EditSpotlight', ['filter' => 'permission:Admin']);
+    $routes->match(['get', 'post'], 'Spotlight/UpdateSpotlight', 'ConAdminSpotlight::UpdateSpotlight', ['filter' => 'permission:Admin']);
+    $routes->post('Spotlight/DeleteSpotlight', 'ConAdminSpotlight::DeleteSpotlight', ['filter' => 'permission:Admin']);
+
     //Admin About
     $routes->match(['get', 'post'], 'AboutSchool/Detail/(:any)', 'ConAdminAboutSchool::AboutSchoolDetail/$1', ['filter' => 'permission:Admin']);
     $routes->match(['get', 'post'], 'AboutSchool/Edit/(:any)', 'ConAdminAboutSchool::AboutSchoolEdit/$1', ['filter' => 'permission:Admin']);

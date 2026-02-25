@@ -38,6 +38,13 @@
             </a>
         </li>
       
+        <li class="menu-item <?=$uri->getSegment(2) == 'Spotlight'?"active":""?>">
+            <a href="<?=base_url('Admin/Spotlight');?>" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-star"></i>
+                <div data-i18n="Analytics">ผลงานเด่น (Spotlight)</div>
+            </a>
+        </li>
+
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Pages</span>
         </li>

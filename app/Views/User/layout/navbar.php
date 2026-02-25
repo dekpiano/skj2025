@@ -1,5 +1,5 @@
 <!-- Brand & Contact Start -->
-<div class="container-fluid py-3 px-4 wow fadeIn d-none d-lg-block top-bar-premium" data-wow-delay="0.1s">
+<div class="container-fluid py-3 px-4 wow fadeIn d-none d-xl-block top-bar-premium" data-wow-delay="0.1s">
     <div class="row align-items-center">
         <div class="col-lg-5">
             <a href="<?= base_url('/'); ?>" class="navbar-brand-premium">
@@ -202,7 +202,7 @@
     }
 
     /* Responsive Top Bar Info Adjustments */
-    @media (min-width: 992px) and (max-width: 1400px) {
+    @media (min-width: 1200px) and (max-width: 1400px) {
         .info-item-nav { padding: 0 10px; }
         .text-thai-nav { font-size: 1.1rem; }
         .text-eng-nav { font-size: 0.7rem; }
@@ -277,7 +277,7 @@
     }
 
     /* --- Mobile Specific Minimal Look (Always Compact) --- */
-    @media (max-width: 991px) {
+    @media (max-width: 1199px) {
         .navbar-skj {
             margin: 5px 5px !important;
             border-radius: 20px !important;
@@ -338,7 +338,7 @@
     }
 
     /* Mega Menu Premium - Desktop Specific */
-    @media (min-width: 992px) {
+    @media (min-width: 1200px) {
         .navbar-skj .nav-item.dropdown {
             position: relative; 
         }
@@ -394,7 +394,7 @@
         justify-content: space-between;
     }
 
-    @media (max-width: 991px) {
+    @media (max-width: 1199px) {
         .navbar-skj .navbar-brand {
             flex: 1;
             min-width: 0;
@@ -440,7 +440,7 @@
     }
 
     /* Tablet Specific: Boost size when there is more room */
-    @media (min-width: 768px) and (max-width: 991px) {
+    @media (min-width: 768px) and (max-width: 1199px) {
         .brand-text-mobile {
             font-size: 1.2rem; /* Larger font for tablets */
         }
@@ -481,7 +481,7 @@
         border-radius: 3px;
     }
 
-    @media (max-width: 991px) {
+    @media (max-width: 1199px) {
         .navbar-collapse {
             background: #249ffd !important; /* Changed from navy to theme blue */
             margin-top: 15px;
@@ -543,7 +543,7 @@
         flex-shrink: 0; /* Prevent countdown from shrinking or taking too much space */
     }
 
-    @media (max-width: 991px) {
+    @media (max-width: 1199px) {
         #nav-countdown {
             margin: 20px 0;
             justify-content: center;
@@ -556,7 +556,7 @@
     }
 
     /* Desktop Hover Fix */
-    @media (min-width: 992px) {
+    @media (min-width: 1200px) {
         /* --- Absolute Fix for Login Dropdown --- */
     .login-container-nav .dropdown-menu-skj {
         display: none; 
@@ -577,7 +577,7 @@
     }
 
     /* Keep other dropdowns with premium effect */
-    @media (min-width: 992px) {
+    @media (min-width: 1200px) {
         .navbar-nav .nav-item.dropdown:hover > .dropdown-menu-skj {
             display: block !important;
             opacity: 1 !important;
@@ -625,9 +625,9 @@
 </style>
 
 <!-- Navbar Start -->
-<nav class="navbar navbar-expand-lg navbar-skj sticky-top">
-    <div class="container-fluid px-2 px-lg-5">
-        <a href="<?= base_url('/'); ?>" class="navbar-brand d-lg-none">
+<nav class="navbar navbar-expand-xl navbar-skj sticky-top">
+    <div class="container-fluid px-2 px-xl-5">
+        <a href="<?= base_url('/'); ?>" class="navbar-brand d-xl-none">
             <div class="navbar-brand-mobile">
                 <img src="<?= base_url() ?>/assets/img/logo/Logo-nav.png" alt="Logo">
                 <div class="brand-text-mobile">
@@ -751,7 +751,7 @@
         </div>
 
         <!-- Moved Outside Collapse to ensure clickable/hoverable -->
-        <div class="d-flex align-items-center gap-2 py-3 py-lg-0 login-container-nav ms-lg-3">
+        <div class="d-flex align-items-center gap-2 py-3 py-xl-0 login-container-nav ms-xl-3">
             <div class="dropdown">
                 <button class="btn btn-outline-light btn-sm rounded-pill px-4 dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
                     <i class="bi bi-box-arrow-in-right"></i> เข้าสู่ระบบ
