@@ -140,6 +140,10 @@ $routes->group('Manager', ['filter' => 'permission:Manager,ผู้บริห
     $routes->get('Academic/TeacherAnalysis', 'ConManagerAcademic::getTeacherAnalysis');
     $routes->get('General', 'ConManagerGeneral::index');
     $routes->get('General/Analysis', 'ConManagerGeneral::getAnalysis');
+    
+    // Evaluation 
+    $routes->get('Evaluation', 'ConManagerEvaluation::index');
+    $routes->post('Evaluation/UpdateStatus', 'ConManagerEvaluation::updateStatus');
 });
 // 
 

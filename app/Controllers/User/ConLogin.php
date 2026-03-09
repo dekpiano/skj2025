@@ -66,14 +66,16 @@ class ConLogin extends BaseController
                     ->where('pers_status', 'กำลังใช้งาน')
                     ->get()->getRowArray();
                 
-                if ($personnelData && in_array($personnelData['pers_position'], ['posi_001', 'posi_002'])) {
+                // ขยายสิทธิ์ให้ผู้บริหารสถานศึกษา (posi_001, posi_002 และตำแหน่งผู้บริหารอื่นๆ ถ้ามี)
+                $executivePositions = ['posi_001', 'posi_002'];
+                if ($personnelData && in_array($personnelData['pers_position'], $executivePositions)) {
                     session()->set([
-                        'AdminID'       => 'P' . $personnelData['pers_id'], // Virtual ID
+                        'AdminID'       => 'P' . $personnelData['pers_id'],
                         'AdminFullname' => $personnelData['pers_firstname'] . ' ' . $personnelData['pers_lastname'],
                         'AdminUsername' => $userData->email,
                         'AdminImage'    => $personnelData['pers_img'] ?? '',
                         'isLoggedIn'    => true,
-                        'roles'         => ['Manager'],
+                        'roles'         => ['Manager', 'ผู้บริหาร'],
                         'personnel'     => $personnelData
                     ]);
                     return redirect()->to('/Manager/Dashboard');
@@ -108,7 +110,7 @@ class ConLogin extends BaseController
                     if ($role['role_name'] === 'Super Admin') {
                         // Super Admin can access both systems - redirect to selection
                         return redirect()->to('/SelectSystem');
-                    } elseif (in_array($role['role_name'], ['Manager', 'ผู้บริหาร', 'Executive'])) {
+                    } elseif (in_array($role['role_name'], ['Manager', 'ผู้บริหาร', 'Executive', 'Executive View', 'ผู้อำนวยการ', 'รองผู้อำนวยการ'])) {
                         return redirect()->to('/Manager/Dashboard');
                     }
 
@@ -147,7 +149,9 @@ class ConLogin extends BaseController
                 ->where('pers_status', 'กำลังใช้งาน')
                 ->get()->getRowArray();
                 
-            if ($personnelData && in_array($personnelData['pers_position'], ['posi_001', 'posi_002'])) {
+            // ขยายสิทธิ์ให้ผู้บริหารสถานศึกษา (posi_001, posi_002 และตำแหน่งผู้บริหารอื่นๆ ถ้ามี)
+            $executivePositions = ['posi_001', 'posi_002', 'posi_003', 'posi_004', 'posi_005']; // รวมตำแหน่งผู้บริหาร/สายงานหลัก
+            if ($personnelData && in_array($personnelData['pers_position'], $executivePositions)) {
                 // ตรวจสอบรหัสผ่านจากตารางบุคลากร (ถ้ามีการตั้งไว้)
                 if (password_verify($password, $personnelData['pers_password'])) {
                     $session->set([
@@ -156,7 +160,7 @@ class ConLogin extends BaseController
                         'AdminUsername' => $username,
                         'AdminImage'    => $personnelData['pers_img'] ?? '',
                         'isLoggedIn'    => true,
-                        'roles'         => ['Manager'],
+                        'roles'         => ['Manager', 'ผู้บริหาร'],
                         'personnel'     => $personnelData
                     ]);
                     return redirect()->to('/Manager/Dashboard');
@@ -197,7 +201,7 @@ class ConLogin extends BaseController
             if ($role['role_name'] === 'Super Admin') {
                 // Super Admin can access both systems - redirect to selection
                 return redirect()->to('/SelectSystem');
-            } elseif (in_array($role['role_name'], ['Manager', 'ผู้บริหาร', 'Executive'])) {
+            } elseif (in_array($role['role_name'], ['Manager', 'ผู้บริหาร', 'Executive', 'Executive View', 'ผู้อำนวยการ', 'รองผู้อำนวยการ'])) {
                 return redirect()->to('/Manager/Dashboard');
             }
             

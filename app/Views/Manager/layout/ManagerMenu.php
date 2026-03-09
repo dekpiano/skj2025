@@ -32,6 +32,12 @@
                 <div data-i18n="Personnel">ภาพรวมบุคลากร</div>
             </a>
         </li>
+        <li class="menu-item <?= ($uri->getSegment(2) == 'Evaluation') ? 'active' : '' ?>">
+            <a href="<?= base_url('Manager/Evaluation') ?>" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-check-shield"></i>
+                <div data-i18n="Evaluation">ประเมินผลการปฏิบัติงาน</div>
+            </a>
+        </li>
 
          <!-- Academic -->
          <li class="menu-header small text-uppercase"><span class="menu-header-text">งานวิชาการ</span></li>

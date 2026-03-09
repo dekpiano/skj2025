@@ -56,6 +56,11 @@
         .bg-menu-theme .menu-inner > .menu-item.active:before {
             background-color: #ff9f43 !important;
         }
+
+        /* Ensure SweetAlert2 is always on top */
+        .swal2-container {
+            z-index: 999999 !important;
+        }
     </style>
   </head>
 
