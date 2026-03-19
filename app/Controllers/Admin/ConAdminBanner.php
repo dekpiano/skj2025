@@ -61,6 +61,7 @@ class ConAdminBanner extends \App\Controllers\BaseController
                     'banner_name' => $this->request->getPost('banner_name'),
                     'banner_linkweb' => $this->request->getPost('banner_linkweb'),
                     'banner_date' => $this->request->getPost('banner_date'),
+                    'banner_end_date' => $this->request->getPost('banner_end_date') ?: null,
                     'banner_status' => 'on',
                     'banner_personnel_id' => session('AdminID')
                 ];
@@ -96,6 +97,7 @@ class ConAdminBanner extends \App\Controllers\BaseController
                 'banner_name' => $this->request->getPost('banner_name'),
                 'banner_linkweb' => $this->request->getPost('banner_linkweb'),
                 'banner_date' => $this->request->getPost('banner_date'),
+                'banner_end_date' => $this->request->getPost('banner_end_date') ?: null,
                 'banner_status' => 'on',
                 'banner_personnel_id' => session('AdminID')
             ];
@@ -205,6 +207,7 @@ class ConAdminBanner extends \App\Controllers\BaseController
             'banner_name' => $this->request->getPost('banner_name'),
             'banner_linkweb' => $this->request->getPost('banner_linkweb'),
             'banner_date' => $this->request->getPost('banner_date'),
+            'banner_end_date' => $this->request->getPost('banner_end_date') ?: null,
             'banner_personnel_id' => session('AdminID')
         ];
 

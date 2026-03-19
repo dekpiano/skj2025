@@ -49,8 +49,12 @@ class ConHome extends BaseController
         
         $page_data['spotlights'] = $this->spotlightModel->where('spotlight_status', 'on')->orderBy('spotlight_date', 'DESC')->findAll();
       
-        $page_data['banner'] = $this->BannerModel->select('banner_id,banner_name,banner_img,banner_linkweb,banner_status')
+        $page_data['banner'] = $this->BannerModel->select('banner_id,banner_name,banner_img,banner_linkweb,banner_status,banner_end_date')
                                         ->where('banner_status','on')
+                                        ->groupStart()
+                                            ->where('banner_end_date', null)
+                                            ->orWhere('banner_end_date >=', date('Y-m-d'))
+                                        ->groupEnd()
                                         ->orderBy('banner_id', 'DESC')
                                         ->findAll();
         $page_data['ConutStudent'] = $this->StudentModel->CountStudentAll();

@@ -35,7 +35,7 @@
                             <th width="10%">สถานะ</th>
                             <th width="40%">ข้อมูลแบนเนอร์</th>
                             <th width="30%">ตัวอย่างภาพ</th>
-                            <th width="10%">วันที่ลง</th>
+                            <th width="15%">วันที่แสดงผล</th>
                         </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">
@@ -92,8 +92,25 @@
                                     <img src="<?= $imageUrl ?>" class="img-fluid" alt="<?= $v_banner->banner_name ?>">
                                 </div>
                             </td>
-                            <td>
-                                <span class="badge bg-label-secondary"><?= date('Y/m/d', strtotime($v_banner->banner_date)) ?></span>
+                             <td>
+                                <div class="d-flex flex-column">
+                                    <span class="badge bg-label-info mb-1" title="วันที่เริ่มแสดงผล">
+                                        <i class="bx bx-calendar-event me-1"></i><?= date('Y/m/d', strtotime($v_banner->banner_date)) ?>
+                                    </span>
+                                    <?php if ($v_banner->banner_end_date): ?>
+                                        <?php 
+                                            $isExpired = strtotime($v_banner->banner_end_date) < strtotime(date('Y-m-d'));
+                                            $badgeClass = $isExpired ? 'bg-label-danger' : 'bg-label-warning';
+                                        ?>
+                                        <span class="badge <?= $badgeClass ?>" title="วันที่สิ้นสุด">
+                                            <i class="bx bx-calendar-x me-1"></i><?= date('Y/m/d', strtotime($v_banner->banner_end_date)) ?>
+                                        </span>
+                                    <?php else: ?>
+                                        <span class="badge bg-label-secondary" title="ไม่มีวันสิ้นสุด">
+                                            <i class="bx bx-infinite me-1"></i>ไม่มีกำหนด
+                                        </span>
+                                    <?php endif; ?>
+                                </div>
                             </td>
                         </tr>
                         <?php endforeach; ?>
@@ -131,10 +148,17 @@
                                 <label for="banner_linkweb">ลิงก์ตัวช่วยเชื่อมโยง (Link URL)</label>
                             </div>
                         </div>
-                        <div class="col-md-12 mb-4">
+                        <div class="col-md-6 mb-4">
                             <div class="form-floating form-floating-outline">
                                 <input class="form-control" type="datetime-local" value="<?= date('Y-m-d H:i') ?>" id="banner_date" name="banner_date" required>
-                                <label for="banner_date">วันที่ประกาศใช้งาน</label>
+                                <label for="banner_date">วันที่เริ่มแสดงผล</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="form-floating form-floating-outline">
+                                <input class="form-control" type="date" id="banner_end_date" name="banner_end_date">
+                                <label for="banner_end_date">แสดงผลจนถึงวันที่ (ถ้ามี)</label>
+                                <small class="text-muted">ปล่อยว่างหากต้องการแสดงผลตลอดไป</small>
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -220,31 +244,7 @@
                             showConfirmButton: false
                         });
 
-                        if (isUpdate) {
-                            // Update the row dynamically without reload
-                            const bannerId = $('#banner_id').val();
-                            const row = $(`#${bannerId}`);
-                            const data = response.data;
-                            
-                            // Update Name and Link
-                            row.find('td:nth-child(3) .fw-bold').text(data.banner_name);
-                            if (data.banner_linkweb) {
-                                row.find('td:nth-child(3) small').html(`<i class="bx bx-link me-1"></i>${data.banner_linkweb}`).removeClass('text-muted').addClass('text-primary');
-                            } else {
-                                row.find('td:nth-child(3) small').html(`<i class="bx bx-link-external me-1"></i>ไม่มีลิงก์เชื่อมโยง`).removeClass('text-primary').addClass('text-muted');
-                            }
-
-                            // Update Image Preview
-                            if (data.banner_img) {
-                                row.find('.banner-preview img').attr('src', `${BASE_URL}/uploads/banner/all/${data.banner_img}`);
-                            }
-                        } else {
-                            // For Add, reload is safest to get the new row with all buttons/logic, 
-                            // OR we could stay here. Let's JUST stay here if they really want no refresh.
-                            // But usually Add requires a reload to see the new item in correct sort order.
-                            // If the user insists on NO REFRESH EVER:
-                            window.location.reload(); 
-                        }
+                        window.location.reload(); 
                     } else {
                         Swal.fire({ icon: 'error', title: 'ไม่สำเร็จ', text: response.message });
                     }
@@ -324,6 +324,12 @@
                                     ('0' + date.getHours()).slice(-2) + ':' + 
                                     ('0' + date.getMinutes()).slice(-2);
                     $('#banner_date').val(formattedDate);
+
+                    if (data.banner_end_date) {
+                        $('#banner_end_date').val(data.banner_end_date);
+                    } else {
+                        $('#banner_end_date').val('');
+                    }
 
                     initFilePond(data.banner_img);
                     new bootstrap.Modal(document.getElementById("ModalAddBanner")).show();

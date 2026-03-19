@@ -170,8 +170,12 @@ class ConNews extends BaseController
         $data['description'] = "";
         $data['banner'] = "";
 
-        $data['banner'] = $this->BannerModel->select('banner_id,banner_name,banner_img,banner_linkweb,banner_status')
+        $data['banner'] = $this->BannerModel->select('banner_id,banner_name,banner_img,banner_linkweb,banner_status,banner_end_date')
         ->where('banner_status','on')
+        ->groupStart()
+            ->where('banner_end_date', null)
+            ->orWhere('banner_end_date >=', date('Y-m-d'))
+        ->groupEnd()
         ->orderBy('banner_id', 'DESC')
         ->findAll();
 
