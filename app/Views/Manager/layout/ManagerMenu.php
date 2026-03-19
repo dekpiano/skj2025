@@ -32,11 +32,23 @@
                 <div data-i18n="Personnel">ภาพรวมบุคลากร</div>
             </a>
         </li>
-        <li class="menu-item <?= ($uri->getSegment(2) == 'Evaluation') ? 'active' : '' ?>">
-            <a href="<?= base_url('Manager/Evaluation') ?>" class="menu-link">
+        <li class="menu-item <?= ($uri->getSegment(2) == 'Evaluation') ? 'active open' : '' ?>">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-check-shield"></i>
                 <div data-i18n="Evaluation">ประเมินผลการปฏิบัติงาน</div>
             </a>
+            <ul class="menu-sub">
+                <li class="menu-item <?= ($uri->getSegment(2) == 'Evaluation' && $uri->getTotalSegments() == 2) ? 'active' : '' ?>">
+                    <a href="<?= base_url('Manager/Evaluation') ?>" class="menu-link">
+                        <div data-i18n="EvaluationReview">ตรวจสอบผลการประเมิน</div>
+                    </a>
+                </li>
+                <li class="menu-item <?= ($uri->getSegment(2) == 'Evaluation' && $uri->getSegment(3) == 'Submit') ? 'active' : '' ?>">
+                    <a href="<?= base_url('Manager/Evaluation/Submit') ?>" class="menu-link">
+                        <div data-i18n="EvaluationSubmit">ส่งผลการปฏิบัติงาน (สำหรับรองฯ)</div>
+                    </a>
+                </li>
+            </ul>
         </li>
 
          <!-- Academic -->

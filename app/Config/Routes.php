@@ -143,6 +143,10 @@ $routes->group('Manager', ['filter' => 'permission:Manager,ผู้บริห
     
     // Evaluation 
     $routes->get('Evaluation', 'ConManagerEvaluation::index');
+    $routes->get('Evaluation/Submit', 'ConManagerEvaluation::submitForm');
+    $routes->post('Evaluation/Save', 'ConManagerEvaluation::saveEvaluation');
+    $routes->post('Evaluation/UploadChunk', 'ConManagerEvaluation::uploadChunk');
+    $routes->get('Evaluation/Delete/(:num)', 'ConManagerEvaluation::deleteEvaluation/$1');
     $routes->post('Evaluation/UpdateStatus', 'ConManagerEvaluation::updateStatus');
 });
 // 

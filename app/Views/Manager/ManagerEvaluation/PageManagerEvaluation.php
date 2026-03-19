@@ -24,6 +24,15 @@
     .bg-light-primary { background: rgba(105, 108, 255, 0.1); color: #696cff; }
     .bg-light-info { background: rgba(3, 195, 236, 0.1); color: #03c3ec; }
 </style>
+<style>
+    /* Executive Theme Overrides */
+    .bg-primary { background-color: #2c3e50 !important; }
+    .btn-primary { background-color: #003366 !important; border-color: #003366 !important; }
+    .btn-primary:hover { background-color: #002244 !important; border-color: #002244 !important; }
+    .text-primary { color: #003366 !important; }
+    .bg-label-primary { background-color: #e3f2fd !important; color: #003366 !important; }
+    .card-header-exec { border-left: 5px solid #003366 !important; }
+</style>
 
 <div class="container-xxl flex-grow-1 container-p-y">
     <div class="row">
@@ -139,11 +148,21 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td><?= $eva['learning_name'] ?: ($eva['pers_learning'] ?: '-') ?></td>
+                                        <td><?= ($eva['learning_name'] ?? ($eva['pers_learning'] ?? ($eva['pers_position'] ?? '-'))) ?></td>
                                         <td class="text-center"><span class="badge bg-label-info"><?= $eva['eva_round'] ?></span></td>
                                         <td class="text-center">
                                             <?php if ($eva['eva_file']): ?>
-                                                <a href="<?= 'https://skj.nsnpao.go.th/uploads/academic/teacher/evaluation/'.$eva['eva_year'].'/'.$eva['eva_round'].'/'.$eva['eva_file'] ?>" target="_blank" class="btn btn-icon btn-label-danger btn-sm" title="ดูไฟล์ PDF">
+                                                <?php 
+                                                    // Default Legacy URL
+                                                    $fileUrl = 'https://skj.nsnpao.go.th/uploads/personnel/teacher/evaluation/'.$eva['eva_year'].'/'.$eva['eva_round'].'/'.$eva['eva_file'];
+                                                    
+                                                    // Check if it's a new file (from the remote server)
+                                                    // Heuristic: if filename has underscores and starts with a number
+                                                    if (strpos($eva['eva_file'], '_') !== false && is_numeric(substr($eva['eva_file'], 0, 1))) {
+                                                        $fileUrl = 'https://skj.nsnpao.go.th/uploads/evaluation/'.$eva['eva_year'].'/'.$eva['eva_round'].'/'.$eva['eva_file'];
+                                                    }
+                                                ?>
+                                                <a href="<?= $fileUrl ?>" target="_blank" class="btn btn-icon btn-label-danger btn-sm" title="ดูไฟล์ PDF">
                                                     <i class="bx bxs-file-pdf fs-4"></i>
                                                 </a>
                                             <?php else: ?>
@@ -152,8 +171,8 @@
                                         </td>
                                         <td class="text-center">
                                             <?php if ($eva['eva_canva_link']): ?>
-                                                <a href="<?= $eva['eva_canva_link'] ?>" target="_blank" class="btn btn-icon btn-label-info btn-sm" title="ไปที่ Canva">
-                                                    <i class="bx bxl-canva fs-4"></i>
+                                                <a href="<?= $eva['eva_canva_link'] ?>" target="_blank" class="btn btn-icon btn-info btn-sm" title="ไปที่ Canva">
+                                                    <i class="bx bx-link-external fs-4"></i>
                                                 </a>
                                             <?php else: ?>
                                                 <span class="text-muted">-</span>

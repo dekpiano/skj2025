@@ -41,6 +41,8 @@ class EvaluationModel extends Model
             tb_personnel.pers_firstname,
             tb_personnel.pers_lastname,
             tb_personnel.pers_img,
+            tb_personnel.pers_learning,
+            tb_personnel.pers_position,
             skjacth_skj.tb_learning.lear_namethai as learning_name
         ');
         $builder->join('tb_personnel', 'tb_personnel.pers_id = tb_teacher_evaluation.eva_teacher_id', 'left');

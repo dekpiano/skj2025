@@ -49,12 +49,33 @@
     <!-- Custom Style for Manager -->
     <style>
         body { font-family: 'Sarabun', sans-serif; }
+        
+        /* Global Executive Theme Overrides */
+        :root {
+            --exec-navy: #003366;
+            --exec-navy-dark: #002244;
+            --exec-navy-light: #e3f2fd;
+        }
+
+        /* Sidebar/Menu Active Color */
         .bg-menu-theme .menu-inner > .menu-item.active > .menu-link {
-            background-color: #ff9f43 !important; /* Orange Theme */
+            background-color: var(--exec-navy) !important;
             color: #fff !important;
         }
         .bg-menu-theme .menu-inner > .menu-item.active:before {
-            background-color: #ff9f43 !important;
+            background-color: var(--exec-navy) !important;
+        }
+
+        /* Buttons & Badges Override */
+        .btn-primary { background-color: var(--exec-navy) !important; border-color: var(--exec-navy) !important; }
+        .btn-primary:hover { background-color: var(--exec-navy-dark) !important; border-color: var(--exec-navy-dark) !important; }
+        .bg-primary { background-color: var(--exec-navy) !important; }
+        .text-primary { color: var(--exec-navy) !important; }
+        .bg-label-primary { background-color: var(--exec-navy-light) !important; color: var(--exec-navy) !important; }
+        
+        /* Profile Card Gradient */
+        .profile-card-exec {
+            background: linear-gradient(135deg, #1a237e 0%, #2c3e50 100%) !important;
         }
 
         /* Ensure SweetAlert2 is always on top */
