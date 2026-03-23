@@ -123,6 +123,34 @@
 
     <!-- Personnel List (Collapsed) -->
     <div class="collapse" id="personnelList">
+        <?php if (isset($grouped_data['management'])): ?>
+            <?php foreach ($grouped_data['management'] as $group): ?>
+                <div class="group-title">
+                    <i class="bx bx-crown me-1 text-warning"></i><?= $group['name'] ?> 
+                    <span class="badge bg-warning rounded-pill ms-2"><?= count($group['members']) ?></span>
+                </div>
+                <div class="row g-3 mb-4">
+                    <?php foreach ($group['members'] as $person): ?>
+                    <div class="col-6 col-md-4 col-lg-2">
+                        <div class="card person-card shadow-sm h-100 border-warning border-top border-3" role="button" data-id="<?= $person['pers_id'] ?>">
+                            <?php if (!empty($person['pers_img'])): ?>
+                                <img src="https://personnel.skj.ac.th/uploads/admin/Personnal/<?= $person['pers_img'] ?>" class="person-img" onerror="this.src='<?= base_url('assets/admin/assets/img/avatars/1.png') ?>'" />
+                            <?php else: ?>
+                                <img src="<?= base_url('assets/admin/assets/img/avatars/1.png') ?>" class="person-img" />
+                            <?php endif; ?>
+                            <div class="person-info">
+                                <div class="person-name" title="<?= $person['pers_prefix'] . $person['pers_firstname'] . ' ' . $person['pers_lastname'] ?>">
+                                    <?= $person['pers_firstname'] ?> <?= mb_substr($person['pers_lastname'], 0, 1) ?>.
+                                </div>
+                                <div class="person-pos fw-bold text-primary"><?= $person['posi_name'] ?? '-' ?></div>
+                            </div>
+                        </div>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
+
         <?php if (isset($grouped_data['learning'])): ?>
             <?php foreach ($grouped_data['learning'] as $group): ?>
                 <div class="group-title">

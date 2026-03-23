@@ -31,9 +31,32 @@ class ConManagerPersonnel extends BaseController
         // Grouping logic
         $grouped_data = [];
 
-        // 1. Group by Teacher Blocks (Learning Groups)
+        // 1. Separate Management/Executives (posi_001, posi_002)
+        $executives = array_filter($all_personnel, function($p) {
+            return in_array($p['pers_position'], ['posi_001', 'posi_002']);
+        });
+
+        if (!empty($executives)) {
+            // Sort executives by position ID (posi_001 usually Director, then posi_002)
+            usort($executives, function($a, $b) {
+                return strcmp($a['pers_position'], $b['pers_position']);
+            });
+            
+            $grouped_data['management'][] = [
+                'name' => 'ผู้บริหารสถานศึกษา',
+                'icon' => 'bx-crown',
+                'members' => array_values($executives)
+            ];
+        }
+
+        // Get remaining personnel excluding executives
+        $other_personnel = array_filter($all_personnel, function($p) {
+            return !in_array($p['pers_position'], ['posi_001', 'posi_002']);
+        });
+
+        // 2. Group by Teacher Blocks (Learning Groups)
         foreach ($learning_groups as $group) {
-            $members = array_filter($all_personnel, function($p) use ($group) {
+            $members = array_filter($other_personnel, function($p) use ($group) {
                 return $p['pers_learning'] == $group['lear_id'];
             });
             
@@ -47,15 +70,14 @@ class ConManagerPersonnel extends BaseController
             }
         }
 
-        // 2. Group by Management (if any specific filter needed, but let's do support for now)
-        // Group remaining as Support if they don't have a learning group
-        $support_staff = array_filter($all_personnel, function($p) {
+        // 3. Group remaining as Support (those without learning group and not executives)
+        $support_staff = array_filter($other_personnel, function($p) {
             return empty($p['pers_learning']) || $p['pers_learning'] == '-' || $p['pers_learning'] == '0';
         });
 
         if (!empty($support_staff)) {
             $grouped_data['support'][] = [
-                'name' => 'บุคลากรสายสนับสนุน / ผู้บริหาร',
+                'name' => 'บุคลากรสายสนับสนุน',
                 'icon' => 'bx-support',
                 'members' => array_values($support_staff)
             ];
@@ -69,15 +91,23 @@ class ConManagerPersonnel extends BaseController
             'position_counts' => []
         ];
 
-        // 1. Learning Stats
+        // 1. Management Stats
+        if (isset($grouped_data['management'])) {
+            $stats['learning_labels'][] = 'ผู้บริหาร';
+            $stats['learning_counts'][] = count($grouped_data['management'][0]['members']);
+        }
+
+        // 2. Learning Stats
         if (isset($grouped_data['learning'])) {
             foreach ($grouped_data['learning'] as $g) {
                 $stats['learning_labels'][] = $g['name'];
                 $stats['learning_counts'][] = count($g['members']);
             }
         }
+
+        // 3. Support Stats
         if (isset($grouped_data['support'])) {
-            $stats['learning_labels'][] = 'สายสนับสนุน/บริหาร';
+            $stats['learning_labels'][] = 'สายสนับสนุน';
             $stats['learning_counts'][] = count($grouped_data['support'][0]['members']);
         }
 
