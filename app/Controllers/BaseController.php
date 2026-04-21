@@ -9,8 +9,11 @@ use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use App\Models\UserHistoryModel;
-use App\Models\VisitorModel; // เพิ่ม Model ที่เราสร้าง
+use App\Models\VisitorModel;
 use App\Models\AboutModel;
+use App\Models\LearningModel;
+use App\Models\PositionModel;
+use App\Libraries\Datethai;
 use AllowDynamicProperties;
 
 #[AllowDynamicProperties]
@@ -88,5 +91,20 @@ abstract class BaseController extends Controller
         } else {
             $this->data['festival_status'] = 'off';
         }
+
+        // --- Common Navbar Data ---
+        $learModel = new LearningModel();
+        $posiModel = new PositionModel();
+        
+        $this->data['Lear'] = $learModel->get()->getResult();
+        $this->data['PosiOther'] = $posiModel->where([
+            'posi_id >=' => 'posi_007',
+            'posi_id <=' => 'posi_012'
+        ])->get()->getResult();
+
+        // --- Common Global Data ---
+        $this->data['full_url'] = current_url();
+        $this->data['dateThai'] = new Datethai();
+        $this->data['uri'] = $this->request->getUri();
     }
 }

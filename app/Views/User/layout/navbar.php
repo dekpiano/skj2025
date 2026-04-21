@@ -679,6 +679,9 @@
                             <i class="bi bi-info-circle"></i> <?= $v_AboutSchool->about_menu ?>
                         </a>
                         <?php endforeach; ?>
+                        <a href="<?= base_url('Board') ?>" class="dropdown-item dropdown-item-skj">
+                            <i class="bi bi-people-fill"></i> คณะกรรมการสถานศึกษา
+                        </a>
                     </div>
                 </div>
 
