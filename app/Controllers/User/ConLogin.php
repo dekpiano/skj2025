@@ -6,134 +6,171 @@ use CodeIgniter\Controller;
 use App\Models\LoginModel;
 use App\Models\PersonnalModel;
 
-require_once SHARED_LIB_PATH . 'google_sheet/vendor/autoload.php';
-use Google_Client;
-use Google_Service_Oauth2;
-
 class ConLogin extends BaseController
 {
-    public function __construct(){
+    protected $LoginModel;
+    protected $PersModel;
+
+    // ข้อมูล Client จาก Google Console (รหัสเดิมของคุณ)
+    private $clientId = "29638025169-aeobhq04v0lvimcjd27osmhlpua380gl.apps.googleusercontent.com";
+    private $clientSecret = "RSANANTRl84lnYm54Hi0icGa";
+
+    public function __construct()
+    {
         parent::__construct();
         $this->LoginModel = new LoginModel();
         $this->PersModel = new PersonnalModel();
     }
 
+    /**
+     * ส่งผู้ใช้ไปหน้า Login ของ Google (OAuth2 Redirect Flow)
+     */
     public function googleLogin()
     {
-        $client = new Google_Client();
-        $client->setClientId('29638025169-aeobhq04v0lvimcjd27osmhlpua380gl.apps.googleusercontent.com');
-        $client->setClientSecret('RSANANTRl84lnYm54Hi0icGa');
-        $client->setRedirectUri(base_url('SkjMain/googleCallback'));
-        $client->addScope('email');
-        $client->addScope('profile');
-
-        // สร้าง URL สำหรับให้ผู้ใช้ล็อกอิน
-        $loginUrl = $client->createAuthUrl();
-        return redirect()->to($loginUrl); // เปลี่ยนเส้นทางไปยัง URL ของ Google OAuth
+        $redirectUri = base_url('SkjMain/googleCallback');
+        $scope = "openid email profile";
+        
+        $params = [
+            'response_type' => 'code',
+            'client_id'     => $this->clientId,
+            'redirect_uri'  => $redirectUri,
+            'scope'         => $scope,
+            'access_type'   => 'online',
+            'prompt'        => 'select_account'
+        ];
+        
+        $authUrl = "https://accounts.google.com/o/oauth2/v2/auth?" . http_build_query($params);
+        return redirect()->to($authUrl);
     }
 
+    /**
+     * รับข้อมูลกลับจาก Google และเช็คสิทธิ์โดยใช้ CURL (CURL Method)
+     */
     public function googleCallback()
     {
-        $client = new Google_Client();
-        $client->setClientId('29638025169-aeobhq04v0lvimcjd27osmhlpua380gl.apps.googleusercontent.com');
-        $client->setClientSecret('RSANANTRl84lnYm54Hi0icGa');
-        $client->setRedirectUri(base_url('SkjMain/googleCallback'));
-
-        if ($this->request->getGet('code')) {
-            try {
-                $token = $client->fetchAccessTokenWithAuthCode($this->request->getGet('code'));
-
-                if (isset($token['error'])) {
-                    log_message('error', 'Google login error: ' . json_encode($token));
-                    session()->setFlashdata('msg', 'เกิดข้อผิดพลาดในการยืนยันตัวตนกับ Google (token error)');
-                    return redirect()->to('/');
-                }
-
-                $client->setAccessToken($token);
-
-                $googleService = new Google_Service_Oauth2($client);
-                $userData = $googleService->userinfo->get();
-
-                $db = \Config\Database::connect();
-                $personnelDb = \Config\Database::connect('personnal');
-
-                // 1. ตรวจสอบจากตารางบุคลากรโดยตรงสำหรับระดับผู้อำนวยการและรองฯ (posi_001, posi_002)
-                $personnelData = $personnelDb->table('tb_personnel')
-                    ->groupStart()
-                        ->where('pers_username', $userData->email)
-                        ->orWhere('login_oauth_uid', $userData->id)
-                    ->groupEnd()
-                    ->where('pers_status', 'กำลังใช้งาน')
-                    ->get()->getRowArray();
-                
-                // ขยายสิทธิ์ให้ผู้บริหารสถานศึกษา (posi_001, posi_002 และตำแหน่งผู้บริหารอื่นๆ ถ้ามี)
-                $executivePositions = ['posi_001', 'posi_002'];
-                if ($personnelData && in_array($personnelData['pers_position'], $executivePositions)) {
-                    session()->set([
-                        'AdminID'       => 'P' . $personnelData['pers_id'],
-                        'AdminFullname' => $personnelData['pers_firstname'] . ' ' . $personnelData['pers_lastname'],
-                        'AdminUsername' => $userData->email,
-                        'AdminImage'    => $personnelData['pers_img'] ?? '',
-                        'isLoggedIn'    => true,
-                        'roles'         => ['Manager', 'ผู้บริหาร'],
-                        'personnel'     => $personnelData
-                    ]);
-                    return redirect()->to('/Manager/Dashboard');
-                }
-
-                // 2. ถ้าไม่ใช่ผู้บริหารระดับสูง ให้ตรวจสอบตามสิทธิ์ใน tb_admin ปกติ
-                $adminUser = $db->table('tb_admin')->where('admin_username', $userData->email)->get()->getRowArray();
-
-                if($adminUser){
-                    // Get Role
-                    $role = $db->table('tb_roles')->where('role_id', $adminUser['role_id'])->get()->getRowArray();
-                    
-                    // Get Personnel Data (already fetched above but we need to ensure it matches admin entry)
-                    $personnelData = $personnelDb->table('tb_personnel')->where('pers_id', $adminUser['pers_id'])->get()->getRowArray();
-
-                    if (!$role || !$personnelData) {
-                        session()->setFlashdata('msg', 'บัญชีผู้ดูแลระบบยังไม่ได้ตั้งค่าสิทธิ์หรือข้อมูลบุคลากรอย่างสมบูรณ์');
-                        return redirect()->to('/');
-                    }
-
-                    session()->set([
-                        'AdminID'       => $adminUser['admin_id'],
-                        'AdminFullname' => $personnelData['pers_firstname'] . ' ' . $personnelData['pers_lastname'],
-                        'AdminUsername' => $adminUser['admin_username'],
-                        'AdminImage'    => $personnelData['pers_img'] ?? '',
-                        'isLoggedIn'    => true,
-                        'roles'         => [$role['role_name']],
-                        'personnel'     => $personnelData
-                    ]);
+        $code = $this->request->getGet('code');
         
-                    // Redirect based on Role
-                    if ($role['role_name'] === 'Super Admin') {
-                        // Super Admin can access both systems - redirect to selection
-                        return redirect()->to('/SelectSystem');
-                    } elseif (in_array($role['role_name'], ['Manager', 'ผู้บริหาร', 'Executive', 'Executive View', 'ผู้อำนวยการ', 'รองผู้อำนวยการ'])) {
-                        return redirect()->to('/Manager/Dashboard');
-                    }
+        if (!$code) {
+            session()->setFlashdata('msg', 'ไม่ได้รับรหัสยืนยันจาก Google');
+            return redirect()->to('/Login/LoginAdmin');
+        }
 
-                    return redirect()->to('/Admin/Dashboard'); // เปลี่ยนเส้นทางหลังจากล็อกอินสำเร็จ
-                }else{
-                    session()->setFlashdata('msg', 'ไม่พบบัญชีผู้ใช้นี้ในระบบ หรือ ไม่เป็นผู้ดูแลระบบ');
-                    return redirect()->to('/');
-                }
-            } catch (\Exception $e) {
-                log_message('error', 'Google login exception: ' . $e->getMessage());
-                session()->setFlashdata('msg', 'เกิดข้อผิดพลาดในการเชื่อมต่อกับ Google.');
-                return redirect()->to('/');
+        // 1. นำ Code ไปแลก ID Token ผ่าน CURL
+        $client = \Config\Services::curlrequest();
+        try {
+            $response = $client->post("https://oauth2.googleapis.com/token", [
+                'form_params' => [
+                    'code'          => $code,
+                    'client_id'     => $this->clientId,
+                    'client_secret' => $this->clientSecret,
+                    'redirect_uri'  => base_url('SkjMain/googleCallback'),
+                    'grant_type'    => 'authorization_code',
+                ]
+            ]);
+            $tokenData = json_decode($response->getBody(), true);
+        } catch (\Exception $e) {
+            log_message('error', 'Google token exchange error: ' . $e->getMessage());
+            session()->setFlashdata('msg', 'ไม่สามารถเชื่อมต่อกับ Google เพื่อแลกสิทธิ์ได้');
+            return redirect()->to('/Login/LoginAdmin');
+        }
+
+        if (!isset($tokenData['id_token'])) {
+            session()->setFlashdata('msg', 'ไม่ได้รับข้อมูลประจำตัวจาก Google');
+            return redirect()->to('/Login/LoginAdmin');
+        }
+
+        // 2. ตรวจสอบข้อมูลจาก ID Token โดยตรง (JWT Payload)
+        // หมายเหตุ: ID Token คือ JWT ที่มีข้อมูลผู้ใช้อยู่ในส่วนที่ 2 (Base64 Encoded)
+        $idTokenParts = explode('.', $tokenData['id_token']);
+        if (count($idTokenParts) < 2) {
+            session()->setFlashdata('msg', 'รูปแบบข้อมูลจาก Google ไม่ถูกต้อง');
+            return redirect()->to('/Login/LoginAdmin');
+        }
+        
+        // ถอดรหัส Base64 URL Safe ด้วยคำสั่งมาตรฐาน
+        $idTokenPayload = $idTokenParts[1];
+        $idTokenPayload = str_replace(['-', '_'], ['+', '/'], $idTokenPayload);
+        $idTokenPayload = str_pad($idTokenPayload, strlen($idTokenPayload) % 4, '=', STR_PAD_RIGHT);
+        $payload = json_decode(base64_decode($idTokenPayload), true);
+
+        if (!$payload) {
+            session()->setFlashdata('msg', 'ไม่สามารถอ่านข้อมูลผู้ใช้จาก Google ได้');
+            return redirect()->to('/Login/LoginAdmin');
+        }
+
+        if (!$payload || isset($payload['error'])) {
+            session()->setFlashdata('msg', 'ข้อมูลผู้ใช้จาก Google ไม่ถูกต้อง');
+            return redirect()->to('/Login/LoginAdmin');
+        }
+
+        // --- เริ่มขั้นตอนการตรวจสอบสิทธิ์ในฐานข้อมูล (เหมือนเดิม) ---
+        $userEmail = $payload['email'];
+        $google_sub = $payload['sub'];
+
+        $db = \Config\Database::connect();
+        $personnelDb = \Config\Database::connect('personnal');
+
+        // ตรวจสอบบุคลากรระดับผู้บริหาร
+        $personnelData = $personnelDb->table('tb_personnel')
+            ->groupStart()
+                ->where('pers_username', $userEmail)
+                ->orWhere('login_oauth_uid', $google_sub)
+            ->groupEnd()
+            ->where('pers_status', 'กำลังใช้งาน')
+            ->get()->getRowArray();
+        
+        $executivePositions = ['posi_001', 'posi_002'];
+        if ($personnelData && in_array($personnelData['pers_position'], $executivePositions)) {
+            session()->set([
+                'AdminID'       => 'P' . $personnelData['pers_id'],
+                'AdminFullname' => $personnelData['pers_firstname'] . ' ' . $personnelData['pers_lastname'],
+                'AdminUsername' => $userEmail,
+                'AdminImage'    => $personnelData['pers_img'] ?? ($payload['picture'] ?? ''),
+                'isLoggedIn'    => true,
+                'roles'         => ['Manager', 'ผู้บริหาร'],
+                'personnel'     => $personnelData
+            ]);
+            return redirect()->to('/Manager/Dashboard');
+        }
+
+        // ตรวจสอบข้อมูลในฐานข้อมูลแอดมินปกติ
+        $adminUser = $db->table('tb_admin')->where('admin_username', $userEmail)->get()->getRowArray();
+
+        if($adminUser){
+            $role = $db->table('tb_roles')->where('role_id', $adminUser['role_id'])->get()->getRowArray();
+            $personnelData = $personnelDb->table('tb_personnel')->where('pers_id', $adminUser['pers_id'])->get()->getRowArray();
+
+            if (!$role || !$personnelData) {
+                session()->setFlashdata('msg', 'บัญชีผู้ดูแลระบบยังไม่ได้ตั้งค่าสิทธิ์หรือข้อมูลบุคลากรอย่างสมบูรณ์');
+                return redirect()->to('/Login/LoginAdmin');
             }
+
+            session()->set([
+                'AdminID'       => $adminUser['admin_id'],
+                'AdminFullname' => $personnelData['pers_firstname'] . ' ' . $personnelData['pers_lastname'],
+                'AdminUsername' => $adminUser['admin_username'],
+                'AdminImage'    => $personnelData['pers_img'] ?? ($payload['picture'] ?? ''),
+                'isLoggedIn'    => true,
+                'roles'         => [$role['role_name']],
+                'personnel'     => $personnelData
+            ]);
+
+            if ($role['role_name'] === 'Super Admin') {
+                return redirect()->to('/SelectSystem');
+            } elseif (in_array($role['role_name'], ['Manager', 'ผู้บริหาร', 'Executive', 'Executive View', 'ผู้อำนวยการ', 'รองผู้อำนวยการ'])) {
+                return redirect()->to('/Manager/Dashboard');
+            }
+
+            return redirect()->to('/Admin/Dashboard');
         } else {
-            return redirect()->to('/auth/googleLogin');
+            session()->setFlashdata('msg', "ไม่พบบัญชีผู้ใช้ $userEmail ในระบบ หรือ คุณไม่ได้รับสิทธิ์ให้เข้าถึงหน้าจัดการ");
+            return redirect()->to('/Login/LoginAdmin');
         }
     }
 
     public function LoginAdmin(){
         $session = session();
-        
-        // ถ้าไม่ใช่ POST ให้แสดงหน้า Login (รองรับ Google Login)
-        if ($this->request->getMethod() !== 'post') {
+        if (! $this->request->is('post')) {
             return view('User/PageLogin');
         }
 
@@ -142,18 +179,15 @@ class ConLogin extends BaseController
         $pass = $this->LoginModel->where('admin_username', $username)->first();
         $personnelDb = \Config\Database::connect('personnal');
 
-        // ถ้าไม่พบใน tb_admin ให้ตรวจสอบใน tb_personnel สำหรับกลุ่มผู้บริหาร (Director/Deputy)
         if (!$pass) {
             $personnelData = $personnelDb->table('tb_personnel')
                 ->where('pers_username', $username)
                 ->where('pers_status', 'กำลังใช้งาน')
                 ->get()->getRowArray();
                 
-            // ขยายสิทธิ์ให้ผู้บริหารสถานศึกษา (posi_001, posi_002 และตำแหน่งผู้บริหารอื่นๆ ถ้ามี)
-            $executivePositions = ['posi_001', 'posi_002', 'posi_003', 'posi_004', 'posi_005']; // รวมตำแหน่งผู้บริหาร/สายงานหลัก
+            $executivePositions = ['posi_001', 'posi_002', 'posi_003', 'posi_004', 'posi_005']; 
             if ($personnelData && in_array($personnelData['pers_position'], $executivePositions)) {
-                // ตรวจสอบรหัสผ่านจากตารางบุคลากร (ถ้ามีการตั้งไว้)
-                if (password_verify($password, $personnelData['pers_password'])) {
+                if (password_verify($password, $personnelData['pers_password'] ?? '')) {
                     $session->set([
                         'AdminID'       => 'P' . $personnelData['pers_id'],
                         'AdminFullname' => $personnelData['pers_firstname'] . ' ' . $personnelData['pers_lastname'],
@@ -166,27 +200,21 @@ class ConLogin extends BaseController
                     return redirect()->to('/Manager/Dashboard');
                 }
             }
-            
             $session->setFlashdata('msg', 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
-            return redirect()->to('/');
+            return redirect()->to('/Login/LoginAdmin');
         }
 
-        $authenticatePassword = password_verify($password, $pass['admin_password']);
-        if($authenticatePassword){
+        if(password_verify($password, $pass['admin_password'] ?? '')){
             $db = \Config\Database::connect();
-            
-            // Get Role
             $role = $db->table('tb_roles')->where('role_id', $pass['role_id'])->get()->getRowArray();
-            
-            // Get Personnel Data
             $personnelData = $personnelDb->table('tb_personnel')->where('pers_id', $pass['pers_id'])->get()->getRowArray();
 
             if (!$role || !$personnelData) {
                 $session->setFlashdata('msg', 'บัญชีผู้ดูแลระบบยังไม่ได้ตั้งค่าสิทธิ์หรือข้อมูลบุคลากรอย่างสมบูรณ์');
-                return redirect()->to('/');
+                return redirect()->to('/Login/LoginAdmin');
             }
 
-            $set_data = [
+            $session->set([
                 'AdminID'       => $pass['admin_id'],
                 'AdminFullname' => $personnelData['pers_firstname'] . ' ' . $personnelData['pers_lastname'],
                 'AdminUsername' => $pass['admin_username'],
@@ -194,49 +222,29 @@ class ConLogin extends BaseController
                 'isLoggedIn'    => true,
                 'roles'         => [$role['role_name']],
                 'personnel'     => $personnelData
-            ];
-            $session->set($set_data);
-
-            // Redirect based on Role
-            if ($role['role_name'] === 'Super Admin') {
-                // Super Admin can access both systems - redirect to selection
-                return redirect()->to('/SelectSystem');
-            } elseif (in_array($role['role_name'], ['Manager', 'ผู้บริหาร', 'Executive', 'Executive View', 'ผู้อำนวยการ', 'รองผู้อำนวยการ'])) {
-                return redirect()->to('/Manager/Dashboard');
-            }
-            
+            ]);
+            if ($role['role_name'] === 'Super Admin') return redirect()->to('/SelectSystem');
+            if (in_array($role['role_name'], ['Manager', 'ผู้บริหาร', 'Executive', 'Executive View', 'ผู้อำนวยการ', 'รองผู้อำนวยการ'])) return redirect()->to('/Manager/Dashboard');
             return redirect()->to('/Admin/Dashboard');
         }else{
             $session->setFlashdata('msg', 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
-            return redirect()->to('/');
+            return redirect()->to('/Login/LoginAdmin');
         }
     }
 
-    public function LogoutAdmin()
-    {
-        $session = session();
-        $session->destroy();
+    public function LogoutAdmin() {
+        session()->destroy();
         return redirect()->to('/');
     }
 
-    public function selectSystem()
-    {
-        // Check if logged in
-        if (!session('isLoggedIn')) {
-            return redirect()->to('/');
-        }
-        
-        // Check if Super Admin
+    public function selectSystem() {
+        if (!session('isLoggedIn')) return redirect()->to('/');
         $roles = session('roles') ?? [];
-        if (!in_array('Super Admin', $roles)) {
-            return redirect()->to('/Admin/Dashboard');
-        }
-        
+        if (!in_array('Super Admin', $roles)) return redirect()->to('/Admin/Dashboard');
         return view('User/UserSelectSystem/PageSelectSystem', [
             'title' => 'เลือกระบบ',
             'description' => 'เลือกระบบที่ต้องการเข้าใช้งาน',
             'userName' => session('AdminFullname')
         ]);
     }
-
 }

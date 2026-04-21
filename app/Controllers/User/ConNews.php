@@ -14,7 +14,16 @@ use App\Models\AboutModel;
 
 class ConNews extends BaseController
 {
-    public function __construct(){
+    protected $NewsModel;
+    protected $PosiModel;
+    protected $LearModel;
+    protected $PersModel;
+    protected $AboutModel;
+    protected $BannerModel;
+    protected $NewsImageModel;
+
+    public function __construct()
+    {
         parent::__construct();
         $this->NewsModel = new NewsModel();
         $this->PosiModel = new PositionModel();
@@ -23,7 +32,6 @@ class ConNews extends BaseController
         $this->AboutModel = new AboutModel();
         $this->BannerModel = new BannerModel();
         $this->NewsImageModel = new \App\Models\NewsImageModel();
-       
     }
 
     public function DataMain(){
@@ -115,7 +123,7 @@ class ConNews extends BaseController
         //print_r($data['NewsAll']);
     }
 
-   function fetchData($limit,$offset = ''){
+    function fetchData($limit,$offset = ''){
         $dbQuery = $this->NewsModel->select('*')->limit($limit,$offset)->orderBy('news_date', 'DESC')->get();
         return $dbQuery->getResult();
     }
@@ -125,6 +133,11 @@ class ConNews extends BaseController
         $page_data = $this->DataMain();
        
         $page_data['news'] = $this->NewsModel->where('news_id',$KeyNews)->orderBy('news_date', 'DESC')->get()->getRow();
+        
+        if (! $page_data['news']) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound("ไม่พบข้อมูลข่าวที่ระบุ");
+        }
+
         $page_data['NewsLatest'] = $this->NewsModel->limit(3)->orderBy('news_date', 'DESC')->get()->getResult();
         $page_data['NewsAlbum'] = $this->NewsImageModel->where('news_id', $KeyNews)->orderBy('news_img_id', 'ASC')->findAll();
 

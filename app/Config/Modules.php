@@ -17,7 +17,7 @@ class Modules extends BaseModules
      *
      * @var bool
      */
-    public $enabled = true;
+    public $discover = true;
 
     /**
      * --------------------------------------------------------------------------
@@ -29,7 +29,25 @@ class Modules extends BaseModules
      *
      * @var bool
      */
-    public $discoverInComposer = true;
+    public $discoverInVendor = true;
+
+    /**
+     * --------------------------------------------------------------------------
+     * Composer Package Auto-Discovery
+     * --------------------------------------------------------------------------
+     *
+     * If $discoverInVendor is true, then auto-discovery will happen across
+     * all namespaces loaded by Composer, as well as the namespaces configured
+     * locally.
+     *
+     * @var array{only: string[], exclude: string[]}
+     */
+    public $composerPackages = [
+        'only'    => [],
+        'exclude' => [
+            // List any packages here that you want to exclude from auto-discovery.
+        ],
+    ];
 
     /**
      * --------------------------------------------------------------------------

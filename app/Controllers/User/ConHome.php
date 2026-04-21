@@ -14,7 +14,17 @@ use App\Models\SpotlightModel;
 
 class ConHome extends BaseController
 {
-    public function __construct(){
+    protected $PosiModel;
+    protected $LearModel;
+    protected $PersModel;
+    protected $NewsModel;
+    protected $BannerModel;
+    protected $AboutModel;
+    protected $StudentModel;
+    protected $spotlightModel;
+
+    public function __construct()
+    {
         parent::__construct(); // It's good practice to call the parent constructor
         $this->PosiModel = new PositionModel();
         $this->LearModel = new LearningModel();

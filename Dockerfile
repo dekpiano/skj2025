@@ -1,4 +1,4 @@
-FROM php:8.0-apache
+FROM php:8.3-apache
 
 # ติดตั้ง System Dependencies และ PHP Extensions ที่จำเป็นสำหรับ CodeIgniter 4
 RUN apt-get update && apt-get install -y \
@@ -22,14 +22,18 @@ RUN apt-get update && apt-get install -y \
     opcache \
     && a2enmod rewrite
 
-# ตั้งค่า Opcache (Performance Tuning)
+# ตั้งค่า Opcache (High Performance Tuning)
 RUN { \
-    echo 'opcache.memory_consumption=128'; \
-    echo 'opcache.interned_strings_buffer=8'; \
-    echo 'opcache.max_accelerated_files=4000'; \
-    echo 'opcache.revalidate_freq=2'; \
+    echo 'opcache.memory_consumption=256'; \
+    echo 'opcache.interned_strings_buffer=16'; \
+    echo 'opcache.max_accelerated_files=10000'; \
+    echo 'opcache.revalidate_freq=0'; \
+    echo 'opcache.validate_timestamps=1'; \
     echo 'opcache.fast_shutdown=1'; \
     echo 'opcache.enable_cli=0'; \
+    # PHP 8.3 JIT Settings
+    echo 'opcache.jit_buffer_size=128M'; \
+    echo 'opcache.jit=tracing'; \
     } > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
 # ตั้งค่า Document Root (User แจ้งว่าไม่ใช้ public)

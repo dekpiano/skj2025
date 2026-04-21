@@ -85,6 +85,31 @@
     @media screen and (max-width: 768px) {
         .slider-img-container { border-radius: 20px; }
     }
+
+    /* Tablet View Adjustments (Portrait & Landscape) */
+    @media screen and (min-width: 577px) and (max-width: 1199px) {
+        #main-banner-slick img {
+            height: 380px; /* เพิ่มความสูงขึ้นจาก 300px เป็น 380px เพื่อให้ดูเต็มและสมดุล */
+            object-fit: cover;
+        }
+        .hero-carousel-wrapper {
+            padding: 115px 0 35px; /* เพิ่มระยะห่างด้านบนเพื่อให้เลื่อนลงมา ไม่ติด Navbar */
+        }
+    }
+
+    /* Smartphone View Adjustments */
+    @media screen and (max-width: 576px) {
+        #main-banner-slick img {
+            height: 150px; /* ทำให้รูปสูงขึ้นมากและดูเต็มพื้นที่ในมือถือ */
+            object-fit: cover;
+        }
+        .slider-img-container {
+            border-radius: 15px;
+        }
+        .hero-carousel-wrapper {
+            padding: 100px 0 30px; /* ปรับ Padding ให้พอดีกับจอเล็ก */
+        }
+    }
 </style>
 
 <section class="hero-carousel-wrapper">
@@ -98,7 +123,8 @@
                     <?php endif; ?>
                         <div class="slider-img-container">
                             <img class="w-100" src="<?=base_url()?>/uploads/banner/all/<?php echo $v_banner['banner_img'];?>"
-                                alt="Banner Image" loading="lazy">
+                                alt="Banner Image" loading="lazy"
+                                onerror="this.onerror=null;this.src='https://placehold.co/1920x600/fb7e9c/white?text=SKJ+Banner+Placeholder';">
                         </div>
                     <?php if($v_banner['banner_linkweb'] != ""): ?>
                     </a>

@@ -5,7 +5,13 @@ use App\Models\AboutModel;
 
 class ConAdminNews extends \App\Controllers\BaseController
 {
-    public function __construct(){
+    protected $NewsModel;
+    protected $AboutModel;
+    protected $NewsImageModel;
+
+    public function __construct()
+    {
+        parent::__construct();
         $this->NewsModel = new NewsModel();
         $this->AboutModel = new AboutModel();
         $this->NewsImageModel = new \App\Models\NewsImageModel();
@@ -41,7 +47,8 @@ class ConAdminNews extends \App\Controllers\BaseController
         $checkID = $builder->select('news_id')->orderBy('news_id','DESC')->get()->getRow();
         if($checkID){
             $ex = explode('_',$checkID->news_id);
-            $NewsIdNew = 'news_'.@sprintf("%03d",$ex[1]+1);
+            $suffix = isset($ex[1]) ? (int)$ex[1] : 0;
+            $NewsIdNew = 'news_'.sprintf("%03d", $suffix + 1);
         }else{
             $NewsIdNew = 'news_001';
         }
@@ -528,7 +535,8 @@ class ConAdminNews extends \App\Controllers\BaseController
         $checkID = $builder->select('news_id')->orderBy('news_id','DESC')->get()->getRow();
         if($checkID){
             $ex = explode('_',$checkID->news_id);
-            $NewsIdNew = 'news_'.@sprintf("%03d",$ex[1]+1);
+            $suffix = isset($ex[1]) ? (int)$ex[1] : 0;
+            $NewsIdNew = 'news_'.sprintf("%03d", $suffix + 1);
         }else{
             $NewsIdNew = 'news_001';
         }

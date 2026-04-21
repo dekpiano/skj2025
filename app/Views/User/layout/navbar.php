@@ -212,6 +212,22 @@
         .info-value-nav { font-size: 0.75rem; }
         .info-label-nav { font-size: 0.6rem; letter-spacing: 0.5px; }
         .top-info-container { gap: 0.8rem; }
+        /* Add Nav link compression here - EXTRA COMPACT */
+        .navbar-skj .nav-link {
+            padding: 8px 6px !important; /* บีบระยะห่างให้เหลือเท่าที่จำเป็น */
+            font-size: 0.85rem !important; /* ลดขนาดเล็กลงเพื่อให้พอดีแนวนอน (iPad Pro Landscape) */
+            gap: 4px; /* ช่องไฟระหว่างไอคอนกับตัวอักษร */
+            margin: 0 1px;
+            white-space: nowrap !important; /* บังคับให้อยู่บรรทัดเดียว ห้ามตกลงมาทับกัน */
+            letter-spacing: -0.2px; /* บีบช่องไฟของตัวอักษรเล็กน้อย */
+        }
+        .navbar-skj .navbar-nav {
+            flex-wrap: nowrap !important; /* ห้ามเมนูร่วงมาบรรทัดใหม่ */
+        }
+        .navbar-skj {
+            margin: 10px 15px; 
+            padding: 2px 15px !important; /* ลดความหนาของตัวแถบเพื่อให้หน้าเว็บดูโปร่งขึ้น */
+        }
     }
 
     @media (max-width: 1250px) {
@@ -298,6 +314,14 @@
             border-radius: 0;
             margin: 0;
             border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+    }
+
+    /* Tablet Specific breathing room */
+    @media (min-width: 768px) and (max-width: 1199px) {
+        .navbar-skj {
+            /* margin: 10px 15px !important; */
+            padding: 10px 20px !important;
         }
     }
 
@@ -439,10 +463,10 @@
         flex: 1;
     }
 
-    /* Tablet Specific: Boost size when there is more room */
+    /* Tablet Specific: Adjust size to prevent text overflow */
     @media (min-width: 768px) and (max-width: 1199px) {
         .brand-text-mobile {
-            font-size: 1.2rem; /* Larger font for tablets */
+            font-size: 1.15rem; /* ขยับขึ้นมานิดนึงเพื่อให้สมดุลกับจอแท็บเล็ตที่กว้างขึ้น */
         }
     }
 

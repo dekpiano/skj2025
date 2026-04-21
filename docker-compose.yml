@@ -14,7 +14,7 @@ services:
     volumes:
       - .:/var/www/html:cached # เชื่อมไฟล์ในโฟลเดอร์ปัจจุบันเข้าไปใน Container (Added :cached for speed)
       - /var/www/html/vendor # Trick: เก็บ vendor ไว้ใน Container เพื่อความเร็ว (ไม่ต้อง Sync กับ Windows)
-      - D:/librarie_skj:/domains/librarie_skj:cached # เชื่อม Library กลาง
+      - D:/xampp/librarie_skj:/domains/librarie_skj:cached # เชื่อม Library กลาง
     environment:
       - CI_ENVIRONMENT=development
     depends_on:

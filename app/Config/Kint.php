@@ -24,7 +24,7 @@ class Kint extends BaseConfig
     */
 
     public $plugins;
-    public $maxDepth          = 6;
+    public $maxDepth          = 7;
     public $displayCalledFrom = true;
     public $expanded          = false;
 
@@ -33,11 +33,9 @@ class Kint extends BaseConfig
     | RichRenderer Settings
     |--------------------------------------------------------------------------
     */
-    public $richTheme  = 'aante-light.css';
+    public $richTheme  = 'original.css';
     public $richFolder = false;
-    public $richSort   = RichRenderer::SORT_FULL;
-    public $richObjectPlugins;
-    public $richTabPlugins;
+    // public $richSort   = RichRenderer::SORT_ALPHABETICAL;
 
     /*
     |--------------------------------------------------------------------------

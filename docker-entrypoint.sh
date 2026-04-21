@@ -5,7 +5,7 @@ set -e
 if [ ! -f "/var/www/html/vendor/autoload.php" ]; then
     echo "📦 Installing Composer dependencies..."
     cd /var/www/html
-    composer install --no-interaction --optimize-autoloader
+    composer install --no-interaction --optimize-autoloader --classmap-authoritative
     echo "✅ Composer install completed!"
 else
     echo "✅ Vendor folder already exists, skipping composer install."

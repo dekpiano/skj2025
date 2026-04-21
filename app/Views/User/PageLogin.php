@@ -10,6 +10,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    
     <style>
         body {
             font-family: 'K2D', sans-serif;
@@ -89,13 +90,19 @@
     <h3 class="login-title">ระบบสารสนเทศผู้บริหาร</h3>
     <p class="login-subtitle">Suankularb Wittayalai (Jiraprawat) Nakhon Sawan</p>
     
+    <div class="py-3 border-top border-bottom mb-4">
+        <p class="text-secondary small mb-2">ยินดีต้อนรับสู่ระบบ EIS</p>
+        <p class="text-muted extra-small" style="font-size: 0.7rem;">เข้าใช้งานด้วยบัญชี Google ของโรงเรียน</p>
+    </div>
+
+    <!-- ปุ่ม Google แบบ Redirect Flow (Legacy + Safe for your current Client ID) -->
     <a href="<?= base_url('SkjMain/googleLogin') ?>" class="btn-google">
         <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="Google">
         เข้าสู่ระบบด้วย Google
     </a>
 
     <?php if (session()->getFlashdata('msg')) : ?>
-        <div class="alert alert-danger mt-3 py-2 small" role="alert">
+        <div class="alert alert-danger mt-4 py-2 small" role="alert">
             <?= session()->getFlashdata('msg') ?>
         </div>
     <?php endif; ?>

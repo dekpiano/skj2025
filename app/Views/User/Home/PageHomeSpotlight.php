@@ -159,7 +159,8 @@
                                 <?= $spot['spotlight_facebook_embed'] ?>
                             </div>
                         <?php else: ?>
-                            <img src="<?= $imageUrl ?>" class="w-100 object-fit-contain spotlight-img" style="max-height: 100%;" alt="<?= $spot['spotlight_topic'] ?>">
+                            <img src="<?= $imageUrl ?>" class="w-100 object-fit-contain spotlight-img" style="max-height: 100%;" alt="<?= $spot['spotlight_topic'] ?>"
+                                onerror="this.onerror=null;this.src='https://placehold.co/1000x800/fb7e9c/white?text=Image+Not+Found';">
                         <?php endif; ?>
                     </div>
                     <div class="col-lg-5 col-md-12 d-flex flex-column justify-content-center spotlight-content-col p-lg-5 p-4">

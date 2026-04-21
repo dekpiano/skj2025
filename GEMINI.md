@@ -10,7 +10,7 @@ This document provides the context and rules for the Gemini CLI to ensure consis
 
 ## 2. Technology Stack
 
-- **Backend:** PHP (v7.4 || v8.0)
+- **Backend:** PHP (v8.3+)
 - **Framework:** CodeIgniter 4
 - **Frontend:** HTML, CSS, JavaScript
 - **CSS Framework:** Bootstrap (as seen in `assets/css/bootstrap.min.css`)

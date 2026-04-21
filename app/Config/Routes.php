@@ -45,10 +45,10 @@ $routes->post('/Admin/News/uploadImage', 'Admin\ConAdminNews::uploadImage');
 $routes->get('/Admin/News/uploadImage', 'Admin\ConAdminNews::uploadImage');
 $routes->get('About/(:any)', 'User\ConAboutSchool::AboutDetail/$1');
 
-$routes->match(['get', 'post'],'News', 'User\ConNews::NewsMain');
+$routes->match(['GET', 'POST'],'News', 'User\ConNews::NewsMain');
 $routes->get('News/Detail/(:any)', 'User\ConNews::NewsDetail/$1');
-$routes->match(['get', 'post'],'News/loadMoreNews', 'User\ConNews::loadMoreNews');
-$routes->match(['get', 'post'],'CountReadNews','User\ConNews::NewsCountRead');
+$routes->match(['GET', 'POST'],'News/loadMoreNews', 'User\ConNews::loadMoreNews');
+$routes->match(['GET', 'POST'],'CountReadNews','User\ConNews::NewsCountRead');
 $routes->get('news-suggestions', 'User\ConNews::newsSuggestions');
 $routes->get('pr', 'User\ConNews::pr');
 
@@ -64,9 +64,9 @@ $routes->get('Yearbook', 'User\ConYearbook::index');
 $routes->get('Email', 'User\ConEmail::index');
 $routes->get('Procurements', 'User\ConProcurements::index');
 // Login admin
-$routes->match(['get', 'post'], 'Login/LoginAdmin', 'User\ConLogin::LoginAdmin');
+$routes->match(['GET', 'POST'], 'Login/LoginAdmin', 'User\ConLogin::LoginAdmin');
 // Login admin for Google
-$routes->get('SkjMain/googleLogin', 'User\ConLogin::googleLogin');
+$routes->match(['GET', 'POST'], 'SkjMain/googleLogin', 'User\ConLogin::googleLogin');
 $routes->get('SkjMain/googleCallback', 'User\ConLogin::googleCallback');
 // Logout
 $routes->get('logout', 'User\ConLogin::LogoutAdmin');
@@ -76,40 +76,40 @@ $routes->group('Admin', ['filter' => 'permission', 'namespace' => 'App\Controlle
 
     //Admin News
     $routes->get('News','ConAdminNews::NewsMain', ['filter' => 'permission:Admin']);
-    $routes->match(['get', 'post'], 'News/AddNews', 'ConAdminNews::NewsAdd', ['filter' => 'permission:Admin']);
-    $routes->match(['get', 'post'], 'News/Add/NewsFacebook', 'ConAdminNews::NewsAddFacebook', ['filter' => 'permission:Admin']);
-    $routes->match(['get', 'post'], 'News/EditNews', 'ConAdminNews::NewsEdit', ['filter' => 'permission:Admin']);
-    $routes->match(['get', 'post'], 'News/UpdateNews', 'ConAdminNews::NewsUpdate', ['filter' => 'permission:Admin']);
-    $routes->match(['get', 'post'], 'News/DeleteNews', 'ConAdminNews::NewsDelete', ['filter' => 'permission:Admin']);
-    $routes->match(['post'], 'News/deleteImage', 'ConAdminNews::deleteImage', ['filter' => 'permission:Admin']);
-    $routes->match(['get', 'post'], 'News/View/Facebook', 'ConAdminNews::ViewNewsFormFacebook', ['filter' => 'permission:Admin']);
-    $routes->match(['get', 'post'], 'News/Select/Facebook', 'ConAdminNews::SelectNewsFormFacebook', ['filter' => 'permission:Admin']);
-    $routes->match(['post'], 'News/Album/Get', 'ConAdminNews::NewsAlbumGet', ['filter' => 'permission:Admin']);
-    $routes->match(['post'], 'News/Album/Delete', 'ConAdminNews::NewsAlbumDelete', ['filter' => 'permission:Admin']);
-    $routes->match(['get', 'post'], 'News/CleanUnusedImages', 'ConAdminNews::CleanUnusedImages', ['filter' => 'permission:Admin']);
+    $routes->match(['GET', 'POST'], 'News/AddNews', 'ConAdminNews::NewsAdd', ['filter' => 'permission:Admin']);
+    $routes->match(['GET', 'POST'], 'News/Add/NewsFacebook', 'ConAdminNews::NewsAddFacebook', ['filter' => 'permission:Admin']);
+    $routes->match(['GET', 'POST'], 'News/EditNews', 'ConAdminNews::NewsEdit', ['filter' => 'permission:Admin']);
+    $routes->match(['GET', 'POST'], 'News/UpdateNews', 'ConAdminNews::NewsUpdate', ['filter' => 'permission:Admin']);
+    $routes->match(['GET', 'POST'], 'News/DeleteNews', 'ConAdminNews::NewsDelete', ['filter' => 'permission:Admin']);
+    $routes->match(['POST'], 'News/deleteImage', 'ConAdminNews::deleteImage', ['filter' => 'permission:Admin']);
+    $routes->match(['GET', 'POST'], 'News/View/Facebook', 'ConAdminNews::ViewNewsFormFacebook', ['filter' => 'permission:Admin']);
+    $routes->match(['GET', 'POST'], 'News/Select/Facebook', 'ConAdminNews::SelectNewsFormFacebook', ['filter' => 'permission:Admin']);
+    $routes->match(['POST'], 'News/Album/Get', 'ConAdminNews::NewsAlbumGet', ['filter' => 'permission:Admin']);
+    $routes->match(['POST'], 'News/Album/Delete', 'ConAdminNews::NewsAlbumDelete', ['filter' => 'permission:Admin']);
+    $routes->match(['GET', 'POST'], 'News/CleanUnusedImages', 'ConAdminNews::CleanUnusedImages', ['filter' => 'permission:Admin']);
     
     // Admin Banner
     $routes->get('Banner','ConAdminBanner::BannerMain', ['filter' => 'permission:Admin']);
     $routes->post('Banner/BannerOnoff','ConAdminBanner::BannerOnoff', ['filter' => 'permission:Admin']);
-    $routes->match(['get', 'post'], 'Banner/Addbanner', 'ConAdminBanner::AddBanner', ['filter' => 'permission:Admin']);
-    $routes->match(['get', 'post'], 'Banner/EditBanner', 'ConAdminBanner::EditBanner', ['filter' => 'permission:Admin']);
-    $routes->match(['get', 'post'], 'Banner/Updatebanner', 'ConAdminBanner::Updatebanner', ['filter' => 'permission:Admin']);
+    $routes->match(['GET', 'POST'], 'Banner/Addbanner', 'ConAdminBanner::AddBanner', ['filter' => 'permission:Admin']);
+    $routes->match(['GET', 'POST'], 'Banner/EditBanner', 'ConAdminBanner::EditBanner', ['filter' => 'permission:Admin']);
+    $routes->match(['GET', 'POST'], 'Banner/Updatebanner', 'ConAdminBanner::Updatebanner', ['filter' => 'permission:Admin']);
     $routes->post('Banner/DeleteBanner', 'ConAdminBanner::DeleteBanner', ['filter' => 'permission:Admin']);
     $routes->post('Banner/CleanupImages', 'ConAdminBanner::CleanupImages', ['filter' => 'permission:Admin']);
 
     // Admin Spotlight
     $routes->get('Spotlight', 'ConAdminSpotlight::index', ['filter' => 'permission:Admin']);
     $routes->post('Spotlight/SpotlightOnoff', 'ConAdminSpotlight::SpotlightOnoff', ['filter' => 'permission:Admin']);
-    $routes->match(['get', 'post'], 'Spotlight/AddSpotlight', 'ConAdminSpotlight::AddSpotlight', ['filter' => 'permission:Admin']);
-    $routes->match(['get', 'post'], 'Spotlight/EditSpotlight', 'ConAdminSpotlight::EditSpotlight', ['filter' => 'permission:Admin']);
-    $routes->match(['get', 'post'], 'Spotlight/UpdateSpotlight', 'ConAdminSpotlight::UpdateSpotlight', ['filter' => 'permission:Admin']);
+    $routes->match(['GET', 'POST'], 'Spotlight/AddSpotlight', 'ConAdminSpotlight::AddSpotlight', ['filter' => 'permission:Admin']);
+    $routes->match(['GET', 'POST'], 'Spotlight/EditSpotlight', 'ConAdminSpotlight::EditSpotlight', ['filter' => 'permission:Admin']);
+    $routes->match(['GET', 'POST'], 'Spotlight/UpdateSpotlight', 'ConAdminSpotlight::UpdateSpotlight', ['filter' => 'permission:Admin']);
     $routes->post('Spotlight/DeleteSpotlight', 'ConAdminSpotlight::DeleteSpotlight', ['filter' => 'permission:Admin']);
 
     //Admin About
-    $routes->match(['get', 'post'], 'AboutSchool/Detail/(:any)', 'ConAdminAboutSchool::AboutSchoolDetail/$1', ['filter' => 'permission:Admin']);
-    $routes->match(['get', 'post'], 'AboutSchool/Edit/(:any)', 'ConAdminAboutSchool::AboutSchoolEdit/$1', ['filter' => 'permission:Admin']);
-    $routes->match(['get', 'post'], 'AboutSchool/Update/(:any)', 'ConAdminAboutSchool::AboutSchoolUpdate/$1', ['filter' => 'permission:Admin']);
-    $routes->match(['get', 'post'], 'AboutSchool/Add', 'ConAdminAboutSchool::AboutSchoolAdd', ['filter' => 'permission:Admin']);
+    $routes->match(['GET', 'POST'], 'AboutSchool/Detail/(:any)', 'ConAdminAboutSchool::AboutSchoolDetail/$1', ['filter' => 'permission:Admin']);
+    $routes->match(['GET', 'POST'], 'AboutSchool/Edit/(:any)', 'ConAdminAboutSchool::AboutSchoolEdit/$1', ['filter' => 'permission:Admin']);
+    $routes->match(['GET', 'POST'], 'AboutSchool/Update/(:any)', 'ConAdminAboutSchool::AboutSchoolUpdate/$1', ['filter' => 'permission:Admin']);
+    $routes->match(['GET', 'POST'], 'AboutSchool/Add', 'ConAdminAboutSchool::AboutSchoolAdd', ['filter' => 'permission:Admin']);
 
     // Admin Roles
     $routes->get('roles', 'RoleController::index', ['filter' => 'permission:Super Admin']);

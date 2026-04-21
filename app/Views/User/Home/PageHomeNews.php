@@ -145,7 +145,8 @@
                 <div>
                     <div class="skj-news-card">
                         <div class="post-img">
-                            <img src="<?=base_url('uploads/news/'.$v_news->news_img)?>" alt="<?= $v_news->news_topic ?>" loading="lazy">
+                            <img src="<?=base_url('uploads/news/'.$v_news->news_img)?>" alt="<?= $v_news->news_topic ?>" loading="lazy"
+                                onerror="this.onerror=null;this.src='https://placehold.co/400x250/fb7e9c/white?text=SKJ+News';">
                         </div>
                         <div class="post-content">
                             <div class="post-meta">
