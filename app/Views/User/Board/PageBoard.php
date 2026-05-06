@@ -76,7 +76,7 @@
     }
 
     .board-img-wrapper {
-        width: 160px;
+        /* width: 160px; */
         height: 160px;
         margin: 0 auto 15px;
         border-radius: 50%;

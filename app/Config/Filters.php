@@ -25,6 +25,7 @@ class Filters extends BaseConfig
         'secureheaders' => SecureHeaders::class,
         'permission'    => \App\Filters\PermissionFilter::class,
         'weblog'        => \App\Filters\WebLogFilter::class,
+        'botany_auth'   => \App\Filters\BotanyAuth::class,
     ];
 
     /**

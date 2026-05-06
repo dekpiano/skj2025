@@ -682,6 +682,9 @@
                         <a href="<?= base_url('Board') ?>" class="dropdown-item dropdown-item-skj">
                             <i class="bi bi-people-fill"></i> คณะกรรมการสถานศึกษา
                         </a>
+                        <a href="<?= base_url('Botany') ?>" class="dropdown-item dropdown-item-skj">
+                            <i class="bi bi-tree-fill"></i> งานสวนพฤกษศาสตร์
+                        </a>
                     </div>
                 </div>
 
@@ -758,6 +761,7 @@
                                 <a href="<?= base_url('PageGroup') ?>" class="dropdown-item dropdown-item-skj"><i class="bi bi-facebook"></i> Facebook กลุ่ม</a>
                                 <a href="<?= base_url('Email') ?>" class="dropdown-item dropdown-item-skj"><i class="bi bi-envelope-at"></i> อีเมลโรงเรียน</a>
                                 <a href="https://documentcenter.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i class="bi bi-file-earmark-arrow-down"></i> โหลดเอกสาร</a>
+                                <a href="<?= base_url('Botany') ?>" class="dropdown-item dropdown-item-skj"><i class="bi bi-tree-fill"></i> งานสวนพฤกษศาสตร์</a>
                             </div>
                             <div class="col-lg-3">
                                 <h6 class="mega-column-title">อื่นๆ</h6>

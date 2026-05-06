@@ -6,7 +6,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
     <title><?= $title ?> | SKJ</title>
-    <meta name="description" content="<?= $description ?>" />
+    <meta name="description" content="<?= $description ?? 'งานสวนพฤกษศาสตร์โรงเรียน สวนกุหลาบวิทยาลัย (จิรประวัติ) นครสวรรค์' ?>" />
     <meta
         content="โรงเรียนสวนกุหลาบวิทยาลัย,โรงเรียน,สวนกุหลาบ,จิรประวัติ,นครสวรรค์,สวนกุหลาบจิรประวัติ,โรงเรียนสวนกุหลาบ"
         name="keywords">
@@ -16,7 +16,7 @@
     <meta name="author" content="Dekpiano" />
     <meta property="og:url" content="<?= $full_url ?>" />
     <meta property="og:title" content="<?= $title ?> | SKJ" />
-    <meta property="og:description" content="<?= $description ?>" />
+    <meta property="og:description" content="<?= $description ?? 'งานสวนพฤกษศาสตร์โรงเรียน สวนกุหลาบวิทยาลัย (จิรประวัติ) นครสวรรค์' ?>" />
     <meta property="og:type" content="website" />
     <?php   if($uri->getSegment(1) == "News" && $uri->getSegment(2) == "Detail") : ?>
     <meta property="og:image" content="<?=$banner;?>" />
