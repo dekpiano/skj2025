@@ -12,8 +12,11 @@ class ConBotany extends BaseController
      */
     public function index()
     {
+        $botanyNewsModel = new \App\Models\BotanyNewsModel();
+        
         $page_data['title'] = 'งานสวนพฤกษศาสตร์โรงเรียน | โรงเรียนสวนกุหลาบวิทยาลัย (จิรประวัติ) นครสวรรค์';
         $page_data['description'] = 'ยินดีต้อนรับสู่งานสวนพฤกษศาสตร์โรงเรียน สวนกุหลาบวิทยาลัย (จิรประวัติ) นครสวรรค์ - โครงการอนุรักษ์พันธุกรรมพืชอันเนื่องมาจากพระราชดำริฯ';
+        $page_data['latest_news'] = $botanyNewsModel->getActiveNews(3);
         
         $data = array_merge($this->data, $page_data);
 

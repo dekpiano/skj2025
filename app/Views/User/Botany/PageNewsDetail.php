@@ -9,7 +9,7 @@
     }
 
     .news-breadcrumb a {
-        color: #fb7e9c;
+        color: #8b2e8b;
         text-decoration: none;
         font-weight: 600;
     }
@@ -73,11 +73,11 @@
 
     .recent-news-title {
         font-weight: 800;
-        color: #fb7e9c;
+        color: #8b2e8b;
         margin-bottom: 25px;
         font-size: 1.4rem;
         padding-bottom: 15px;
-        border-bottom: 3px solid #249ffd;
+        border-bottom: 3px solid #551a8b;
         display: inline-block;
     }
 
@@ -201,10 +201,10 @@
                 </style>
 
                 <div class="mt-5 pt-5 border-top">
-                    <button class="btn btn-outline-primary rounded-pill px-4" style="color: #fb7e9c; border-color: #fb7e9c;" onclick="window.history.back()">
+                    <button class="btn btn-outline-primary rounded-pill px-4" style="color: #8b2e8b; border-color: #8b2e8b;" onclick="window.history.back()">
                         <i class="bi bi-arrow-left me-2"></i> ย้อนกลับ
                     </button>
-                    <button class="btn btn-primary rounded-pill px-4 ms-2" style="background-color: #fb7e9c; border-color: #fb7e9c;" onclick="window.print()">
+                    <button class="btn btn-primary rounded-pill px-4 ms-2" style="background-color: #8b2e8b; border-color: #8b2e8b;" onclick="window.print()">
                         <i class="bi bi-printer me-2"></i> พิมพ์ข่าวนี้
                     </button>
                 </div>
