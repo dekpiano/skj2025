@@ -66,7 +66,7 @@
     }
 
     .hero-title {
-        font-size: clamp(2.5rem, 6vw, 4.5rem);
+        font-size: clamp(2.5rem, 6vw, 4rem);
         font-weight: 900;
         margin-bottom: 25px;
         line-height: 1.1;
@@ -225,10 +225,104 @@
         margin-bottom: 30px;
     }
 
+    .text-purple { color: #8b2e8b; }
+    .btn-hero {
+        background: #fb7e9c;
+        color: white;
+        border: none;
+        transition: all 0.3s ease;
+    }
+    .btn-hero:hover {
+        background: #f16184;
+        color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(251, 126, 156, 0.4) !important;
+    }
+
+    @media (max-width: 991px) {
+        .hero-title { font-size: 3.2rem; }
+        .hero-content { padding: 45px; }
+    }
+
     @media (max-width: 768px) {
-        .hero-title { font-size: 2.8rem; }
-        .hero-subtitle { font-size: 1.1rem; }
-        .info-title { font-size: 1.8rem; }
+        .hero-section {
+            height: auto;
+            min-height: 100vh;
+            padding: 100px 20px;
+        }
+        .hero-content {
+            padding: 35px 20px;
+            border-radius: 40px;
+        }
+        .hero-title { 
+            font-size: 2.2rem !important; 
+        }
+        .hero-subtitle { 
+            font-size: 1.1rem !important; 
+            margin-bottom: 30px !important;
+            padding: 0 10px;
+        }
+        .royal-logo {
+            width: 130px;
+        }
+        .logo-spotlight {
+            padding: 20px;
+            margin-bottom: 5px;
+        }
+        .menu-section, .info-section, .latest-news-section, .info-cards-section, .royal-tribute-section {
+            padding: 60px 0 !important;
+        }
+        .royal-tribute-section {
+            min-height: auto !important;
+        }
+        .section-header {
+            margin-bottom: 40px;
+        }
+        .section-header h2 {
+            font-size: 2rem;
+        }
+        .info-title { font-size: 1.8rem !important; }
+        
+        .quote-container {
+            text-align: center !important;
+            padding-right: 0 !important;
+        }
+        .quote-container i {
+            margin: 0 auto;
+        }
+        .quote-container h3 {
+            font-size: 1.3rem !important;
+            text-align: center !important;
+        }
+        .tribute-author {
+            text-align: center !important;
+        }
+        .quote-container .line {
+            margin-left: auto !important;
+            margin-right: auto !important;
+        }
+        .portrait-wrapper {
+            margin-top: 30px;
+        }
+        .menu-grid {
+            grid-template-columns: 1fr;
+            padding: 0 15px;
+        }
+        .menu-card {
+            padding: 30px 20px;
+        }
+        .menu-icon-wrapper {
+            width: 80px;
+            height: 80px;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .hero-title { font-size: 1.6rem !important; }
+        .hero-subtitle { font-size: 0.8rem !important; }
+        .btn-hero { width: 100%; }
     }
 </style>
 
@@ -244,13 +338,13 @@
 
         <div class="hero-content animate__animated animate__fadeIn" style="animation-duration: 2s;">
             <!-- Main Title -->
-            <h1 class="hero-title mb-4" style="font-size: clamp(2.5rem, 6vw, 4.2rem);">
+            <h1 class="hero-title mb-4">
                 งานสวนพฤกษศาสตร์โรงเรียน<br>
                 <span style="font-size: 0.67em; font-weight: 700;">สวนกุหลาบวิทยาลัย (จิรประวัติ) นครสวรรค์</span>
             </h1>
             
             <!-- Subtitle -->
-            <p class="hero-subtitle mb-5" style="max-width: 850px; margin-left: auto; margin-right: auto; line-height: 1.6; opacity: 0.85;">
+            <p class="hero-subtitle mb-5" style="max-width: 850px; margin-left: auto; margin-right: auto; line-height: 1.6;">
                 โครงการอนุรักษ์พันธุกรรมพืชอันเนื่องมาจากพระราชดำริ<br>
                 สมเด็จพระกนิษฐาธิราชเจ้า กรมสมเด็จพระเทพรัตนราชสุดาฯ สยามบรมราชกุมารี (อพ.สธ.)
             </p>

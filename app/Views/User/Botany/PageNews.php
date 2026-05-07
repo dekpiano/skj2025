@@ -104,6 +104,32 @@
     .news-card:hover .read-more {
         gap: 12px;
     }
+
+    @media (max-width: 768px) {
+        .news-header {
+            padding: 60px 0 100px;
+            border-radius: 0 0 30px 30px;
+        }
+        .news-header h1 {
+            font-size: 2.2rem;
+        }
+        .news-header p {
+            font-size: 1rem;
+        }
+        .news-container {
+            margin-top: -50px;
+            padding-bottom: 60px;
+        }
+        .news-card {
+            border-radius: 20px;
+        }
+        .news-body {
+            padding: 20px;
+        }
+        .news-title {
+            font-size: 1.15rem;
+        }
+    }
 </style>
 
 <div class="news-header animate__animated animate__fadeIn">

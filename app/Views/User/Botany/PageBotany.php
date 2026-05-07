@@ -145,7 +145,18 @@
     }
 
     @media (max-width: 768px) {
+        .botany-container { padding: 40px 0; }
         .botany-header h1 { font-size: 2rem; }
+        .botany-header { margin-bottom: 40px; }
+        .botany-card { border-radius: 20px; }
+        .botany-content { padding: 20px; }
+        .botany-name-th { font-size: 1.25rem; }
+        .search-box { margin-bottom: 30px; }
+    }
+
+    @media (max-width: 480px) {
+        .botany-header h1 { font-size: 1.8rem; }
+        .botany-container { padding: 30px 0; }
     }
 </style>
 

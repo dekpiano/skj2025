@@ -122,7 +122,13 @@
     }
 
     @media (max-width: 768px) {
-        .news-detail-title { font-size: 1.8rem; }
+        .news-detail-header { padding: 40px 0; }
+        .news-detail-title { font-size: 1.8rem !important; }
+        .news-meta { gap: 10px; flex-direction: column; }
+        .news-content-wrapper { padding: 30px 0; }
+        .main-img-wrapper { border-radius: 20px; margin-bottom: 30px; }
+        .news-article-content { font-size: 1.05rem; }
+        .recent-news-card { padding: 25px; border-radius: 20px; }
     }
 </style>
 

@@ -103,6 +103,17 @@
             font-size: 0.9rem;
             margin-bottom: 25px;
         }
+
+        @media (max-width: 576px) {
+            body { height: auto; min-height: 100vh; padding: 40px 0; }
+            .login-card {
+                padding: 35px 20px;
+                margin: 0 20px;
+                border-radius: 25px;
+            }
+            .login-title { font-size: 1.6rem; }
+            .login-logo { width: 80px; margin-bottom: 20px; }
+        }
     </style>
 </head>
 <body>

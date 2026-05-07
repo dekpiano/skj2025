@@ -140,6 +140,17 @@
         .qr-section { flex-direction: column; text-align: center; }
         .qr-code-placeholder { margin-top: 20px; }
     }
+
+    @media (max-width: 768px) {
+        .botany-detail-container { padding: 40px 0; }
+        .plant-title-th { font-size: 1.8rem; }
+        .plant-title-en { font-size: 1.1rem; }
+        .plant-main-content { padding: 25px; }
+        .plant-hero-img { height: 250px; }
+        .meta-item { padding: 15px; }
+        .content-text { font-size: 1rem; }
+        .section-title { font-size: 1.3rem; }
+    }
 </style>
 
 <div class="botany-detail-container">
