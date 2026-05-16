@@ -28,7 +28,7 @@
                         <div class="info-icon-nav phone-grad"><i class="bi bi-telephone"></i></div>
                         <div class="ms-3">
                             <div class="info-label-nav">ติดต่อเรา</div>
-                            <div class="info-value-nav">056-009-667</div>
+                            <div class="info-value-nav">056-200-765</div>
                         </div>
                     </div>
                     <div class="info-item-nav border-0">
@@ -264,6 +264,13 @@
         font-size: 1.05rem;
     }
 
+    .navbar-skj .nav-link:hover {
+        background: rgba(36, 159, 253, 0.15); /* Soft Blue background on hover */
+        color: #fff !important;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(36, 159, 253, 0.2);
+    }
+
     /* Scrolled Style: Compact & High Tech */
     .navbar-skj.navbar-scrolled {
         margin: 8px 15px;
@@ -351,14 +358,14 @@
     .dropdown-item-skj:last-child { margin-bottom: 0; }
 
     .dropdown-item-skj:hover {
-        background: rgba(251, 126, 156, 0.1);
-        color: #FB7E9C;
+        background: rgba(36, 159, 253, 0.1); /* Soft Blue background */
+        color: #249ffd; /* Blue text */
         transform: translateX(5px);
     }
 
     .dropdown-item-skj i {
         font-size: 1.1rem;
-        color: #FB7E9C;
+        color: #249ffd; /* Blue icons */
     }
 
     /* Mega Menu Premium - Desktop Specific */

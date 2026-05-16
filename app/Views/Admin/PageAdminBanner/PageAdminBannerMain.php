@@ -33,8 +33,9 @@
                         <tr>
                             <th width="10%">การจัดการ</th>
                             <th width="10%">สถานะ</th>
-                            <th width="40%">ข้อมูลแบนเนอร์</th>
-                            <th width="30%">ตัวอย่างภาพ</th>
+                            <th width="30%">ข้อมูลแบนเนอร์</th>
+                            <th width="20%">Desktop (21:9)</th>
+                            <th width="15%">Mobile (9:16)</th>
                             <th width="15%">วันที่แสดงผล</th>
                         </tr>
                     </thead>
@@ -43,7 +44,7 @@
                         <tr id="<?= $v_banner->banner_id ?>">
                             <td>
                                 <div class="dropdown">
-                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                    <button type="button" class="btn btn-sm btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                                         <i class="bx bx-dots-vertical-rounded"></i>
                                     </button>
                                     <div class="dropdown-menu">
@@ -57,24 +58,41 @@
                                 </div>
                             </td>
                             <td>
-                                <label class="switch-toggle" title="ล็อก/ปลดล็อก">
-                                    <input type="checkbox" class="form-check-input-toggle" status-key="<?= $v_banner->banner_id ?>" 
-                                        <?= $v_banner->banner_status == "on" ? "checked" : "" ?>>
-                                    <span class="slider-toggle">
-                                        <span class="label-on">เปิด</span>
-                                        <span class="label-off">ปิด</span>
-                                    </span>
-                                </label>
+                                <div class="d-flex flex-column align-items-center gap-2">
+                                    <label class="switch-toggle" title="เปิด/ปิดการแสดงผล">
+                                        <input type="checkbox" class="form-check-input-toggle" status-key="<?= $v_banner->banner_id ?>" 
+                                            <?= $v_banner->banner_status == "on" ? "checked" : "" ?>>
+                                        <span class="slider-toggle">
+                                            <span class="label-on">เปิด</span>
+                                            <span class="label-off">ปิด</span>
+                                        </span>
+                                    </label>
+                                    <?php 
+                                        $now = time();
+                                        $startDate = strtotime($v_banner->banner_date);
+                                        $endDate = $v_banner->banner_end_date ? strtotime($v_banner->banner_end_date . ' 23:59:59') : null;
+                                        
+                                        if ($v_banner->banner_status == 'off') {
+                                            echo '<span class="badge bg-label-secondary small-badge">ถูกปิดไว้</span>';
+                                        } elseif ($now < $startDate) {
+                                            echo '<span class="badge bg-label-info small-badge">รอเริ่มแสดง</span>';
+                                        } elseif ($endDate && $now > $endDate) {
+                                            echo '<span class="badge bg-label-danger small-badge">หมดอายุ</span>';
+                                        } else {
+                                            echo '<span class="badge bg-label-success small-badge">กำลังแสดง</span>';
+                                        }
+                                    ?>
+                                </div>
                             </td>
                             <td>
                                 <div class="d-flex flex-column">
-                                    <span class="fw-bold text-dark text-truncate" style="max-width: 250px;" title="<?= $v_banner->banner_name ?>">
+                                    <span class="fw-bold text-heading text-truncate mb-1" style="max-width: 280px;" title="<?= $v_banner->banner_name ?>">
                                         <?= $v_banner->banner_name ?>
                                     </span>
                                     <?php if ($v_banner->banner_linkweb): ?>
-                                        <small class="text-primary text-truncate" style="max-width: 250px;" title="<?= $v_banner->banner_linkweb ?>">
+                                        <a href="<?= $v_banner->banner_linkweb ?>" target="_blank" class="text-primary text-truncate small" style="max-width: 280px;">
                                             <i class="bx bx-link me-1"></i><?= $v_banner->banner_linkweb ?>
-                                        </small>
+                                        </a>
                                     <?php else: ?>
                                         <small class="text-muted"><i class="bx bx-link-external me-1"></i>ไม่มีลิงก์เชื่อมโยง</small>
                                     <?php endif; ?>
@@ -85,30 +103,57 @@
                                     $imageUrl = base_url('uploads/banner/all/' . $v_banner->banner_img);
                                     $imagePath = FCPATH . 'uploads/banner/all/' . $v_banner->banner_img;
                                     if (empty($v_banner->banner_img) || !file_exists($imagePath)) {
-                                        $imageUrl = 'https://via.placeholder.com/600x200.png?text=Image+Not+Found';
+                                        $imageUrl = 'https://via.placeholder.com/600x200.png?text=No+Desktop+Image';
                                     }
                                 ?>
-                                <div class="banner-preview rounded border overflow-hidden shadow-sm" style="max-width: 250px;">
-                                    <img src="<?= $imageUrl ?>" class="img-fluid" alt="<?= $v_banner->banner_name ?>">
+                                <div class="banner-preview-container">
+                                    <a href="<?= $imageUrl ?>" target="_blank" class="d-block">
+                                        <div class="banner-preview rounded overflow-hidden shadow-sm">
+                                            <img src="<?= $imageUrl ?>" class="img-fluid" alt="Desktop">
+                                            <div class="banner-preview-overlay">
+                                                <i class="bx bx-desktop"></i>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </td>
+                            <td>
+                                <?php
+                                    $imageMobileUrl = base_url('uploads/banner/all/' . $v_banner->banner_img_mobile);
+                                    $imageMobilePath = FCPATH . 'uploads/banner/all/' . $v_banner->banner_img_mobile;
+                                    if (empty($v_banner->banner_img_mobile) || !file_exists($imageMobilePath)) {
+                                        $imageMobileUrl = 'https://via.placeholder.com/200x400.png?text=No+Mobile+Image';
+                                    }
+                                ?>
+                                <div class="banner-preview-container-mobile">
+                                    <a href="<?= $imageMobileUrl ?>" target="_blank" class="d-block">
+                                        <div class="banner-preview rounded overflow-hidden shadow-sm">
+                                            <img src="<?= $imageMobileUrl ?>" class="img-fluid" alt="Mobile">
+                                            <div class="banner-preview-overlay">
+                                                <i class="bx bx-mobile"></i>
+                                            </div>
+                                        </div>
+                                    </a>
                                 </div>
                             </td>
                              <td>
-                                <div class="d-flex flex-column">
-                                    <span class="badge bg-label-info mb-1" title="วันที่เริ่มแสดงผล">
-                                        <i class="bx bx-calendar-event me-1"></i><?= date('Y/m/d', strtotime($v_banner->banner_date)) ?>
-                                    </span>
+                                <div class="d-flex flex-column gap-1">
+                                    <div class="d-flex align-items-center gap-1">
+                                        <i class="bx bx-calendar-event text-info small"></i>
+                                        <span class="small text-muted">เริ่ม:</span>
+                                        <span class="fw-medium small"><?= date('d/m/Y H:i', strtotime($v_banner->banner_date)) ?></span>
+                                    </div>
                                     <?php if ($v_banner->banner_end_date): ?>
-                                        <?php 
-                                            $isExpired = strtotime($v_banner->banner_end_date) < strtotime(date('Y-m-d'));
-                                            $badgeClass = $isExpired ? 'bg-label-danger' : 'bg-label-warning';
-                                        ?>
-                                        <span class="badge <?= $badgeClass ?>" title="วันที่สิ้นสุด">
-                                            <i class="bx bx-calendar-x me-1"></i><?= date('Y/m/d', strtotime($v_banner->banner_end_date)) ?>
-                                        </span>
+                                        <div class="d-flex align-items-center gap-1">
+                                            <i class="bx bx-calendar-x text-warning small"></i>
+                                            <span class="small text-muted">สิ้นสุด:</span>
+                                            <span class="fw-medium small"><?= date('d/m/Y', strtotime($v_banner->banner_end_date)) ?></span>
+                                        </div>
                                     <?php else: ?>
-                                        <span class="badge bg-label-secondary" title="ไม่มีวันสิ้นสุด">
-                                            <i class="bx bx-infinite me-1"></i>ไม่มีกำหนด
-                                        </span>
+                                        <div class="d-flex align-items-center gap-1">
+                                            <i class="bx bx-infinite text-muted small"></i>
+                                            <span class="small text-muted">ไม่มีกำหนด</span>
+                                        </div>
                                     <?php endif; ?>
                                 </div>
                             </td>
@@ -132,38 +177,77 @@
             </div>
             <form id="form-banner" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="banner_id" id="banner_id">
-                <input type="hidden" name="original_banner_img" id="original_banner_img">
                 <?= csrf_field() ?>
                 <div class="modal-body p-4">
-                    <div class="row">
-                        <div class="col-md-12 mb-4">
-                            <div class="form-floating form-floating-outline">
-                                <input type="text" class="form-control" name="banner_name" id="banner_name" placeholder="ใส่หัวข้อแบนเนอร์..." required>
-                                <label for="banner_name">หัวข้อแบนเนอร์</label>
+                    <!-- Section: General Info -->
+                    <div class="mb-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="avatar avatar-sm bg-label-primary me-2">
+                                <span class="avatar-initial rounded"><i class="bx bx-info-circle"></i></span>
+                            </div>
+                            <h6 class="mb-0 text-primary fw-bold">ข้อมูลพื้นฐาน</h6>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-floating form-floating-outline">
+                                    <input type="text" class="form-control" name="banner_name" id="banner_name" placeholder="ใส่หัวข้อแบนเนอร์..." required>
+                                    <label for="banner_name">หัวข้อแบนเนอร์ / ชื่อกิจกรรม</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating form-floating-outline">
+                                    <input type="text" class="form-control" name="banner_linkweb" id="banner_linkweb" placeholder="Ex. https://google.com">
+                                    <label for="banner_linkweb">ลิงก์เชื่อมโยง (Link URL)</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating form-floating-outline">
+                                    <input class="form-control" type="datetime-local" value="<?= date('Y-m-d H:i') ?>" id="banner_date" name="banner_date" required>
+                                    <label for="banner_date">วันที่เริ่มแสดงผล</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating form-floating-outline">
+                                    <input class="form-control" type="date" id="banner_end_date" name="banner_end_date">
+                                    <label for="banner_end_date">แสดงผลจนถึงวันที่ (ถ้ามี)</label>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-12 mb-4">
-                            <div class="form-floating form-floating-outline">
-                                <input type="text" class="form-control" name="banner_linkweb" id="banner_linkweb" placeholder="Ex. https://google.com">
-                                <label for="banner_linkweb">ลิงก์ตัวช่วยเชื่อมโยง (Link URL)</label>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <!-- Section: Media Upload -->
+                    <div>
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="avatar avatar-sm bg-label-info me-2">
+                                <span class="avatar-initial rounded"><i class="bx bx-image-alt"></i></span>
                             </div>
+                            <h6 class="mb-0 text-info fw-bold">สื่อประชาสัมพันธ์ (Responsive Images)</h6>
                         </div>
-                        <div class="col-md-6 mb-4">
-                            <div class="form-floating form-floating-outline">
-                                <input class="form-control" type="datetime-local" value="<?= date('Y-m-d H:i') ?>" id="banner_date" name="banner_date" required>
-                                <label for="banner_date">วันที่เริ่มแสดงผล</label>
+                        <div class="row g-4">
+                            <!-- Desktop Version -->
+                            <div class="col-md-7">
+                                <div class="upload-label mb-2">
+                                    <span class="badge bg-label-dark">Desktop Version</span>
+                                    <small class="text-muted ms-2">แนะนำ 1920x822 (21:9)</small>
+                                </div>
+                                <div class="filepond-wrapper desktop-pond">
+                                    <input type="file" name="banner_img" id="banner_img">
+                                    <input type="hidden" name="original_banner_img" id="original_banner_img">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6 mb-4">
-                            <div class="form-floating form-floating-outline">
-                                <input class="form-control" type="date" id="banner_end_date" name="banner_end_date">
-                                <label for="banner_end_date">แสดงผลจนถึงวันที่ (ถ้ามี)</label>
-                                <small class="text-muted">ปล่อยว่างหากต้องการแสดงผลตลอดไป</small>
+                            <!-- Mobile Version -->
+                            <div class="col-md-5">
+                                <div class="upload-label mb-2">
+                                    <span class="badge bg-label-info">Mobile Version</span>
+                                    <small class="text-muted ms-2">แนะนำ 1080x1920 (9:16)</small>
+                                </div>
+                                <div class="filepond-wrapper mobile-pond">
+                                    <input type="file" name="banner_img_mobile" id="banner_img_mobile">
+                                    <input type="hidden" name="original_banner_img_mobile" id="original_banner_img_mobile">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-12">
-                            <label class="form-label text-uppercase fw-bold small text-muted mb-2">รูปภาพแบนเนอร์ (ขนาดแนะนำ 1920x720 px)</label>
-                            <input type="file" name="banner_img" id="banner_img">
                         </div>
                     </div>
                 </div>
@@ -186,12 +270,12 @@
 <script src="https://unpkg.com/filepond/dist/filepond.min.js"></script>
 <script>
     FilePond.registerPlugin(FilePondPluginImagePreview, FilePondPluginFileValidateType);
-    let pond;
+    let pond, pondMobile;
     const BASE_URL = "<?= base_url() ?>";
 
     $(document).ready(function() {
         const dataTable = $('#myTable').DataTable({
-            order: [[4, 'desc']],
+            order: [],
             language: {
                 search: "_INPUT_",
                 searchPlaceholder: "ค้นหาแบนเนอร์...",
@@ -209,11 +293,10 @@
             e.preventDefault();
             const formData = new FormData(this);
             const pondFile = pond ? pond.getFile() : null;
-            const isUpdate = $(this).attr('action').includes('Updatebanner');
+            const pondMobileFile = pondMobile ? pondMobile.getFile() : null;
 
-            if (pondFile) {
-                formData.append('banner_img', pondFile.file);
-            }
+            if (pondFile) formData.append('banner_img', pondFile.file);
+            if (pondMobileFile) formData.append('banner_img_mobile', pondMobileFile.file);
 
             $.ajax({
                 url: $(this).attr('action'),
@@ -301,7 +384,12 @@
         $(document).on("click", "#AddBanner", function() {
             $('#ModalTitle').text('เพิ่มแบนเนอร์ใหม่');
             $('#form-banner').attr('action', '<?=base_url('Admin/Banner/Addbanner')?>').trigger('reset');
-            initFilePond();
+            $('#banner_id').val('');
+            $('#original_banner_img').val('');
+            $('#original_banner_img_mobile').val('');
+            
+            initFilePond(null, 'desktop');
+            initFilePond(null, 'mobile');
             new bootstrap.Modal(document.getElementById("ModalAddBanner")).show();
         });
 
@@ -316,13 +404,14 @@
                     $('#banner_name').val(data.banner_name);
                     $('#banner_linkweb').val(data.banner_linkweb);
                     $('#original_banner_img').val(data.banner_img);
+                    $('#original_banner_img_mobile').val(data.banner_img_mobile);
                     
                     let date = new Date(data.banner_date);
                     let formattedDate = date.getFullYear() + '-' + 
-                                    ('0' + (date.getMonth() + 1)).slice(-2) + '-' + 
-                                    ('0' + date.getDate()).slice(-2) + 'T' + 
-                                    ('0' + date.getHours()).slice(-2) + ':' + 
-                                    ('0' + date.getMinutes()).slice(-2);
+                                     ('0' + (date.getMonth() + 1)).slice(-2) + '-' + 
+                                     ('0' + date.getDate()).slice(-2) + 'T' + 
+                                     ('0' + date.getHours()).slice(-2) + ':' + 
+                                     ('0' + date.getMinutes()).slice(-2);
                     $('#banner_date').val(formattedDate);
 
                     if (data.banner_end_date) {
@@ -331,7 +420,8 @@
                         $('#banner_end_date').val('');
                     }
 
-                    initFilePond(data.banner_img);
+                    initFilePond(data.banner_img, 'desktop');
+                    initFilePond(data.banner_img_mobile, 'mobile');
                     new bootstrap.Modal(document.getElementById("ModalAddBanner")).show();
                 }
             }, 'json');
@@ -376,25 +466,39 @@
 
         $('#ModalAddBanner').on('hidden.bs.modal', function () {
             if (pond) { pond.destroy(); pond = null; }
+            if (pondMobile) { pondMobile.destroy(); pondMobile = null; }
             $('#form-banner').trigger('reset');
         });
 
-        function initFilePond(imgName = null) {
-            const inputElement = document.querySelector('#banner_img');
-            if (pond) { pond.destroy(); }
+        function initFilePond(imgName = null, type = 'desktop') {
+            const selector = type === 'desktop' ? '#banner_img' : '#banner_img_mobile';
+            const inputElement = document.querySelector(selector);
+            
+            if (type === 'desktop' && pond) { pond.destroy(); }
+            if (type === 'mobile' && pondMobile) { pondMobile.destroy(); }
             
             let options = {
-                labelIdle: 'ลากไฟล์มาวาง หรือ <span class="filepond--label-action">คลิกเพื่ออัปโหลด</span>',
-                imagePreviewHeight: 200,
+                labelIdle: type === 'desktop' 
+                    ? '<i class="bx bx-cloud-upload d-block fs-2 mb-2"></i> Desktop Version (21:9)<br><span class="filepond--label-action">เลือกไฟล์</span> หรือ ลากมาวาง'
+                    : '<i class="bx bx-mobile-vibration d-block fs-2 mb-2"></i> Mobile (9:16)<br><span class="filepond--label-action">เลือกไฟล์</span> หรือ ลากวาง',
+                imagePreviewHeight: type === 'desktop' ? 180 : 250,
                 acceptedFileTypes: ['image/*'],
-                credits: false
+                credits: false,
+                styleButtonProcessItemPosition: 'right',
+                styleLoadIndicatorPosition: 'right',
+                styleProgressIndicatorPosition: 'right',
+                styleButtonRemoveItemPosition: 'left',
             };
 
             if (imgName) {
                 options.files = [{ source: `${BASE_URL}/uploads/banner/all/${imgName}` }];
             }
 
-            pond = FilePond.create(inputElement, options);
+            if (type === 'desktop') {
+                pond = FilePond.create(inputElement, options);
+            } else {
+                pondMobile = FilePond.create(inputElement, options);
+            }
         }
     });
 </script>
@@ -416,9 +520,40 @@
     .switch-toggle input:checked + .slider-toggle .label-on { opacity: 1; }
     .switch-toggle input:checked + .slider-toggle .label-off { opacity: 0; }
     
-    .banner-preview { transition: transform 0.2s; cursor: pointer; }
-    .banner-preview:hover { transform: scale(1.05); }
-    .dataTables_wrapper .dataTables_filter input { border: 1px solid #d9dee3; border-radius: 0.375rem; padding: 0.422rem 0.875rem; }
+    .small-badge { font-size: 0.65rem; padding: 0.2rem 0.5rem; text-transform: none; }
+    .banner-preview-container { max-width: 180px; }
+    .banner-preview-container-mobile { max-width: 80px; }
+    .banner-preview { position: relative; transition: all 0.3s ease; border: 1px solid rgba(0,0,0,0.05); background: #f8f9fa; }
+    .banner-preview img { display: block; width: 100%; transition: transform 0.3s ease; }
+    .banner-preview-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease; }
+    .banner-preview-overlay i { color: white; font-size: 1.5rem; }
+    .banner-preview:hover { transform: translateY(-3px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1) !important; }
+    .banner-preview:hover img { transform: scale(1.05); }
+    .banner-preview:hover .banner-preview-overlay { opacity: 1; }
+
+    /* Mobile Specific Admin UI */
+    @media screen and (max-width: 991px) {
+        .banner-preview-container { max-width: 120px; }
+        .banner-preview-container-mobile { max-width: 60px; }
+        .table-responsive { border: 0; }
+    }
+    
+    .dataTables_wrapper .dataTables_filter input { border: 1px solid #d9dee3; border-radius: 0.375rem; padding: 0.422rem 0.875rem; width: 250px; }
     .dataTables_wrapper .dataTables_paginate .paginate_button { padding: 0.3rem 0.5rem; }
+    
+    /* Table row hover effect */
+    .table-hover tbody tr:hover { background-color: rgba(105, 108, 255, 0.04); }
+
+    /* FilePond Custom Styling */
+    .filepond--panel-root { background-color: #f8f9fa; border: 2px dashed #d9dee3; }
+    .desktop-pond .filepond--root { min-height: 200px; }
+    .mobile-pond .filepond--root { min-height: 200px; }
+    .filepond--label-action { text-decoration-color: var(--primary); color: var(--primary); }
+    .filepond--drop-label { color: #566a71; }
+    
+    .avatar-sm { width: 32px; height: 32px; }
+    .bg-label-primary { background-color: #e7e7ff !important; color: #696cff !important; }
+    .bg-label-info { background-color: #d7f5fc !important; color: #03c3ec !important; }
+    .upload-label .badge { font-size: 0.7rem; }
 </style>
 <?= $this->endSection() ?>

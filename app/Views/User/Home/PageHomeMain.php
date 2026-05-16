@@ -40,9 +40,6 @@
 <?= $this->include('User/Home/PageHomeCarousel') ?>
 <!-- Carousel End -->
 
-<!-- Spotlight Feature Start -->
-<?= $this->include('User/Home/PageHomeSpotlight') ?>
-<!-- Spotlight Feature End -->
 
 <!-- Excellence Start -->
 <?= $this->include('User/Home/PageHomeRecommend')?>
@@ -52,6 +49,10 @@
 <?= $this->include('User/Home/PageHomeWelcome')?>
 <!-- Welcome To End -->
 
+<!-- Spotlight Feature Start -->
+<?= $this->include('User/Home/PageHomeSpotlight') ?>
+<!-- Spotlight Feature End -->
+ 
 <!-- Facts Start -->
 <?= $this->include('User/Home/PageHomeCounter')?>
 <!-- Facts End -->

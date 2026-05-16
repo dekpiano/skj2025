@@ -214,7 +214,7 @@
             <div class="col-lg-3 col-md-6">
                 <h5 class="footer-title">ติดต่อเรา</h5>
                 <p class="mb-3 text-white-50"><i class="bi bi-geo-alt-fill text-primary me-2"></i> 160 ม.1 ต.นครสวรรค์ออก อ.เมือง จ.นครสวรรค์ 60000</p>
-                <p class="mb-3 text-white-50"><i class="bi bi-telephone-fill text-primary me-2"></i> 056-009-667</p>
+                <p class="mb-3 text-white-50"><i class="bi bi-telephone-fill text-primary me-2"></i> 056-200-765</p>
                 <p class="mb-4 text-white-50"><i class="bi bi-envelope-fill text-primary me-2"></i> skjns160@skj.ac.th</p>
                 
                 <h6 class="text-white mb-3 fw-bold">Social Media</h6>

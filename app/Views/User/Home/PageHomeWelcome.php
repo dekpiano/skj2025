@@ -104,84 +104,101 @@
     }
 
     .excellence-icon {
-        width: 50px;
-        height: 50px;
-        border-radius: 12px;
+        width: 60px;
+        height: 60px;
+        min-width: 60px;
+        border-radius: 16px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.2rem;
-        flex-shrink: 0;
+        font-size: 1.6rem;
     }
 
     .bg-pink-light { background: rgba(251, 126, 156, 0.1); color: var(--primary); }
     .bg-blue-light { background: rgba(36, 159, 253, 0.1); color: var(--secondary); }
 
     .excellence-content h6 {
-        font-weight: 800;
-        color: #1a2a4d;
-        margin-bottom: 4px;
-        font-size: 1.05rem;
+        font-weight: 700;
+        margin-bottom: 5px;
+        color: #333;
     }
 
     .excellence-content p {
-        color: #777;
         margin: 0;
-        font-size: 0.85rem;
-        line-height: 1.4;
+        font-size: 0.9rem;
+        color: #777;
     }
 
     @media (max-width: 991px) {
-        .welcome-section { padding: 40px 0; }
-        .welcome-heading { margin-bottom: 1.5rem; }
-        
-        .mobile-excellence-wrapper {
-            display: flex;
-            align-items: flex-start;
-            gap: 15px;
+        .welcome-section {
+            padding: 80px 0 60px;
+            text-align: center;
         }
-        
-        .mobile-img-col {
-            flex: 0 0 40%;
-            max-width: 40%;
+        .section-subtitle {
+            justify-content: center;
+            margin-bottom: 20px;
         }
-        
-        .mobile-grid-col {
-            flex: 0 0 60%;
-            max-width: 60%;
+        .welcome-heading .line-1 {
+            font-size: 2.2rem;
         }
-
+        .welcome-heading .line-2 {
+            font-size: 1.3rem;
+        }
         .welcome-img-card {
-            border-radius: 25px;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            margin: 0 auto 20px;
+            max-width: 280px;
+            aspect-ratio: 1/1;
+            border-radius: 30px;
         }
-
+        .direct-line-card {
+            margin-top: 15px;
+            margin-bottom: 45px;
+            padding: 18px;
+        }
         .excellence-grid-row {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
         }
-
+        .excellence-grid-item {
+            width: 100% !important;
+        }
         .excellence-card {
-            padding: 12px;
-            gap: 10px;
-            border-radius: 15px;
+            flex-direction: column;
+            text-align: center;
+            padding: 20px 15px;
+            gap: 12px;
+            border-radius: 24px;
         }
-
         .excellence-icon {
-            width: 35px;
-            height: 35px;
-            font-size: 1rem;
-            border-radius: 8px;
+            margin: 0 auto;
+            width: 50px;
+            height: 50px;
+            font-size: 1.4rem;
         }
-
         .excellence-content h6 {
-            font-size: 0.9rem;
-            margin-bottom: 0;
+            font-size: 1rem;
+            margin-bottom: 4px;
         }
-
         .excellence-content p {
-            display: none;
+            font-size: 0.8rem;
+            line-height: 1.4;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .excellence-grid-row {
+            grid-template-columns: 1fr;
+        }
+        .excellence-card {
+            flex-direction: row;
+            text-align: left;
+            padding: 15px;
+        }
+        .excellence-icon {
+            margin: 0;
+            width: 45px;
+            height: 45px;
         }
     }
 
@@ -201,6 +218,95 @@
             width: calc(33.333% - 14px);
         }
     }
+
+    /* Direct Line to Director Styles */
+    .direct-line-card {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        padding: 20px 25px;
+        border-radius: 25px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        margin-top: 25px; /* Added top margin instead of bottom */
+        color: white;
+        box-shadow: 0 15px 35px rgba(251, 126, 156, 0.25);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        text-decoration: none !important;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        width: 100%;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .direct-line-card:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 30px 60px rgba(30, 60, 114, 0.3);
+        color: white;
+    }
+
+    .direct-line-icon {
+        width: 70px;
+        height: 70px;
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(5px);
+        border-radius: 22px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.2rem;
+        position: relative;
+    }
+
+    .direct-line-icon::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 22px;
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        animation: pulse-border 2s infinite;
+    }
+
+    @keyframes pulse-border {
+        0% { transform: scale(1); opacity: 1; }
+        100% { transform: scale(1.5); opacity: 0; }
+    }
+
+    .direct-line-content .direct-label {
+        display: block;
+        font-size: 0.95rem;
+        font-weight: 500;
+        opacity: 0.9;
+        margin-bottom: 5px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .direct-line-content .direct-number {
+        display: block;
+        font-size: 1.8rem;
+        font-weight: 800;
+        margin: 0;
+        letter-spacing: 1.5px;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    @media (max-width: 576px) {
+        .direct-line-card {
+            padding: 20px;
+            gap: 15px;
+            max-width: 100%;
+        }
+        .direct-line-icon {
+            width: 55px;
+            height: 55px;
+            font-size: 1.6rem;
+        }
+        .direct-line-content .direct-number {
+            font-size: 1.4rem;
+        }
+    }
 </style>
 
 <section class="welcome-section">
@@ -212,6 +318,17 @@
                     <div class="welcome-img-card">
                         <img src="<?= base_url('uploads/director/pa.png') ?>" alt="Director SKJ">
                     </div>
+                    
+                    <!-- Direct Line (Desktop) -->
+                    <a href="tel:0989789705" class="direct-line-card wow fadeInUp" data-wow-delay="0.5s">
+                        <div class="direct-line-icon">
+                            <i class="bi bi-telephone-outbound-fill"></i>
+                        </div>
+                        <div class="direct-line-content">
+                            <span class="direct-label">สายตรงถึงผู้บริหารสถานศึกษา</span>
+                            <h3 class="direct-number">098-978-9705</h3>
+                        </div>
+                    </a>
                 </div>
             </div>
 
@@ -233,6 +350,17 @@
                         <div class="welcome-img-card">
                             <img src="<?= base_url('uploads/director/pa.png') ?>" alt="Director SKJ">
                         </div>
+
+                        <!-- Direct Line (Mobile) -->
+                        <a href="tel:0989789705" class="direct-line-card wow fadeInUp" data-wow-delay="0.5s" style="margin-bottom: 35px;">
+                            <div class="direct-line-icon">
+                                <i class="bi bi-telephone-outbound-fill"></i>
+                            </div>
+                            <div class="direct-line-content">
+                                <span class="direct-label">สายตรงถึงผู้บริหารสถานศึกษา</span>
+                                <h3 class="direct-number">098-978-9705</h3>
+                            </div>
+                        </a>
                     </div>
 
                     <!-- Excellence Grid -->

@@ -12,9 +12,16 @@ class ConAdminBanner extends \App\Controllers\BaseController
 
     public function BannerMain()
     {        
+        // อัปเดตสถานะแบนเนอร์ที่หมดอายุให้เป็น 'off' โดยอัตโนมัติ
+        $this->BannerModel->where('banner_end_date !=', null)
+                          ->where('banner_end_date <', date('Y-m-d'))
+                          ->where('banner_status', 'on')
+                          ->set(['banner_status' => 'off'])
+                          ->update();
+
         $data['title'] = "แบนเนอร์ประชาสัมพันธ์";
         $data['description'] = "รวมแบนเนอร์ประชาสัมพันธ์ กิจกรรมต่าง ๆ ของโรงเรียน";
-        $data['banner'] = $this->BannerModel->orderBy('banner_date','DESC')->get()->getResult();
+        $data['banner'] = $this->BannerModel->orderBy('banner_id','DESC')->get()->getResult();
         
         return view('Admin/PageAdminBanner/PageAdminBannerMain', array_merge($this->data, $data));
     }
@@ -42,71 +49,53 @@ class ConAdminBanner extends \App\Controllers\BaseController
         }
 
         $imageFile = $this->request->getFile('banner_img');
+        $imageMobileFile = $this->request->getFile('banner_img_mobile');
 
-        // กรณีมีไฟล์และถูกต้อง
-        if ($imageFile && $imageFile->isValid() && !$imageFile->hasMoved()) {
-            $RandomName = $imageFile->getRandomName();
+        $dataSave = [
+            'banner_name' => $this->request->getPost('banner_name'),
+            'banner_linkweb' => $this->request->getPost('banner_linkweb'),
+            'banner_date' => $this->request->getPost('banner_date'),
+            'banner_end_date' => $this->request->getPost('banner_end_date') ?: null,
+            'banner_status' => 'on',
+            'banner_personnel_id' => session('AdminID')
+        ];
 
-            try {
-                // Resize และบันทึกไฟล์
+        try {
+            // Handle Horizontal Image (JPG Fallback)
+            if ($imageFile && $imageFile->isValid() && !$imageFile->hasMoved()) {
+                $newName = $imageFile->getRandomName();
+                $jpgName = pathinfo($newName, PATHINFO_FILENAME) . '.jpg';
                 \Config\Services::image()
                     ->withFile($imageFile)
-                    ->resize(1920, 720, false, 'auto')
-                    ->save(FCPATH . '/uploads/banner/all/' . $RandomName);
-
-                $NameImg = $RandomName;
-
-                $dataSave = [
-                    'banner_img' => $NameImg,
-                    'banner_name' => $this->request->getPost('banner_name'),
-                    'banner_linkweb' => $this->request->getPost('banner_linkweb'),
-                    'banner_date' => $this->request->getPost('banner_date'),
-                    'banner_end_date' => $this->request->getPost('banner_end_date') ?: null,
-                    'banner_status' => 'on',
-                    'banner_personnel_id' => session('AdminID')
-                ];
-                $builder->insert($dataSave);
-                $insertID = $database->insertID();
-
-                return $this->response->setJSON([
-                    'status' => true,
-                    'message' => 'บันทึกแบนเนอร์สำเร็จ!',
-                    'banner_id' => $insertID,
-                    'data' => $dataSave
-                ]);
-            } catch (\Exception $e) {
-                return $this->response->setJSON([
-                    'status' => false,
-                    'message' => 'เกิดข้อผิดพลาดในการบันทึกภาพ: ' . $e->getMessage()
-                ]);
-            }
-        } 
-        
-        // กรณีไม่มีไฟล์หรือไฟล์ไม่ถูกต้อง
-        else {
-            // ตรวจสอบว่า Error เพราะอะไร
-            if ($imageFile && $imageFile->getError() !== UPLOAD_ERR_NO_FILE) {
-                return $this->response->setJSON([
-                    'status' => false,
-                    'message' => 'ไม่สามารถอัปโหลดไฟล์ได้ (Error Code: ' . $imageFile->getError() . ')'
-                ]);
+                    ->resize(1920, 822, false, 'auto')
+                    ->save(FCPATH . 'uploads/banner/all/' . $jpgName, 85); // Save as JPG with 85% quality
+                $dataSave['banner_img'] = $jpgName;
             }
 
-            // ถ้าแค่นี้ไม่มีไฟล์ ก็บันทึกเฉพาะข้อมูล
-            $dataSave = [
-                'banner_name' => $this->request->getPost('banner_name'),
-                'banner_linkweb' => $this->request->getPost('banner_linkweb'),
-                'banner_date' => $this->request->getPost('banner_date'),
-                'banner_end_date' => $this->request->getPost('banner_end_date') ?: null,
-                'banner_status' => 'on',
-                'banner_personnel_id' => session('AdminID')
-            ];
+            // Handle Vertical Image (JPG Fallback)
+            if ($imageMobileFile && $imageMobileFile->isValid() && !$imageMobileFile->hasMoved()) {
+                $newNameMobile = $imageMobileFile->getRandomName();
+                $jpgNameMobile = 'mobile_' . pathinfo($newNameMobile, PATHINFO_FILENAME) . '.jpg';
+                \Config\Services::image()
+                    ->withFile($imageMobileFile)
+                    ->resize(1080, 1920, false, 'auto')
+                    ->save(FCPATH . 'uploads/banner/all/' . $jpgNameMobile, 85);
+                $dataSave['banner_img_mobile'] = $jpgNameMobile;
+            }
+
             $builder->insert($dataSave);
+            $insertID = $database->insertID();
 
             return $this->response->setJSON([
                 'status' => true,
-                'message' => 'บันทึกแบนเนอร์ (ไม่มีรูป) สำเร็จ!',
+                'message' => 'บันทึกแบนเนอร์สำเร็จ! (รองรับ Responsive)',
+                'banner_id' => $insertID,
                 'data' => $dataSave
+            ]);
+        } catch (\Exception $e) {
+            return $this->response->setJSON([
+                'status' => false,
+                'message' => 'เกิดข้อผิดพลาดในการบันทึกภาพ: ' . $e->getMessage()
             ]);
         }
     }
@@ -126,74 +115,25 @@ class ConAdminBanner extends \App\Controllers\BaseController
         return $this->response->setJSON($data);
     }
 
-    public function NewsEdit(){
-        $KeyNewsid = $this->request->getPost('KeyNewsid');
-        $EditNews = $this->BannerModel->select('*,CAST(news_date AS DATE) AS news_dateNews')->where('news_id',$KeyNewsid)->get()->getResult();
-        echo json_encode($EditNews);
-        
-    }
-
-    public function NewsUpdate(){
-        $database = \Config\Database::connect();
-        $builder = $database->table('tb_news');
-        $id = $this->request->getPost('edit_news_id');
-        $sel_img = $this->BannerModel->select('news_img')->where('news_id',$id)->get()->getResult();
-        if($sel_img[0]->news_img != ''){
-            @unlink(("uploads/news/".$sel_img[0]->news_img));
-        }
-
-        $imageFile = $this->request->getFile('edit_news_img'); 
-        if($imageFile->getError() == 0){
-            $RandomName = $imageFile->getRandomName();
-
-            $image = \Config\Services::image()
-            ->withFile($imageFile)
-            ->resize(2560, 1440, true, 'height')
-            ->save(FCPATH.'/uploads/news/'. $RandomName);
-   
-            $data = [              
-               'news_img' => $RandomName,
-               'news_topic' =>  $this->request->getPost('edit_news_topic'),
-               'news_content' => $this->request->getPost('edit_news_content'),
-               'news_date' => $this->request->getPost('edit_news_date'),
-               'news_category' => $this->request->getPost('edit_news_category'),
-               'personnel_id' => session('AdminID')
-               ];
-                    $builder->where('news_id',  $this->request->getPost('edit_news_id'));
-            $save = $builder->update($data);
-           echo $save;
-        }else{
-            $data = [              
-                'news_topic' =>  $this->request->getPost('edit_news_topic'),
-                'news_content' => $this->request->getPost('edit_news_content'),
-                'news_date' => $this->request->getPost('edit_news_date'),
-                'news_category' => $this->request->getPost('edit_news_category'),
-                'personnel_id' => session('AdminID')
-                ];
-                    $builder->where('news_id',  $this->request->getPost('edit_news_id'));
-            $save = $builder->update($data);
-            echo $save;
-        }
-    }
+    // ลบโค้ดส่วนเกินที่ไม่ได้ใช้งานออก
 
     public function DeleteBanner(){
         $id = $this->request->getPost('KeyBannerid');
-        $sel_img = $this->BannerModel->select('banner_img')->where('banner_id',$id)->get()->getResult();
-        if($sel_img[0]->banner_img != ''){
-            @unlink("uploads/banner/all/".$sel_img[0]->banner_img);
+        $sel_img = $this->BannerModel->where('banner_id',$id)->first();
+        if($sel_img['banner_img'] != ''){
+            @unlink("uploads/banner/all/".$sel_img['banner_img']);
         }        
+        if($sel_img['banner_img_mobile'] != ''){
+            @unlink("uploads/banner/all/".$sel_img['banner_img_mobile']);
+        }
         $result = $this->BannerModel->delete(['banner_id' => $id]);        
         echo $result;
     }
 
     public function Updatebanner()
     {
-        // ตรวจสอบข้อมูล POST
         if (empty($this->request->getPost())) {
-            return $this->response->setJSON([
-                'status' => false,
-                'message' => 'ข้อมูลมีขนาดใหญ่เกินกว่าที่ Server กำหนด (post_max_size) กรุณาลดขนาดไฟล์'
-            ]);
+            return $this->response->setJSON(['status' => false, 'message' => 'ข้อมูลมีขนาดใหญ่เกินกว่าที่ Server กำหนด']);
         }
 
         $database = \Config\Database::connect();
@@ -201,7 +141,10 @@ class ConAdminBanner extends \App\Controllers\BaseController
 
         $id = $this->request->getPost('banner_id');
         $originalImg = $this->request->getPost('original_banner_img');
+        $originalImgMobile = $this->request->getPost('original_banner_img_mobile');
+        
         $imageFile = $this->request->getFile('banner_img');
+        $imageMobileFile = $this->request->getFile('banner_img_mobile');
 
         $dataUpdate = [
             'banner_name' => $this->request->getPost('banner_name'),
@@ -211,46 +154,47 @@ class ConAdminBanner extends \App\Controllers\BaseController
             'banner_personnel_id' => session('AdminID')
         ];
 
-        // Check if a new image is uploaded
-        if ($imageFile && $imageFile->isValid() && !$imageFile->hasMoved()) {
-            
-            // Delete old image if it exists
-            if ($originalImg && file_exists(FCPATH . 'uploads/banner/all/' . $originalImg)) {
-                @unlink(FCPATH . 'uploads/banner/all/' . $originalImg);
-            }
-
-            $RandomName = $imageFile->getRandomName();
-            try {
+        try {
+            // Update Horizontal Image (JPG Fallback)
+            if ($imageFile && $imageFile->isValid() && !$imageFile->hasMoved()) {
+                if ($originalImg && file_exists(FCPATH . 'uploads/banner/all/' . $originalImg)) {
+                    @unlink(FCPATH . 'uploads/banner/all/' . $originalImg);
+                }
+                $newName = $imageFile->getRandomName();
+                $jpgName = pathinfo($newName, PATHINFO_FILENAME) . '.jpg';
                 \Config\Services::image()
                     ->withFile($imageFile)
-                    ->resize(1920, 720, false, 'auto')
-                    ->save(FCPATH . '/uploads/banner/all/' . $RandomName);
-                
-                $dataUpdate['banner_img'] = $RandomName;
-            } catch (\Exception $e) {
-                // กรณีรูปพัง บันทึก Log ไว้ แต่ยังให้ทำการ Update ข้อมูลอื่นต่อไป
-                log_message('error', 'Update Banner Image Error: ' . $e->getMessage());
+                    ->resize(1920, 822, false, 'auto')
+                    ->save(FCPATH . 'uploads/banner/all/' . $jpgName, 85);
+                $dataUpdate['banner_img'] = $jpgName;
             }
-        } 
-        // เพิ่มการตรวจสอบ Error กรณีอัปเดต
-        else if ($imageFile && $imageFile->getError() !== UPLOAD_ERR_NO_FILE) {
-             return $this->response->setJSON([
-                'status' => false,
-                'message' => 'ไม่สามารถอัปโหลดรูปภาพได้ (Error Code: ' . $imageFile->getError() . ') - ไฟล์อาจมีขนาดใหญ่เกินไป'
+
+            // Update Mobile Image (JPG Fallback)
+            if ($imageMobileFile && $imageMobileFile->isValid() && !$imageMobileFile->hasMoved()) {
+                if ($originalImgMobile && file_exists(FCPATH . 'uploads/banner/all/' . $originalImgMobile)) {
+                    @unlink(FCPATH . 'uploads/banner/all/' . $originalImgMobile);
+                }
+                $newNameMobile = $imageMobileFile->getRandomName();
+                $jpgNameMobile = 'mobile_' . pathinfo($newNameMobile, PATHINFO_FILENAME) . '.jpg';
+                \Config\Services::image()
+                    ->withFile($imageMobileFile)
+                    ->resize(1080, 1920, false, 'auto')
+                    ->save(FCPATH . 'uploads/banner/all/' . $jpgNameMobile, 85);
+                $dataUpdate['banner_img_mobile'] = $jpgNameMobile;
+            }
+
+            $builder->where('banner_id', $id);
+            $update = $builder->update($dataUpdate);
+            $updatedData = $database->table('tb_banner')->where('banner_id', $id)->get()->getRowArray();
+
+            return $this->response->setJSON([
+                'status' => $update ? true : false,
+                'message' => $update ? 'อัปเดตแบนเนอร์สำเร็จ!' : 'อัปเดตแบนเนอร์ไม่สำเร็จ!',
+                'data' => $updatedData
             ]);
+        } catch (\Exception $e) {
+            return $this->response->setJSON(['status' => false, 'message' => 'Error: ' . $e->getMessage()]);
         }
-
-        $builder->where('banner_id', $id);
-        $update = $builder->update($dataUpdate);
-
-        // Fetch fresh data for UI update
-        $updatedData = $database->table('tb_banner')->where('banner_id', $id)->get()->getRowArray();
-
-        return $this->response->setJSON([
-            'status' => $update ? true : false,
-            'message' => $update ? 'อัปเดตแบนเนอร์สำเร็จ!' : 'อัปเดตแบนเนอร์ไม่สำเร็จ!',
-            'data' => $updatedData
-        ]);
     }
 
     public function CleanupImages()
@@ -258,12 +202,11 @@ class ConAdminBanner extends \App\Controllers\BaseController
         $database = \Config\Database::connect();
         $builder = $database->table('tb_banner');
         
-        $query = $builder->select('banner_img')->get()->getResultArray();
+        $query = $builder->select('banner_img, banner_img_mobile')->get()->getResultArray();
         $usedImages = [];
         foreach ($query as $row) {
-            if (!empty($row['banner_img'])) {
-                $usedImages[] = $row['banner_img'];
-            }
+            if (!empty($row['banner_img'])) $usedImages[] = $row['banner_img'];
+            if (!empty($row['banner_img_mobile'])) $usedImages[] = $row['banner_img_mobile'];
         }
 
         $folderPath = FCPATH . 'uploads/banner/all/';
