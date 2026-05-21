@@ -41,6 +41,13 @@
         }
     }
 
+    /* --- Tablet / iPad View (768px to 1199px) --- */
+    @media screen and (min-width: 768px) and (max-width: 1199px) {
+        .hero-carousel-wrapper {
+            padding: 110px 0 30px;
+        }
+    }
+
     /* --- Smartphone View --- */
     @media screen and (max-width: 767px) {
         .hero-carousel-wrapper {

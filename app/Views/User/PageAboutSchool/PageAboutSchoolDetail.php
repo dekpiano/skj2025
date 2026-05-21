@@ -197,7 +197,7 @@
 
                     <div class="mt-5 p-4 rounded-4" style="background: linear-gradient(45deg, #1a2a4d, #249ffd); color: #fff;">
                         <h6 class="fw-bold mb-3"><i class="bi bi-telephone-outbound-fill me-2"></i> สอบถามข้อมูลเพิ่มเติม</h6>
-                        <p class="small mb-0 opacity-75">โทร: 056-009-667</p>
+                        <p class="small mb-0 opacity-75">โทร: 056-200-765</p>
                         <p class="small mb-0 opacity-75">จันทร์ - ศุกร์ | 08.00 - 16.30 น.</p>
                     </div>
                 </aside>

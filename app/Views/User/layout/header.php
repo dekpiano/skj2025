@@ -249,11 +249,74 @@ gtag('config', 'G-4XVY09LWJ8');
     .header-guidance { background-image: url('<?= base_url('uploads/background/bg-guidance.jpg') ?>'); }
     .header-academic { background-image: url('<?= base_url('uploads/background/bg-academic.jpg') ?>'); }
 
-    @media (max-width: 767px) {
+    /* Unified Subpage Spacing overrides for Fixed Navbar on Tablet & Mobile (viewports < 1200px) */
+    @media (max-width: 1199px) {
+        /* Tablet & iPad View */
         .skj-page-header {
-            padding: 80px 20px;
+            padding: 110px 20px 70px !important;
+        }
+        .skj-page-header.detail-header {
+            margin-bottom: 0 !important;
+            padding-bottom: 80px !important;
+        }
+        .main-news-img-wrapper {
+            margin-top: 0 !important;
+        }
+        .container-fluid.page-header.py-5 {
+            padding-top: 110px !important;
+            padding-bottom: 60px !important;
+        }
+        .board-container, 
+        .botany-container, 
+        .botany-detail-container {
+            padding-top: 120px !important;
+            padding-bottom: 80px !important;
+        }
+        .news-header, 
+        .course-header, 
+        .group-header {
+            padding-top: 125px !important;
+            padding-bottom: 80px !important;
+        }
+        .news-detail-header {
+            padding-top: 120px !important;
+            padding-bottom: 40px !important;
+        }
+    }
+
+    @media (max-width: 767px) {
+        /* Smartphone View */
+        .skj-page-header {
+            padding: 100px 20px 60px !important;
             border-radius: 0 0 40px 40px;
             background-attachment: scroll;
+        }
+        .skj-page-header.detail-header {
+            margin-bottom: 0 !important;
+            padding-bottom: 50px !important;
+        }
+        .main-news-img-wrapper {
+            margin-top: 0 !important;
+        }
+        .container-fluid.page-header.py-5 {
+            padding-top: 95px !important;
+            padding-bottom: 50px !important;
+        }
+        .board-container, 
+        .botany-container, 
+        .botany-detail-container {
+            padding-top: 100px !important;
+            padding-bottom: 60px !important;
+        }
+        .news-header, 
+        .course-header, 
+        .group-header {
+            padding-top: 105px !important;
+            padding-bottom: 60px !important;
+        }
+        .news-detail-header {
+            padding-top: 100px !important;
+            padding-bottom: 30px !important;
         }
     }
     </style>
