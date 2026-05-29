@@ -49,29 +49,52 @@
             font-size: 0.9rem;
         }
         .btn-google {
-            background: #fff;
-            color: #444;
-            border: 1px solid #ddd;
-            padding: 12px 20px;
+            background: linear-gradient(135deg, #4285F4 0%, #357ae8 100%);
+            color: #ffffff !important;
+            border: none;
+            padding: 14px 24px;
             border-radius: 30px;
-            font-weight: 600;
+            font-weight: 700;
+            font-size: 1.05rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            transition: all 0.3s ease;
+            gap: 12px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             text-decoration: none;
             width: 100%;
+            box-shadow: 0 8px 25px rgba(66, 133, 244, 0.35);
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-google::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.25) 50%, rgba(255,255,255,0) 100%);
+            transform: translateX(-100%);
+            transition: all 0.6s ease;
+        }
+        .btn-google:hover::before {
+            transform: translateX(100%);
         }
         .btn-google:hover {
-            background: #f8f9fa;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            border-color: #4f46e5;
-            color: #4f46e5;
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 30px rgba(66, 133, 244, 0.5);
+            color: #ffffff !important;
+        }
+        .btn-google:active {
+            transform: translateY(-1px);
         }
         .btn-google img {
-            width: 20px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            padding: 3px;
+            border-radius: 50%;
         }
         .back-home {
             margin-top: 20px;
@@ -92,15 +115,40 @@
     <h3 class="login-title">ระบบสารสนเทศ EIS</h3>
     <p class="login-subtitle">Suankularb Wittayalai (Jiraprawat) Nakhon Sawan</p>
     
-    <div class="py-3 border-top border-bottom mb-4">
-        <p class="text-secondary small mb-2 fw-semibold"><i class="bi bi-shield-check text-primary"></i> ยินดีต้อนรับสู่ระบบ EIS</p>
-        <p class="text-muted extra-small" style="font-size: 0.75rem; line-height: 1.4;">(สำหรับผู้บริหารสถานศึกษา และบุคลากรสายสนับสนุน)</p>
+    <div class="mb-4">
+        <!-- Target Audience Banner -->
+        <div class="card border-0 mb-3 p-3 text-start" style="background: rgba(79, 70, 229, 0.06); border-radius: 12px; border: 1px solid rgba(79, 70, 229, 0.15) !important;">
+            <div class="d-flex align-items-center mb-2">
+                <div class="text-white rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 28px; height: 28px; background: linear-gradient(135deg, #003366 0%, #4f46e5 100%);">
+                    <i class="bi bi-shield-lock" style="font-size: 0.9rem;"></i>
+                </div>
+                <h6 class="mb-0 fw-bold text-dark" style="font-size: 0.9rem; letter-spacing: 0.3px;">เข้าใช้งานเฉพาะกลุ่มบุคคล</h6>
+            </div>
+            <p class="text-secondary mb-1 small" style="font-size: 0.8rem; line-height: 1.4;">
+                <i class="bi bi-check-circle-fill text-success me-1"></i> <strong>ผู้บริหารสถานศึกษา</strong> (ผู้บริหาร / รักษาการ)
+            </p>
+            <p class="text-secondary mb-0 small" style="font-size: 0.8rem; line-height: 1.4;">
+                <i class="bi bi-check-circle-fill text-success me-1"></i> <strong>บุคลากรฝ่ายสนับสนุน</strong> (ธุรการ, พนักงาน, เจ้าหน้าที่)
+            </p>
+        </div>
+
+        <!-- Teacher Warning Banner -->
+        <div class="alert alert-warning border-0 p-3 text-start mb-0" style="background: rgba(255, 193, 7, 0.08); border-radius: 12px; border: 1px solid rgba(255, 193, 7, 0.25) !important;">
+            <div class="d-flex align-items-center mb-1">
+                <i class="bi bi-exclamation-triangle-fill text-warning me-2" style="font-size: 1.1rem;"></i>
+                <h6 class="alert-heading mb-0 fw-bold text-dark" style="font-size: 0.85rem;">คำชี้แจงสำหรับครูผู้สอน!</h6>
+            </div>
+            <p class="mb-0 text-muted small" style="font-size: 0.78rem; line-height: 1.4;">
+                ระบบนี้<strong>ไม่ใช่สำหรับครูผู้สอน</strong> หากท่านเป็นครูผู้สอน กรุณาลงชื่อเข้าใช้งานที่ 
+                <a href="https://teacher.skj.ac.th/" target="_blank" class="fw-bold text-primary text-decoration-underline">ระบบครูผู้สอน (Teacher)</a>
+            </p>
+        </div>
     </div>
 
     <!-- ปุ่ม Google แบบ Redirect Flow (Legacy + Safe for your current Client ID) -->
     <a href="<?= base_url('SkjMain/googleLogin') ?>" class="btn-google">
         <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="Google">
-        เข้าสู่ระบบด้วย Google
+        เข้าสู่ระบบด้วย อีเมล @skj.ac.th
     </a>
 
     <?php if (session()->getFlashdata('msg')) : ?>

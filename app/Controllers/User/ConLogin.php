@@ -110,7 +110,7 @@ class ConLogin extends BaseController
         $db = \Config\Database::connect();
         $personnelDb = \Config\Database::connect('personnal');
 
-        // ตรวจสอบบุคลากรระดับผู้บริหาร
+        // ตรวจสอบบุคลากรจาก tb_personnel
         $personnelData = $personnelDb->table('tb_personnel')
             ->groupStart()
                 ->where('pers_username', $userEmail)
@@ -119,8 +119,15 @@ class ConLogin extends BaseController
             ->where('pers_status', 'กำลังใช้งาน')
             ->get()->getRowArray();
         
+        // ตรวจสอบตำแหน่งตาม pers_position
+        // posi_001, posi_002 = ผู้บริหาร
+        // posi_003 - posi_006 = ครูผู้สอน (ไม่อนุญาตเข้าระบบนี้)
+        // posi_007 ขึ้นไป = ฝ่ายสนับสนุน
         $executivePositions = ['posi_001', 'posi_002'];
+        $teacherPositions   = ['posi_003', 'posi_004', 'posi_005', 'posi_006'];
+
         if ($personnelData && in_array($personnelData['pers_position'], $executivePositions)) {
+            // ผู้บริหาร -> Manager Dashboard
             session()->set([
                 'AdminID'       => 'P' . $personnelData['pers_id'],
                 'AdminFullname' => $personnelData['pers_firstname'] . ' ' . $personnelData['pers_lastname'],
@@ -131,8 +138,12 @@ class ConLogin extends BaseController
                 'personnel'     => $personnelData
             ]);
             return redirect()->to('/Manager/Dashboard');
-        } elseif ($personnelData && (empty($personnelData['pers_learning']) || $personnelData['pers_learning'] == '-' || $personnelData['pers_learning'] == '0')) {
-            // Support Staff Google redirection
+        } elseif ($personnelData && in_array($personnelData['pers_position'], $teacherPositions)) {
+            // ครูผู้สอน -> ไม่อนุญาตเข้าระบบนี้
+            session()->setFlashdata('msg', 'ระบบนี้สำหรับผู้บริหารและฝ่ายสนับสนุนเท่านั้น ครูผู้สอนกรุณาใช้ระบบ Teacher');
+            return redirect()->to('/Login/LoginAdmin');
+        } elseif ($personnelData && !in_array($personnelData['pers_position'], $executivePositions) && !in_array($personnelData['pers_position'], $teacherPositions)) {
+            // ฝ่ายสนับสนุน (posi_007 ขึ้นไป) -> Support Dashboard
             session()->set([
                 'AdminID'       => 'P' . $personnelData['pers_id'],
                 'AdminFullname' => $personnelData['pers_firstname'] . ' ' . $personnelData['pers_lastname'],
@@ -184,7 +195,7 @@ class ConLogin extends BaseController
 
     public function LoginAdmin(){
         $session = session();
-        if (! $this->request->is('post')) {
+        if (strtolower($this->request->getMethod()) !== 'post') {
             return view('User/PageLogin');
         }
 
@@ -198,9 +209,16 @@ class ConLogin extends BaseController
                 ->where('pers_username', $username)
                 ->where('pers_status', 'กำลังใช้งาน')
                 ->get()->getRowArray();
-                
-            $executivePositions = ['posi_001', 'posi_002', 'posi_003', 'posi_004', 'posi_005']; 
+
+            // ตรวจสอบตำแหน่งตาม pers_position
+            // posi_001, posi_002 = ผู้บริหาร
+            // posi_003 - posi_006 = ครูผู้สอน (ไม่อนุญาตเข้าระบบนี้)
+            // posi_007 ขึ้นไป = ฝ่ายสนับสนุน
+            $executivePositions = ['posi_001', 'posi_002'];
+            $teacherPositions   = ['posi_003', 'posi_004', 'posi_005', 'posi_006'];
+
             if ($personnelData && in_array($personnelData['pers_position'], $executivePositions)) {
+                // ผู้บริหาร -> Manager Dashboard
                 if (password_verify($password, $personnelData['pers_password'] ?? '')) {
                     $session->set([
                         'AdminID'       => 'P' . $personnelData['pers_id'],
@@ -213,10 +231,12 @@ class ConLogin extends BaseController
                     ]);
                     return redirect()->to('/Manager/Dashboard');
                 }
-            }
-
-            // Support Staff traditional redirection
-            if ($personnelData && (empty($personnelData['pers_learning']) || $personnelData['pers_learning'] == '-' || $personnelData['pers_learning'] == '0')) {
+            } elseif ($personnelData && in_array($personnelData['pers_position'], $teacherPositions)) {
+                // ครูผู้สอน -> ไม่อนุญาตเข้าระบบนี้
+                $session->setFlashdata('msg', 'ระบบนี้สำหรับผู้บริหารและฝ่ายสนับสนุนเท่านั้น ครูผู้สอนกรุณาใช้ระบบ Teacher');
+                return redirect()->to('/Login/LoginAdmin');
+            } elseif ($personnelData && !in_array($personnelData['pers_position'], $executivePositions) && !in_array($personnelData['pers_position'], $teacherPositions)) {
+                // ฝ่ายสนับสนุน (posi_007 ขึ้นไป) -> Support Dashboard
                 if (password_verify($password, $personnelData['pers_password'] ?? '')) {
                     $session->set([
                         'AdminID'       => 'P' . $personnelData['pers_id'],

@@ -93,8 +93,13 @@
                         </div>
                         <div class="col-md-8 ps-md-4">
                             <h4 class="text-white fw-bold mb-1">สวัสดีครับ, <?= session('AdminFullname') ?> 👋</h4>
-                            <p class="mb-0 opacity-75">ยินดีต้อนรับสู่แดชบอร์ดผู้บริหาร ข้อมูลสรุปประจำวันที่ <?= date('d/m/Y') ?></p>
-                            <span class="badge bg-white text-primary mt-2">ปีการศึกษา <?= $schoolyear['schyear_year'] ?? '-' ?></span>
+                            <p class="mb-3 opacity-75">ยินดีต้อนรับสู่แดชบอร์ดผู้บริหาร ข้อมูลสรุปประจำวันที่ <?= date('d/m/Y') ?></p>
+                            <div class="d-flex flex-wrap gap-2 align-items-center">
+                                <span class="badge bg-white text-primary py-2 px-3">ปีการศึกษา <?= $schoolyear['schyear_year'] ?? '-' ?></span>
+                                <a href="<?= base_url('Manager/ManagerAttendance') ?>" class="btn btn-warning btn-md fw-bold px-4 shadow rounded-pill">
+                                    <i class="bx bx-time-five me-1 fs-5"></i> ลงเวลางานผู้บริหาร (Check-In)
+                                </a>
+                            </div>
                         </div>
                         <div class="col-md-3 text-end d-none d-md-block">
                              <a href="<?= base_url('logout') ?>" class="btn btn-outline-white btn-sm text-white border-white">
