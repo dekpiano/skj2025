@@ -216,6 +216,15 @@ $routes->group('Manager', ['filter' => 'permission:Manager,ผู้บริห
 });
 // 
 
+$routes->group('Support', ['filter' => 'permission:Support,ฝ่ายสนับสนุน', 'namespace' => 'App\Controllers\Support'], function ($routes) {
+    $routes->get('Dashboard', 'ConSupportAttendance::dashboard');
+    $routes->get('SupportAttendance', 'ConSupportAttendance::index');
+    $routes->post('SupportAttendance/checkin', 'ConSupportAttendance::checkInsert');
+    $routes->post('SupportAttendance/checkout', 'ConSupportAttendance::checkOut');
+    $routes->get('SupportAttendance/History', 'ConSupportAttendance::history');
+    $routes->get('SupportAttendance/Report', 'ConSupportAttendance::monthlyReport');
+});
+
 /*
 
  * --------------------------------------------------------------------

@@ -131,6 +131,18 @@ class ConLogin extends BaseController
                 'personnel'     => $personnelData
             ]);
             return redirect()->to('/Manager/Dashboard');
+        } elseif ($personnelData && (empty($personnelData['pers_learning']) || $personnelData['pers_learning'] == '-' || $personnelData['pers_learning'] == '0')) {
+            // Support Staff Google redirection
+            session()->set([
+                'AdminID'       => 'P' . $personnelData['pers_id'],
+                'AdminFullname' => $personnelData['pers_firstname'] . ' ' . $personnelData['pers_lastname'],
+                'AdminUsername' => $userEmail,
+                'AdminImage'    => $personnelData['pers_img'] ?? ($payload['picture'] ?? ''),
+                'isLoggedIn'    => true,
+                'roles'         => ['Support', 'ฝ่ายสนับสนุน'],
+                'personnel'     => $personnelData
+            ]);
+            return redirect()->to('/Support/Dashboard');
         }
 
         // ตรวจสอบข้อมูลในฐานข้อมูลแอดมินปกติ
@@ -159,6 +171,8 @@ class ConLogin extends BaseController
                 return redirect()->to('/SelectSystem');
             } elseif (in_array($role['role_name'], ['Manager', 'ผู้บริหาร', 'Executive', 'Executive View', 'ผู้อำนวยการ', 'รองผู้อำนวยการ'])) {
                 return redirect()->to('/Manager/Dashboard');
+            } elseif (in_array($role['role_name'], ['Support', 'ฝ่ายสนับสนุน'])) {
+                return redirect()->to('/Support/Dashboard');
             }
 
             return redirect()->to('/Admin/Dashboard');
@@ -200,6 +214,23 @@ class ConLogin extends BaseController
                     return redirect()->to('/Manager/Dashboard');
                 }
             }
+
+            // Support Staff traditional redirection
+            if ($personnelData && (empty($personnelData['pers_learning']) || $personnelData['pers_learning'] == '-' || $personnelData['pers_learning'] == '0')) {
+                if (password_verify($password, $personnelData['pers_password'] ?? '')) {
+                    $session->set([
+                        'AdminID'       => 'P' . $personnelData['pers_id'],
+                        'AdminFullname' => $personnelData['pers_firstname'] . ' ' . $personnelData['pers_lastname'],
+                        'AdminUsername' => $username,
+                        'AdminImage'    => $personnelData['pers_img'] ?? '',
+                        'isLoggedIn'    => true,
+                        'roles'         => ['Support', 'ฝ่ายสนับสนุน'],
+                        'personnel'     => $personnelData
+                    ]);
+                    return redirect()->to('/Support/Dashboard');
+                }
+            }
+
             $session->setFlashdata('msg', 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
             return redirect()->to('/Login/LoginAdmin');
         }
@@ -225,6 +256,7 @@ class ConLogin extends BaseController
             ]);
             if ($role['role_name'] === 'Super Admin') return redirect()->to('/SelectSystem');
             if (in_array($role['role_name'], ['Manager', 'ผู้บริหาร', 'Executive', 'Executive View', 'ผู้อำนวยการ', 'รองผู้อำนวยการ'])) return redirect()->to('/Manager/Dashboard');
+            if (in_array($role['role_name'], ['Support', 'ฝ่ายสนับสนุน'])) return redirect()->to('/Support/Dashboard');
             return redirect()->to('/Admin/Dashboard');
         }else{
             $session->setFlashdata('msg', 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');

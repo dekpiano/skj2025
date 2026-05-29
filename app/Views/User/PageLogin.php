@@ -37,7 +37,9 @@
             margin-bottom: 20px;
         }
         .login-title {
-            color: #FB7E9C;
+            background: linear-gradient(135deg, #003366 0%, #4f46e5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             font-weight: 700;
             margin-bottom: 10px;
         }
@@ -65,8 +67,8 @@
             background: #f8f9fa;
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            border-color: #FB7E9C;
-            color: #FB7E9C;
+            border-color: #4f46e5;
+            color: #4f46e5;
         }
         .btn-google img {
             width: 20px;
@@ -79,7 +81,7 @@
             font-size: 0.85rem;
         }
         .back-home:hover {
-            color: #249ffd;
+            color: #4f46e5;
         }
     </style>
 </head>
@@ -87,12 +89,12 @@
 
 <div class="login-card">
     <img src="<?= base_url('assets/img/logo/Logo-nav.png') ?>" alt="Logo" class="logo-img">
-    <h3 class="login-title">ระบบสารสนเทศผู้บริหาร</h3>
+    <h3 class="login-title">ระบบสารสนเทศ EIS</h3>
     <p class="login-subtitle">Suankularb Wittayalai (Jiraprawat) Nakhon Sawan</p>
     
     <div class="py-3 border-top border-bottom mb-4">
-        <p class="text-secondary small mb-2">ยินดีต้อนรับสู่ระบบ EIS</p>
-        <p class="text-muted extra-small" style="font-size: 0.7rem;">เข้าใช้งานด้วยบัญชี Google ของโรงเรียน</p>
+        <p class="text-secondary small mb-2 fw-semibold"><i class="bi bi-shield-check text-primary"></i> ยินดีต้อนรับสู่ระบบ EIS</p>
+        <p class="text-muted extra-small" style="font-size: 0.75rem; line-height: 1.4;">(สำหรับผู้บริหารสถานศึกษา และบุคลากรสายสนับสนุน)</p>
     </div>
 
     <!-- ปุ่ม Google แบบ Redirect Flow (Legacy + Safe for your current Client ID) -->
