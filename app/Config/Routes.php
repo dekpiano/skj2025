@@ -206,6 +206,13 @@ $routes->group('Manager', ['filter' => 'permission:Manager,ผู้บริห
     $routes->post('Evaluation/UploadChunk', 'ConManagerEvaluation::uploadChunk');
     $routes->get('Evaluation/Delete/(:num)', 'ConManagerEvaluation::deleteEvaluation/$1');
     $routes->post('Evaluation/UpdateStatus', 'ConManagerEvaluation::updateStatus');
+
+    // Executive Attendance
+    $routes->get('ManagerAttendance', 'ConManagerAttendance::index');
+    $routes->post('ManagerAttendance/checkin', 'ConManagerAttendance::checkInsert');
+    $routes->post('ManagerAttendance/checkout', 'ConManagerAttendance::checkOut');
+    $routes->get('ManagerAttendance/History', 'ConManagerAttendance::history');
+    $routes->get('ManagerAttendance/Report', 'ConManagerAttendance::monthlyReport');
 });
 // 
 

@@ -24,6 +24,26 @@
             </a>
         </li>
 
+        <!-- Executive Attendance -->
+        <li class="menu-item <?= ($uri->getSegment(2) == 'ManagerAttendance') ? 'active open' : '' ?>">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-time-five"></i>
+                <div data-i18n="Attendance">ลงเวลางานผู้บริหาร</div>
+            </a>
+            <ul class="menu-sub">
+                <li class="menu-item <?= ($uri->getSegment(2) == 'ManagerAttendance' && $uri->getTotalSegments() == 2) ? 'active' : '' ?>">
+                    <a href="<?= base_url('Manager/ManagerAttendance') ?>" class="menu-link">
+                        <div data-i18n="CheckIn">เช็คชื่อเข้างาน</div>
+                    </a>
+                </li>
+                <li class="menu-item <?= ($uri->getSegment(2) == 'ManagerAttendance' && $uri->getSegment(3) == 'History') ? 'active' : '' ?>">
+                    <a href="<?= base_url('Manager/ManagerAttendance/History') ?>" class="menu-link">
+                        <div data-i18n="AttendanceHistory">ประวัติลงเวลา</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
         <!-- Personnel -->
         <li class="menu-header small text-uppercase"><span class="menu-header-text">งานบุคลากร</span></li>
         <li class="menu-item <?= ($uri->getSegment(2) == 'Personnel') ? 'active' : '' ?>">
