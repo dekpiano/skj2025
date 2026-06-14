@@ -28,6 +28,6 @@
   };
 
   // Expose config to global scope if needed by other scripts
-  // window.config = config; // Uncomment this line if other scripts explicitly rely on window.config
+  window.config = config; // Uncomment this line if other scripts explicitly rely on window.config
 
 })();

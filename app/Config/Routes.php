@@ -140,6 +140,7 @@ $routes->group('Admin', ['filter' => 'permission', 'namespace' => 'App\Controlle
     // Admin Logs
     $routes->get('Logs', 'AdminLogs::index', ['filter' => 'permission:Super Admin']);
     $routes->get('Logs/Clean', 'AdminLogs::deleteOldLogs', ['filter' => 'permission:Super Admin']);
+    $routes->get('Logs/Export', 'AdminLogs::export', ['filter' => 'permission:Super Admin']);
 
     // Admin Settings
     $routes->get('Settings', 'ConAdminSettings::index', ['filter' => 'permission:Admin']);

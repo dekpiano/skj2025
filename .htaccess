@@ -57,3 +57,12 @@ Options All -Indexes
 # Disable server signature start
 	ServerSignature Off
 # Disable server signature end
+
+# Add mime types for fonts
+<IfModule mod_mime.c>
+    AddType application/font-woff .woff
+    AddType application/font-woff2 .woff2
+    AddType application/x-font-ttf .ttf
+    AddType application/vnd.ms-fontobject .eot
+</IfModule>
+
