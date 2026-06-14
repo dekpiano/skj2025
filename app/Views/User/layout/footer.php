@@ -3,10 +3,10 @@
 <style>
     .footer-main {
         background: linear-gradient(4deg, rgb(0 0 0 / 85%) 0%, rgb(0 145 255 / 85%) 100%), url(<?= base_url('uploads/background/bg-footer.png') ?>) center bottom no-repeat;
-    background-size: cover;
-    color: #fff;
-    position: relative;
-    overflow: hidden;
+        background-size: cover;
+        color: #fff;
+        position: relative;
+        overflow: hidden;
     }
 
     .footer-main::before {
@@ -15,7 +15,8 @@
         width: 100%;
         height: 85px;
         left: 0;
-        top: -1px; /* Overlap slightly with previous section */
+        top: -1px;
+        /* Overlap slightly with previous section */
         z-index: 1;
         background: url('<?= base_url('uploads/home/overlay-bottom.png') ?>') top center no-repeat;
         background-size: 100% 100%;
@@ -175,7 +176,7 @@
         left: 50%;
         transform: translateX(-50%);
         z-index: 30000;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         transition: all 0.3s ease;
         animation: chat-pulse 2s infinite;
         border: none;
@@ -188,10 +189,19 @@
     }
 
     @keyframes chat-pulse {
-        0% { box-shadow: 0 0 0 0 rgba(255, 105, 180, 0.7); }
-        70% { box-shadow: 0 0 0 15px rgba(255, 105, 180, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(255, 105, 180, 0); }
+        0% {
+            box-shadow: 0 0 0 0 rgba(255, 105, 180, 0.7);
+        }
+
+        70% {
+            box-shadow: 0 0 0 15px rgba(255, 105, 180, 0);
+        }
+
+        100% {
+            box-shadow: 0 0 0 0 rgba(255, 105, 180, 0);
+        }
     }
+
     .back-to-top {
         z-index: 30000 !important;
         width: 45px !important;
@@ -203,24 +213,29 @@
         box-shadow: 0 10px 20px rgba(251, 126, 156, 0.3);
     }
 </style>
-<a href="http://m.me/230288483730783" target="_blank" class="btn btn-primary messenger-fab px-3 py-1 rounded-pill d-flex align-items-center shadow-lg">
+<a href="http://m.me/230288483730783" target="_blank"
+    class="btn btn-primary messenger-fab px-3 py-1 rounded-pill d-flex align-items-center shadow-lg">
     <i class="fab fa-facebook-messenger me-2" style="font-size: 18px;"></i>
     <span class="fw-bold" style="font-size: 13px;">ติดต่อสอบถามที่นี่</span>
 </a>
 
-<div class="footer-main pt-5 wow fadeIn <?= (isset($festival_status) && $festival_status == 'on') ? 'snow-cap' : '' ?>" data-wow-delay="0.1s" style="padding-top: 100px !important;">
+<div class="footer-main pt-5 wow fadeIn <?= (isset($festival_status) && $festival_status == 'on') ? 'snow-cap' : '' ?>"
+    data-wow-delay="0.1s" style="padding-top: 100px !important;">
     <div class="container py-5">
         <div class="row g-5">
             <div class="col-lg-3 col-md-6">
                 <h5 class="footer-title">ติดต่อเรา</h5>
-                <p class="mb-3 text-white-50"><i class="bi bi-geo-alt-fill text-primary me-2"></i> 160 ม.1 ต.นครสวรรค์ออก อ.เมือง จ.นครสวรรค์ 60000</p>
+                <p class="mb-3 text-white-50"><i class="bi bi-geo-alt-fill text-primary me-2"></i> 160 ม.1
+                    ต.นครสวรรค์ออก อ.เมือง จ.นครสวรรค์ 60000</p>
                 <p class="mb-3 text-white-50"><i class="bi bi-telephone-fill text-primary me-2"></i> 056-200-765</p>
-                <p class="mb-4 text-white-50"><i class="bi bi-envelope-fill text-primary me-2"></i> skjns160@skj.ac.th</p>
-                
+                <p class="mb-4 text-white-50"><i class="bi bi-envelope-fill text-primary me-2"></i> skjns160@skj.ac.th
+                </p>
+
                 <h6 class="text-white mb-3 fw-bold">Social Media</h6>
                 <div class="d-flex">
                     <a class="social-btn" href="https://www.facebook.com/SKJNS160"><i class="fab fa-facebook-f"></i></a>
-                    <a class="social-btn" href="https://www.youtube.com/channel/UC7p4cQQuIFLyrF68p7JbWDw"><i class="fab fa-youtube"></i></a>
+                    <a class="social-btn" href="https://www.youtube.com/channel/UC7p4cQQuIFLyrF68p7JbWDw"><i
+                            class="fab fa-youtube"></i></a>
                 </div>
             </div>
 
@@ -228,25 +243,35 @@
                 <h5 class="footer-title">โรงเรียนเครือสวนกุหลาบวิทยาลัย</h5>
                 <div class="row">
                     <div class="col-md-6">
-                        <a class="footer-link" target="_blank" href="http://www.sk.ac.th/"><i class="bi bi-link-45deg me-1"></i> สวนกุหลาบวิทยาลัย</a>
-                        <a class="footer-link" target="_blank" href="http://www.skn.ac.th/"><i class="bi bi-link-45deg me-1"></i> สวนกุหลาบวิทยาลัย นนทบุรี</a>
-                        <a class="footer-link" target="_blank" href="http://www.skr.ac.th/"><i class="bi bi-link-45deg me-1"></i> สวนกุหลาบวิทยาลัย รังสิต</a>
-                        <a class="footer-link" target="_blank" href="http://www.sks.ac.th/"><i class="bi bi-link-45deg me-1"></i> นวมินทราชินูทิศ สวนกุหลาบวิทยาลัย สมุทรปราการ</a>
-                        <a class="footer-link" target="_blank" href="http://www.skp.ac.th/"><i class="bi bi-link-45deg me-1"></i> นวมินทราชินูทิศ สวนกุหลาบวิทยาลัย ปทุมธานี</a>
+                        <a class="footer-link" target="_blank" href="http://www.sk.ac.th/"><i
+                                class="bi bi-link-45deg me-1"></i> สวนกุหลาบวิทยาลัย</a>
+                        <a class="footer-link" target="_blank" href="http://www.skn.ac.th/"><i
+                                class="bi bi-link-45deg me-1"></i> สวนกุหลาบวิทยาลัย นนทบุรี</a>
+                        <a class="footer-link" target="_blank" href="http://www.skr.ac.th/"><i
+                                class="bi bi-link-45deg me-1"></i> สวนกุหลาบวิทยาลัย รังสิต</a>
+                        <a class="footer-link" target="_blank" href="http://www.sks.ac.th/"><i
+                                class="bi bi-link-45deg me-1"></i> นวมินทราชินูทิศ สวนกุหลาบวิทยาลัย สมุทรปราการ</a>
+                        <a class="footer-link" target="_blank" href="http://www.skp.ac.th/"><i
+                                class="bi bi-link-45deg me-1"></i> นวมินทราชินูทิศ สวนกุหลาบวิทยาลัย ปทุมธานี</a>
                     </div>
                     <div class="col-md-6">
-                        <a class="footer-link" target="_blank" href="http://www.skpb.ac.th/"><i class="bi bi-link-45deg me-1"></i> สวนกุหลาบวิทยาลัย เพชรบูรณ์</a>
-                        <a class="footer-link" target="_blank" href="https://www.sksb.ac.th/"><i class="bi bi-link-45deg me-1"></i> สวนกุหลาบวิทยาลัย สระบุรี</a>
-                        <a class="footer-link" target="_blank" href="http://www.suanchon.ac.th/"><i class="bi bi-link-45deg me-1"></i> สวนกุหลาบวิทยาลัย ชลบุรี</a>
-                        <a class="footer-link" target="_blank" href="http://www.skns.ac.th/"><i class="bi bi-link-45deg me-1"></i> สวนกุหลาบวิทยาลัย นครศรีธรรมราช</a>
-                        <a class="footer-link" target="_blank" href="http://www.sk-thonburi.ac.th/"><i class="bi bi-link-45deg me-1"></i> สวนกุหลาบวิทยาลัย ธนบุรี</a>
+                        <a class="footer-link" target="_blank" href="http://www.skpb.ac.th/"><i
+                                class="bi bi-link-45deg me-1"></i> สวนกุหลาบวิทยาลัย เพชรบูรณ์</a>
+                        <a class="footer-link" target="_blank" href="https://www.sksb.ac.th/"><i
+                                class="bi bi-link-45deg me-1"></i> สวนกุหลาบวิทยาลัย สระบุรี</a>
+                        <a class="footer-link" target="_blank" href="http://www.suanchon.ac.th/"><i
+                                class="bi bi-link-45deg me-1"></i> สวนกุหลาบวิทยาลัย ชลบุรี</a>
+                        <a class="footer-link" target="_blank" href="http://www.skns.ac.th/"><i
+                                class="bi bi-link-45deg me-1"></i> สวนกุหลาบวิทยาลัย นครศรีธรรมราช</a>
+                        <a class="footer-link" target="_blank" href="http://www.sk-thonburi.ac.th/"><i
+                                class="bi bi-link-45deg me-1"></i> สวนกุหลาบวิทยาลัย ธนบุรี</a>
                     </div>
                 </div>
             </div>
 
             <div class="col-lg-3 col-md-6">
                 <h5 class="footer-title">สถิติผู้เข้าชม</h5>
-                
+
                 <div class="visitor-card">
                     <div class="visitor-icon"><i class="bi bi-eye-fill"></i></div>
                     <div class="visitor-info">
@@ -254,7 +279,7 @@
                         <span><?= number_format($v['visitAll']) ?></span>
                     </div>
                 </div>
-                
+
                 <div class="visitor-card">
                     <div class="visitor-icon"><i class="bi bi-person-fill"></i></div>
                     <div class="visitor-info">
@@ -294,11 +319,14 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-md-6 text-center text-md-start mb-3 mb-md-0 fw-light text-white-50 small">
-                    &copy; <span class="text-white fw-bold">โรงเรียนเครือสวนกุหลาบวิทยาลัย (จิรประวัติ) นครสวรรค์</span>. All Rights Reserved.
+                    &copy; <span class="text-white fw-bold">โรงเรียนเครือสวนกุหลาบวิทยาลัย (จิรประวัติ)
+                        นครสวรรค์</span>. All Rights Reserved.
                 </div>
                 <div class="col-md-6 text-center text-md-end text-white-50 small">
-                    Author By <a href="https://www.facebook.com/dekpiano" class="text-primary text-decoration-none fw-bold">Dekpiano</a> | 
-                    <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal" class="text-white-50 text-decoration-none ms-2">Admin Login</a>
+                    Author By <a href="https://www.facebook.com/dekpiano"
+                        class="text-primary text-decoration-none fw-bold">Dekpiano</a> |
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal"
+                        class="text-white-50 text-decoration-none ms-2">Admin Login</a>
                 </div>
             </div>
         </div>
@@ -316,12 +344,12 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.0/js/bootstrap.min.js"></script>
-<script src="<?=base_url()?>/assets/lib/wow/wow.min.js"></script>
-<script src="<?=base_url()?>/assets/lib/easing/easing.min.js"></script>
-<script src="<?=base_url()?>/assets/lib/waypoints/waypoints.min.js"></script>
-<script src="<?=base_url()?>/assets/lib/counterup/counterup.min.js"></script>
+<script src="<?= base_url() ?>/assets/lib/wow/wow.min.js"></script>
+<script src="<?= base_url() ?>/assets/lib/easing/easing.min.js"></script>
+<script src="<?= base_url() ?>/assets/lib/waypoints/waypoints.min.js"></script>
+<script src="<?= base_url() ?>/assets/lib/counterup/counterup.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.carousel.min.js"></script>
-<script src="<?=base_url()?>/assets/lib/lightbox/js/lightbox.min.js"></script>
+<script src="<?= base_url() ?>/assets/lib/lightbox/js/lightbox.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"></script>
 
@@ -330,185 +358,185 @@
 <!-- Template Javascript -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
-<script src="<?=base_url()?>/assets/js/main.js?v=3"></script>
-<?php if($uri->getSegment(1) === "News"):?>
-<script src="<?=base_url()?>/assets/js/News/News.js?v=10.2"></script>
+<script src="<?= base_url() ?>/assets/js/main.js?v=3"></script>
+<?php if ($uri->getSegment(1) === "News"): ?>
+    <script src="<?= base_url() ?>/assets/js/News/News.js?v=10.2"></script>
 <?php endif; ?>
 
 <script>
-$(document).ready(function() {
-    // Cleanup grayscale states
-    localStorage.removeItem('grayscaleEnabled');
-    localStorage.removeItem('grayscale-mode');
-    $('html').css('filter', 'none').removeClass('grayscale-mode');
+    $(document).ready(function () {
+        // Cleanup grayscale states
+        localStorage.removeItem('grayscaleEnabled');
+        localStorage.removeItem('grayscale-mode');
+        $('html').css('filter', 'none').removeClass('grayscale-mode');
 
-    const observer = lozad('img[data-src]'); 
-    observer.observe();
+        const observer = lozad('img[data-src]');
+        observer.observe();
 
 
-    // SKJ News Slick Slider (Home Page)
-    if ($('#news-slick-slider').length) {
-        $('#news-slick-slider').slick({
-            centerMode: true,
-            centerPadding: '40px', 
-            slidesToShow: 5,
-            infinite: true,
-            autoplay: true,
-            autoplaySpeed: 3000,
-            pauseOnHover: true,
-            dots: true,
-            arrows: true,
-            responsive: [
-                {
-                    breakpoint: 1600,
-                    settings: {
-                        slidesToShow: 4,
-                        centerPadding: '40px'
+        // SKJ News Slick Slider (Home Page)
+        if ($('#news-slick-slider').length) {
+            $('#news-slick-slider').slick({
+                centerMode: true,
+                centerPadding: '40px',
+                slidesToShow: 5,
+                infinite: true,
+                autoplay: true,
+                autoplaySpeed: 3000,
+                pauseOnHover: true,
+                dots: true,
+                arrows: true,
+                responsive: [
+                    {
+                        breakpoint: 1600,
+                        settings: {
+                            slidesToShow: 4,
+                            centerPadding: '40px'
+                        }
+                    },
+                    {
+                        breakpoint: 1300,
+                        settings: {
+                            slidesToShow: 3,
+                            centerPadding: '40px'
+                        }
+                    },
+                    {
+                        breakpoint: 992,
+                        settings: {
+                            slidesToShow: 2,
+                            centerPadding: '40px'
+                        }
+                    },
+                    {
+                        breakpoint: 768,
+                        settings: {
+                            arrows: false,
+                            centerMode: true,
+                            centerPadding: '40px',
+                            slidesToShow: 2
+                        }
+                    },
+                    {
+                        breakpoint: 480,
+                        settings: {
+                            arrows: false,
+                            centerMode: true,
+                            centerPadding: '30px',
+                            slidesToShow: 1
+                        }
                     }
-                },
-                {
-                    breakpoint: 1300,
-                    settings: {
-                        slidesToShow: 3,
-                        centerPadding: '40px'
-                    }
-                },
-                {
-                    breakpoint: 992,
-                    settings: {
-                        slidesToShow: 2,
-                        centerPadding: '40px'
-                    }
-                },
-                {
-                    breakpoint: 768,
-                    settings: {
-                        arrows: false,
-                        centerMode: true,
-                        centerPadding: '40px',
-                        slidesToShow: 2
-                    }
-                },
-                {
-                    breakpoint: 480,
-                    settings: {
-                        arrows: false,
-                        centerMode: true,
-                        centerPadding: '30px',
-                        slidesToShow: 1
-                    }
-                }
-            ]
-        });
-    }
+                ]
+            });
+        }
 
-    // SKJ News Reward Slick Slider
-    if ($('#news-reward-slick-slider').length) {
-        $('#news-reward-slick-slider').slick({
-            centerMode: true,
-            centerPadding: '40px',
-            slidesToShow: 5,
-            infinite: true,
-            autoplay: true,
-            autoplaySpeed: 3500,
-            pauseOnHover: true,
-            dots: true,
-            arrows: true,
-            responsive: [
-                {
-                    breakpoint: 1600,
-                    settings: {
-                        slidesToShow: 4,
-                        centerPadding: '40px'
+        // SKJ News Reward Slick Slider
+        if ($('#news-reward-slick-slider').length) {
+            $('#news-reward-slick-slider').slick({
+                centerMode: true,
+                centerPadding: '40px',
+                slidesToShow: 5,
+                infinite: true,
+                autoplay: true,
+                autoplaySpeed: 3500,
+                pauseOnHover: true,
+                dots: true,
+                arrows: true,
+                responsive: [
+                    {
+                        breakpoint: 1600,
+                        settings: {
+                            slidesToShow: 4,
+                            centerPadding: '40px'
+                        }
+                    },
+                    {
+                        breakpoint: 1300,
+                        settings: {
+                            slidesToShow: 3,
+                            centerPadding: '40px'
+                        }
+                    },
+                    {
+                        breakpoint: 992,
+                        settings: {
+                            slidesToShow: 2,
+                            centerPadding: '40px'
+                        }
+                    },
+                    {
+                        breakpoint: 768,
+                        settings: {
+                            arrows: false,
+                            centerMode: true,
+                            centerPadding: '40px',
+                            slidesToShow: 2
+                        }
+                    },
+                    {
+                        breakpoint: 480,
+                        settings: {
+                            arrows: false,
+                            centerMode: true,
+                            centerPadding: '30px',
+                            slidesToShow: 1
+                        }
                     }
-                },
-                {
-                    breakpoint: 1300,
-                    settings: {
-                        slidesToShow: 3,
-                        centerPadding: '40px'
-                    }
-                },
-                {
-                    breakpoint: 992,
-                    settings: {
-                        slidesToShow: 2,
-                        centerPadding: '40px'
-                    }
-                },
-                {
-                    breakpoint: 768,
-                    settings: {
-                        arrows: false,
-                        centerMode: true,
-                        centerPadding: '40px',
-                        slidesToShow: 2
-                    }
-                },
-                {
-                    breakpoint: 480,
-                    settings: {
-                        arrows: false,
-                        centerMode: true,
-                        centerPadding: '30px',
-                        slidesToShow: 1
-                    }
-                }
-            ]
-        });
-    }
+                ]
+            });
+        }
 
-    // SKJ Main Banner Slick Slider (Wider Luxurious Peek Mode)
-    if ($('#main-banner-slick').length) {
-        $('#main-banner-slick').slick({
-            centerMode: true,
-            centerPadding: '5%',
-            slidesToShow: 1,
-            dots: true,
-            infinite: true,
-            speed: 800,
-            autoplay: true,
-            autoplaySpeed: 4000,
-            pauseOnHover: false,
-            arrows: true,
-            responsive: [
-                {
-                    breakpoint: 1200,
-                    settings: {
-                        centerPadding: '4%'
+        // SKJ Main Banner Slick Slider (Wider Luxurious Peek Mode)
+        if ($('#main-banner-slick').length) {
+            $('#main-banner-slick').slick({
+                centerMode: true,
+                centerPadding: '5%',
+                slidesToShow: 1,
+                dots: true,
+                infinite: true,
+                speed: 800,
+                autoplay: true,
+                autoplaySpeed: 4000,
+                pauseOnHover: false,
+                arrows: true,
+                responsive: [
+                    {
+                        breakpoint: 1200,
+                        settings: {
+                            centerPadding: '4%'
+                        }
+                    },
+                    {
+                        breakpoint: 768,
+                        settings: {
+                            centerPadding: '30px',
+                            arrows: false
+                        }
                     }
-                },
-                {
-                    breakpoint: 768,
-                    settings: {
-                        centerPadding: '30px',
-                        arrows: false
-                    }
-                }
-            ]
-        });
-    }
+                ]
+            });
+        }
 
-    // fallback for other news sliders using the class if any
-    if ($(".news-slider").not('#news-slick-slider, #news-reward-slick-slider').length) {
-        $(".news-slider").not('#news-slick-slider, #news-reward-slick-slider').owlCarousel({
-            items : 3,
-            itemsDesktop:[1199,3],
-            itemsDesktopSmall:[980,2],
-            itemsMobile : [600,1],
-            pagination:true,
-            autoPlay:true
-        });
-    }
-});
+        // fallback for other news sliders using the class if any
+        if ($(".news-slider").not('#news-slick-slider, #news-reward-slick-slider').length) {
+            $(".news-slider").not('#news-slick-slider, #news-reward-slick-slider').owlCarousel({
+                items: 3,
+                itemsDesktop: [1199, 3],
+                itemsDesktopSmall: [980, 2],
+                itemsMobile: [600, 1],
+                pagination: true,
+                autoPlay: true
+            });
+        }
+    });
 
-$('#TBProcurements').DataTable(
-    {
-        order: [[0, 'desc']]
-    }
-);
+    $('#TBProcurements').DataTable(
+        {
+            order: [[0, 'desc']]
+        }
+    );
 </script>
-<?php if (session()->getFlashdata('msg')) : ?>
+<?php if (session()->getFlashdata('msg')): ?>
     <script>
         Swal.fire({
             icon: 'error',
@@ -517,25 +545,8 @@ $('#TBProcurements').DataTable(
         })
     </script>
 <?php endif; ?>
-<?php if($uri->getSegment(1) == ''): // Only run on homepage ?>
-<script>
-$(document).ready(function() {
-    // Check if the modal has been shown before
-    if (localStorage.getItem('welcomeModalShown') !== 'true') {
-        // The modal HTML is in PageHomeMain.php, check if it exists
-        if ($('#welcomeModal').length) {
-            var welcomeModal = new bootstrap.Modal(document.getElementById('welcomeModal'), {
-                keyboard: false
-            });
-            welcomeModal.show();
 
-            // Set a flag in localStorage so it doesn't show again
-            localStorage.setItem('welcomeModalShown', 'true');
-        }
-    }
-});
-</script>
-<?php endif; ?>
+
 </body>
 
 </html>
@@ -551,7 +562,7 @@ $(document).ready(function() {
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="<?=base_url('Login/LoginAdmin')?>" method="post">
+                <form action="<?= base_url('Login/LoginAdmin') ?>" method="post">
                     <div class="form-floating mb-2">
                         <input type="text" class="form-control" id="Username" name="Username"
                             placeholder="name@example.com">
@@ -570,18 +581,18 @@ $(document).ready(function() {
     </div>
 </div>
 
- <!-- Modal -->
- <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-sm">
-            <div class="modal-content">
-              
-                <div class="modal-body">
-                    <!-- ปุ่มสำหรับล็อกอินผ่าน Google -->
-                    <a href="<?= base_url('SkjMain/googleLogin') ?>" class="btn btn-danger btn-block w-100">
-                        <i class="fab fa-google"></i> เข้าสู่ระบบด้วย Google
-                    </a>
-                </div>
-               
+<!-- Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <!-- ปุ่มสำหรับล็อกอินผ่าน Google -->
+                <a href="<?= base_url('SkjMain/googleLogin') ?>" class="btn btn-danger btn-block w-100">
+                    <i class="fab fa-google"></i> เข้าสู่ระบบด้วย Google
+                </a>
             </div>
+
         </div>
     </div>
+</div>

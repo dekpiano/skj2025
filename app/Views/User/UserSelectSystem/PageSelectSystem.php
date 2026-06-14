@@ -72,6 +72,7 @@
         }
         .system-card.admin .icon { background: linear-gradient(135deg, #696cff 0%, #5a5fc9 100%); }
         .system-card.manager .icon { background: linear-gradient(135deg, #ff9f43 0%, #e88e2e 100%); }
+        .system-card.support .icon { background: linear-gradient(135deg, #03c3ec 0%, #00b0d6 100%); }
         
         .system-card h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 10px; color: #333 !important; }
         .system-card p { color: #697a8d !important; font-size: 0.9rem; margin-bottom: 20px; }
@@ -87,6 +88,8 @@
         .system-card.admin .btn-enter:hover { background: #5a5fc9; }
         .system-card.manager .btn-enter { background: #ff9f43; color: white; }
         .system-card.manager .btn-enter:hover { background: #e88e2e; }
+        .system-card.support .btn-enter { background: #03c3ec; color: white; }
+        .system-card.support .btn-enter:hover { background: #00b0d6; }
 
         .logout-link {
             text-align: center;
@@ -122,6 +125,14 @@
                 <div class="icon"><i class="bx bx-bar-chart-alt-2"></i></div>
                 <h3>ระบบผู้บริหาร</h3>
                 <p>ดูภาพรวมบุคลากร วิชาการ และงานบริหารทั่วไป</p>
+                <span class="btn-enter">เข้าสู่ระบบ <i class="bx bx-right-arrow-alt"></i></span>
+            </a>
+
+            <!-- Support System -->
+            <a href="<?= base_url('Support/Dashboard') ?>" class="system-card support">
+                <div class="icon"><i class="bx bx-support"></i></div>
+                <h3>ระบบฝ่ายสนับสนุน</h3>
+                <p>จัดการข้อมูลงานฝ่ายสนับสนุนและภาระหน้าที่ต่างๆ</p>
                 <span class="btn-enter">เข้าสู่ระบบ <i class="bx bx-right-arrow-alt"></i></span>
             </a>
         </div>

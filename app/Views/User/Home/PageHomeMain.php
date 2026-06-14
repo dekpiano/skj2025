@@ -329,12 +329,66 @@
 
 
 <!-- Welcome Modal -->
+<?php if (isset($welcome_modal_status) && $welcome_modal_status == 'on' && !empty($welcome_modal_images) && is_array($welcome_modal_images)): ?>
 <div class="modal fade" id="welcomeModal" tabindex="-1" aria-labelledby="welcomeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-body text-center">
-                <img src="<?php echo base_url('uploads/24 ตุลาคม ไว้อาลัยพระพันปีหลวง.png'); ?>" class="img-fluid" alt="ประกาศ">
+        <div class="modal-content border-0 bg-transparent position-relative">
+            <div class="modal-body text-center p-0 overflow-hidden rounded-3 shadow-lg" style="background-color: transparent;">
+                <?php if (count($welcome_modal_images) == 1): ?>
+                    <img src="<?php echo base_url('uploads/welcome/' . $welcome_modal_images[0]); ?>" class="img-fluid rounded-3" alt="ประกาศ">
+                <?php else: ?>
+                    <div id="welcomeCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3500">
+                        <!-- Indicators -->
+                        <div class="carousel-indicators">
+                             <?php foreach ($welcome_modal_images as $index => $img): ?>
+                                 <button type="button" data-bs-target="#welcomeCarousel" data-bs-slide-to="<?= $index ?>" class="<?= $index === 0 ? 'active' : '' ?>" aria-current="<?= $index === 0 ? 'true' : 'false' ?>"></button>
+                             <?php endforeach; ?>
+                        </div>
+                        
+                        <!-- Slides -->
+                        <div class="carousel-inner rounded-3">
+                            <?php foreach ($welcome_modal_images as $index => $img): ?>
+                                <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
+                                    <img src="<?php echo base_url('uploads/welcome/' . $img); ?>" class="d-block w-100 img-fluid" alt="ประกาศ <?= $index + 1 ?>">
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                        
+                        <!-- Controls -->
+                        <button class="carousel-control-prev" type="button" data-bs-target="#welcomeCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#welcomeCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                <?php endif; ?>
             </div>
+            <!-- Close Button Overlay -->
+            <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" aria-label="Close" style="z-index: 1055; filter: drop-shadow(0px 2px 5px rgba(0,0,0,0.5));"></button>
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var welcomeModalEl = document.getElementById('welcomeModal');
+        if (welcomeModalEl) {
+            // ตรวจสอบว่าในวันนี้เคยแสดงป๊อปอัปไปแล้วหรือยัง
+            var today = new Date().toDateString(); // ดึงวันที่ปัจจุบัน (เช่น "Sun Jun 14 2026")
+            var lastShown = localStorage.getItem('welcome_modal_last_shown');
+            
+            if (lastShown !== today) {
+                var welcomeModal = new bootstrap.Modal(welcomeModalEl, {
+                    keyboard: false
+                });
+                welcomeModal.show();
+                
+                // บันทึกสถานะว่าแสดงในวันนี้แล้ว
+                localStorage.setItem('welcome_modal_last_shown', today);
+            }
+        }
+    });
+</script>
+<?php endif; ?>

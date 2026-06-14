@@ -103,63 +103,16 @@ class ConLogin extends BaseController
             return redirect()->to('/Login/LoginAdmin');
         }
 
-        // --- เริ่มขั้นตอนการตรวจสอบสิทธิ์ในฐานข้อมูล (เหมือนเดิม) ---
+        // --- เริ่มขั้นตอนการตรวจสอบสิทธิ์ในฐานข้อมูล (เฉพาะ tb_admin เท่านั้นที่มีสิทธิ์เข้าระบบหลังบ้าน) ---
         $userEmail = $payload['email'];
-        $google_sub = $payload['sub'];
 
         $db = \Config\Database::connect();
         $personnelDb = \Config\Database::connect('personnal');
 
-        // ตรวจสอบบุคลากรจาก tb_personnel
-        $personnelData = $personnelDb->table('tb_personnel')
-            ->groupStart()
-                ->where('pers_username', $userEmail)
-                ->orWhere('login_oauth_uid', $google_sub)
-            ->groupEnd()
-            ->where('pers_status', 'กำลังใช้งาน')
-            ->get()->getRowArray();
-        
-        // ตรวจสอบตำแหน่งตาม pers_position
-        // posi_001, posi_002 = ผู้บริหาร
-        // posi_003 - posi_006 = ครูผู้สอน (ไม่อนุญาตเข้าระบบนี้)
-        // posi_007 ขึ้นไป = ฝ่ายสนับสนุน
-        $executivePositions = ['posi_001', 'posi_002'];
-        $teacherPositions   = ['posi_003', 'posi_004', 'posi_005', 'posi_006'];
-
-        if ($personnelData && in_array($personnelData['pers_position'], $executivePositions)) {
-            // ผู้บริหาร -> Manager Dashboard
-            session()->set([
-                'AdminID'       => 'P' . $personnelData['pers_id'],
-                'AdminFullname' => $personnelData['pers_firstname'] . ' ' . $personnelData['pers_lastname'],
-                'AdminUsername' => $userEmail,
-                'AdminImage'    => $personnelData['pers_img'] ?? ($payload['picture'] ?? ''),
-                'isLoggedIn'    => true,
-                'roles'         => ['Manager', 'ผู้บริหาร'],
-                'personnel'     => $personnelData
-            ]);
-            return redirect()->to('/Manager/Dashboard');
-        } elseif ($personnelData && in_array($personnelData['pers_position'], $teacherPositions)) {
-            // ครูผู้สอน -> ไม่อนุญาตเข้าระบบนี้
-            session()->setFlashdata('msg', 'ระบบนี้สำหรับผู้บริหารและฝ่ายสนับสนุนเท่านั้น ครูผู้สอนกรุณาใช้ระบบ Teacher');
-            return redirect()->to('/Login/LoginAdmin');
-        } elseif ($personnelData && !in_array($personnelData['pers_position'], $executivePositions) && !in_array($personnelData['pers_position'], $teacherPositions)) {
-            // ฝ่ายสนับสนุน (posi_007 ขึ้นไป) -> Support Dashboard
-            session()->set([
-                'AdminID'       => 'P' . $personnelData['pers_id'],
-                'AdminFullname' => $personnelData['pers_firstname'] . ' ' . $personnelData['pers_lastname'],
-                'AdminUsername' => $userEmail,
-                'AdminImage'    => $personnelData['pers_img'] ?? ($payload['picture'] ?? ''),
-                'isLoggedIn'    => true,
-                'roles'         => ['Support', 'ฝ่ายสนับสนุน'],
-                'personnel'     => $personnelData
-            ]);
-            return redirect()->to('/Support/Dashboard');
-        }
-
-        // ตรวจสอบข้อมูลในฐานข้อมูลแอดมินปกติ
+        // ตรวจสอบข้อมูลในฐานข้อมูลแอดมินปกติ (tb_admin)
         $adminUser = $db->table('tb_admin')->where('admin_username', $userEmail)->get()->getRowArray();
 
-        if($adminUser){
+        if ($adminUser) {
             $role = $db->table('tb_roles')->where('role_id', $adminUser['role_id'])->get()->getRowArray();
             $personnelData = $personnelDb->table('tb_personnel')->where('pers_id', $adminUser['pers_id'])->get()->getRowArray();
 
@@ -205,52 +158,6 @@ class ConLogin extends BaseController
         $personnelDb = \Config\Database::connect('personnal');
 
         if (!$pass) {
-            $personnelData = $personnelDb->table('tb_personnel')
-                ->where('pers_username', $username)
-                ->where('pers_status', 'กำลังใช้งาน')
-                ->get()->getRowArray();
-
-            // ตรวจสอบตำแหน่งตาม pers_position
-            // posi_001, posi_002 = ผู้บริหาร
-            // posi_003 - posi_006 = ครูผู้สอน (ไม่อนุญาตเข้าระบบนี้)
-            // posi_007 ขึ้นไป = ฝ่ายสนับสนุน
-            $executivePositions = ['posi_001', 'posi_002'];
-            $teacherPositions   = ['posi_003', 'posi_004', 'posi_005', 'posi_006'];
-
-            if ($personnelData && in_array($personnelData['pers_position'], $executivePositions)) {
-                // ผู้บริหาร -> Manager Dashboard
-                if (password_verify($password, $personnelData['pers_password'] ?? '')) {
-                    $session->set([
-                        'AdminID'       => 'P' . $personnelData['pers_id'],
-                        'AdminFullname' => $personnelData['pers_firstname'] . ' ' . $personnelData['pers_lastname'],
-                        'AdminUsername' => $username,
-                        'AdminImage'    => $personnelData['pers_img'] ?? '',
-                        'isLoggedIn'    => true,
-                        'roles'         => ['Manager', 'ผู้บริหาร'],
-                        'personnel'     => $personnelData
-                    ]);
-                    return redirect()->to('/Manager/Dashboard');
-                }
-            } elseif ($personnelData && in_array($personnelData['pers_position'], $teacherPositions)) {
-                // ครูผู้สอน -> ไม่อนุญาตเข้าระบบนี้
-                $session->setFlashdata('msg', 'ระบบนี้สำหรับผู้บริหารและฝ่ายสนับสนุนเท่านั้น ครูผู้สอนกรุณาใช้ระบบ Teacher');
-                return redirect()->to('/Login/LoginAdmin');
-            } elseif ($personnelData && !in_array($personnelData['pers_position'], $executivePositions) && !in_array($personnelData['pers_position'], $teacherPositions)) {
-                // ฝ่ายสนับสนุน (posi_007 ขึ้นไป) -> Support Dashboard
-                if (password_verify($password, $personnelData['pers_password'] ?? '')) {
-                    $session->set([
-                        'AdminID'       => 'P' . $personnelData['pers_id'],
-                        'AdminFullname' => $personnelData['pers_firstname'] . ' ' . $personnelData['pers_lastname'],
-                        'AdminUsername' => $username,
-                        'AdminImage'    => $personnelData['pers_img'] ?? '',
-                        'isLoggedIn'    => true,
-                        'roles'         => ['Support', 'ฝ่ายสนับสนุน'],
-                        'personnel'     => $personnelData
-                    ]);
-                    return redirect()->to('/Support/Dashboard');
-                }
-            }
-
             $session->setFlashdata('msg', 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
             return redirect()->to('/Login/LoginAdmin');
         }

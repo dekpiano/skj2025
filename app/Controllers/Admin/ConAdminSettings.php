@@ -14,7 +14,7 @@ class ConAdminSettings extends BaseController
         $data = [
             'title' => "ตั้งค่าระบบ",
             'description' => "จัดการการตั้งค่าต่างๆ ของเว็บไซต์",
-            'settings' => $settingsModel->findAll()
+            'settings' => $settingsModel->whereNotIn('setting_name', ['welcome_modal_status', 'welcome_modal_image'])->findAll()
         ];
 
         return view('Admin/PageAdminSettings/AdminSettingsMain', array_merge($this->data, $data));

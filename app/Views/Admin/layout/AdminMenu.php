@@ -45,6 +45,13 @@
             </a>
         </li>
 
+        <li class="menu-item <?=$uri->getSegment(2) == 'WelcomeModal'?"active":""?>">
+            <a href="<?=base_url('Admin/WelcomeModal');?>" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-notification"></i>
+                <div data-i18n="Analytics">ป๊อปอัปแจ้งเตือน</div>
+            </a>
+        </li>
+
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Pages</span>
         </li>

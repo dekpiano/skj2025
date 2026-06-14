@@ -83,13 +83,17 @@ abstract class BaseController extends Controller
         // Pass AboutSchool data to all views
         $this->data['AboutSchool'] = $aboutModel->get()->getResult();
 
-        // Pass Festival Theme Status
+        // Pass Festival Theme Status and Welcome Modal Status
         // Check if table exists first to avoid error if not initialized
         $db = \Config\Database::connect();
         if ($db->tableExists('tb_web_settings')) {
             $this->data['festival_status'] = $webSettingsModel->getStatus('festival_theme');
+            $this->data['welcome_modal_status'] = $webSettingsModel->getStatus('welcome_modal_status');
+            $this->data['welcome_modal_images'] = json_decode($webSettingsModel->getStatus('welcome_modal_images') ?: '[]', true);
         } else {
             $this->data['festival_status'] = 'off';
+            $this->data['welcome_modal_status'] = 'off';
+            $this->data['welcome_modal_images'] = [];
         }
 
         // --- Common Navbar Data ---

@@ -24,9 +24,22 @@ class WebSettingsModel extends Model
      */
     public function updateStatus($name, $value)
     {
-        return $this->where('setting_name', $name)->set([
-            'setting_value' => $value,
-            'updated_at' => date('Y-m-d H:i:s')
-        ])->update();
+        $db = \Config\Database::connect();
+        $builder = $db->table($this->table);
+        $exists = $builder->where('setting_name', $name)->countAllResults();
+        
+        if ($exists > 0) {
+            return $builder->where('setting_name', $name)->update([
+                'setting_value' => $value,
+                'updated_at' => date('Y-m-d H:i:s')
+            ]);
+        } else {
+            return $builder->insert([
+                'setting_name' => $name,
+                'setting_value' => $value,
+                'setting_description' => 'Auto-created setting',
+                'updated_at' => date('Y-m-d H:i:s')
+            ]);
+        }
     }
 }

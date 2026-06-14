@@ -28,7 +28,7 @@
                                         <td>
                                             <?php if ($setting['setting_name'] == 'festival_theme'): ?>
                                                 <div class="form-check form-switch">
-                                                    <input class="form-check-input festival-toggle" type="checkbox" 
+                                                    <input class="form-check-input setting-toggle" type="checkbox" 
                                                         data-id="<?= $setting['setting_id'] ?>" 
                                                         <?= $setting['setting_value'] == 'on' ? 'checked' : '' ?>>
                                                     <label class="form-check-label"><?= $setting['setting_value'] == 'on' ? 'เปิดใช้งาน' : 'ปิดใช้งาน' ?></label>
@@ -76,15 +76,17 @@
 <script>
 $(document).ready(function() {
     // Handle Toggle Switch
-    $('.festival-toggle').on('change', function() {
+    $('.setting-toggle').on('change', function() {
         const isChecked = $(this).is(':checked');
         const status = isChecked ? 'on' : 'off';
+        const id = $(this).data('id');
         const label = $(this).next('label');
+        const checkbox = $(this);
 
         $.ajax({
-            url: '<?= base_url('Admin/toggleFestival') ?>',
+            url: '<?= base_url('Admin/Settings/Update') ?>',
             method: 'POST',
-            data: { status: status },
+            data: { id: id, value: status },
             success: function(response) {
                 if (response.status === 'success') {
                     label.text(isChecked ? 'เปิดใช้งาน' : 'ปิดใช้งาน');
@@ -97,12 +99,12 @@ $(document).ready(function() {
                     });
                 } else {
                     Swal.fire({ icon: 'error', title: 'ผิดพลาด!', text: response.message });
-                    $(this).prop('checked', !isChecked);
+                    checkbox.prop('checked', !isChecked);
                 }
             },
             error: function() {
                 Swal.fire({ icon: 'error', title: 'ผิดพลาด!', text: 'เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์' });
-                $(this).prop('checked', !isChecked);
+                checkbox.prop('checked', !isChecked);
             }
         });
     });

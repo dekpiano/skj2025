@@ -14,18 +14,57 @@ class ConAdminDashboard extends \App\Controllers\BaseController
             $forge->addField([
                 'setting_id' => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
                 'setting_name' => ['type' => 'VARCHAR', 'constraint' => '100'],
-                'setting_value' => ['type' => 'VARCHAR', 'constraint' => '255'],
+                'setting_value' => ['type' => 'TEXT', 'null' => true],
                 'setting_description' => ['type' => 'TEXT', 'null' => true],
                 'updated_at' => ['type' => 'DATETIME', 'null' => true],
             ]);
             $forge->addKey('setting_id', true);
             $forge->createTable('tb_web_settings');
-            $db->table('tb_web_settings')->insert([
-                'setting_name' => 'festival_theme',
-                'setting_value' => 'on',
-                'setting_description' => 'เปิด-ปิด ธีมเทศกาล (เช่น ปีใหม่ หิมะตก)',
-                'updated_at' => date('Y-m-d H:i:s')
+            
+            $db->table('tb_web_settings')->insertBatch([
+                [
+                    'setting_name' => 'festival_theme',
+                    'setting_value' => 'on',
+                    'setting_description' => 'เปิด-ปิด ธีมเทศกาล (เช่น ปีใหม่ หิมะตก)',
+                    'updated_at' => date('Y-m-d H:i:s')
+                ],
+                [
+                    'setting_name' => 'welcome_modal_status',
+                    'setting_value' => 'off',
+                    'setting_description' => 'เปิด-ปิด ป๊อปอัปแจ้งเตือนหน้าแรก (on/off)',
+                    'updated_at' => date('Y-m-d H:i:s')
+                ],
+                [
+                    'setting_name' => 'welcome_modal_images',
+                    'setting_value' => '["24 ตุลาคม ไว้อาลัยพระพันปีหลวง.png"]',
+                    'setting_description' => 'รายชื่อไฟล์รูปภาพป๊อปอัปแจ้งเตือน (เก็บไว้ใน uploads/) รูปแบบ JSON Array',
+                    'updated_at' => date('Y-m-d H:i:s')
+                ]
             ]);
+        } else {
+            // Ensure both settings exist even if the table was already created
+            $existsStatus = $db->table('tb_web_settings')->where('setting_name', 'welcome_modal_status')->countAllResults();
+            if ($existsStatus == 0) {
+                $db->table('tb_web_settings')->insert([
+                    'setting_name' => 'welcome_modal_status',
+                    'setting_value' => 'off',
+                    'setting_description' => 'เปิด-ปิด ป๊อปอัปแจ้งเตือนหน้าแรก (on/off)',
+                    'updated_at' => date('Y-m-d H:i:s')
+                ]);
+            }
+            $existsImages = $db->table('tb_web_settings')->where('setting_name', 'welcome_modal_images')->countAllResults();
+            if ($existsImages == 0) {
+                // Check if old setting welcome_modal_image existed to migrate it
+                $oldSetting = $db->table('tb_web_settings')->where('setting_name', 'welcome_modal_image')->get()->getRowArray();
+                $initialValue = $oldSetting ? json_encode([$oldSetting['setting_value']]) : '["24 ตุลาคม ไว้อาลัยพระพันปีหลวง.png"]';
+                
+                $db->table('tb_web_settings')->insert([
+                    'setting_name' => 'welcome_modal_images',
+                    'setting_value' => $initialValue,
+                    'setting_description' => 'รายชื่อไฟล์รูปภาพป๊อปอัปแจ้งเตือน (เก็บไว้ใน uploads/) รูปแบบ JSON Array',
+                    'updated_at' => date('Y-m-d H:i:s')
+                ]);
+            }
         }
 
         $newsModel = new \App\Models\NewsModel();
