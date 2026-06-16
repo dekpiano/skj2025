@@ -73,6 +73,56 @@ class ConManagerDashboard extends BaseController
             'food_report' => $db_general->table('tb_food_reports')->like('food_date', date('Y-m'))->countAllResults()
         ];
 
+        // Fetch current user position name, department position name, and faction
+        $userPosition = '';
+        $userWorkPosition = '';
+        $userFaction = '';
+        $pers = session('personnel');
+        if ($pers && isset($pers['pers_id'])) {
+            $userPosRow = $db_personnel->table('tb_personnel')
+                ->select('tb_personnel.pers_faction, skjacth_skj.tb_position.posi_name, skjacth_skj.tb_position_main.work_name')
+                ->join('skjacth_skj.tb_position', 'skjacth_skj.tb_position.posi_id = tb_personnel.pers_position', 'left')
+                ->join('skjacth_skj.tb_position_main', 'skjacth_skj.tb_position_main.work_id = tb_personnel.pers_workother_id', 'left')
+                ->where('tb_personnel.pers_id', $pers['pers_id'])
+                ->get()->getRowArray();
+            $userPosition = $userPosRow['posi_name'] ?? '';
+            $userWorkPosition = $userPosRow['work_name'] ?? '';
+            $userFaction = $userPosRow['pers_faction'] ?? '';
+        }
+
+        // Access Control by Position & Faction
+        $showPersonnel = false;
+        $showAcademic = false;
+        $showGeneral = false;
+        $showNews = false;
+
+        // Check if user is a Deputy Director (รองผู้อำนวยการ) — check this FIRST
+        // because 'รองผู้อำนวยการสถานศึกษา' contains 'ผู้อำนวยการสถานศึกษา' as substring
+        $isDeputyDirector = !empty($userPosition) && mb_strpos($userPosition, 'รองผู้อำนวยการ') !== false;
+
+        if ($isDeputyDirector) {
+            // Deputy Director: show only sections matching their faction
+            if (mb_strpos($userFaction, 'บุคคล') !== false) {
+                $showPersonnel = true;
+            }
+            if (mb_strpos($userFaction, 'วิชาการ') !== false) {
+                $showAcademic = true;
+            }
+            if (mb_strpos($userFaction, 'ทั่วไป') !== false) {
+                $showGeneral = true;
+                $showNews = true;
+            }
+            if (mb_strpos($userFaction, 'งบประมาณ') !== false) {
+                $showGeneral = true;
+            }
+        } else {
+            // Director (ผู้อำนวยการสถานศึกษา) or any other role: show all
+            $showPersonnel = true;
+            $showAcademic = true;
+            $showGeneral = true;
+            $showNews = true;
+        }
+
         $data = [
             'title' => 'ภาพรวมบริหารจัดการ',
             'description' => 'ข้อมูลสรุปสำหรับผู้บริหาร',
@@ -84,7 +134,14 @@ class ConManagerDashboard extends BaseController
             'general_stats' => $general_stats,
             'chart_learning' => $chart_learning,
             'visitStats' => (new \App\Models\VisitorModel())->getStats(),
-            'countNews' => (new \App\Models\NewsModel())->countAllResults()
+            'countNews' => (new \App\Models\NewsModel())->countAllResults(),
+            'userPosition' => $userPosition,
+            'userWorkPosition' => $userWorkPosition,
+            'userFaction' => $userFaction,
+            'showPersonnel' => $showPersonnel,
+            'showAcademic' => $showAcademic,
+            'showGeneral' => $showGeneral,
+            'showNews' => $showNews
         ];
 
         return view('Manager/ManagerDashboard/PageManagerDashboard', array_merge($this->data, $data));

@@ -9,6 +9,20 @@ class ConManagerPersonnel extends BaseController
 {
     public function index()
     {
+        $db_personnel = \Config\Database::connect('personnal');
+        $total_count = $db_personnel->table('tb_personnel')->where('pers_status', 'กำลังใช้งาน')->countAllResults();
+
+        $data = [
+            'title' => 'งานบุคลากร',
+            'description' => 'เลือกระบบงานบุคลากรที่ต้องการเข้าใช้งาน',
+            'total_count' => $total_count
+        ];
+
+        return view('Manager/ManagerPersonnel/PageManagerPersonnelHub', array_merge($this->data, $data));
+    }
+
+    public function overview()
+    {
         $db_skj = \Config\Database::connect('default');
         $db_personnel = \Config\Database::connect('personnal');
 
@@ -250,10 +264,22 @@ class ConManagerPersonnel extends BaseController
         }, $abnormal);
 
         // 3. Late / Absent / No clock-in (Today)
-        $all_active = $db_personnel->table('tb_personnel')
-            ->select('pers_id, pers_firstname, pers_lastname')
-            ->where('pers_status', 'กำลังใช้งาน')
-            ->get()->getResultArray();
+        $builder = $db_personnel->table('tb_personnel');
+        $builder->select('
+            skjacth_personnel.tb_personnel.pers_id,
+            skjacth_personnel.tb_personnel.pers_firstname,
+            skjacth_personnel.tb_personnel.pers_lastname,
+            skjacth_personnel.tb_personnel.pers_faction,
+            skjacth_skj.tb_position.posi_name,
+            skjacth_skj.tb_learning.lear_namethai as learning_name
+        ');
+        $builder->join('skjacth_skj.tb_position', 'skjacth_skj.tb_position.posi_id = skjacth_personnel.tb_personnel.pers_position', 'left');
+        $builder->join('skjacth_skj.tb_learning', 'skjacth_skj.tb_learning.lear_id = skjacth_personnel.tb_personnel.pers_learning', 'left');
+        $builder->where('pers_status', 'กำลังใช้งาน');
+        $builder->orderBy('skjacth_personnel.tb_personnel.pers_learning', 'ASC');
+        $builder->orderBy('skjacth_personnel.tb_personnel.pers_position', 'ASC');
+        $builder->orderBy('skjacth_personnel.tb_personnel.pers_firstname', 'ASC');
+        $all_active = $builder->get()->getResultArray();
         
         $attendance_range = $db_personnel->table('tb_personnel_attendance')
             ->where('att_date >=', $startDate)
@@ -264,40 +290,70 @@ class ConManagerPersonnel extends BaseController
         $att_counts = [];
         foreach ($attendance_range as $att) {
             $att_map[$att['att_person_id']] = $att;
-            $status = $att['att_status'];
+            $status = $att['att_status'] ?? ($att['status'] ?? 'ไม่ลงเวลา');
             $att_counts[$status] = ($att_counts[$status] ?? 0) + 1;
         }
 
         $total_active = $db_personnel->table('tb_personnel')->where('pers_status', 'กำลังใช้งาน')->countAllResults();
         
-        // Calculate no-record (tricky for range, usually we look at average or today if range is 1 day)
-        // For simplicity: if 1 day, use total - recorded. If range, just show 0 or don't show.
+        // Calculate no-record
         $no_record = ($startDate === $endDate) ? max(0, $total_active - count($attendance_range)) : 0;
 
         $summary_data = [
-            $att_counts['มา'] ?? 0,
-            $att_counts['สาย'] ?? 0,
+            $att_counts['มา'] ?? ($att_counts['มาปกติ'] ?? ($att_counts['ปกติ'] ?? 0)),
+            $att_counts['สาย'] ?? ($att_counts['มาสาย'] ?? 0),
             $att_counts['ขาด'] ?? 0,
             ($att_counts['ลากิจ'] ?? 0) + ($att_counts['ลาป่วย'] ?? 0) + ($att_counts['ไปราชการ'] ?? 0) + ($att_counts['อื่นๆ'] ?? 0),
             $no_record
         ];
 
-        // Prepare late report details
+        // Prepare late report details and detailed all-attendance logs
         $late_report = ['late' => [], 'absent' => [], 'no_clock_in' => []];
+        $all_attendance = [];
+
         foreach ($all_active as $p) {
-            if (!isset($att_map[$p['pers_id']])) {
-                if ($startDate === $endDate) { // Only show No Record if it's a single day
+            $has_record = isset($att_map[$p['pers_id']]);
+            $att_row = $has_record ? $att_map[$p['pers_id']] : null;
+            
+            $status = 'ไม่ลงเวลา';
+            if ($has_record) {
+                $status = $att_row['att_status'] ?? ($att_row['status'] ?? 'มาปกติ');
+            }
+
+            $check_in_time = '-';
+            if ($has_record) {
+                $check_in_time = $att_row['att_time'] ?? ($att_row['check_in'] ?? ($att_row['att_checkin'] ?? '-'));
+            }
+
+            $check_out_time = '-';
+            if ($has_record) {
+                $check_out_time = $att_row['check_out'] ?? ($att_row['att_checkout'] ?? '-');
+            }
+
+            $all_attendance[] = [
+                'name' => $p['pers_firstname'] . ' ' . $p['pers_lastname'],
+                'learning_group' => $p['learning_name'] ?? 'ผู้บริหาร/อื่น ๆ',
+                'position' => $p['posi_name'] ?? '-',
+                'faction' => $p['pers_faction'] ?? '-',
+                'status' => $status,
+                'check_in' => $check_in_time,
+                'check_out' => $check_out_time,
+                'date' => $att_row['att_date'] ?? $startDate
+            ];
+
+            if (!$has_record) {
+                if ($startDate === $endDate) {
                     $late_report['no_clock_in'][] = [
                         'name' => $p['pers_firstname'] . ' ' . $p['pers_lastname'],
                         'status' => 'ไม่ลงเวลา'
                     ];
                 }
             } else {
-                $status = $att_map[$p['pers_id']]['att_status'];
-                if ($status == 'สาย') {
+                if ($status == 'สาย' || $status == 'มาสาย') {
                     $late_report['late'][] = [
                         'name' => $p['pers_firstname'] . ' ' . $p['pers_lastname'],
-                        'status' => 'สาย'
+                        'status' => $status,
+                        'time' => $check_in_time
                     ];
                 } elseif ($status == 'ขาด') {
                     $late_report['absent'][] = [
@@ -313,6 +369,7 @@ class ConManagerPersonnel extends BaseController
             'leave_details' => $leave_details,
             'abnormal' => $abnormal_formatted,
             'late_report' => $late_report,
+            'all_attendance' => $all_attendance,
             'summary_data' => $summary_data
         ]);
     }

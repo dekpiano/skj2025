@@ -2,100 +2,202 @@
 
 <?= $this->section('content') ?>
 <style>
-    .stat-card {
-        border: none;
-        border-radius: 12px;
-        transition: transform 0.2s ease;
+    :root {
+        --primary-gradient: linear-gradient(135deg, #696cff, #4044ee);
+        --warning-gradient: linear-gradient(135deg, #ffab00, #ffc233);
+        --success-gradient: linear-gradient(135deg, #71dd37, #8ee85c);
+        --card-border-color: rgba(67, 89, 113, 0.08);
     }
-    .stat-card:hover {
-        transform: translateY(-3px);
+
+    /* Modern Chart Cards */
+    .chart-card {
+        border: 1px solid var(--card-border-color);
+        border-radius: 16px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+        background: #fff;
     }
-    .stat-icon {
-        width: 48px;
-        height: 48px;
-        border-radius: 10px;
+
+    /* Navigation Sidebar / Pills */
+    .group-nav-link {
         display: flex;
         align-items: center;
-        justify-content: center;
-        font-size: 1.5rem;
-    }
-    .chart-card {
-        border: none;
+        justify-content: space-between;
+        padding: 12px 16px;
         border-radius: 12px;
+        color: #566a7f;
+        text-decoration: none;
+        transition: all 0.25s ease;
+        margin-bottom: 6px;
+        background: transparent;
+        border: 1px solid transparent;
+        font-weight: 500;
     }
+    .group-nav-link:hover {
+        background: rgba(105, 108, 255, 0.04);
+        color: #696cff;
+    }
+    .group-nav-link.active {
+        background: #e7e7ff;
+        color: #696cff;
+        font-weight: 600;
+        border-color: rgba(105, 108, 255, 0.15);
+    }
+    .group-nav-link .badge {
+        font-size: 0.75rem;
+        padding: 5px 10px;
+    }
+
+    /* Personnel Cards */
     .person-card {
-        border: none;
-        border-radius: 10px;
-        transition: all 0.2s ease;
+        border: 1px solid var(--card-border-color);
+        border-radius: 16px;
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         overflow: hidden;
+        cursor: pointer;
+        background: #fff;
+        height: 100%;
+        position: relative;
     }
     .person-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 20px rgba(0,0,0,0.08) !important;
+        transform: translateY(-6px);
+        box-shadow: 0 16px 32px rgba(105, 108, 255, 0.08) !important;
+        border-color: rgba(105, 108, 255, 0.2);
     }
-    .person-img {
+    
+    .person-img-wrapper {
+        position: relative;
         width: 100%;
-        aspect-ratio: 1;
-        object-fit: cover;
+        padding-top: 115%; /* aspect ratio */
+        background: #f5f5f9;
+        overflow: hidden;
     }
+
+    .person-img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+    .person-card:hover .person-img {
+        transform: scale(1.06);
+    }
+
     .person-info {
-        padding: 12px;
+        padding: 16px;
         text-align: center;
+        background: #fff;
     }
     .person-name {
         font-weight: 700;
-        font-size: 0.85rem;
-        color: #333;
+        font-size: 0.9rem;
+        color: #435971;
+        margin-bottom: 4px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
     }
     .person-pos {
-        font-size: 0.75rem;
-        color: #697a8d;
+        font-size: 0.76rem;
+        color: #8e9ba5;
+        font-weight: 500;
     }
-    .group-title {
-        font-size: 1rem;
-        font-weight: 700;
+
+    /* Custom Scrollbar for group menu */
+    .group-menu-scroll {
+        max-height: 480px;
+        overflow-y: auto;
+        padding-right: 4px;
+    }
+    .group-menu-scroll::-webkit-scrollbar {
+        width: 5px;
+    }
+    .group-menu-scroll::-webkit-scrollbar-thumb {
+        background: rgba(67, 89, 113, 0.1);
+        border-radius: 4px;
+    }
+
+    .search-wrapper {
+        position: relative;
+    }
+    .search-icon {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #a1b0cb;
+        font-size: 1.2rem;
+    }
+    .search-input {
+        padding-left: 42px;
+        border-radius: 12px;
+        border: 1px solid var(--card-border-color);
+        transition: all 0.3s;
+    }
+    .search-input:focus {
+        border-color: #696cff;
+        box-shadow: 0 0 0 0.2rem rgba(105, 108, 255, 0.15);
+    }
+
+    .nav-tabs .nav-link {
+        border: none;
         color: #566a7f;
-        border-left: 4px solid #696cff;
-        padding-left: 12px;
-        margin: 24px 0 16px;
+        font-weight: 500;
+        padding: 12px 20px;
+        border-bottom: 2px solid transparent;
+    }
+    .nav-tabs .nav-link.active {
+        color: #696cff;
+        border-bottom-color: #696cff;
+        font-weight: 600;
+        background: transparent;
     }
 </style>
 
 <div class="container-xxl flex-grow-1 container-p-y">
 
     <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h4 class="fw-bold mb-0"><i class="bx bx-group text-primary me-2"></i>ภาพรวมบุคลากร</h4>
-            <small class="text-muted">ภาพรวมและรายชื่อบุคลากรทั้งหมด</small>
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+        <div class="d-flex align-items-center">
+            <a href="<?= base_url('Manager/Personnel') ?>" class="btn btn-outline-secondary btn-icon rounded-circle me-3">
+                <i class="bx bx-left-arrow-alt"></i>
+            </a>
+            <div>
+                <h4 class="fw-bold mb-1" style="color: #435971;">ทำเนียบบุคลากร</h4>
+                <p class="text-muted mb-0">ระบบจัดหมวดหมู่ วิเคราะห์สถิติ และค้นหาประวัติรายบุคคล</p>
+            </div>
         </div>
-        <span class="badge bg-primary rounded-pill fs-6 px-3 py-2"><?= number_format($total_count) ?> ท่าน</span>
+        <div>
+            <span class="badge bg-label-primary p-2 px-3 rounded-pill fs-6">
+                <i class="bx bx-group me-1"></i> บุคลากรทั้งหมด <?= number_format($total_count) ?> ท่าน
+            </span>
+        </div>
     </div>
 
-
     <!-- Charts Row -->
-    <div class="row g-3 mb-4">
+    <div class="row g-4 mb-4">
         <!-- Attendance Summary -->
         <div class="col-lg-5">
-            <div class="card chart-card shadow-sm h-100">
+            <div class="card chart-card h-100">
                 <div class="card-header bg-transparent border-0 pb-1 d-flex flex-wrap justify-content-between align-items-center">
-                    <h6 class="mb-2 fw-bold"><i class="bx bx-pie-chart-alt text-primary me-2"></i>สรุปการปฏิบัติงาน</h6>
-                    <div class="d-flex align-items-center mb-2">
-                        <input type="date" id="startDate" class="form-control form-control-sm me-1" value="<?= date('Y-m-d') ?>" style="width: auto;">
-                        <span class="me-1">-</span>
-                        <input type="date" id="endDate" class="form-control form-control-sm me-2" value="<?= date('Y-m-d') ?>" style="width: auto;">
-                        <button class="btn btn-xs btn-label-primary" id="btnAnalysis">
-                            <i class="bx bx-analyse me-1"></i>วิเคราะห์
-                        </button>
+                    <h6 class="mb-2 fw-bold" style="color: #435971;"><i class="bx bx-pie-chart-alt text-primary me-2"></i>สรุปการปฏิบัติงาน</h6>
+                    <div class="d-flex align-items-center mb-2 gap-1">
+                        <input type="date" id="startDate" class="form-control form-control-sm" value="<?= date('Y-m-d') ?>" style="width: auto; border-radius: 8px;">
+                        <span class="text-muted">-</span>
+                        <input type="date" id="endDate" class="form-control form-control-sm" value="<?= date('Y-m-d') ?>" style="width: auto; border-radius: 8px;">
                     </div>
                 </div>
                 <div class="card-body pt-0">
                     <div id="attendanceChart"></div>
-                    <div class="text-center mt-n2">
+                    <div class="text-center mt-n2 mb-3">
                         <small class="text-muted" id="currentDateRange">ข้อมูลประจำวันที่: <?= date('d/m/Y') ?></small>
+                    </div>
+                    <div class="d-grid">
+                        <button class="btn btn-primary" id="btnAnalysis" style="border-radius: 12px; padding: 12px; font-weight: 600; background: var(--primary-gradient); border: none; box-shadow: 0 4px 12px rgba(105, 108, 255, 0.25);">
+                            <i class="bx bx-list-check me-2 fs-5"></i>ดูรายละเอียดการลงเวลางาน & สถิติ
+                        </button>
                     </div>
                 </div>
             </div>
@@ -103,9 +205,9 @@
 
         <!-- Learning Group Proportion -->
         <div class="col-lg-7">
-            <div class="card chart-card shadow-sm h-100">
+            <div class="card chart-card h-100">
                 <div class="card-header bg-transparent border-0 pb-0">
-                    <h6 class="mb-0 fw-bold"><i class="bx bx-bar-chart-alt-2 text-primary me-2"></i>สัดส่วนบุคลากรรายกลุ่มสาระ</h6>
+                    <h6 class="mb-0 fw-bold" style="color: #435971;"><i class="bx bx-bar-chart-alt-2 text-primary me-2"></i>สัดส่วนบุคลากรรายกลุ่มสาระ</h6>
                 </div>
                 <div class="card-body pt-2">
                     <div id="learningChart"></div>
@@ -114,94 +216,145 @@
         </div>
     </div>
 
-    <!-- Personnel List Toggle -->
-    <div class="d-grid mb-4">
-        <button class="btn btn-outline-primary rounded-3" type="button" data-bs-toggle="collapse" data-bs-target="#personnelList" aria-expanded="false">
-            <i class="bx bx-chevron-down me-2"></i>แสดงรายชื่อบุคลากรทั้งหมด
-        </button>
-    </div>
-
-    <!-- Personnel List (Collapsed) -->
-    <div class="collapse" id="personnelList">
-        <?php if (isset($grouped_data['management'])): ?>
-            <?php foreach ($grouped_data['management'] as $group): ?>
-                <div class="group-title">
-                    <i class="bx bx-crown me-1 text-warning"></i><?= $group['name'] ?> 
-                    <span class="badge bg-warning rounded-pill ms-2"><?= count($group['members']) ?></span>
+    <!-- Directory Layout -->
+    <div class="row g-4">
+        <!-- Left Side Navigation: Learning Groups -->
+        <div class="col-md-4 col-lg-3">
+            <div class="card chart-card p-3">
+                <div class="mb-3 search-wrapper">
+                    <i class="bx bx-search search-icon"></i>
+                    <input type="text" id="searchPersonnel" class="form-control search-input" placeholder="ค้นหาชื่อ, ตำแหน่ง...">
                 </div>
-                <div class="row g-3 mb-4">
-                    <?php foreach ($group['members'] as $person): ?>
-                    <div class="col-6 col-md-4 col-lg-2">
-                        <div class="card person-card shadow-sm h-100 border-warning border-top border-3" role="button" data-id="<?= $person['pers_id'] ?>">
-                            <?php if (!empty($person['pers_img'])): ?>
-                                <img src="https://personnel.skj.ac.th/uploads/admin/Personnal/<?= $person['pers_img'] ?>" class="person-img" onerror="this.src='<?= base_url('assets/admin/assets/img/avatars/1.png') ?>'" />
-                            <?php else: ?>
-                                <img src="<?= base_url('assets/admin/assets/img/avatars/1.png') ?>" class="person-img" />
-                            <?php endif; ?>
-                            <div class="person-info">
-                                <div class="person-name" title="<?= $person['pers_prefix'] . $person['pers_firstname'] . ' ' . $person['pers_lastname'] ?>">
-                                    <?= $person['pers_firstname'] ?> <?= mb_substr($person['pers_lastname'], 0, 1) ?>.
+                <hr class="my-2 opacity-50">
+                <div class="group-menu-scroll">
+                    <!-- Default: All -->
+                    <a href="javascript:void(0);" class="group-nav-link active" data-target="all">
+                        <span><i class="bx bx-grid-alt me-2 text-primary"></i>ทั้งหมด</span>
+                        <span class="badge bg-label-primary rounded-pill"><?= $total_count ?></span>
+                    </a>
+                    
+                    <?php if (isset($grouped_data['management'])): ?>
+                        <?php foreach ($grouped_data['management'] as $group): ?>
+                            <a href="javascript:void(0);" class="group-nav-link" data-target="management-group">
+                                <span><i class="bx bx-crown me-2 text-warning"></i><?= $group['name'] ?></span>
+                                <span class="badge bg-label-warning rounded-pill"><?= count($group['members']) ?></span>
+                            </a>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+
+                    <?php if (isset($grouped_data['learning'])): ?>
+                        <?php foreach ($grouped_data['learning'] as $group): ?>
+                            <a href="javascript:void(0);" class="group-nav-link" data-target="learning-<?= $group['id'] ?>">
+                                <span><i class="bx bx-book-reader me-2 text-info"></i><?= $group['name'] ?></span>
+                                <span class="badge bg-label-info rounded-pill"><?= count($group['members']) ?></span>
+                            </a>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+
+                    <?php if (isset($grouped_data['support'])): ?>
+                        <a href="javascript:void(0);" class="group-nav-link" data-target="support-group">
+                            <span><i class="bx bx-support me-2 text-secondary"></i>บุคลากรสายสนับสนุน</span>
+                            <span class="badge bg-label-secondary rounded-pill"><?= count($grouped_data['support'][0]['members']) ?></span>
+                        </a>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side Content: Cards Display -->
+        <div class="col-md-8 col-lg-9">
+            <div class="card chart-card p-4">
+                <!-- Current Selected Title -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold mb-0" id="currentGroupTitle" style="color: #435971;">บุคลากรทั้งหมด</h5>
+                    <small class="text-muted" id="searchResultText"></small>
+                </div>
+
+                <!-- Cards Grid -->
+                <div class="row g-3" id="personnelGrid">
+                    
+                    <!-- Management -->
+                    <?php if (isset($grouped_data['management'])): ?>
+                        <?php foreach ($grouped_data['management'] as $group): ?>
+                            <?php foreach ($group['members'] as $person): ?>
+                            <div class="col-6 col-sm-4 col-md-4 col-lg-3 personnel-item-card" 
+                                 data-group="management-group"
+                                 data-name="<?= mb_strtolower($person['pers_firstname'] . ' ' . $person['pers_lastname'] . ' ' . ($person['posi_name'] ?? '')) ?>">
+                                <div class="card person-card border-warning border-top border-3" role="button" data-id="<?= $person['pers_id'] ?>">
+                                    <div class="person-img-wrapper">
+                                        <?php if (!empty($person['pers_img'])): ?>
+                                            <img src="https://personnel.skj.ac.th/uploads/admin/Personnal/<?= $person['pers_img'] ?>" class="person-img" onerror="this.src='<?= base_url('assets/admin/assets/img/avatars/1.png') ?>'" />
+                                        <?php else: ?>
+                                            <img src="<?= base_url('assets/admin/assets/img/avatars/1.png') ?>" class="person-img" />
+                                        <?php endif; ?>
+                                    </div>
+                                    <div class="person-info">
+                                        <div class="person-name" title="<?= $person['pers_prefix'] . $person['pers_firstname'] . ' ' . $person['pers_lastname'] ?>">
+                                            <?= $person['pers_prefix'] ?><?= $person['pers_firstname'] ?> <?= mb_substr($person['pers_lastname'], 0, 1) ?>.
+                                        </div>
+                                        <div class="person-pos text-warning"><?= $person['posi_name'] ?? '-' ?></div>
+                                    </div>
                                 </div>
-                                <div class="person-pos fw-bold text-primary"><?= $person['posi_name'] ?? '-' ?></div>
+                            </div>
+                            <?php endforeach; ?>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+
+                    <!-- Learning Groups -->
+                    <?php if (isset($grouped_data['learning'])): ?>
+                        <?php foreach ($grouped_data['learning'] as $group): ?>
+                            <?php foreach ($group['members'] as $person): ?>
+                            <div class="col-6 col-sm-4 col-md-4 col-lg-3 personnel-item-card" 
+                                 data-group="learning-<?= $group['id'] ?>"
+                                 data-name="<?= mb_strtolower($person['pers_firstname'] . ' ' . $person['pers_lastname'] . ' ' . ($person['posi_name'] ?? '')) ?>">
+                                <div class="card person-card" role="button" data-id="<?= $person['pers_id'] ?>">
+                                    <div class="person-img-wrapper">
+                                        <?php if (!empty($person['pers_img'])): ?>
+                                            <img src="https://personnel.skj.ac.th/uploads/admin/Personnal/<?= $person['pers_img'] ?>" class="person-img" onerror="this.src='<?= base_url('assets/admin/assets/img/avatars/1.png') ?>'" />
+                                        <?php else: ?>
+                                            <img src="<?= base_url('assets/admin/assets/img/avatars/1.png') ?>" class="person-img" />
+                                        <?php endif; ?>
+                                    </div>
+                                    <div class="person-info">
+                                        <div class="person-name" title="<?= $person['pers_prefix'] . $person['pers_firstname'] . ' ' . $person['pers_lastname'] ?>">
+                                            <?= $person['pers_prefix'] ?><?= $person['pers_firstname'] ?> <?= mb_substr($person['pers_lastname'], 0, 1) ?>.
+                                        </div>
+                                        <div class="person-pos"><?= $person['posi_name'] ?? '-' ?></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php endforeach; ?>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+
+                    <!-- Support -->
+                    <?php if (isset($grouped_data['support'])): ?>
+                        <?php foreach ($grouped_data['support'][0]['members'] as $person): ?>
+                        <div class="col-6 col-sm-4 col-md-4 col-lg-3 personnel-item-card" 
+                             data-group="support-group"
+                             data-name="<?= mb_strtolower($person['pers_firstname'] . ' ' . $person['pers_lastname'] . ' ' . ($person['posi_name'] ?? '')) ?>">
+                            <div class="card person-card" role="button" data-id="<?= $person['pers_id'] ?>">
+                                <div class="person-img-wrapper">
+                                    <?php if (!empty($person['pers_img'])): ?>
+                                        <img src="https://personnel.skj.ac.th/uploads/admin/Personnal/<?= $person['pers_img'] ?>" class="person-img" onerror="this.src='<?= base_url('assets/admin/assets/img/avatars/1.png') ?>'" />
+                                    <?php else: ?>
+                                        <img src="<?= base_url('assets/admin/assets/img/avatars/1.png') ?>" class="person-img" />
+                                    <?php endif; ?>
+                                </div>
+                                <div class="person-info">
+                                    <div class="person-name" title="<?= $person['pers_prefix'] . $person['pers_firstname'] . ' ' . $person['pers_lastname'] ?>">
+                                        <?= $person['pers_prefix'] ?><?= $person['pers_firstname'] ?> <?= mb_substr($person['pers_lastname'], 0, 1) ?>.
+                                    </div>
+                                    <div class="person-pos"><?= $person['posi_name'] ?? '-' ?></div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <?php endforeach; ?>
-                </div>
-            <?php endforeach; ?>
-        <?php endif; ?>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
 
-        <?php if (isset($grouped_data['learning'])): ?>
-            <?php foreach ($grouped_data['learning'] as $group): ?>
-                <div class="group-title">
-                    <i class="bx bx-book-reader me-1"></i><?= $group['name'] ?> 
-                    <span class="badge bg-primary rounded-pill ms-2"><?= count($group['members']) ?></span>
                 </div>
-                <div class="row g-3 mb-3">
-                    <?php foreach ($group['members'] as $person): ?>
-                    <div class="col-6 col-md-4 col-lg-2">
-                        <div class="card person-card shadow-sm h-100" role="button" data-id="<?= $person['pers_id'] ?>">
-                            <?php if (!empty($person['pers_img'])): ?>
-                                <img src="https://personnel.skj.ac.th/uploads/admin/Personnal/<?= $person['pers_img'] ?>" class="person-img" onerror="this.src='<?= base_url('assets/admin/assets/img/avatars/1.png') ?>'" />
-                            <?php else: ?>
-                                <img src="<?= base_url('assets/admin/assets/img/avatars/1.png') ?>" class="person-img" />
-                            <?php endif; ?>
-                            <div class="person-info">
-                                <div class="person-name" title="<?= $person['pers_prefix'] . $person['pers_firstname'] . ' ' . $person['pers_lastname'] ?>">
-                                    <?= $person['pers_firstname'] ?> <?= mb_substr($person['pers_lastname'], 0, 1) ?>.
-                                </div>
-                                <div class="person-pos"><?= $person['posi_name'] ?? '-' ?></div>
-                            </div>
-                        </div>
-                    </div>
-                    <?php endforeach; ?>
-                </div>
-            <?php endforeach; ?>
-        <?php endif; ?>
-
-        <?php if (isset($grouped_data['support'])): ?>
-            <div class="group-title">
-                <i class="bx bx-support me-1"></i>บุคลากรสายสนับสนุน
-                <span class="badge bg-secondary rounded-pill ms-2"><?= count($grouped_data['support'][0]['members']) ?></span>
             </div>
-            <div class="row g-3 mb-3">
-                <?php foreach ($grouped_data['support'][0]['members'] as $person): ?>
-                <div class="col-6 col-md-4 col-lg-2">
-                    <div class="card person-card shadow-sm h-100" role="button" data-id="<?= $person['pers_id'] ?>">
-                        <?php if (!empty($person['pers_img'])): ?>
-                            <img src="https://personnel.skj.ac.th/uploads/admin/Personnal/<?= $person['pers_img'] ?>" class="person-img" onerror="this.src='<?= base_url('assets/admin/assets/img/avatars/1.png') ?>'" />
-                        <?php else: ?>
-                            <img src="<?= base_url('assets/admin/assets/img/avatars/1.png') ?>" class="person-img" />
-                        <?php endif; ?>
-                        <div class="person-info">
-                            <div class="person-name"><?= $person['pers_firstname'] ?> <?= mb_substr($person['pers_lastname'], 0, 1) ?>.</div>
-                            <div class="person-pos"><?= $person['posi_name'] ?? '-' ?></div>
-                        </div>
-                    </div>
-                </div>
-                <?php endforeach; ?>
-            </div>
-        <?php endif; ?>
+        </div>
     </div>
 
 </div>
@@ -209,9 +362,9 @@
 <!-- Personnel Detail Modal -->
 <div class="modal fade" id="personnelModal" tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content border-0 shadow-lg">
-            <div class="modal-header bg-primary">
-                <h5 class="modal-title text-white"><i class="bx bx-user me-2"></i>ข้อมูลประวัติบุคลากร</h5>
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 16px;">
+            <div class="modal-header bg-primary py-3">
+                <h5 class="modal-title text-white mb-0"><i class="bx bx-user me-2"></i>ข้อมูลประวัติบุคลากร</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body p-0" id="modalContent">
@@ -225,16 +378,19 @@
 
 <!-- Attendance Analysis Modal -->
 <div class="modal fade" id="analysisModal" tabindex="-1">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content border-0 shadow-lg">
-            <div class="modal-header bg-dark">
-                <h5 class="modal-title text-white"><i class="bx bx-analyse me-2"></i>วิเคราะห์การปฏิบัติงานและสถิติการลา</h5>
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 16px;">
+            <div class="modal-header bg-dark py-3">
+                <h5 class="modal-title text-white mb-0"><i class="bx bx-analyse me-2"></i>วิเคราะห์การปฏิบัติงานและสถิติการลา</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body p-0">
                 <ul class="nav nav-tabs nav-fill" role="tablist">
                     <li class="nav-item">
-                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-stats"><i class="bx bx-stats me-1"></i>สถิติการลา</button>
+                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-all-attendance"><i class="bx bx-list-check me-1"></i>รายละเอียดการลงเวลา</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-stats"><i class="bx bx-stats me-1"></i>สถิติการลา</button>
                     </li>
                     <li class="nav-item">
                         <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-abnormal"><i class="bx bx-error-circle me-1"></i>ลาบ่อยผิดปกติ</button>
@@ -244,7 +400,38 @@
                     </li>
                 </ul>
                 <div class="tab-content p-4">
-                    <div class="tab-pane fade show active" id="tab-stats">
+                    <div class="tab-pane fade show active" id="tab-all-attendance">
+                        <div class="mb-3 d-flex gap-2">
+                            <input type="text" id="searchAttTable" class="form-control form-control-sm" placeholder="ค้นหาชื่อ, กลุ่มสาระ, ตำแหน่ง...">
+                            <select id="filterAttStatus" class="form-select form-select-sm" style="width: auto;">
+                                <option value="all">สถานะทั้งหมด</option>
+                                <option value="ปกติ">มาปกติ</option>
+                                <option value="สาย">มาสาย</option>
+                                <option value="ขาด">ขาด</option>
+                                <option value="ลา">ลา</option>
+                                <option value="ไม่ลงเวลา">ไม่ลงเวลา</option>
+                            </select>
+                        </div>
+                        <div class="table-responsive" style="max-height: 350px;">
+                            <table class="table table-sm table-hover align-middle">
+                                <thead class="table-light sticky-top">
+                                    <tr>
+                                        <th>ชื่อ-นามสกุล</th>
+                                        <th>ตำแหน่ง</th>
+                                        <th>กลุ่มสาระ</th>
+                                        <th>วันที่</th>
+                                        <th class="text-center">เวลาเข้า</th>
+                                        <th class="text-center">เวลาออก</th>
+                                        <th class="text-center">สถานะ</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="allAttendanceTableBody">
+                                    <!-- Rendered dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tab-stats">
                         <div id="analysisStatsContent"></div>
                     </div>
                     <div class="tab-pane fade" id="tab-abnormal">
@@ -302,7 +489,7 @@
     });
     attendanceChart.render();
 
-    // Re-fetch Chart Data when dates change (Optional but better for UX)
+    // Re-fetch Chart Data when dates change
     const updateAttendanceSummary = () => {
         const start = document.getElementById('startDate').value;
         const end = document.getElementById('endDate').value;
@@ -321,7 +508,57 @@
     document.getElementById('startDate').addEventListener('change', updateAttendanceSummary);
     document.getElementById('endDate').addEventListener('change', updateAttendanceSummary);
 
-    // Person Card Click
+    // Dynamic Filter & Search Logic
+    const groupLinks = document.querySelectorAll('.group-nav-link');
+    const searchInput = document.getElementById('searchPersonnel');
+    const cards = document.querySelectorAll('.personnel-item-card');
+    const titleEl = document.getElementById('currentGroupTitle');
+    const resultTextEl = document.getElementById('searchResultText');
+
+    let currentGroup = 'all';
+
+    const filterPersonnel = () => {
+        const query = searchInput.value.trim().toLowerCase();
+        let visibleCount = 0;
+
+        cards.forEach(card => {
+            const cardGroup = card.dataset.group;
+            const cardName = card.dataset.name;
+
+            const matchesGroup = (currentGroup === 'all' || cardGroup === currentGroup);
+            const matchesQuery = (!query || cardName.includes(query));
+
+            if (matchesGroup && matchesQuery) {
+                card.style.display = 'block';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        if (query) {
+            resultTextEl.innerText = `พบผลลัพธ์ ${visibleCount} รายการ`;
+        } else {
+            resultTextEl.innerText = '';
+        }
+    };
+
+    groupLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            groupLinks.forEach(l => l.classList.remove('active'));
+            this.classList.add('active');
+
+            currentGroup = this.dataset.target;
+            const groupText = this.querySelector('span').innerText.trim();
+            titleEl.innerText = groupText;
+
+            filterPersonnel();
+        });
+    });
+
+    searchInput.addEventListener('input', filterPersonnel);
+
+    // Person Card Click Detail fetching
     document.querySelectorAll('.person-card').forEach(card => {
         card.addEventListener('click', function() {
             const id = this.dataset.id;
@@ -417,7 +654,7 @@
         });
     });
 
-    // Attendance Analysis
+    // Attendance Analysis Modal Logic
     document.getElementById('btnAnalysis').addEventListener('click', function() {
         const modal = new bootstrap.Modal(document.getElementById('analysisModal'));
         modal.show();
@@ -425,10 +662,12 @@
         const statsEl = document.getElementById('analysisStatsContent');
         const abnormalEl = document.getElementById('abnormalTableBody');
         const lateEl = document.getElementById('lateAbsentContent');
+        const allAttTableBody = document.getElementById('allAttendanceTableBody');
 
         statsEl.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>';
         abnormalEl.innerHTML = '';
         lateEl.innerHTML = '';
+        allAttTableBody.innerHTML = '<tr><td colspan="5" class="text-center py-4"><div class="spinner-border spinner-border-sm text-primary"></div> กําลังโหลด...</td></tr>';
 
         const start = document.getElementById('startDate').value;
         const end = document.getElementById('endDate').value;
@@ -469,19 +708,16 @@
 
                     // 3. Late/Absent
                     let lateHtml = '';
-                    // Late
                     res.late_report.late.forEach(item => {
                         lateHtml += `
                             <div class="col-md-6">
                                 <div class="d-flex align-items-center bg-light p-2 rounded">
                                     <div class="badge bg-warning me-2">สาย</div>
                                     <div class="flex-grow-1 small fw-bold">${item.name}</div>
-                                    <div class="small text-muted">${item.time}</div>
                                 </div>
                             </div>
                         `;
                     });
-                    // Absent
                     res.late_report.absent.forEach(item => {
                         lateHtml += `
                             <div class="col-md-6">
@@ -492,7 +728,6 @@
                             </div>
                         `;
                     });
-                    // No clock in
                     res.late_report.no_clock_in.forEach(item => {
                         lateHtml += `
                             <div class="col-md-6">
@@ -504,9 +739,81 @@
                         `;
                     });
                     lateEl.innerHTML = lateHtml || '<div class="col-12 text-center text-muted">ไม่พบข้อมูลความผิดปกติ</div>';
+
+                    // 4. All Attendance Table
+                    window.currentAttendanceData = res.all_attendance;
+                    renderAttendanceRows(res.all_attendance);
                 }
             });
     });
+
+    const renderAttendanceRows = (data) => {
+        let html = '';
+        data.forEach(item => {
+            let statusBadge = '';
+            if (item.status.includes('มา') || item.status.includes('ปกติ')) {
+                statusBadge = '<span class="badge bg-label-success">มาปกติ</span>';
+            } else if (item.status.includes('สาย')) {
+                statusBadge = '<span class="badge bg-label-warning">สาย</span>';
+            } else if (item.status.includes('ขาด')) {
+                statusBadge = '<span class="badge bg-label-danger">ขาด</span>';
+            } else if (item.status.includes('ลา')) {
+                statusBadge = '<span class="badge bg-label-info">ลา</span>';
+            } else {
+                statusBadge = '<span class="badge bg-label-secondary">ไม่ลงเวลา</span>';
+            }
+
+            html += `
+                <tr>
+                    <td><strong>${item.name}</strong></td>
+                    <td><span class="small">${item.position || '-'}</span></td>
+                    <td><span class="small">${item.learning_group || '-'}</span></td>
+                    <td>${item.date.split('-').reverse().join('/')}</td>
+                    <td class="text-center font-monospace">${item.check_in || '-'}</td>
+                    <td class="text-center font-monospace">${item.check_out || '-'}</td>
+                    <td class="text-center">${statusBadge}</td>
+                </tr>
+            `;
+        });
+        document.getElementById('allAttendanceTableBody').innerHTML = html || '<tr><td colspan="7" class="text-center text-muted">ไม่พบข้อมูลการลงเวลา</td></tr>';
+    };
+
+    // Table Search & Filter logic
+    const attSearch = document.getElementById('searchAttTable');
+    const attFilter = document.getElementById('filterAttStatus');
+
+    const applyTableFilter = () => {
+        if (!window.currentAttendanceData) return;
+        const query = attSearch.value.trim().toLowerCase();
+        const status = attFilter.value;
+
+        const filtered = window.currentAttendanceData.filter(item => {
+            const matchesQuery = item.name.toLowerCase().includes(query) ||
+                                 (item.position && item.position.toLowerCase().includes(query)) ||
+                                 (item.learning_group && item.learning_group.toLowerCase().includes(query));
+            let matchesStatus = true;
+
+            if (status === 'ปกติ') {
+                matchesStatus = item.status.includes('มา') || item.status.includes('ปกติ');
+            } else if (status === 'สาย') {
+                matchesStatus = item.status.includes('สาย');
+            } else if (status === 'ขาด') {
+                matchesStatus = item.status.includes('ขาด');
+            } else if (status === 'ลา') {
+                matchesStatus = item.status.includes('ลา');
+            } else if (status === 'ไม่ลงเวลา') {
+                matchesStatus = item.status.includes('ไม่ลงเวลา') || (!item.check_in && !item.status);
+            }
+
+            return matchesQuery && matchesStatus;
+        });
+
+        renderAttendanceRows(filtered);
+    };
+
+    attSearch.addEventListener('input', applyTableFilter);
+    attFilter.addEventListener('change', applyTableFilter);
+
 })();
 </script>
 <?= $this->endSection() ?>

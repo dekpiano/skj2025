@@ -92,7 +92,20 @@
                             <?php endif; ?>
                         </div>
                         <div class="col-md-8 ps-md-4">
-                            <h4 class="text-white fw-bold mb-1">สวัสดีครับ, <?= session('AdminFullname') ?> 👋</h4>
+                            <?php 
+                                $positionParts = [];
+                                if (!empty($userPosition)) {
+                                    $positionParts[] = $userPosition;
+                                }
+                                if (!empty($userWorkPosition)) {
+                                    $positionParts[] = $userWorkPosition;
+                                }
+                                if (!empty($userFaction)) {
+                                    $positionParts[] = $userFaction;
+                                }
+                                $positionText = implode(' / ', $positionParts);
+                            ?>
+                            <h4 class="text-white fw-bold mb-1">สวัสดีครับ, <?= session('AdminFullname') ?> <?= !empty($positionText) ? '<span class="fs-6 fw-normal text-warning ms-1">(' . $positionText . ')</span>' : '' ?> 👋</h4>
                             <p class="mb-3 opacity-75">ยินดีต้อนรับสู่แดชบอร์ดผู้บริหาร ข้อมูลสรุปประจำวันที่ <?= date('d/m/Y') ?></p>
                             <div class="d-flex flex-wrap gap-2 align-items-center">
                                 <span class="badge bg-white text-primary py-2 px-3">ปีการศึกษา <?= $schoolyear['schyear_year'] ?? '-' ?></span>
@@ -112,6 +125,7 @@
         </div>
 
         <!-- Section 1: Human Resources -->
+        <?php if ($showPersonnel): ?>
         <div class="col-12">
             <h5 class="module-header">งานบุคลากร</h5>
         </div>
@@ -159,8 +173,10 @@
                 </div>
             </div>
         </div>
+        <?php endif; ?>
 
         <!-- Section 2: Academic & Students -->
+        <?php if ($showAcademic): ?>
         <div class="col-12">
             <h5 class="module-header">งานวิชาการและนักเรียน</h5>
         </div>
@@ -201,7 +217,7 @@
         <div class="col-md-6 mb-4">
             <div class="card stat-card shadow-sm h-100">
                 <div class="card-header bg-transparent border-0 pb-0">
-                    <h6 class="mb-0 fw-bold">ประสิทธิภาพบุคลากรสายผู้สอน</h6>
+                    <h6 class="mb-0 fw-bold">ประสิทธิภาพบุลากรสายผู้สอน</h6>
                 </div>
                 <div class="card-body">
                     <div class="row align-items-center">
@@ -216,8 +232,10 @@
                 </div>
             </div>
         </div>
+        <?php endif; ?>
 
         <!-- Section 3: General Administration -->
+        <?php if ($showGeneral): ?>
         <div class="col-12">
             <h5 class="module-header">งานบริหารทั่วไป</h5>
         </div>
@@ -262,8 +280,10 @@
                 </a>
             </div>
         </div>
+        <?php endif; ?>
 
         <!-- Section 4: News & Website -->
+        <?php if ($showNews): ?>
         <div class="col-12">
             <h5 class="module-header">เว็บไซต์และข่าวประชาสัมพันธ์</h5>
         </div>
@@ -295,6 +315,7 @@
                 </div>
             </div>
         </div>
+        <?php endif; ?>
     </div>
 </div>
 <?= $this->endSection() ?>
@@ -306,25 +327,28 @@ document.addEventListener('DOMContentLoaded', function() {
     const learningData = <?= json_encode($chart_learning) ?>;
 
     // 1. Personnel Learning Group Summary (Mini Bar)
-    new ApexCharts(document.querySelector("#learningSummaryChart"), {
-        series: [{ name: 'จำนวน', data: learningData.data }],
-        chart: { type: 'bar', height: 160, toolbar: { show: false } },
-        plotOptions: { 
-            bar: { 
-                borderRadius: 4, 
-                distributed: true,
-                columnWidth: '50%'
-            } 
-        },
-        colors: ['#696cff', '#71dd37', '#03c3ec', '#ffab00', '#ff3e1d'],
-        dataLabels: { enabled: false },
-        xaxis: { 
-            categories: learningData.labels,
-            labels: { show: false }
-        },
-        yaxis: { show: false },
-        tooltip: { y: { formatter: val => val + " ท่าน" } }
-    }).render();
+    const chartEl = document.querySelector("#learningSummaryChart");
+    if (chartEl) {
+        new ApexCharts(chartEl, {
+            series: [{ name: 'จำนวน', data: learningData.data }],
+            chart: { type: 'bar', height: 160, toolbar: { show: false } },
+            plotOptions: { 
+                bar: { 
+                    borderRadius: 4, 
+                    distributed: true,
+                    columnWidth: '50%'
+                } 
+            },
+            colors: ['#696cff', '#71dd37', '#03c3ec', '#ffab00', '#ff3e1d'],
+            dataLabels: { enabled: false },
+            xaxis: { 
+                categories: learningData.labels,
+                labels: { show: false }
+            },
+            yaxis: { show: false },
+            tooltip: { y: { formatter: val => val + " ท่าน" } }
+        }).render();
+    }
 });
 </script>
 <?= $this->endSection() ?>

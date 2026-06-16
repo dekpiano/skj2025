@@ -194,6 +194,7 @@ $routes->group('admin/botany', ['filter' => 'botany_auth', 'namespace' => 'App\C
 $routes->group('Manager', ['filter' => 'permission:Manager,ผู้บริหาร', 'namespace' => 'App\Controllers\Manager'], function ($routes) {
     $routes->get('Dashboard', 'ConManagerDashboard::index');
     $routes->get('Personnel', 'ConManagerPersonnel::index');
+    $routes->get('Personnel/Overview', 'ConManagerPersonnel::overview');
     $routes->get('Academic/student', 'ConManagerAcademic::index');
     $routes->get('Academic/Teacher', 'ConManagerAcademic::teacherIndex');
     $routes->get('Personnel/Detail/(:any)', 'ConManagerPersonnel::getPersonnelDetail/$1');

@@ -1,3 +1,52 @@
+<?php
+$db_personnel = \Config\Database::connect('personnal');
+$pers = session('personnel');
+
+$showPersonnel = false;
+$showAcademic = false;
+$showGeneral = false;
+$showNews = false;
+
+$userPosition = '';
+$userFaction = '';
+
+if ($pers && isset($pers['pers_id'])) {
+    $userPosRow = $db_personnel->table('tb_personnel')
+        ->select('tb_personnel.pers_faction, skjacth_skj.tb_position.posi_name')
+        ->join('skjacth_skj.tb_position', 'skjacth_skj.tb_position.posi_id = tb_personnel.pers_position', 'left')
+        ->where('tb_personnel.pers_id', $pers['pers_id'])
+        ->get()->getRowArray();
+    $userPosition = $userPosRow['posi_name'] ?? '';
+    $userFaction = $userPosRow['pers_faction'] ?? '';
+}
+
+// Check if user is a Deputy Director (รองผู้อำนวยการ) — check this FIRST
+// because 'รองผู้อำนวยการสถานศึกษา' contains 'ผู้อำนวยการสถานศึกษา' as substring
+$isDeputyDirector = !empty($userPosition) && mb_strpos($userPosition, 'รองผู้อำนวยการ') !== false;
+
+if ($isDeputyDirector) {
+    // Deputy Director: show only sections matching their faction
+    if (mb_strpos($userFaction, 'บุคคล') !== false) {
+        $showPersonnel = true;
+    }
+    if (mb_strpos($userFaction, 'วิชาการ') !== false) {
+        $showAcademic = true;
+    }
+    if (mb_strpos($userFaction, 'ทั่วไป') !== false) {
+        $showGeneral = true;
+        $showNews = true;
+    }
+    if (mb_strpos($userFaction, 'งบประมาณ') !== false) {
+        $showGeneral = true;
+    }
+} else {
+    // Director (ผู้อำนวยการสถานศึกษา) or any other role: show all
+    $showPersonnel = true;
+    $showAcademic = true;
+    $showGeneral = true;
+    $showNews = true;
+}
+?>
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
     <div class="app-brand demo">
         <a href="<?= base_url('Manager/Dashboard') ?>" class="app-brand-link">
@@ -44,6 +93,7 @@
             </ul>
         </li>
 
+        <?php if ($showPersonnel): ?>
         <!-- Personnel -->
         <li class="menu-header small text-uppercase"><span class="menu-header-text">งานบุคลากร</span></li>
         <li class="menu-item <?= ($uri->getSegment(2) == 'Personnel') ? 'active' : '' ?>">
@@ -70,7 +120,9 @@
                 </li>
             </ul>
         </li>
+        <?php endif; ?>
 
+        <?php if ($showAcademic): ?>
          <!-- Academic -->
          <li class="menu-header small text-uppercase"><span class="menu-header-text">งานวิชาการ</span></li>
         <li class="menu-item <?= ($uri->getSegment(2) == 'Academic' && $uri->getSegment(3) == 'student') ? 'active' : '' ?>">
@@ -85,7 +137,9 @@
                 <div data-i18n="AcademicTeacher">ภาพรวมครู</div>
             </a>
         </li>
+        <?php endif; ?>
 
+        <?php if ($showGeneral): ?>
         <!-- Admin General -->
         <li class="menu-header small text-uppercase"><span class="menu-header-text">งานบริหารทั่วไป</span></li>
         <li class="menu-item <?= ($uri->getSegment(2) == 'General') ? 'active' : '' ?>">
@@ -94,6 +148,7 @@
                 <div data-i18n="General">ภาพรวมงานบริหารทั่วไป</div>
             </a>
         </li>
+        <?php endif; ?>
 
     </ul>
 </aside>
