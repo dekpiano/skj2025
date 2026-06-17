@@ -18,10 +18,14 @@
     <meta property="og:title" content="<?= $title ?> | SKJ" />
     <meta property="og:description" content="<?= $description ?? 'งานสวนพฤกษศาสตร์โรงเรียน สวนกุหลาบวิทยาลัย (จิรประวัติ) นครสวรรค์' ?>" />
     <meta property="og:type" content="website" />
-    <?php   if($uri->getSegment(1) == "News" && $uri->getSegment(2) == "Detail") : ?>
-    <meta property="og:image" content="<?=$banner;?>" />
+    <?php if ($uri->getSegment(1) == "News" && $uri->getSegment(2) == "Detail") : ?>
+    <meta property="og:image" content="<?= $banner; ?>" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <?php else: ?>
-    <meta property="og:image" content="<?=base_url('uploads/banner/Banner-skj-main.png')?>" />
+    <meta property="og:image" content="<?= base_url('uploads/banner/Banner-skj-main.png') ?>" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <?php endif; ?>
 
     <!-- Favicon -->

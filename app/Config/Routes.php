@@ -152,6 +152,9 @@ $routes->group('Admin', ['filter' => 'permission', 'namespace' => 'App\Controlle
     // Admin Welcome Modal
     $routes->get('WelcomeModal', 'ConAdminWelcomeModal::index', ['filter' => 'permission:Admin']);
     $routes->match(['GET', 'POST'], 'WelcomeModal/Update', 'ConAdminWelcomeModal::updateSetting', ['filter' => 'permission:Admin']);
+
+    // Admin Student List
+    $routes->get('Student', 'ConAdminStudent::index', ['filter' => 'permission:Admin']);
 });
 
 $routes->group('Admin/Botany', ['filter' => 'botany_auth', 'namespace' => 'App\Controllers\Admin'], function ($routes) {
