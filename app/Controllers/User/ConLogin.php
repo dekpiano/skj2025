@@ -133,9 +133,9 @@ class ConLogin extends BaseController
 
             if ($role['role_name'] === 'Super Admin') {
                 return redirect()->to('/SelectSystem');
-            } elseif (in_array($role['role_name'], ['Manager', 'ผู้บริหาร', 'Executive', 'Executive View', 'ผู้อำนวยการ', 'รองผู้อำนวยการ'])) {
+            } elseif (in_array($role['role_name'], ['Manager', 'ผู้บริหาร', 'ผู้บริหารสถานศึกษา', 'Executive', 'Executive View', 'ผู้อำนวยการ', 'รองผู้อำนวยการ'])) {
                 return redirect()->to('/Manager/Dashboard');
-            } elseif (in_array($role['role_name'], ['Support', 'ฝ่ายสนับสนุน'])) {
+            } elseif (in_array($role['role_name'], ['Support', 'ฝ่ายสนับสนุน', 'บุคลากรฝ่ายสนับสนุน'])) {
                 return redirect()->to('/Support/Dashboard');
             }
 
@@ -182,8 +182,8 @@ class ConLogin extends BaseController
                 'personnel'     => $personnelData
             ]);
             if ($role['role_name'] === 'Super Admin') return redirect()->to('/SelectSystem');
-            if (in_array($role['role_name'], ['Manager', 'ผู้บริหาร', 'Executive', 'Executive View', 'ผู้อำนวยการ', 'รองผู้อำนวยการ'])) return redirect()->to('/Manager/Dashboard');
-            if (in_array($role['role_name'], ['Support', 'ฝ่ายสนับสนุน'])) return redirect()->to('/Support/Dashboard');
+            if (in_array($role['role_name'], ['Manager', 'ผู้บริหาร', 'ผู้บริหารสถานศึกษา', 'Executive', 'Executive View', 'ผู้อำนวยการ', 'รองผู้อำนวยการ'])) return redirect()->to('/Manager/Dashboard');
+            if (in_array($role['role_name'], ['Support', 'ฝ่ายสนับสนุน', 'บุคลากรฝ่ายสนับสนุน'])) return redirect()->to('/Support/Dashboard');
             return redirect()->to('/Admin/Dashboard');
         }else{
             $session->setFlashdata('msg', 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');

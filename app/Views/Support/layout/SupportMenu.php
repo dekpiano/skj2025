@@ -23,12 +23,12 @@
             </a>
         </li>
 
-        <!-- Support Attendance -->
-        <li class="menu-header small text-uppercase"><span class="menu-header-text">ระบบลงเวลาปฏิบัติงาน</span></li>
-        <li class="menu-item <?= ($uri->getSegment(2) == 'SupportAttendance') ? 'active open' : '' ?>">
+        <!-- App Check-in -->
+        <li class="menu-header small text-uppercase"><span class="menu-header-text">ลงเวลางานผ่านแอป</span></li>
+        <li class="menu-item <?= ($uri->getSegment(2) == 'SupportAttendance' && ($uri->getTotalSegments() == 2 || ($uri->getSegment(3) == 'History' && \Config\Services::request()->getGet('type') !== 'official'))) ? 'active open' : '' ?>">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-time-five"></i>
-                <div>ลงเวลางานฝ่ายสนับสนุน</div>
+                <i class="menu-icon tf-icons bx bx-mobile"></i>
+                <div>ลงเวลางานผ่านแอป</div>
             </a>
             <ul class="menu-sub">
                 <li class="menu-item <?= ($uri->getSegment(2) == 'SupportAttendance' && $uri->getTotalSegments() == 2) ? 'active' : '' ?>">
@@ -36,9 +36,30 @@
                         <div>เช็คชื่อเข้างาน</div>
                     </a>
                 </li>
-                <li class="menu-item <?= ($uri->getSegment(2) == 'SupportAttendance' && $uri->getSegment(3) == 'History') ? 'active' : '' ?>">
+                <li class="menu-item <?= ($uri->getSegment(2) == 'SupportAttendance' && $uri->getSegment(3) == 'History' && \Config\Services::request()->getGet('type') !== 'official') ? 'active' : '' ?>">
                     <a href="<?= base_url('Support/SupportAttendance/History') ?>" class="menu-link">
-                        <div>ประวัติลงเวลา</div>
+                        <div>ประวัติลงเวลาผ่านแอป</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <!-- Fingerprint / Official Stats -->
+        <li class="menu-header small text-uppercase"><span class="menu-header-text">ข้อมูลสแกนนิ้ว & วันลา</span></li>
+        <li class="menu-item <?= ($uri->getSegment(2) == 'SupportAttendance' && ($uri->getSegment(3) == 'Report' || $uri->getSegment(3) == 'FingerprintHistory')) ? 'active open' : '' ?>">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-fingerprint"></i>
+                <div>ประวัติงานบุคลากร</div>
+            </a>
+            <ul class="menu-sub">
+                <li class="menu-item <?= ($uri->getSegment(2) == 'SupportAttendance' && $uri->getSegment(3) == 'FingerprintHistory') ? 'active' : '' ?>">
+                    <a href="<?= base_url('Support/SupportAttendance/FingerprintHistory') ?>" class="menu-link">
+                        <div>ประวัติสแกนนิ้ว & ลา</div>
+                    </a>
+                </li>
+                <li class="menu-item <?= ($uri->getSegment(2) == 'SupportAttendance' && $uri->getSegment(3) == 'Report') ? 'active' : '' ?>">
+                    <a href="<?= base_url('Support/SupportAttendance/Report') ?>" class="menu-link">
+                        <div>รายงานสรุปรายเดือน</div>
                     </a>
                 </li>
             </ul>

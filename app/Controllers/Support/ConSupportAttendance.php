@@ -305,6 +305,38 @@ class ConSupportAttendance extends BaseController
         $year   = $this->request->getGet('year')  ?? date('Y');
 
         $records = $this->attendanceModel->getHistoryDetailed($persId, $month, $year);
+
+        // สร้างรายการเดือนไทย
+        $months = [
+            '01' => 'มกราคม', '02' => 'กุมภาพันธ์', '03' => 'มีนาคม',
+            '04' => 'เมษายน', '05' => 'พฤษภาคม', '06' => 'มิถุนายน',
+            '07' => 'กรกฎาคม', '08' => 'สิงหาคม', '09' => 'กันยายน',
+            '10' => 'ตุลาคม', '11' => 'พฤศจิกายน', '12' => 'ธันวาคม',
+        ];
+
+        $data = [
+            'title'       => 'ประวัติลงเวลาผ่านแอป',
+            'description' => 'ประวัติและข้อมูลการเช็คชื่อเข้า-ออกงานผ่านแอปพลิเคชัน',
+            'records'     => $records,
+            'month'       => $month,
+            'year'        => $year,
+            'months'      => $months,
+        ];
+
+        return view('Support/SupportAttendance/PageSupportAttendanceHistory', array_merge($this->data, $data));
+    }
+
+    public function fingerprintHistory()
+    {
+        $persId = $this->getSupportPersId();
+        if (!$persId) {
+            return redirect()->to('/Login/LoginAdmin')->with('msg', 'กรุณาเข้าสู่ระบบ');
+        }
+
+        $month  = $this->request->getGet('month') ?? date('m');
+        $year   = $this->request->getGet('year')  ?? date('Y');
+
+        $officialRecords = $this->attendanceModel->getOfficialHistoryDetailed($persId, $month, $year);
         $summary = $this->attendanceModel->getMonthlySummary($persId, $month, $year);
 
         // สร้างรายการเดือนไทย
@@ -316,16 +348,16 @@ class ConSupportAttendance extends BaseController
         ];
 
         $data = [
-            'title'       => 'ประวัติลงเวลาฝ่ายสนับสนุน',
-            'description' => 'ประวัติและข้อมูลการเช็คชื่อเข้า-ออกงานของฝ่ายสนับสนุน',
-            'records'     => $records,
-            'summary'     => $summary,
-            'month'       => $month,
-            'year'        => $year,
-            'months'      => $months,
+            'title'           => 'ประวัติการสแกนนิ้วมือ & ข้อมูลวันลา',
+            'description'     => 'ประวัติและข้อมูลจากเครื่องสแกนนิ้วและใบอนุมัติการลาทางการ',
+            'officialRecords' => $officialRecords,
+            'summary'         => $summary,
+            'month'           => $month,
+            'year'            => $year,
+            'months'          => $months,
         ];
 
-        return view('Support/SupportAttendance/PageSupportAttendanceHistory', array_merge($this->data, $data));
+        return view('Support/SupportAttendance/PageSupportAttendanceFingerprint', array_merge($this->data, $data));
     }
 
     /**
@@ -350,16 +382,18 @@ class ConSupportAttendance extends BaseController
 
         $summary = $this->attendanceModel->getMonthlySummary($persId, $month, $year);
         $records = $this->attendanceModel->getHistoryDetailed($persId, $month, $year);
+        $officialRecords = $this->attendanceModel->getOfficialHistoryDetailed($persId, $month, $year);
 
         $data = [
-            'title'       => 'รายงานสรุปการลงเวลางานฝ่ายสนับสนุน',
-            'description' => 'รายงานสรุปการลงเวลางานประจำเดือน',
-            'summary'     => $summary,
-            'records'     => $records,
-            'month'       => $month,
-            'year'        => $year,
-            'months'      => $months,
-            'fullname'    => session('AdminFullname'),
+            'title'           => 'รายงานสรุปการลงเวลางานฝ่ายสนับสนุน',
+            'description'     => 'รายงานสรุปการลงเวลางานประจำเดือน',
+            'summary'         => $summary,
+            'records'         => $records,
+            'officialRecords' => $officialRecords,
+            'month'           => $month,
+            'year'            => $year,
+            'months'          => $months,
+            'fullname'        => session('AdminFullname'),
         ];
 
         return view('Support/SupportAttendance/PageSupportAttendanceReport', array_merge($this->data, $data));

@@ -77,57 +77,18 @@
         </form>
     </div>
 
-    <!-- Summary Cards -->
-    <div class="row g-3 mb-4">
-        <div class="col-md-4">
-            <div class="card summary-card border-start border-success border-3 h-100">
-                <div class="card-body text-center p-3">
-                    <div class="avatar bg-label-success rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
-                        <i class="bi bi-check-circle-fill fs-4"></i>
-                    </div>
-                    <h3 class="fw-bold mb-0 text-success"><?= $summary['ปกติ'] ?></h3>
-                    <small class="text-muted fw-bold">มาทำงานปกติ (วัน)</small>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card summary-card border-start border-warning border-3 h-100">
-                <div class="card-body text-center p-3">
-                    <div class="avatar bg-label-warning rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
-                        <i class="bi bi-exclamation-triangle-fill fs-4"></i>
-                    </div>
-                    <h3 class="fw-bold mb-0 text-warning"><?= $summary['มาสาย'] ?></h3>
-                    <small class="text-muted fw-bold">มาสาย (วัน)</small>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card summary-card border-start border-danger border-3 h-100">
-                <div class="card-body text-center p-3">
-                    <div class="avatar bg-label-danger rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
-                        <i class="bi bi-x-circle-fill fs-4"></i>
-                    </div>
-                    <h3 class="fw-bold mb-0 text-danger"><?= $summary['ขาด'] ?></h3>
-                    <small class="text-muted fw-bold">ขาดงาน (วัน)</small>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- History Table -->
     <div class="card shadow-sm border">
-        <div class="card-header border-bottom d-flex align-items-center justify-content-between bg-light">
-            <h5 class="mb-0 fw-bold">
-                <i class="bi bi-table me-2 text-primary"></i>
-                รายละเอียดการเช็คชื่อประจำเดือน
+        <div class="card-header border-bottom bg-light py-3">
+            <h5 class="card-title mb-0 fw-bold text-primary">
+                <i class="bi bi-phone me-1"></i> รายการประวัติลงเวลางานผ่านแอป
             </h5>
-            <span class="badge bg-primary">เดือน <?= $months[$month] ?? '' ?> พ.ศ. <?= $year + 543 ?></span>
         </div>
         <div class="card-body pt-3">
             <?php if (empty($records)): ?>
                 <div class="text-center py-5">
                     <i class="bi bi-inbox fs-1 text-muted"></i>
-                    <p class="text-muted mt-2">ไม่พบข้อมูลการเช็คชื่อในเดือนนี้</p>
+                    <p class="text-muted mt-2">ไม่พบข้อมูลการเช็คชื่อผ่านแอปในเดือนนี้</p>
                 </div>
             <?php else: ?>
                 <div class="table-responsive text-nowrap history-table">

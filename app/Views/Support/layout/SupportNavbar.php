@@ -5,6 +5,20 @@
     $initials = mb_substr($userName, 0, 1);
     $hasImage = !empty($userImg);
     $imgUrl = 'https://personnel.skj.ac.th/uploads/admin/Personnal/' . $userImg;
+
+    // Fetch official position name
+    $personnel = session('personnel');
+    $positionName = 'บุคลากรสายสนับสนุน';
+    if ($personnel && !empty($personnel['pers_position'])) {
+        $db = \Config\Database::connect('default');
+        $posRow = $db->table('tb_position')
+                     ->where('posi_id', $personnel['pers_position'])
+                     ->get()
+                     ->getRowArray();
+        if ($posRow) {
+            $positionName = $posRow['posi_name'];
+        }
+    }
 ?>
 <nav
     class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
@@ -24,7 +38,11 @@
         <ul class="navbar-nav flex-row align-items-center ms-auto">
             <!-- User Dropdown -->
             <li class="nav-item navbar-dropdown dropdown-user dropdown">
-                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                <a class="nav-link dropdown-toggle hide-arrow d-flex align-items-center" href="javascript:void(0);" data-bs-toggle="dropdown">
+                    <div class="text-end me-2 d-none d-sm-block">
+                        <span class="fw-semibold d-block text-dark lh-1 mb-1"><?= $userName ?></span>
+                        <small class="text-muted" style="font-size: 0.75rem;"><?= $positionName ?></small>
+                    </div>
                     <div class="avatar avatar-online">
                         <?php if ($hasImage): ?>
                             <img src="<?= $imgUrl ?>" alt class="w-px-40 h-auto rounded-circle" style="object-fit: cover;" onerror="this.src='<?= base_url('assets/admin/assets/img/avatars/1.png') ?>'" />
@@ -48,7 +66,7 @@
                                 </div>
                                 <div class="flex-grow-1">
                                     <span class="fw-semibold d-block"><?= $userName ?></span>
-                                    <small class="text-muted">บุคลากรสายสนับสนุน</small>
+                                    <small class="text-muted"><?= $positionName ?></small>
                                 </div>
                             </div>
                         </a>

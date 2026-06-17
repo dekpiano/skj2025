@@ -100,28 +100,35 @@
 
     <!-- Summary Cards -->
     <div class="row g-4 mb-4">
-        <div class="col-md-3 col-6">
+        <div class="col-lg col-md-4 col-6">
             <div class="stat-card border">
                 <div class="stat-icon bg-label-primary text-primary"><i class="bi bi-calendar-check"></i></div>
                 <div class="stat-number text-primary"><?= array_sum($summary) ?></div>
                 <div class="stat-label fw-bold">จำนวนวันที่มีประวัติ</div>
             </div>
         </div>
-        <div class="col-md-3 col-6">
+        <div class="col-lg col-md-4 col-6">
             <div class="stat-card border">
                 <div class="stat-icon bg-label-success text-success"><i class="bi bi-check-circle-fill"></i></div>
                 <div class="stat-number text-success"><?= $summary['ปกติ'] ?></div>
                 <div class="stat-label fw-bold">มาปกติ (วัน)</div>
             </div>
         </div>
-        <div class="col-md-3 col-6">
+        <div class="col-lg col-md-4 col-6">
+            <div class="stat-card border">
+                <div class="stat-icon bg-label-info text-info" style="background-color: rgba(13, 110, 253, 0.1); color: #0d6efd;"><i class="bi bi-calendar2-range-fill"></i></div>
+                <div class="stat-number" style="color: #0d6efd;"><?= $summary['ลา'] ?></div>
+                <div class="stat-label fw-bold">วันลา (วัน)</div>
+            </div>
+        </div>
+        <div class="col-lg col-md-4 col-6">
             <div class="stat-card border">
                 <div class="stat-icon bg-label-warning text-warning"><i class="bi bi-exclamation-triangle-fill"></i></div>
                 <div class="stat-number text-warning"><?= $summary['มาสาย'] ?></div>
                 <div class="stat-label fw-bold">มาสาย (วัน)</div>
             </div>
         </div>
-        <div class="col-md-3 col-6">
+        <div class="col-lg col-md-4 col-6">
             <div class="stat-card border">
                 <div class="stat-icon bg-label-danger text-danger"><i class="bi bi-x-circle-fill"></i></div>
                 <div class="stat-number text-danger"><?= $summary['ขาด'] ?></div>
@@ -137,89 +144,198 @@
     </div>
 
     <!-- Attendance Record Table -->
-    <div class="chart-card border">
-        <h5 class="mb-3 fw-bold"><i class="bi bi-list-check me-2 text-primary"></i>รายละเอียดเวลาปฏิบัติงาน</h5>
-        <?php if (empty($records)): ?>
-            <div class="text-center py-5">
-                <i class="bi bi-inbox fs-1 text-muted"></i>
-                <p class="text-muted mt-2">ไม่พบข้อมูลการลงเวลางานประจำเดือนนี้</p>
-            </div>
-        <?php else: ?>
-            <div class="table-responsive text-nowrap">
-                <table class="table table-hover">
-                    <thead>
-                        <tr class="table-light">
-                            <th class="text-center" width="50">#</th>
-                            <th>วันที่</th>
-                            <th>เวลาเข้า</th>
-                            <th>เวลาออก</th>
-                            <th>ระยะเวลาปฏิบัติงาน</th>
-                            <th class="text-center">สถานะ</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $thDaysShort = ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'];
-                        foreach ($records as $i => $r):
-                            $d = new DateTime($r['att_date']);
-                            $dayName = $thDaysShort[$d->format('w')];
-                            $dateDisplay = $d->format('d/m/') . ($d->format('Y') + 543);
-
-                            // คำนวณระยะเวลาทำงาน
-                            $workHours = '-';
-                            if ($r['check_in'] && $r['check_out']) {
-                                $t1 = strtotime($r['check_in']);
-                                $t2 = strtotime($r['check_out']);
-                                $diff = $t2 - $t1;
-                                $h = floor($diff / 3600);
-                                $m = floor(($diff % 3600) / 60);
-                                $workHours = "{$h} ชม. {$m} น.";
-                            }
-                        ?>
-                        <tr>
-                            <td class="text-center fw-bold"><?= $i + 1 ?></td>
-                            <td>
-                                <div class="fw-bold text-dark"><?= $dateDisplay ?></div>
-                                <small class="text-muted">วัน<?= $dayName ?></small>
-                            </td>
-                            <td>
-                                <?php if ($r['check_in']): ?>
-                                    <span class="badge bg-label-primary fs-6"><?= date('H:i', strtotime($r['check_in'])) ?></span>
-                                <?php else: ?>
-                                    <span class="text-muted">-</span>
-                                <?php endif; ?>
-                            </td>
-                            <td>
-                                <?php if ($r['check_out']): ?>
-                                    <span class="badge bg-label-success fs-6"><?= date('H:i', strtotime($r['check_out'])) ?></span>
-                                <?php else: ?>
-                                    <span class="text-muted">-</span>
-                                <?php endif; ?>
-                            </td>
-                            <td>
-                                <?php if ($r['check_in'] && $r['check_out']): ?>
-                                    <span class="fw-bold text-dark fs-6"><?= $workHours ?></span>
-                                <?php else: ?>
-                                    <span class="text-muted">-</span>
-                                <?php endif; ?>
-                            </td>
-                            <td class="text-center">
+    <div class="chart-card border p-0 overflow-hidden">
+        <div class="card-header border-bottom bg-light px-4 py-3">
+            <ul class="nav nav-tabs card-header-tabs m-0" id="reportTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active fw-bold text-primary" id="app-report-tab" data-bs-toggle="tab" data-bs-target="#app-report-content" type="button" role="tab" aria-controls="app-report-content" aria-selected="true">
+                        <i class="bi bi-phone me-1"></i> รายละเอียดจากแอป
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link fw-bold text-primary" id="official-report-tab" data-bs-toggle="tab" data-bs-target="#official-report-content" type="button" role="tab" aria-controls="official-report-content" aria-selected="false">
+                        <i class="bi bi-fingerprint me-1"></i> รายละเอียดจากเครื่องสแกนนิ้ว/ใบลา
+                    </button>
+                </li>
+            </ul>
+        </div>
+        <div class="tab-content p-4" id="reportTabsContent">
+            <!-- Tab 1: App Records -->
+            <div class="tab-pane fade show active" id="app-report-content" role="tabpanel" aria-labelledby="app-report-tab">
+                <?php if (empty($records)): ?>
+                    <div class="text-center py-5">
+                        <i class="bi bi-inbox fs-1 text-muted"></i>
+                        <p class="text-muted mt-2">ไม่พบข้อมูลการลงเวลางานจากแอปประจำเดือนนี้</p>
+                    </div>
+                <?php else: ?>
+                    <div class="table-responsive text-nowrap">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr class="table-light">
+                                    <th class="text-center" width="50">#</th>
+                                    <th>วันที่</th>
+                                    <th>เวลาเข้า</th>
+                                    <th>เวลาออก</th>
+                                    <th>ระยะเวลาปฏิบัติงาน</th>
+                                    <th class="text-center">สถานะ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
                                 <?php
-                                $statusClass = [
-                                    'ปกติ'  => 'bg-label-success',
-                                    'มาสาย' => 'bg-label-warning',
-                                    'ขาด'   => 'bg-label-danger',
-                                ];
-                                $class = $statusClass[$r['status']] ?? 'bg-label-secondary';
+                                $thDaysShort = ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'];
+                                foreach ($records as $i => $r):
+                                    $d = new DateTime($r['att_date']);
+                                    $dayName = $thDaysShort[$d->format('w')];
+                                    $dateDisplay = $d->format('d/m/') . ($d->format('Y') + 543);
+
+                                    // คำนวณระยะเวลาทำงาน
+                                    $workHours = '-';
+                                    if ($r['check_in'] && $r['check_out']) {
+                                        $t1 = strtotime($r['check_in']);
+                                        $t2 = strtotime($r['check_out']);
+                                        $diff = $t2 - $t1;
+                                        $h = floor($diff / 3600);
+                                        $m = floor(($diff % 3600) / 60);
+                                        $workHours = "{$h} ชม. {$m} น.";
+                                    }
                                 ?>
-                                <span class="badge <?= $class ?> fw-bold"><?= $r['status'] ?></span>
-                            </td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+                                <tr>
+                                    <td class="text-center fw-bold"><?= $i + 1 ?></td>
+                                    <td>
+                                        <div class="fw-bold text-dark"><?= $dateDisplay ?></div>
+                                        <small class="text-muted">วัน<?= $dayName ?></small>
+                                    </td>
+                                    <td>
+                                        <?php if ($r['check_in']): ?>
+                                            <span class="badge bg-label-primary fs-6"><?= date('H:i', strtotime($r['check_in'])) ?></span>
+                                        <?php else: ?>
+                                            <span class="text-muted">-</span>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td>
+                                        <?php if ($r['check_out']): ?>
+                                            <span class="badge bg-label-success fs-6"><?= date('H:i', strtotime($r['check_out'])) ?></span>
+                                        <?php else: ?>
+                                            <span class="text-muted">-</span>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td>
+                                        <?php if ($r['check_in'] && $r['check_out']): ?>
+                                            <span class="fw-bold text-dark fs-6"><?= $workHours ?></span>
+                                        <?php else: ?>
+                                            <span class="text-muted">-</span>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td class="text-center">
+                                        <?php
+                                        $statusClass = [
+                                            'ปกติ'  => 'bg-label-success',
+                                            'มาสาย' => 'bg-label-warning',
+                                            'ขาด'   => 'bg-label-danger',
+                                        ];
+                                        $class = $statusClass[$r['status']] ?? 'bg-label-secondary';
+                                        ?>
+                                        <span class="badge <?= $class ?> fw-bold"><?= $r['status'] ?></span>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php endif; ?>
             </div>
-        <?php endif; ?>
+
+            <!-- Tab 2: Official Records -->
+            <div class="tab-pane fade" id="official-report-content" role="tabpanel" aria-labelledby="official-report-tab">
+                <?php if (empty($officialRecords)): ?>
+                    <div class="text-center py-5">
+                        <i class="bi bi-inbox fs-1 text-muted"></i>
+                        <p class="text-muted mt-2">ไม่พบข้อมูลการสแกนนิ้วหรือใบลาในเดือนนี้</p>
+                    </div>
+                <?php else: ?>
+                    <div class="table-responsive text-nowrap">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr class="table-primary" style="border-bottom: 2px solid #4f46e5;">
+                                    <th class="text-center" width="50">#</th>
+                                    <th>วันที่ (ระบบเครื่องสแกน)</th>
+                                    <th><i class="bi bi-fingerprint text-primary me-1"></i>เวลาเข้าสแกนนิ้ว</th>
+                                    <th><i class="bi bi-fingerprint text-success me-1"></i>เวลาออกสแกนนิ้ว</th>
+                                    <th>ระยะเวลา</th>
+                                    <th class="text-center">สถานะทางการ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $thDaysShort = ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'];
+                                foreach ($officialRecords as $i => $r):
+                                    $d = new DateTime($r['att_date']);
+                                    $dayName = $thDaysShort[$d->format('w')];
+                                    $dateDisplay = $d->format('d/m/') . ($d->format('Y') + 543);
+
+                                    // คำนวณระยะเวลาทำงาน
+                                    $workHours = '-';
+                                    if (!empty($r['att_time']) && $r['att_time'] !== '00:00:00' && !empty($r['att_checkout']) && $r['att_checkout'] !== '00:00:00') {
+                                        $t1 = strtotime($r['att_time']);
+                                        $t2 = strtotime($r['att_checkout']);
+                                        $diff = $t2 - $t1;
+                                        $h = floor($diff / 3600);
+                                        $m = floor(($diff % 3600) / 60);
+                                        $workHours = "{$h} ชม. {$m} น.";
+                                    }
+                                ?>
+                                <tr>
+                                    <td class="text-center fw-bold"><?= $i + 1 ?></td>
+                                    <td>
+                                        <div class="fw-bold text-dark"><?= $dateDisplay ?></div>
+                                        <small class="text-muted">วัน<?= $dayName ?></small>
+                                    </td>
+                                    <td>
+                                        <?php if (!empty($r['att_time']) && $r['att_time'] !== '00:00:00'): ?>
+                                            <span class="badge bg-label-primary fs-6"><i class="bi bi-clock me-1"></i><?= date('H:i', strtotime($r['att_time'])) ?></span>
+                                        <?php else: ?>
+                                            <span class="text-muted">-</span>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td>
+                                        <?php if (!empty($r['att_checkout']) && $r['att_checkout'] !== '00:00:00'): ?>
+                                            <span class="badge bg-label-success fs-6"><i class="bi bi-clock me-1"></i><?= date('H:i', strtotime($r['att_checkout'])) ?></span>
+                                        <?php else: ?>
+                                            <span class="text-muted">-</span>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td>
+                                        <?php if ($workHours !== '-'): ?>
+                                            <span class="fw-bold text-dark fs-6"><?= $workHours ?></span>
+                                        <?php else: ?>
+                                            <span class="text-muted">-</span>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td class="text-center">
+                                        <?php
+                                        $statusClass = [
+                                            'มา'  => 'btn-outline-success',
+                                            'มาปกติ' => 'btn-outline-success',
+                                            'ปกติ'  => 'btn-outline-success',
+                                            'สาย' => 'btn-outline-warning',
+                                            'มาสาย' => 'btn-outline-warning',
+                                            'ขาด'   => 'btn-outline-danger',
+                                            'ลากิจ' => 'btn-outline-info',
+                                            'ลาป่วย' => 'btn-outline-info',
+                                            'ไปราชการ' => 'btn-outline-primary',
+                                        ];
+                                        $class = $statusClass[$r['att_status']] ?? 'btn-outline-secondary';
+                                        ?>
+                                        <span class="badge border <?= $class ?> fw-bold px-3 py-1.5"><i class="bi bi-shield-check me-1"></i><?= $r['att_status'] ?></span>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -231,13 +347,13 @@
     // Pie Chart with ApexCharts
     document.addEventListener('DOMContentLoaded', function () {
         var options = {
-            series: [<?= $summary['ปกติ'] ?>, <?= $summary['มาสาย'] ?>, <?= $summary['ขาด'] ?>],
+            series: [<?= $summary['ปกติ'] ?>, <?= $summary['ลา'] ?>, <?= $summary['มาสาย'] ?>, <?= $summary['ขาด'] ?>],
             chart: {
                 type: 'donut',
                 height: 350,
             },
-            labels: ['มาปกติ', 'มาสาย', 'ขาดงาน'],
-            colors: ['#28a745', '#ffc107', '#dc3545'],
+            labels: ['มาปกติ', 'วันลา', 'มาสาย', 'ขาดงาน'],
+            colors: ['#28a745', '#0d6efd', '#ffc107', '#dc3545'],
             legend: {
                 position: 'bottom',
                 fontFamily: 'Sarabun, sans-serif',

@@ -149,132 +149,12 @@
         </div>
     </div>
 
-    <!-- Quick Status and Actions -->
-    <div class="row g-4 mb-4">
-        <!-- Today Attendance Status Card -->
-        <div class="col-lg-6">
-            <div class="card border shadow-sm h-100">
-                <div class="card-header border-bottom d-flex align-items-center justify-content-between bg-light">
-                    <h5 class="mb-0 fw-bold"><i class="bi bi-clock me-2 text-primary"></i>สถานะการลงเวลางานวันนี้</h5>
-                    <span class="badge bg-primary px-2.5 py-1">วันนี้</span>
-                </div>
-                <div class="card-body py-4">
-                    <div class="d-flex align-items-center">
-                        <div class="p-3 rounded-circle me-3 d-flex align-items-center justify-content-center <?= $todayRecord ? ($todayRecord['check_out'] ? 'bg-label-success text-success' : 'bg-label-info text-info') : 'bg-label-secondary text-muted' ?>" style="width: 60px; height: 60px;">
-                            <?php if ($todayRecord): ?>
-                                <?php if ($todayRecord['check_out']): ?>
-                                    <i class="bi bi-check2-all fs-2"></i>
-                                <?php else: ?>
-                                    <i class="bi bi-box-arrow-in-right fs-2"></i>
-                                <?php endif; ?>
-                            <?php else: ?>
-                                <i class="bi bi-slash-circle fs-2"></i>
-                            <?php endif; ?>
-                        </div>
-                        <div>
-                            <div class="small text-muted mb-1">สถานะปัจจุบัน</div>
-                            <h4 class="fw-bold text-dark mb-0"><?= $todayStatus ?></h4>
-                        </div>
-                    </div>
-
-                    <hr class="my-4">
-
-                    <div class="row g-3">
-                        <div class="col-6">
-                            <div class="bg-light p-3 rounded-3">
-                                <small class="text-muted d-block mb-1"><i class="bi bi-box-arrow-in-right text-success me-1"></i>เวลาเช็คอิน</small>
-                                <span class="fw-bold fs-5 text-dark"><?= ($todayRecord && $todayRecord['check_in']) ? date('H:i:s', strtotime($todayRecord['check_in'])) : '--:--:--' ?></span>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="bg-light p-3 rounded-3">
-                                <small class="text-muted d-block mb-1"><i class="bi bi-box-arrow-left text-danger me-1"></i>เวลาเช็คเอาท์</small>
-                                <span class="fw-bold fs-5 text-dark"><?= ($todayRecord && $todayRecord['check_out']) ? date('H:i:s', strtotime($todayRecord['check_out'])) : '--:--:--' ?></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mt-4">
-                        <?php if (!$todayRecord): ?>
-                            <a href="<?= base_url('Support/SupportAttendance') ?>" class="btn btn-primary w-100 py-2.5 quick-action-btn fw-bold">
-                                <i class="bi bi-camera me-2"></i> สแกนลงเวลาเข้างาน (Check-In)
-                            </a>
-                        <?php elseif (!$todayRecord['check_out']): ?>
-                            <a href="<?= base_url('Support/SupportAttendance') ?>" class="btn btn-warning w-100 py-2.5 quick-action-btn fw-bold text-dark">
-                                <i class="bi bi-camera-reels me-2"></i> สแกนลงเวลากลับงาน (Check-Out)
-                            </a>
-                        <?php else: ?>
-                            <button class="btn btn-success w-100 py-2.5 quick-action-btn fw-bold" disabled>
-                                <i class="bi bi-check-circle me-2"></i> วันนี้คุณลงเวลางานเสร็จสิ้นแล้ว
-                            </button>
-                        <?php endif; ?>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Attendance Settings & Rules -->
-        <div class="col-lg-6">
-            <div class="card border shadow-sm h-100">
-                <div class="card-header border-bottom d-flex align-items-center justify-content-between bg-light">
-                    <h5 class="mb-0 fw-bold"><i class="bi bi-info-circle me-2 text-primary"></i>กติกาและพื้นที่การเช็คชื่อ</h5>
-                    <span class="badge bg-secondary">ข้อกำหนด</span>
-                </div>
-                <div class="card-body py-4">
-                    <ul class="list-group list-group-flush mb-0">
-                        <li class="list-group-item px-0 py-3 bg-transparent d-flex align-items-center justify-content-between">
-                            <div class="d-flex align-items-center">
-                                <i class="bi bi-geo-alt-fill text-primary me-3 fs-4"></i>
-                                <div>
-                                    <div class="fw-bold text-dark">ขอบเขตพื้นที่ลงเวลางาน</div>
-                                    <small class="text-muted">ตรวจสอบโดยระบบ GPS มือถือ/คอมพิวเตอร์</small>
-                                </div>
-                            </div>
-                            <span class="badge bg-label-primary font-monospace fw-bold">
-                                <?= $locationSettings ? $locationSettings->radius_m : '200' ?> เมตร
-                            </span>
-                        </li>
-                        <li class="list-group-item px-0 py-3 bg-transparent d-flex align-items-center justify-content-between">
-                            <div class="d-flex align-items-center">
-                                <i class="bi bi-alarm-fill text-warning me-3 fs-4"></i>
-                                <div>
-                                    <div class="fw-bold text-dark">เวลาเข้างานปกติ</div>
-                                    <small class="text-muted">หากลงเวลาหลังจากนี้จะถือว่า "สาย"</small>
-                                </div>
-                            </div>
-                            <span class="badge bg-label-warning font-monospace fw-bold">
-                                ก่อน <?= $locationSettings ? date('H:i', strtotime($locationSettings->check_in_end)) : '08:30' ?> น.
-                            </span>
-                        </li>
-                        <li class="list-group-item px-0 py-3 bg-transparent d-flex align-items-center justify-content-between">
-                            <div class="d-flex align-items-center">
-                                <i class="bi bi-camera-fill text-success me-3 fs-4"></i>
-                                <div>
-                                    <div class="fw-bold text-dark">การยืนยันตัวตนด้วยภาพถ่าย</div>
-                                    <small class="text-muted">กล้อง Webcam ถ่ายภาพใบหน้าปัจจุบัน</small>
-                                </div>
-                            </div>
-                            <span class="badge bg-label-success fw-bold">
-                                ต้องถ่ายภาพเซลฟี่
-                            </span>
-                        </li>
-                    </ul>
-                    <div class="alert alert-info border-0 rounded-3 mt-4 mb-0 d-flex align-items-start">
-                        <i class="bi bi-exclamation-triangle-fill me-2 fs-5 text-primary"></i>
-                        <small class="mb-0">
-                            <strong>คำแนะนำ:</strong> กรุณาเปิดระบบระบุตำแหน่ง GPS บนสมาร์ทโฟนหรือเบราว์เซอร์ของท่านทุกครั้งก่อนลงเวลางาน เพื่อหลีกเลี่ยงความผิดพลาดในการค้นหาพิกัดพื้นที่
-                        </small>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Monthly Stats Summary Dashboard -->
     <h5 class="fw-bold text-dark mb-3"><i class="bi bi-graph-up-arrow me-2 text-primary"></i>สรุปผลการปฏิบัติงานของเดือนนี้ (เดือน<?= date('m') ?>)</h5>
     <div class="row g-3 mb-4">
         <!-- Present Days -->
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="card stat-card border-start border-success border-4">
                 <div class="card-body p-4 text-center">
                     <div class="avatar bg-label-success rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 56px; height: 56px;">
@@ -286,8 +166,21 @@
             </div>
         </div>
 
+        <!-- Leave Days -->
+        <div class="col-md-3">
+            <div class="card stat-card border-start border-primary border-4">
+                <div class="card-body p-4 text-center">
+                    <div class="avatar bg-label-primary rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 56px; height: 56px;">
+                        <i class="bi bi-calendar2-range-fill fs-3 text-primary"></i>
+                    </div>
+                    <h2 class="fw-black mb-1 text-primary"><?= $summary['ลา'] ?></h2>
+                    <div class="fw-bold text-muted small">วันลา (วัน)</div>
+                </div>
+            </div>
+        </div>
+
         <!-- Late Days -->
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="card stat-card border-start border-warning border-4">
                 <div class="card-body p-4 text-center">
                     <div class="avatar bg-label-warning rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 56px; height: 56px;">
@@ -300,7 +193,7 @@
         </div>
 
         <!-- Absences -->
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="card stat-card border-start border-danger border-4">
                 <div class="card-body p-4 text-center">
                     <div class="avatar bg-label-danger rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 56px; height: 56px;">

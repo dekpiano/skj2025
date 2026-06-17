@@ -194,7 +194,7 @@ $routes->group('admin/botany', ['filter' => 'botany_auth', 'namespace' => 'App\C
     $routes->post('newsdeleteimage', 'ConAdminBotany::NewsDeleteImage');
 });
 
-$routes->group('Manager', ['filter' => 'permission:Manager,ผู้บริหาร', 'namespace' => 'App\Controllers\Manager'], function ($routes) {
+$routes->group('Manager', ['filter' => 'permission:Manager,ผู้บริหาร,ผู้บริหารสถานศึกษา', 'namespace' => 'App\Controllers\Manager'], function ($routes) {
     $routes->get('Dashboard', 'ConManagerDashboard::index');
     $routes->get('Personnel', 'ConManagerPersonnel::index');
     $routes->get('Personnel/Overview', 'ConManagerPersonnel::overview');
@@ -225,12 +225,13 @@ $routes->group('Manager', ['filter' => 'permission:Manager,ผู้บริห
 });
 // 
 
-$routes->group('Support', ['filter' => 'permission:Support,ฝ่ายสนับสนุน', 'namespace' => 'App\Controllers\Support'], function ($routes) {
+$routes->group('Support', ['filter' => 'permission:Support,ฝ่ายสนับสนุน,บุคลากรฝ่ายสนับสนุน', 'namespace' => 'App\Controllers\Support'], function ($routes) {
     $routes->get('Dashboard', 'ConSupportAttendance::dashboard');
     $routes->get('SupportAttendance', 'ConSupportAttendance::index');
     $routes->post('SupportAttendance/checkin', 'ConSupportAttendance::checkInsert');
     $routes->post('SupportAttendance/checkout', 'ConSupportAttendance::checkOut');
     $routes->get('SupportAttendance/History', 'ConSupportAttendance::history');
+    $routes->get('SupportAttendance/FingerprintHistory', 'ConSupportAttendance::fingerprintHistory');
     $routes->get('SupportAttendance/Report', 'ConSupportAttendance::monthlyReport');
 });
 

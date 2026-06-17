@@ -113,11 +113,13 @@ class SupportAttendanceModel extends Model
      */
     public function getMonthlySummary(string $persId, string $month, string $year): array
     {
-        $records = $this->select('status, COUNT(*) as cnt')
-                        ->where('pers_id', $persId)
+        $db = \Config\Database::connect('personnal');
+        $records = $db->table('tb_personnel_attendance')
+                        ->select('att_status, COUNT(*) as cnt')
+                        ->where('att_person_id', $persId)
                         ->where('MONTH(att_date)', $month)
                         ->where('YEAR(att_date)', $year)
-                        ->groupBy('status')
+                        ->groupBy('att_status')
                         ->get()
                         ->getResultArray();
 
@@ -125,11 +127,19 @@ class SupportAttendanceModel extends Model
             'ปกติ' => 0,
             'มาสาย' => 0,
             'ขาด'  => 0,
+            'ลา'   => 0,
         ];
 
         foreach ($records as $row) {
-            if (isset($summary[$row['status']])) {
-                $summary[$row['status']] = (int) $row['cnt'];
+            $status = $row['att_status'];
+            if ($status === 'มา' || $status === 'มาปกติ' || $status === 'ปกติ') {
+                $summary['ปกติ'] += (int) $row['cnt'];
+            } elseif ($status === 'สาย' || $status === 'มาสาย') {
+                $summary['มาสาย'] += (int) $row['cnt'];
+            } elseif ($status === 'ขาด') {
+                $summary['ขาด'] += (int) $row['cnt'];
+            } elseif (in_array($status, ['ลากิจ', 'ลาป่วย', 'ไปราชการ', 'อื่นๆ', 'ลา'])) {
+                $summary['ลา'] += (int) $row['cnt'];
             }
         }
 
@@ -146,5 +156,20 @@ class SupportAttendanceModel extends Model
                     ->where('YEAR(att_date)', $year)
                     ->orderBy('att_date', 'DESC')
                     ->findAll();
+    }
+
+    /**
+     * ดึงประวัติละเอียดจากระบบสแกนนิ้วและใบลาของบุคลากร
+     */
+    public function getOfficialHistoryDetailed(string $persId, string $month, string $year): array
+    {
+        $db = \Config\Database::connect('personnal');
+        return $db->table('tb_personnel_attendance')
+                  ->where('att_person_id', $persId)
+                  ->where('MONTH(att_date)', $month)
+                  ->where('YEAR(att_date)', $year)
+                  ->orderBy('att_date', 'DESC')
+                  ->get()
+                  ->getResultArray();
     }
 }
