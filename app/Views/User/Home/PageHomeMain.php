@@ -329,27 +329,30 @@
 
 
 <!-- Welcome Modal -->
-<?php if (isset($welcome_modal_status) && $welcome_modal_status == 'on' && !empty($welcome_modal_images) && is_array($welcome_modal_images)): ?>
+<?php if (isset($welcome_modal_is_active) && $welcome_modal_is_active && !empty($welcome_modal_images) && is_array($welcome_modal_images)): ?>
 <div class="modal fade" id="welcomeModal" tabindex="-1" aria-labelledby="welcomeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content border-0 bg-transparent position-relative">
             <div class="modal-body text-center p-0 overflow-hidden rounded-3 shadow-lg" style="background-color: transparent;">
-                <?php if (count($welcome_modal_images) == 1): ?>
-                    <img src="<?php echo base_url('uploads/welcome/' . $welcome_modal_images[0]); ?>" class="img-fluid rounded-3" alt="ประกาศ">
+                <?php 
+                    $modalList = !empty($welcome_modal_active_images) ? $welcome_modal_active_images : array_map(function($img) { return ['file' => $img, 'title' => '']; }, $welcome_modal_images);
+                ?>
+                <?php if (count($modalList) == 1): ?>
+                    <img src="<?php echo base_url('uploads/welcome/' . $modalList[0]['file']); ?>" class="img-fluid rounded-3" alt="<?= esc($modalList[0]['title'] ?: 'ประกาศ') ?>">
                 <?php else: ?>
                     <div id="welcomeCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3500">
                         <!-- Indicators -->
                         <div class="carousel-indicators">
-                             <?php foreach ($welcome_modal_images as $index => $img): ?>
+                             <?php foreach ($modalList as $index => $item): ?>
                                  <button type="button" data-bs-target="#welcomeCarousel" data-bs-slide-to="<?= $index ?>" class="<?= $index === 0 ? 'active' : '' ?>" aria-current="<?= $index === 0 ? 'true' : 'false' ?>"></button>
                              <?php endforeach; ?>
                         </div>
                         
                         <!-- Slides -->
                         <div class="carousel-inner rounded-3">
-                            <?php foreach ($welcome_modal_images as $index => $img): ?>
+                            <?php foreach ($modalList as $index => $item): ?>
                                 <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
-                                    <img src="<?php echo base_url('uploads/welcome/' . $img); ?>" class="d-block w-100 img-fluid" alt="ประกาศ <?= $index + 1 ?>">
+                                    <img src="<?php echo base_url('uploads/welcome/' . $item['file']); ?>" class="d-block w-100 img-fluid" alt="<?= esc($item['title'] ?: ('ประกาศ ' . ($index + 1))) ?>">
                                 </div>
                             <?php endforeach; ?>
                         </div>

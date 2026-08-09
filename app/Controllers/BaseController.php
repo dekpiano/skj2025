@@ -88,12 +88,62 @@ abstract class BaseController extends Controller
         $db = \Config\Database::connect();
         if ($db->tableExists('tb_web_settings')) {
             $this->data['festival_status'] = $webSettingsModel->getStatus('festival_theme');
-            $this->data['welcome_modal_status'] = $webSettingsModel->getStatus('welcome_modal_status');
-            $this->data['welcome_modal_images'] = json_decode($webSettingsModel->getStatus('welcome_modal_images') ?: '[]', true);
+            
+            $modalStatus = $webSettingsModel->getStatus('welcome_modal_status'); // 'on', 'off'
+            $rawItems = $webSettingsModel->getStatus('welcome_modal_items');
+            $items = json_decode($rawItems ?: '[]', true);
+
+            // Backward compatibility fallback
+            if (empty($items)) {
+                $rawImages = $webSettingsModel->getStatus('welcome_modal_images');
+                $legacyImages = json_decode($rawImages ?: '[]', true);
+                if (is_array($legacyImages)) {
+                    $items = [];
+                    foreach ($legacyImages as $img) {
+                        if (is_string($img)) {
+                            $items[] = ['file' => $img, 'title' => '', 'start_datetime' => '', 'end_datetime' => ''];
+                        } elseif (is_array($img) && isset($img['file'])) {
+                            $items[] = $img;
+                        }
+                    }
+                }
+            }
+            
+            $now = date('Y-m-d\TH:i');
+            $activeImages = [];
+
+            if ($modalStatus === 'on' && is_array($items)) {
+                foreach ($items as $item) {
+                    $file = is_array($item) ? ($item['file'] ?? '') : $item;
+                    if (!$file) continue;
+
+                    $startDt = is_array($item) ? ($item['start_datetime'] ?? '') : '';
+                    $endDt = is_array($item) ? ($item['end_datetime'] ?? '') : '';
+
+                    $afterStart = empty($startDt) || ($now >= $startDt);
+                    $beforeEnd = empty($endDt) || ($now <= $endDt);
+
+                    if ($afterStart && $beforeEnd) {
+                        $activeImages[] = [
+                            'file' => $file,
+                            'title' => is_array($item) ? ($item['title'] ?? '') : ''
+                        ];
+                    }
+                }
+            }
+
+            $this->data['welcome_modal_status'] = $modalStatus;
+            $this->data['welcome_modal_is_active'] = !empty($activeImages);
+            $this->data['welcome_modal_active_images'] = $activeImages;
+            $this->data['welcome_modal_images'] = array_column($activeImages, 'file');
+            $this->data['welcome_modal_items'] = $items;
         } else {
             $this->data['festival_status'] = 'off';
             $this->data['welcome_modal_status'] = 'off';
+            $this->data['welcome_modal_is_active'] = false;
+            $this->data['welcome_modal_active_images'] = [];
             $this->data['welcome_modal_images'] = [];
+            $this->data['welcome_modal_items'] = [];
         }
 
         // --- Common Navbar Data ---

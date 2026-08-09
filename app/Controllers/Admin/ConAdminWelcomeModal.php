@@ -18,28 +18,37 @@ class ConAdminWelcomeModal extends BaseController
 
         $settingsModel = new WebSettingsModel();
         
-        $rawImages = $settingsModel->getStatus('welcome_modal_images');
-        $images = json_decode($rawImages ?: '[]', true);
+        $rawItems = $settingsModel->getStatus('welcome_modal_items');
+        $items = json_decode($rawItems ?: '[]', true);
         
-        // If JSON decode failed due to prior truncation, try to recover or fallback
-        if ($rawImages && $images === null) {
-            log_message('warning', 'WelcomeModal JSON decode failed: ' . $rawImages);
-            // Fallback: search for filenames inside the broken string using regex
-            preg_match_all('/"([^"]+\.(?:png|jpg|jpeg|webp))"/i', $rawImages, $matches);
-            if (!empty($matches[1])) {
-                $images = $matches[1];
-                // Save the recovered array back to db
-                $settingsModel->updateStatus('welcome_modal_images', json_encode($images));
-            } else {
-                $images = [];
+        // Backward compatibility fallback: if welcome_modal_items is empty, convert old welcome_modal_images string list into items array
+        if (empty($items)) {
+            $rawImages = $settingsModel->getStatus('welcome_modal_images');
+            $legacyImages = json_decode($rawImages ?: '[]', true);
+            if (is_array($legacyImages) && !empty($legacyImages)) {
+                $globalStart = $settingsModel->getStatus('welcome_modal_start_datetime');
+                $globalEnd = $settingsModel->getStatus('welcome_modal_end_datetime');
+                $items = [];
+                foreach ($legacyImages as $img) {
+                    if (is_string($img)) {
+                        $items[] = [
+                            'file' => $img,
+                            'title' => '',
+                            'start_datetime' => $globalStart !== 'off' ? $globalStart : '',
+                            'end_datetime' => $globalEnd !== 'off' ? $globalEnd : ''
+                        ];
+                    } elseif (is_array($img) && isset($img['file'])) {
+                        $items[] = $img;
+                    }
+                }
             }
         }
 
         $data = [
             'title' => "จัดการป๊อปอัปแจ้งเตือน",
-            'description' => "จัดการรูปภาพแบบหลายรูป เรียงลำดับ และเปิด-ปิดสถานะของป๊อปอัปแจ้งเตือนหน้าแรกของเว็บไซต์",
+            'description' => "จัดการรูปภาพประกาศ ตั้งค่าชื่อประกาศ และกำหนดช่วงเวลาแสดงผลแยกตามรายรูปภาพ",
             'status' => $settingsModel->getStatus('welcome_modal_status'),
-            'images' => $images
+            'items' => $items
         ];
 
         return view('Admin/PageAdminWelcomeModal/WelcomeModalMain', array_merge($this->data, $data));
@@ -55,46 +64,63 @@ class ConAdminWelcomeModal extends BaseController
             $settingsModel = new WebSettingsModel();
             
             $status = $this->request->getPost('status') ?: 'off';
-            
-            // 1. Update status
             $settingsModel->updateStatus('welcome_modal_status', $status);
             
-            // 2. Load previous files from DB
-            $dbImages = json_decode($settingsModel->getStatus('welcome_modal_images') ?: '[]', true);
-            if (!is_array($dbImages)) {
-                $dbImages = [];
+            // Load existing items from database
+            $rawDbItems = $settingsModel->getStatus('welcome_modal_items');
+            $dbItems = json_decode($rawDbItems ?: '[]', true) ?: [];
+            $dbFiles = array_column($dbItems, 'file');
+
+            // Legacy backup check
+            if (empty($dbFiles)) {
+                $legacyImages = json_decode($settingsModel->getStatus('welcome_modal_images') ?: '[]', true) ?: [];
+                $dbFiles = array_filter(array_map(function($i) { return is_array($i) ? ($i['file'] ?? null) : $i; }, $legacyImages));
             }
-            
-            // 3. Get existing images that are kept/reordered from the client
-            $existingImages = $this->request->getPost('existing_images') ?: [];
-            if (!is_array($existingImages)) {
-                $existingImages = [];
-            }
-            
-            // Ensure uploads/welcome/ folder exists
+
+            // Get existing item inputs submitted by client
+            $inputFiles = $this->request->getPost('item_file') ?: [];
+            $inputTitles = $this->request->getPost('item_title') ?: [];
+            $inputStarts = $this->request->getPost('item_start_datetime') ?: [];
+            $inputEnds = $this->request->getPost('item_end_datetime') ?: [];
+
             $uploadPath = FCPATH . 'uploads/welcome/';
             if (!is_dir($uploadPath)) {
                 mkdir($uploadPath, 0777, true);
             }
 
-            // Delete images that were removed by the user
-            $removedImages = array_diff($dbImages, $existingImages);
-            foreach ($removedImages as $removedImg) {
-                if ($removedImg) {
-                    $filePath = $uploadPath . $removedImg;
+            // Delete removed image files
+            $keptFiles = array_values(array_filter($inputFiles));
+            $removedFiles = array_diff($dbFiles, $keptFiles);
+            foreach ($removedFiles as $removedFile) {
+                if ($removedFile) {
+                    $filePath = $uploadPath . $removedFile;
                     if (file_exists($filePath)) {
                         @unlink($filePath);
                     }
                 }
             }
-            
-            // Start building final array
-            $finalImages = $existingImages;
-            
-            // 4. Handle multiple new uploads
+
+            // Build item objects for existing files
+            $finalItems = [];
+            foreach ($inputFiles as $idx => $fileName) {
+                if (!empty($fileName)) {
+                    $finalItems[] = [
+                        'file' => $fileName,
+                        'title' => $inputTitles[$idx] ?? '',
+                        'start_datetime' => $inputStarts[$idx] ?? '',
+                        'end_datetime' => $inputEnds[$idx] ?? ''
+                    ];
+                }
+            }
+
+            // Handle newly uploaded files
             $files = $this->request->getFiles();
+            $newTitles = $this->request->getPost('new_item_title') ?: [];
+            $newStarts = $this->request->getPost('new_item_start_datetime') ?: [];
+            $newEnds = $this->request->getPost('new_item_end_datetime') ?: [];
+
             if (isset($files['welcome_modal_imgs'])) {
-                foreach ($files['welcome_modal_imgs'] as $file) {
+                foreach ($files['welcome_modal_imgs'] as $nIdx => $file) {
                     if ($file && $file->isValid() && !$file->hasMoved()) {
                         $newName = $file->getRandomName();
                         $jpgName = pathinfo($newName, PATHINFO_FILENAME) . '.jpg';
@@ -103,19 +129,27 @@ class ConAdminWelcomeModal extends BaseController
                             ->withFile($file)
                             ->save($uploadPath . $jpgName, 90);
                             
-                        $finalImages[] = $jpgName;
+                        $finalItems[] = [
+                            'file' => $jpgName,
+                            'title' => $newTitles[$nIdx] ?? '',
+                            'start_datetime' => $newStarts[$nIdx] ?? '',
+                            'end_datetime' => $newEnds[$nIdx] ?? ''
+                        ];
                     }
                 }
             }
-            
-            // 5. Clean and update settings in DB
-            $finalImages = array_values(array_filter($finalImages));
-            $settingsModel->updateStatus('welcome_modal_images', json_encode($finalImages));
+
+            // Clean array and update DB
+            $finalItems = array_values($finalItems);
+            $settingsModel->updateStatus('welcome_modal_items', json_encode($finalItems));
+            // Keep legacy setting synced with filename list for compatibility
+            $legacyFilenameList = array_column($finalItems, 'file');
+            $settingsModel->updateStatus('welcome_modal_images', json_encode($legacyFilenameList));
             
             return $this->response->setJSON([
                 'status' => 'success',
                 'message' => 'บันทึกการตั้งค่าป๊อปอัปแจ้งเตือนเรียบร้อยแล้ว',
-                'images' => $finalImages
+                'items' => $finalItems
             ]);
         } catch (\Exception $e) {
             log_message('error', 'WelcomeModal Update Error: ' . $e->getMessage());

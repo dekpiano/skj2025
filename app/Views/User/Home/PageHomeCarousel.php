@@ -1,6 +1,6 @@
 <style>
     .hero-carousel-wrapper {
-        padding: 40px 0;
+        padding: 15px 0 40px 0; /* ลดด้านบนให้ขยับขึ้นไปชิด Navbar มากขึ้น (Navbar มี margin-bottom อยู่แล้ว) */
         background: #fff;
         overflow: hidden;
     }
@@ -44,14 +44,14 @@
     /* --- Tablet / iPad View (768px to 1199px) --- */
     @media screen and (min-width: 768px) and (max-width: 1199px) {
         .hero-carousel-wrapper {
-            padding: 110px 0 30px;
+            padding: 10px 0 30px 0; /* ลดด้านบนลงอีก */
         }
     }
 
     /* --- Smartphone View --- */
     @media screen and (max-width: 767px) {
         .hero-carousel-wrapper {
-            padding: 90px 0 20px;
+            padding: 5px 0 25px 0; /* มือถือให้ชิดขึ้นไปอีก */
         }
         .slider-img-container {
             border-radius: 15px;
