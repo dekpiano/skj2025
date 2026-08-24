@@ -252,3 +252,35 @@ $routes->group('Support', ['filter' => 'permission:Support,ฝ่ายสนั
 if (is_file(APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php')) {
     require APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php';
 }
+
+// Live Chat Admin & API Routes (SKJ Main Website)
+$routes->get('Admin/LiveChat', 'Admin\AdminControlChat::index');
+$routes->get('Admin/live-chat', 'Admin\AdminControlChat::index');
+$routes->get('admin/live-chat', 'Admin\AdminControlChat::index');
+$routes->get('admin/LiveChat', 'Admin\AdminControlChat::index');
+
+$routes->get('admin/live-chat/sessions', 'Admin\AdminControlChat::getSessions');
+$routes->get('Admin/live-chat/sessions', 'Admin\AdminControlChat::getSessions');
+$routes->get('admin/live-chat/messages/(:num)', 'Admin\AdminControlChat::getSessionMessages/$1');
+$routes->get('Admin/live-chat/messages/(:num)', 'Admin\AdminControlChat::getSessionMessages/$1');
+$routes->post('admin/live-chat/reply', 'Admin\AdminControlChat::sendReply');
+$routes->post('Admin/live-chat/reply', 'Admin\AdminControlChat::sendReply');
+$routes->post('admin/live-chat/upload', 'Admin\AdminControlChat::uploadAttachment');
+$routes->post('Admin/live-chat/upload', 'Admin\AdminControlChat::uploadAttachment');
+$routes->post('admin/live-chat/toggle-status/(:num)', 'Admin\AdminControlChat::toggleStatus/$1');
+$routes->post('Admin/live-chat/toggle-status/(:num)', 'Admin\AdminControlChat::toggleStatus/$1');
+$routes->post('admin/live-chat/delete/(:num)', 'Admin\AdminControlChat::deleteSession/$1');
+$routes->post('Admin/live-chat/delete/(:num)', 'Admin\AdminControlChat::deleteSession/$1');
+
+$routes->get('admin/live-chat/telegram-config', 'Admin\AdminControlChat::getTelegramConfig');
+$routes->get('Admin/live-chat/telegram-config', 'Admin\AdminControlChat::getTelegramConfig');
+$routes->post('admin/live-chat/telegram-config', 'Admin\AdminControlChat::saveTelegramConfig');
+$routes->post('Admin/live-chat/telegram-config', 'Admin\AdminControlChat::saveTelegramConfig');
+$routes->post('admin/live-chat/telegram-test', 'Admin\AdminControlChat::testTelegramNotification');
+$routes->post('Admin/live-chat/telegram-test', 'Admin\AdminControlChat::testTelegramNotification');
+
+$routes->post('api/chat/init', 'Api\ChatApi::initSession');
+$routes->post('api/chat/send', 'Api\ChatApi::sendMessage');
+$routes->post('api/chat/upload', 'Api\ChatApi::uploadAttachment');
+$routes->get('api/chat/messages', 'Api\ChatApi::getMessages');
+

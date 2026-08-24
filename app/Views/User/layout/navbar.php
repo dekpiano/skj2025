@@ -44,7 +44,7 @@
                     </div>
                     <ul class="nav-menu-lawa">
                         <li class="has-dropdown">
-                            <a href="#">เกี่ยวกับ สกจ</a>
+                            <a href="#"><i class="bi bi-bank me-1"></i>เกี่ยวกับ สกจ</a>
                             <ul class="sub-menu">
                                 <?php foreach ($AboutSchool as $key => $v_AboutSchool): ?>
                                     <li><a href="<?= base_url('About/' . urlencode($v_AboutSchool->about_menu)) ?>"><i
@@ -52,47 +52,49 @@
                                     </li>
                                 <?php endforeach; ?>
                                 <li><a href="<?= base_url('Board') ?>"><i
-                                            class="bi bi-people-fill me-2"></i>คณะกรรมการสถานศึกษา</a></li>
+                                            class="bi bi-person-lines-fill me-2"></i>คณะกรรมการสถานศึกษา</a></li>
                                 <li><a href="<?= base_url('Botany') ?>"><i
-                                            class="bi bi-tree-fill me-2"></i>งานสวนพฤกษศาสตร์</a></li>
+                                            class="bi bi-flower1 me-2"></i>งานสวนพฤกษศาสตร์</a></li>
                             </ul>
                         </li>
                         <li class="has-dropdown has-mega">
-                            <a href="#">หน่วยงานภายใน</a>
+                            <a href="#"><i class="bi bi-diagram-3-fill me-1"></i>หน่วยงานภายใน</a>
                             <div class="mega-menu">
                                 <div class="row">
                                     <div class="col-lg-3">
-                                        <h6 class="mega-title">ฝ่ายบริหารงาน</h6>
+                                        <h6 class="mega-title"><i class="bi bi-briefcase-fill me-2"></i>ฝ่ายบริหารงาน</h6>
                                         <a href="https://academic.skj.ac.th/"><i
-                                                class="bi bi-book me-2"></i>งานวิชาการ</a>
+                                                class="bi bi-journal-bookmark-fill me-2"></i>งานวิชาการ</a>
                                         <a href="https://general.skj.ac.th/"><i
-                                                class="bi bi-gear me-2"></i>งานทั่วไป</a>
+                                                class="bi bi-gear-wide-connected me-2"></i>งานทั่วไป</a>
                                         <a href="https://personnel.skj.ac.th/"><i
-                                                class="bi bi-person-badge me-2"></i>งานบุคคล</a>
+                                                class="bi bi-person-vcard me-2"></i>งานบุคคล</a>
                                         <a href="https://budgetplan.skj.ac.th/"><i
-                                                class="bi bi-bar-chart-line me-2"></i>งานงบประมาณและแผน</a>
+                                                class="bi bi-graph-up-arrow me-2"></i>งานงบประมาณและแผน</a>
                                     </div>
                                     <div class="col-lg-3">
-                                        <h6 class="mega-title">คณะผู้บริหาร</h6>
+                                        <h6 class="mega-title"><i class="bi bi-person-workspace me-2"></i>คณะผู้บริหาร</h6>
                                         <a href="<?= base_url('Personnal/Executive') ?>"><i
-                                                class="bi bi-person-video2 me-2"></i>ผู้บริหารสถานศึกษา</a>
+                                                class="bi bi-person-check-fill me-2"></i>ผู้บริหารสถานศึกษา</a>
                                     </div>
                                     <div class="col-lg-3">
-                                        <h6 class="mega-title">บุคลากรสายการสอน</h6>
+                                        <h6 class="mega-title"><i class="bi bi-mortarboard-fill me-2"></i>บุคลากรสายการสอน</h6>
                                         <a href="https://personnel.skj.ac.th/directory"><b><i
                                                     class="bi bi-people-fill me-2"></i>บุคลากรทั้งหมด</b></a>
                                         <?php foreach ($Lear as $key => $v_Lear): ?>
                                             <a
-                                                href="<?= base_url('Personnal/' . urlencode("สายการสอน") . '/' . str_replace(" ", "-", urlencode($v_Lear->lear_namethai))) ?>"><?= $v_Lear->lear_namethai; ?></a>
+                                                href="<?= base_url('Personnal/' . urlencode("สายการสอน") . '/' . str_replace(" ", "-", urlencode($v_Lear->lear_namethai))) ?>"><i
+                                                    class="bi bi-book-half me-1 small"></i><?= $v_Lear->lear_namethai; ?></a>
                                         <?php endforeach; ?>
                                     </div>
                                     <div class="col-lg-3">
-                                        <h6 class="mega-title">สายสนับสนุน</h6>
+                                        <h6 class="mega-title"><i class="bi bi-wrench-adjustable-circle me-2"></i>สายสนับสนุน</h6>
                                         <a href="<?= base_url('Personnal/' . urlencode("สายสนับสนุน")) ?>"><b><i
                                                     class="bi bi-person-gear me-2"></i>สายสนับสนุนทั้งหมด</b></a>
                                         <?php foreach ($PosiOther as $key => $v_PosiOther): ?>
                                             <a
-                                                href="<?= base_url('Personnal/' . urlencode("สายสนับสนุน") . '/' . str_replace(" ", "-", urlencode($v_PosiOther->posi_name))) ?>"><?= $v_PosiOther->posi_name; ?></a>
+                                                href="<?= base_url('Personnal/' . urlencode("สายสนับสนุน") . '/' . str_replace(" ", "-", urlencode($v_PosiOther->posi_name))) ?>"><i
+                                                    class="bi bi-shield-check me-1 small"></i><?= $v_PosiOther->posi_name; ?></a>
                                         <?php endforeach; ?>
                                     </div>
                                 </div>
@@ -115,40 +117,40 @@
                 <!-- RIGHT COLUMN -->
                 <div class="nav-col nav-col-right">
                     <ul class="nav-menu-lawa">
-                        <li><a href="<?= base_url('News') ?>">ประชาสัมพันธ์</a></li>
-                        <li><a href="<?= base_url('Course') ?>">หลักสูตร</a></li>
+                        <li><a href="<?= base_url('News') ?>"><i class="bi bi-newspaper me-1"></i>ประชาสัมพันธ์</a></li>
+                        <li><a href="<?= base_url('Course') ?>"><i class="bi bi-mortarboard-fill me-1"></i>หลักสูตร</a></li>
                         <li class="has-dropdown has-mega">
-                            <a href="#">SKJ บริการ</a>
+                            <a href="#"><i class="bi bi-grid-3x3-gap me-1"></i>SKJ บริการ</a>
                             <div class="mega-menu mega-menu-right">
                                 <div class="row">
                                     <div class="col-lg-3">
-                                        <h6 class="mega-title">นักเรียน & การเรียน</h6>
-                                        <a href="https://admission.skj.ac.th/">รับสมัครนักเรียน</a>
-                                        <a href="https://academic.skj.ac.th/LearningOnline">ห้องเรียนออนไลน์</a>
-                                        <a href="https://learnsuan.skj.ac.th/">สวนกุหลาบศึกษา</a>
-                                        <a href="<?= base_url('guidance') ?>">ทุนการศึกษา</a>
+                                        <h6 class="mega-title"><i class="bi bi-book-half me-2"></i>นักเรียน & การเรียน</h6>
+                                        <a href="https://admission.skj.ac.th/"><i class="bi bi-person-plus me-2"></i>รับสมัครนักเรียน</a>
+                                        <a href="https://academic.skj.ac.th/LearningOnline"><i class="bi bi-globe me-2"></i>ห้องเรียนออนไลน์</a>
+                                        <a href="https://learnsuan.skj.ac.th/"><i class="bi bi-journal-text me-2"></i>สวนกุหลาบศึกษา</a>
+                                        <a href="<?= base_url('guidance') ?>"><i class="bi bi-mortarboard me-2"></i>ทุนการศึกษา</a>
                                     </div>
                                     <div class="col-lg-3">
-                                        <h6 class="mega-title">ระบบจอง & แจ้งซ่อม</h6>
-                                        <a href="https://general.skj.ac.th/Booking">จองอาคารสถานที่</a>
-                                        <a href="https://general.skj.ac.th/CarBooking">จองยานพาหนะ</a>
-                                        <a href="https://general.skj.ac.th/Repair">แจ้งซ่อมออนไลน์</a>
-                                        <a href="https://general.skj.ac.th/FoodReport">รายงานอาหาร</a>
+                                        <h6 class="mega-title"><i class="bi bi-wrench-adjustable me-2"></i>ระบบจอง & แจ้งซ่อม</h6>
+                                        <a href="https://general.skj.ac.th/Booking"><i class="bi bi-building-up me-2"></i>จองอาคารสถานที่</a>
+                                        <a href="https://general.skj.ac.th/CarBooking"><i class="bi bi-car-front me-2"></i>จองยานพาหนะ</a>
+                                        <a href="https://general.skj.ac.th/Repair"><i class="bi bi-tools me-2"></i>แจ้งซ่อมออนไลน์</a>
+                                        <a href="https://general.skj.ac.th/FoodReport"><i class="bi bi-pie-chart me-2"></i>รายงานอาหาร</a>
                                     </div>
                                     <div class="col-lg-3">
-                                        <h6 class="mega-title">ข้อมูล & เอกสาร</h6>
-                                        <a href="<?= base_url('Yearbook') ?>">หนังสือรุ่นดิจิทัล</a>
-                                        <a href="<?= base_url('PageGroup') ?>">Facebook กลุ่ม</a>
-                                        <a href="<?= base_url('Email') ?>">อีเมลโรงเรียน</a>
-                                        <a href="https://documentcenter.skj.ac.th/">โหลดเอกสาร</a>
-                                        <a href="<?= base_url('Botany') ?>">งานสวนพฤกษศาสตร์</a>
+                                        <h6 class="mega-title"><i class="bi bi-folder2-open me-2"></i>ข้อมูล & เอกสาร</h6>
+                                        <a href="<?= base_url('Yearbook') ?>"><i class="bi bi-book me-2"></i>หนังสือรุ่นดิจิทัล</a>
+                                        <a href="<?= base_url('PageGroup') ?>"><i class="bi bi-facebook me-2"></i>Facebook กลุ่ม</a>
+                                        <a href="<?= base_url('Email') ?>"><i class="bi bi-envelope-at me-2"></i>อีเมลโรงเรียน</a>
+                                        <a href="https://documentcenter.skj.ac.th/"><i class="bi bi-file-earmark-arrow-down me-2"></i>โหลดเอกสาร</a>
+                                        <a href="<?= base_url('Botany') ?>"><i class="bi bi-tree-fill me-2"></i>งานสวนพฤกษศาสตร์</a>
                                     </div>
                                     <div class="col-lg-3">
-                                        <h6 class="mega-title">กีฬา & อื่นๆ</h6>
-                                        <a href="<?= base_url('Procurements') ?>">จัดซื้อจัดจ้าง</a>
-                                        <a href="https://sites.google.com/skj.ac.th/skj68/home">ประกันคุณภาพฯ</a>
-                                        <a href="https://sportbase.skj.ac.th/User/Match">ตารางแข่งขันกีฬา</a>
-                                        <a href="https://sportbase.skj.ac.th/User/Athlete">ทำเนียบนักกีฬา</a>
+                                        <h6 class="mega-title"><i class="bi bi-trophy me-2"></i>กีฬา & อื่นๆ</h6>
+                                        <a href="<?= base_url('Procurements') ?>"><i class="bi bi-cart-check me-2"></i>จัดซื้อจัดจ้าง</a>
+                                        <a href="https://sites.google.com/skj.ac.th/skj68/home"><i class="bi bi-shield-check me-2"></i>ประกันคุณภาพฯ</a>
+                                        <a href="https://sportbase.skj.ac.th/User/Match"><i class="bi bi-calendar-event me-2"></i>ตารางแข่งขันกีฬา</a>
+                                        <a href="https://sportbase.skj.ac.th/User/Athlete"><i class="bi bi-people me-2"></i>ทำเนียบนักกีฬา</a>
                                     </div>
                                 </div>
                             </div>
@@ -200,51 +202,51 @@
                     
                     <!-- เกี่ยวกับ สกจ -->
                     <li class="mob-dropdown">
-                        <a href="#" class="mob-toggle"><i class="bi bi-info-circle me-2"></i>เกี่ยวกับ สกจ</a>
+                        <a href="#" class="mob-toggle"><i class="bi bi-bank me-2"></i>เกี่ยวกับ สกจ</a>
                         <ul class="mob-sub">
                             <?php foreach ($AboutSchool as $key => $v_AboutSchool): ?>
                                 <li><a
-                                        href="<?= base_url('About/' . urlencode($v_AboutSchool->about_menu)) ?>"><?= $v_AboutSchool->about_menu ?></a>
+                                        href="<?= base_url('About/' . urlencode($v_AboutSchool->about_menu)) ?>"><i class="bi bi-info-circle me-2"></i><?= $v_AboutSchool->about_menu ?></a>
                                 </li>
                             <?php endforeach; ?>
                             <li><a href="<?= base_url('Board') ?>"><i
-                                        class="bi bi-people-fill me-2"></i>คณะกรรมการสถานศึกษา</a></li>
+                                        class="bi bi-person-lines-fill me-2"></i>คณะกรรมการสถานศึกษา</a></li>
                             <li><a href="<?= base_url('Botany') ?>"><i
-                                        class="bi bi-tree-fill me-2"></i>งานสวนพฤกษศาสตร์</a></li>
+                                        class="bi bi-flower1 me-2"></i>งานสวนพฤกษศาสตร์</a></li>
                         </ul>
                     </li>
 
                     <!-- หน่วยงานภายใน -->
                     <li class="mob-dropdown">
-                        <a href="#" class="mob-toggle"><i class="bi bi-building me-2"></i>หน่วยงานภายใน</a>
+                        <a href="#" class="mob-toggle"><i class="bi bi-diagram-3-fill me-2"></i>หน่วยงานภายใน</a>
                         <ul class="mob-sub">
-                            <li class="mob-sub-header">ฝ่ายบริหารงาน</li>
-                            <li><a href="https://academic.skj.ac.th/"><i class="bi bi-book me-2"></i>งานวิชาการ</a></li>
-                            <li><a href="https://general.skj.ac.th/"><i class="bi bi-gear me-2"></i>งานทั่วไป</a></li>
-                            <li><a href="https://personnel.skj.ac.th/"><i class="bi bi-person-badge me-2"></i>งานบุคคล</a></li>
-                            <li><a href="https://budgetplan.skj.ac.th/"><i class="bi bi-bar-chart-line me-2"></i>งานงบประมาณและแผน</a></li>
+                            <li class="mob-sub-header"><i class="bi bi-briefcase-fill me-2"></i>ฝ่ายบริหารงาน</li>
+                            <li><a href="https://academic.skj.ac.th/"><i class="bi bi-journal-bookmark-fill me-2"></i>งานวิชาการ</a></li>
+                            <li><a href="https://general.skj.ac.th/"><i class="bi bi-gear-wide-connected me-2"></i>งานทั่วไป</a></li>
+                            <li><a href="https://personnel.skj.ac.th/"><i class="bi bi-person-vcard me-2"></i>งานบุคคล</a></li>
+                            <li><a href="https://budgetplan.skj.ac.th/"><i class="bi bi-graph-up-arrow me-2"></i>งานงบประมาณและแผน</a></li>
 
-                            <li class="mob-sub-header">คณะผู้บริหาร</li>
-                            <li><a href="<?= base_url('Personnal/Executive') ?>"><i class="bi bi-person-video2 me-2"></i>ผู้บริหารสถานศึกษา</a></li>
+                            <li class="mob-sub-header"><i class="bi bi-person-workspace me-2"></i>คณะผู้บริหาร</li>
+                            <li><a href="<?= base_url('Personnal/Executive') ?>"><i class="bi bi-person-check-fill me-2"></i>ผู้บริหารสถานศึกษา</a></li>
 
                             <!-- บุคลากรสายการสอน (Sub-Dropdown) -->
                             <li class="mob-dropdown mob-sub-dropdown">
-                                <a href="#" class="mob-toggle"><i class="bi bi-people-fill me-2"></i>บุคลากรสายการสอน</a>
+                                <a href="#" class="mob-toggle"><i class="bi bi-mortarboard-fill me-2"></i>บุคลากรสายการสอน</a>
                                 <ul class="mob-sub">
                                     <li><a href="https://personnel.skj.ac.th/directory"><b><i class="bi bi-people-fill me-2"></i>บุคลากรทั้งหมด</b></a></li>
                                     <?php foreach ($Lear as $key => $v_Lear): ?>
-                                        <li><a href="<?= base_url('Personnal/' . urlencode("สายการสอน") . '/' . str_replace(" ", "-", urlencode($v_Lear->lear_namethai))) ?>"><?= $v_Lear->lear_namethai; ?></a></li>
+                                        <li><a href="<?= base_url('Personnal/' . urlencode("สายการสอน") . '/' . str_replace(" ", "-", urlencode($v_Lear->lear_namethai))) ?>"><i class="bi bi-book-half me-1 small"></i><?= $v_Lear->lear_namethai; ?></a></li>
                                     <?php endforeach; ?>
                                 </ul>
                             </li>
 
                             <!-- สายสนับสนุน (Sub-Dropdown) -->
                             <li class="mob-dropdown mob-sub-dropdown">
-                                <a href="#" class="mob-toggle"><i class="bi bi-person-gear me-2"></i>สายสนับสนุน</a>
+                                <a href="#" class="mob-toggle"><i class="bi bi-wrench-adjustable-circle me-2"></i>สายสนับสนุน</a>
                                 <ul class="mob-sub">
                                     <li><a href="<?= base_url('Personnal/' . urlencode("สายสนับสนุน")) ?>"><b><i class="bi bi-person-gear me-2"></i>สายสนับสนุนทั้งหมด</b></a></li>
                                     <?php foreach ($PosiOther as $key => $v_PosiOther): ?>
-                                        <li><a href="<?= base_url('Personnal/' . urlencode("สายสนับสนุน") . '/' . str_replace(" ", "-", urlencode($v_PosiOther->posi_name))) ?>"><?= $v_PosiOther->posi_name; ?></a></li>
+                                        <li><a href="<?= base_url('Personnal/' . urlencode("สายสนับสนุน") . '/' . str_replace(" ", "-", urlencode($v_PosiOther->posi_name))) ?>"><i class="bi bi-shield-check me-1 small"></i><?= $v_PosiOther->posi_name; ?></a></li>
                                     <?php endforeach; ?>
                                 </ul>
                             </li>
@@ -253,36 +255,36 @@
 
                     <li><a href="<?= base_url('News') ?>"><i class="bi bi-newspaper me-2"></i>ประชาสัมพันธ์</a></li>
                     <li><a href="<?= base_url('Course') ?>"><i
-                                class="bi bi-mortarboard me-2"></i>หลักสูตร</a></li>
+                                class="bi bi-mortarboard-fill me-2"></i>หลักสูตร</a></li>
 
                     <!-- SKJ บริการ -->
                     <li class="mob-dropdown">
-                        <a href="#" class="mob-toggle"><i class="bi bi-grid me-2"></i>SKJ บริการ</a>
+                        <a href="#" class="mob-toggle"><i class="bi bi-grid-3x3-gap me-2"></i>SKJ บริการ</a>
                         <ul class="mob-sub">
-                            <li class="mob-sub-header">นักเรียน & การเรียน</li>
-                            <li><a href="https://admission.skj.ac.th/">รับสมัครนักเรียน</a></li>
-                            <li><a href="https://academic.skj.ac.th/LearningOnline">ห้องเรียนออนไลน์</a></li>
-                            <li><a href="https://learnsuan.skj.ac.th/">สวนกุหลาบศึกษา</a></li>
-                            <li><a href="<?= base_url('guidance') ?>">ทุนการศึกษา</a></li>
+                            <li class="mob-sub-header"><i class="bi bi-book-half me-2"></i>นักเรียน & การเรียน</li>
+                            <li><a href="https://admission.skj.ac.th/"><i class="bi bi-person-plus me-2"></i>รับสมัครนักเรียน</a></li>
+                            <li><a href="https://academic.skj.ac.th/LearningOnline"><i class="bi bi-globe me-2"></i>ห้องเรียนออนไลน์</a></li>
+                            <li><a href="https://learnsuan.skj.ac.th/"><i class="bi bi-journal-text me-2"></i>สวนกุหลาบศึกษา</a></li>
+                            <li><a href="<?= base_url('guidance') ?>"><i class="bi bi-mortarboard me-2"></i>ทุนการศึกษา</a></li>
 
-                            <li class="mob-sub-header">ระบบจอง & แจ้งซ่อม</li>
-                            <li><a href="https://general.skj.ac.th/Booking">จองอาคารสถานที่</a></li>
-                            <li><a href="https://general.skj.ac.th/CarBooking">จองยานพาหนะ</a></li>
-                            <li><a href="https://general.skj.ac.th/Repair">แจ้งซ่อมออนไลน์</a></li>
-                            <li><a href="https://general.skj.ac.th/FoodReport">รายงานอาหาร</a></li>
+                            <li class="mob-sub-header"><i class="bi bi-wrench-adjustable me-2"></i>ระบบจอง & แจ้งซ่อม</li>
+                            <li><a href="https://general.skj.ac.th/Booking"><i class="bi bi-building-up me-2"></i>จองอาคารสถานที่</a></li>
+                            <li><a href="https://general.skj.ac.th/CarBooking"><i class="bi bi-car-front me-2"></i>จองยานพาหนะ</a></li>
+                            <li><a href="https://general.skj.ac.th/Repair"><i class="bi bi-tools me-2"></i>แจ้งซ่อมออนไลน์</a></li>
+                            <li><a href="https://general.skj.ac.th/FoodReport"><i class="bi bi-pie-chart me-2"></i>รายงานอาหาร</a></li>
 
-                            <li class="mob-sub-header">ข้อมูล & เอกสาร</li>
-                            <li><a href="<?= base_url('Yearbook') ?>">หนังสือรุ่นดิจิทัล</a></li>
-                            <li><a href="<?= base_url('PageGroup') ?>">Facebook กลุ่ม</a></li>
-                            <li><a href="<?= base_url('Email') ?>">อีเมลโรงเรียน</a></li>
-                            <li><a href="https://documentcenter.skj.ac.th/">โหลดเอกสาร</a></li>
-                            <li><a href="<?= base_url('Botany') ?>">งานสวนพฤกษศาสตร์</a></li>
+                            <li class="mob-sub-header"><i class="bi bi-folder2-open me-2"></i>ข้อมูล & เอกสาร</li>
+                            <li><a href="<?= base_url('Yearbook') ?>"><i class="bi bi-book me-2"></i>หนังสือรุ่นดิจิทัล</a></li>
+                            <li><a href="<?= base_url('PageGroup') ?>"><i class="bi bi-facebook me-2"></i>Facebook กลุ่ม</a></li>
+                            <li><a href="<?= base_url('Email') ?>"><i class="bi bi-envelope-at me-2"></i>อีเมลโรงเรียน</a></li>
+                            <li><a href="https://documentcenter.skj.ac.th/"><i class="bi bi-file-earmark-arrow-down me-2"></i>โหลดเอกสาร</a></li>
+                            <li><a href="<?= base_url('Botany') ?>"><i class="bi bi-tree-fill me-2"></i>งานสวนพฤกษศาสตร์</a></li>
 
-                            <li class="mob-sub-header">กีฬา & อื่นๆ</li>
-                            <li><a href="<?= base_url('Procurements') ?>">จัดซื้อจัดจ้าง</a></li>
-                            <li><a href="https://sites.google.com/skj.ac.th/skj68/home">ประกันคุณภาพฯ</a></li>
-                            <li><a href="https://sportbase.skj.ac.th/User/Match">ตารางแข่งขันกีฬา</a></li>
-                            <li><a href="https://sportbase.skj.ac.th/User/Athlete">ทำเนียบนักกีฬา</a></li>
+                            <li class="mob-sub-header"><i class="bi bi-trophy me-2"></i>กีฬา & อื่นๆ</li>
+                            <li><a href="<?= base_url('Procurements') ?>"><i class="bi bi-cart-check me-2"></i>จัดซื้อจัดจ้าง</a></li>
+                            <li><a href="https://sites.google.com/skj.ac.th/skj68/home"><i class="bi bi-shield-check me-2"></i>ประกันคุณภาพฯ</a></li>
+                            <li><a href="https://sportbase.skj.ac.th/User/Match"><i class="bi bi-calendar-event me-2"></i>ตารางแข่งขันกีฬา</a></li>
+                            <li><a href="https://sportbase.skj.ac.th/User/Athlete"><i class="bi bi-people me-2"></i>ทำเนียบนักกีฬา</a></li>
                         </ul>
                     </li>
 
@@ -607,6 +609,10 @@
         position: relative;
     }
 
+    .nav-menu-lawa>li.has-mega {
+        position: static;
+    }
+
     .nav-menu-lawa>li>a {
         color: rgba(255, 255, 255, 0.9);
         font-weight: 700;
@@ -647,18 +653,18 @@
     .sub-menu {
         position: absolute;
         top: 100%;
-        left: 0;
-        min-width: 250px;
+        left: 50%;
+        transform: translateX(-50%) translateY(15px);
+        min-width: 280px;
         background: #fff;
         box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
         border-top: 3px solid #fb7e9c;
-        border-radius: 0 0 8px 8px;
-        padding: 8px 0;
+        border-radius: 0 0 10px 10px;
+        padding: 10px 0;
         list-style: none;
         margin: 0;
         visibility: hidden;
         opacity: 0;
-        transform: translateY(15px);
         transition: all 0.3s ease;
         z-index: 1060;
     }
@@ -666,23 +672,34 @@
     .sub-menu-right {
         left: auto;
         right: 0;
+        transform: translateY(15px);
     }
 
     .has-dropdown:hover>.sub-menu {
         visibility: visible;
         opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+
+    .has-dropdown:hover>.sub-menu-right {
         transform: translateY(0);
     }
 
     .sub-menu li a {
-        display: block;
-        padding: 10px 20px;
-        color: #444;
-        font-weight: 500;
-        font-size: 13px;
+        display: flex;
+        align-items: center;
+        padding: 11px 22px;
+        color: #334155;
+        font-weight: 600;
+        font-size: 15px;
         text-decoration: none;
         transition: all 0.3s;
-        border-bottom: 1px solid #f0f0f0;
+        border-bottom: 1px solid #f1f5f9;
+        white-space: nowrap;
+    }
+
+    .sub-menu li a i {
+        font-size: 17px;
     }
 
     .sub-menu li:last-child a {
@@ -692,62 +709,69 @@
     .sub-menu li a:hover {
         color: #fb7e9c;
         background: #fff5f7;
-        padding-left: 25px;
+        padding-left: 28px;
     }
 
-    /* ---- Mega Menu ---- */
+    /* ---- Mega Menu (Positioned dead-center of the entire navbar container) ---- */
     .mega-menu {
         position: absolute;
         top: 100%;
-        left: 0;
+        left: 50%;
+        transform: translateX(-50%) translateY(15px);
+        width: calc(100% - 40px);
+        max-width: 1200px;
         min-width: 800px;
-        max-width: calc(100vw - 40px);
         background: #fff;
-        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 20px 45px rgba(0, 0, 0, 0.18);
         border-top: 3px solid #ec4899;
-        border-radius: 0 0 8px 8px;
-        padding: 25px 30px;
+        border-radius: 0 0 16px 16px;
+        padding: 28px 35px;
         visibility: hidden;
         opacity: 0;
-        transform: translateY(15px);
         transition: all 0.3s ease;
         z-index: 1060;
-    }
-
-    .mega-menu-right {
-        left: auto;
-        right: 0;
     }
 
     .has-mega:hover>.mega-menu {
         visibility: visible;
         opacity: 1;
-        transform: translateY(0);
+        transform: translateX(-50%) translateY(0);
     }
 
     .mega-title {
-        font-weight: 700;
-        color: #1e293b;
-        font-size: 14px;
-        margin-bottom: 12px;
+        font-weight: 800;
+        color: #0f172a;
+        font-size: 15.5px;
+        margin-bottom: 14px;
         padding-bottom: 8px;
-        border-bottom: 2px solid #fb7e9c;
-        display: inline-block;
+        border-bottom: 2.5px solid #fb7e9c;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .mega-title i {
+        font-size: 17px;
+        color: #fb7e9c;
     }
 
     .mega-menu a {
-        display: block;
-        padding: 7px 0;
-        color: #555;
-        font-weight: 500;
-        font-size: 13px;
+        display: flex;
+        align-items: center;
+        padding: 8px 0;
+        color: #475569;
+        font-weight: 600;
+        font-size: 14.5px;
         text-decoration: none;
         transition: all 0.2s;
     }
 
+    .mega-menu a i {
+        font-size: 16px;
+    }
+
     .mega-menu a:hover {
         color: #fb7e9c;
-        padding-left: 5px;
+        padding-left: 6px;
     }
 
     /* ---- Login Button ---- */
@@ -811,6 +835,102 @@
         border: 1px solid rgba(255, 255, 255, 0.3);
         padding: 5px 10px;
         border-radius: 6px;
+    }
+
+    /* ---- Tablet / iPad Specific Responsive Rules ---- */
+    @media (min-width: 992px) and (max-width: 1199px) {
+        .header-upper {
+            margin: 10px 15px;
+        }
+
+        .header-upper.is-sticky {
+            left: 15px;
+            width: calc(100% - 30px);
+        }
+
+        .nav-col-left {
+            padding-left: 10px;
+        }
+
+        .nav-col-right {
+            padding-right: 10px;
+        }
+
+        .social-icons-left {
+            gap: 10px;
+        }
+
+        .social-icons-left a {
+            font-size: 15px;
+        }
+
+        .nav-menu-lawa {
+            gap: 6px;
+        }
+
+        .nav-menu-lawa>li>a {
+            font-size: 13.5px;
+            padding: 24px 8px;
+        }
+
+        .nav-col-center {
+            flex: 0 0 140px;
+        }
+
+        .logo-banner-shape {
+            width: 140px;
+            height: 135px;
+            padding-top: 10px;
+        }
+
+        .logo-banner-shape img {
+            height: 45px;
+        }
+
+        .logo-banner-name {
+            font-size: 12px;
+        }
+
+        .logo-banner-sub {
+            font-size: 9px;
+        }
+
+        .btn-login {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        .login-btn-wrap {
+            padding-left: 8px;
+        }
+
+        /* Mega menu for iPad Landscape */
+        .mega-menu {
+            width: calc(100% - 20px);
+            min-width: 0;
+            padding: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(15px);
+        }
+
+        .mega-title {
+            font-size: 13.5px;
+            margin-bottom: 8px;
+        }
+
+        .mega-menu a {
+            font-size: 12.5px;
+            padding: 5px 0;
+        }
+
+        .sub-menu {
+            min-width: 240px;
+        }
+
+        .sub-menu li a {
+            font-size: 13.5px;
+            padding: 9px 16px;
+        }
     }
 
     @media (max-width: 991px) {
@@ -942,45 +1062,53 @@
         .mob-sub-header {
             font-weight: 700;
             color: #ffd6e0;
-            font-size: 11px;
-            padding: 10px 15px 4px 15px;
-            margin-top: 4px;
+            font-size: 13.5px;
+            padding: 12px 16px 6px 16px;
+            margin-top: 6px;
             letter-spacing: 0.5px;
             text-transform: uppercase;
             border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
         }
 
         /* 2nd Level Sub-Dropdown Styling */
         .mob-sub .mob-sub-dropdown > .mob-toggle {
-            padding: 10px 35px 10px 15px;
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 13px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-            background: rgba(255, 255, 255, 0.04);
+            padding: 12px 38px 12px 18px;
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 14.5px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.05);
             position: relative;
         }
 
         .mob-sub .mob-sub-dropdown > .mob-toggle::after {
-            width: 22px;
-            height: 22px;
-            font-size: 14px;
-            right: 10px;
-            background: rgba(255, 255, 255, 0.12);
+            width: 24px;
+            height: 24px;
+            font-size: 15px;
+            right: 12px;
+            background: rgba(255, 255, 255, 0.15);
         }
 
         .mob-sub .mob-sub-dropdown.open > .mob-sub {
-            background: rgba(0, 0, 0, 0.18);
+            background: rgba(0, 0, 0, 0.22);
             border-radius: 6px;
         }
 
         .mob-sub li a {
-            display: block;
-            color: rgba(255, 255, 255, 0.75);
-            padding: 10px 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.88);
+            padding: 11px 18px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             text-decoration: none;
-            font-size: 13px;
+            font-size: 14.5px;
+            font-weight: 500;
             transition: all 0.2s;
+        }
+
+        .mob-sub li a i {
+            font-size: 16px;
         }
 
         .mob-sub li:last-child a {
@@ -989,8 +1117,8 @@
 
         .mob-sub li a:hover {
             color: #fff;
-            background: rgba(255, 255, 255, 0.1);
-            padding-left: 20px;
+            background: rgba(255, 255, 255, 0.15);
+            padding-left: 22px;
         }
 
         .mobile-social {

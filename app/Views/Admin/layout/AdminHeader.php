@@ -27,9 +27,9 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title><?=$title;?> | ระบบจัดการเว็บไซต์โรงเรียน</title>
+    <title><?= $title ?? 'ระบบจัดการเว็บไซต์โรงเรียน'; ?> | ระบบจัดการเว็บไซต์โรงเรียน</title>
 
-    <meta name="description" content="<?=$description;?>" />
+    <meta name="description" content="<?= $description ?? ($title ?? 'ระบบจัดการเว็บไซต์โรงเรียน'); ?>" />
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="<?=base_url('assets/admin/assets/img/favicon/favicon.ico')?>" />
@@ -76,6 +76,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+
+    <?= $this->renderSection('styles') ?>
+    <?= $this->renderSection('css') ?>
   </head>
 
   

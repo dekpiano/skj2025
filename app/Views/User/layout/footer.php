@@ -596,3 +596,7 @@
         </div>
     </div>
 </div>
+
+<!-- SKJ Live Chat Floating Widget -->
+<?= view('Components/ChatWidget') ?>
+
