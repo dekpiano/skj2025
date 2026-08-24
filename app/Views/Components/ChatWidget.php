@@ -23,65 +23,65 @@
     /* Floating Launcher Button */
     .skj-chat-launcher {
         position: fixed;
-        bottom: 26px;
-        right: 26px;
+        bottom: 30px;
+        right: 22px;
         z-index: 99999;
-        width: 66px;
-        height: 66px;
+        width: 48px;
+        height: 48px;
         border-radius: 50%;
         background: var(--skj-chat-gradient);
         color: #ffffff !important;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 32px;
-        box-shadow: 0 10px 30px rgba(255, 107, 139, 0.5), 0 4px 14px rgba(86, 204, 242, 0.35);
+        font-size: 23px;
+        box-shadow: 0 6px 20px rgba(255, 107, 139, 0.4), 0 3px 10px rgba(86, 204, 242, 0.25);
         cursor: pointer;
         transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-        border: 3.5px solid #ffffff;
+        border: 2.5px solid #ffffff;
         outline: none;
     }
 
     .skj-chat-launcher:hover {
-        transform: scale(1.1) translateY(-4px);
-        box-shadow: 0 16px 40px rgba(255, 107, 139, 0.65), 0 8px 20px rgba(86, 204, 242, 0.45);
+        transform: scale(1.08) translateY(-3px);
+        box-shadow: 0 10px 28px rgba(255, 107, 139, 0.55), 0 5px 14px rgba(86, 204, 242, 0.35);
         color: #ffffff;
     }
 
     .skj-chat-launcher-pill {
         position: absolute;
-        right: 80px;
+        right: 60px;
         top: 50%;
         transform: translateY(-50%);
         background: #ffffff;
         color: #0f172a;
-        font-size: 0.85rem;
+        font-size: 0.78rem;
         font-weight: 700;
-        padding: 9px 18px;
+        padding: 6px 14px;
         border-radius: 30px;
-        box-shadow: 0 10px 25px rgba(15, 23, 42, 0.14);
-        border: 1.5px solid rgba(255, 107, 139, 0.25);
+        box-shadow: 0 6px 16px rgba(15, 23, 42, 0.12);
+        border: 1px solid rgba(255, 107, 139, 0.25);
         white-space: nowrap;
         pointer-events: none;
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 5px;
         animation: floatPill 3.5s ease-in-out infinite;
     }
     .skj-chat-launcher-pill::after {
         content: '';
         position: absolute;
-        right: -7px;
+        right: -6px;
         top: 50%;
         transform: translateY(-50%);
-        border-width: 7px 0 7px 7px;
+        border-width: 5px 0 5px 6px;
         border-style: solid;
         border-color: transparent transparent transparent #ffffff;
     }
 
     @keyframes floatPill {
         0%, 100% { transform: translateY(-50%) translateX(0); }
-        50% { transform: translateY(-50%) translateX(-5px); }
+        50% { transform: translateY(-50%) translateX(-4px); }
     }
 
     .skj-chat-launcher .badge-unread {
@@ -90,10 +90,10 @@
         right: -3px;
         background: linear-gradient(135deg, #ef4444, #dc2626);
         color: #ffffff;
-        font-size: 11px;
+        font-size: 10px;
         font-weight: 800;
-        min-width: 24px;
-        height: 24px;
+        min-width: 20px;
+        height: 20px;
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -105,14 +105,14 @@
     /* Floating Chat Window Box */
     .skj-chat-window {
         position: fixed;
-        bottom: 106px;
-        right: 26px;
-        width: 410px;
+        bottom: 90px;
+        right: 22px;
+        width: 400px;
         max-width: calc(100vw - 32px);
-        height: 610px;
-        max-height: calc(100dvh - 125px);
+        height: 590px;
+        max-height: calc(100dvh - 120px);
         background: #ffffff;
-        border-radius: 26px;
+        border-radius: 24px;
         box-shadow: var(--skj-chat-shadow);
         border: 1px solid rgba(226, 232, 240, 0.95);
         z-index: 999999;
@@ -121,6 +121,29 @@
         overflow: hidden;
         animation: chatSlideUp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
+
+    /* Mobile Chat Widget Responsive Rules (< 992px) */
+    @media (max-width: 991px) {
+        /* Hide floating launcher on mobile because it's directly integrated into the Bottom Navigation Bar */
+        .skj-chat-launcher {
+            display: none !important;
+        }
+
+        .skj-chat-launcher-pill {
+            display: none !important;
+        }
+
+        .skj-chat-window {
+            bottom: calc(75px + env(safe-area-inset-bottom, 0px));
+            right: 10px;
+            left: 10px;
+            width: auto;
+            max-width: calc(100vw - 20px);
+            height: calc(100dvh - 150px);
+            border-radius: 20px;
+        }
+    }
+
 
     @keyframes chatSlideUp {
         from { opacity: 0; transform: translateY(30px) scale(0.92); }
@@ -422,11 +445,6 @@
     }
     .skj-chat-lightbox-close:hover { transform: scale(1.1); }
 
-    @media (max-width: 768px) {
-        .skj-chat-launcher { bottom: 18px; right: 18px; width: 58px; height: 58px; font-size: 28px; }
-        .skj-chat-launcher-pill { display: none; }
-        .skj-chat-window { bottom: 84px; right: 12px; left: 12px; width: auto; max-width: none; height: calc(100dvh - 100px); }
-    }
 </style>
 
 <div id="skjChatContainerWrap">

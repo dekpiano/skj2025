@@ -169,55 +169,7 @@
         padding: 25px 0;
         border-top: 1px solid rgba(255, 255, 255, 0.05);
     }
-
-    .messenger-fab {
-        position: fixed;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 30000;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        transition: all 0.3s ease;
-        animation: chat-pulse 2s infinite;
-        border: none;
-        background: linear-gradient(45deg, var(--primary), var(--secondary)) !important;
-    }
-
-    .messenger-fab:hover {
-        transform: translateX(-50%) translateY(-5px);
-        box-shadow: 0 15px 35px rgba(255, 105, 180, 0.4);
-    }
-
-    @keyframes chat-pulse {
-        0% {
-            box-shadow: 0 0 0 0 rgba(255, 105, 180, 0.7);
-        }
-
-        70% {
-            box-shadow: 0 0 0 15px rgba(255, 105, 180, 0);
-        }
-
-        100% {
-            box-shadow: 0 0 0 0 rgba(255, 105, 180, 0);
-        }
-    }
-
-    .back-to-top {
-        z-index: 30000 !important;
-        width: 45px !important;
-        height: 45px !important;
-        bottom: 20px !important;
-        right: 20px !important;
-        border: none;
-        background: var(--primary) !important;
-        box-shadow: 0 10px 20px rgba(251, 126, 156, 0.3);
-    }
 </style>
-<a href="http://m.me/230288483730783" target="_blank"
-    class="btn btn-primary messenger-fab px-3 py-1 rounded-pill d-flex align-items-center shadow-lg">
-    <i class="fab fa-facebook-messenger me-2" style="font-size: 18px;"></i>
-    <span class="fw-bold" style="font-size: 13px;">ติดต่อสอบถามที่นี่</span>
-</a>
 
 <div class="footer-main pt-5 wow fadeIn <?= (isset($festival_status) && $festival_status == 'on') ? 'snow-cap' : '' ?>"
     data-wow-delay="0.1s" style="padding-top: 100px !important;">
@@ -333,10 +285,6 @@
     </div>
 </div>
 <!-- Footer End -->
-
-
-<!-- Back to Top -->
-<a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top"><i class="bi bi-arrow-up"></i></a>
 
 
 <!-- JavaScript Libraries -->

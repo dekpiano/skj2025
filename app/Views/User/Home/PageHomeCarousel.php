@@ -51,26 +51,27 @@
     /* --- Smartphone View --- */
     @media screen and (max-width: 767px) {
         .hero-carousel-wrapper {
-            padding: 5px 0 25px 0; /* มือถือให้ชิดขึ้นไปอีก */
+            padding: 5px 0 25px 0;
         }
         .slider-img-container {
-            border-radius: 15px;
-            margin: 0 5px;
+            border-radius: 18px;
+            margin: 0 4px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            overflow: hidden;
         }
         #main-banner-slick img {
             aspect-ratio: 9 / 16;
             object-fit: cover;
-            max-height: 80vh;
+            width: 100%;
+            max-height: 75vh;
         }
-        /* Fallback if no mobile image is provided */
-        .slider-img-container.no-mobile-img img {
-            aspect-ratio: 21 / 9;
-            object-fit: contain;
-            background: #000; /* Black bars for horizontal image in vertical space if needed */
+        /* Slick dots on mobile */
+        #main-banner-slick .slick-dots { 
+            bottom: -22px; 
         }
-        /* Hide dots and arrows on very small screens for cleaner look */
-        #main-banner-slick .slick-dots { bottom: -30px; }
-        #main-banner-slick .slick-prev, #main-banner-slick .slick-next { display: none !important; }
+        #main-banner-slick .slick-prev, #main-banner-slick .slick-next { 
+            display: none !important; 
+        }
     }
 
     /* Slick Arrows & Dots Styling */
@@ -100,7 +101,7 @@
                 <?php if($v_banner['banner_linkweb'] != ""): ?>
                 <a href="<?=$v_banner['banner_linkweb']?>" target="_blank">
                 <?php endif; ?>
-                    <div class="slider-img-container <?= empty($v_banner['banner_img_mobile']) ? 'no-mobile-img' : '' ?>">
+                    <div class="slider-img-container <?= !empty($v_banner['banner_img_mobile']) ? 'has-mobile-img' : 'no-mobile-img' ?>">
                         <picture>
                             <?php if(!empty($v_banner['banner_img_mobile'])): ?>
                                 <!-- Smartphone Version (767px and below) -->

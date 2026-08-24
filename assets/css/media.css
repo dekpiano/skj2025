@@ -1,4 +1,30 @@
-/* // X-Small devices (portrait phones, less than 576px) */
+/* // X-Small & Small Mobile devices (portrait phones, less than 768px / 992px) */
+
+@media (max-width: 991.98px) {
+    /* Safe Bottom Space on Smartphones for Mobile Bottom Nav Bar */
+    body {
+        padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)) !important;
+    }
+
+    /* Touch-friendly horizontal swipe for tabs on mobile */
+    .recommend-nav {
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        justify-content: flex-start !important;
+        padding: 4px 10px 15px 10px !important;
+        gap: 10px !important;
+        scrollbar-width: none; /* Firefox */
+    }
+    .recommend-nav::-webkit-scrollbar {
+        display: none; /* Chrome/Safari */
+    }
+    .recommend-nav .nav-link {
+        flex: 0 0 auto !important;
+        min-width: 105px !important;
+        padding: 12px 14px !important;
+    }
+}
 
 @media (max-width: 576px) {
     .text-header .text-thai {
@@ -20,7 +46,14 @@
         font-size: 15px;
         margin-bottom: 10px!important;
     }
+
+    /* Container fluid padding on small phones */
+    .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
 }
+
 
 
 /* // Small devices (landscape phones, less than 768px) */
