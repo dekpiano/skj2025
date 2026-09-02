@@ -47,10 +47,6 @@ if (!function_exists('getFriendlyAction')) {
             }
         }
 
-        if (stripos($urlPath, 'botany') !== false) {
-            return 'จัดการข้อมูลสวนพฤกษศาสตร์';
-        }
-
         return 'เข้าชมหน้าทั่วไป / เรียกข้อมูล';
     }
 }

@@ -267,6 +267,35 @@
         box-shadow: 0 3px 12px rgba(249, 115, 22, 0.08);
     }
 
+    /* Links inside client chat bubbles */
+    .skj-msg-bubble a {
+        word-break: break-all;
+        text-decoration: underline;
+        transition: opacity 0.2s ease;
+    }
+    .skj-msg-bubble.user a {
+        color: #ffffff !important;
+        font-weight: 600;
+        text-decoration-color: rgba(255, 255, 255, 0.85);
+    }
+    .skj-msg-bubble.user a:hover {
+        opacity: 0.9;
+    }
+    .skj-msg-bubble.admin a {
+        color: #2563eb !important;
+        font-weight: 600;
+    }
+    .skj-msg-bubble.admin a:hover {
+        color: #1d4ed8 !important;
+    }
+    .skj-msg-bubble.system a {
+        color: #ea580c !important;
+        font-weight: 600;
+    }
+    .skj-msg-bubble.system a:hover {
+        color: #c2410c !important;
+    }
+
     .skj-chat-img-thumb {
         max-width: 220px;
         max-height: 180px;
@@ -821,11 +850,7 @@
         
         let bubbleContent = '';
         if (text) {
-            // Formatted markdown links or bold text support
-            let formatted = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                               .replace(/•/g, '&bull;')
-                               .replace(/\n/g, '<br>');
-            bubbleContent += `<div>${formatted}</div>`;
+            bubbleContent += `<div>${formatChatMessage(text, isUser)}</div>`;
         }
 
         if (attachmentUrl) {
@@ -845,6 +870,74 @@
         row.innerHTML = html;
         body.appendChild(row);
         body.scrollTop = body.scrollHeight;
+    }
+
+    function decodeHtmlEntities(str) {
+        if (!str) return '';
+        const txt = document.createElement('textarea');
+        txt.innerHTML = str;
+        return txt.value;
+    }
+
+    function formatChatMessage(rawText, isDarkBubble = false) {
+        if (!rawText) return '';
+
+        // Decode existing HTML entities if previously encoded in backend
+        const decoded = decodeHtmlEntities(rawText);
+
+        // Sanitize raw text to prevent XSS attacks
+        const div = document.createElement('div');
+        div.textContent = decoded;
+        let safe = div.innerHTML;
+
+        const tokens = [];
+
+        // 1. Markdown link pattern: [label](url)
+        safe = safe.replace(/\[([^\]]+)\]\((https?:\/\/[^\s<)]+)\)/g, function(match, label, url) {
+            const token = `__CHAT_LINK_TOKEN_${tokens.length}__`;
+            tokens.push(`<a href="${url}" target="_blank" rel="noopener noreferrer" class="chat-text-link">${label} <i class="bx bx-link-external" style="font-size: 0.82em; vertical-align: middle;"></i></a>`);
+            return token;
+        });
+
+        // 2. Full URL pattern: https://... or http://...
+        safe = safe.replace(/(https?:\/\/[^\s<]+)/gi, function(match, url) {
+            let cleanUrl = url;
+            let trailing = '';
+            const matchTrailing = cleanUrl.match(/[.,;:!?)\]"']+$/);
+            if (matchTrailing) {
+                trailing = matchTrailing[0];
+                cleanUrl = cleanUrl.slice(0, -trailing.length);
+            }
+            const token = `__CHAT_LINK_TOKEN_${tokens.length}__`;
+            tokens.push(`<a href="${cleanUrl}" target="_blank" rel="noopener noreferrer" class="chat-text-link">${cleanUrl}</a>${trailing}`);
+            return token;
+        });
+
+        // 3. WWW URL pattern: www.example.com...
+        safe = safe.replace(/(^|[\s\n>])(www\.[a-zA-Z0-9\-]+(\.[a-zA-Z0-9\-]+)+[^\s<]*)/gi, function(match, prefix, url) {
+            let cleanUrl = url;
+            let trailing = '';
+            const matchTrailing = cleanUrl.match(/[.,;:!?)\]"']+$/);
+            if (matchTrailing) {
+                trailing = matchTrailing[0];
+                cleanUrl = cleanUrl.slice(0, -trailing.length);
+            }
+            const token = `__CHAT_LINK_TOKEN_${tokens.length}__`;
+            tokens.push(`<a href="https://${cleanUrl}" target="_blank" rel="noopener noreferrer" class="chat-text-link">${cleanUrl}</a>${trailing}`);
+            return prefix + token;
+        });
+
+        // 4. Restore tokens
+        tokens.forEach((html, i) => {
+            safe = safe.split(`__CHAT_LINK_TOKEN_${i}__`).join(html);
+        });
+
+        // 5. Formatting (bold, bullets, line breaks)
+        safe = safe.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        safe = safe.replace(/•/g, '&bull;');
+        safe = safe.replace(/\n/g, '<br>');
+
+        return safe;
     }
 
     function openChatLightbox(url) {

@@ -45,25 +45,6 @@ $routes->post('/Admin/News/uploadImage', 'Admin\ConAdminNews::uploadImage');
 $routes->get('/Admin/News/uploadImage', 'Admin\ConAdminNews::uploadImage');
 $routes->get('About/(:any)', 'User\ConAboutSchool::AboutDetail/$1');
 $routes->get('Board', 'User\ConBoard::index');
-$routes->get('botany', 'User\ConBotany::index');
-$routes->get('botany/plants', 'User\ConBotany::plants');
-$routes->get('botany/detail/(:num)', 'User\ConBotany::detail/$1');
-$routes->get('botany/news', 'User\ConBotany::news');
-$routes->get('botany/newsdetail/(:num)', 'User\ConBotany::newsDetail/$1');
-$routes->get('botany/login', 'User\ConBotanyLogin::index');
-$routes->post('botany/login/auth', 'User\ConBotanyLogin::auth');
-$routes->get('botany/logout', 'User\ConBotanyLogin::logout');
-$routes->get('botany/createuser', 'User\ConBotanyLogin::create_default_user');
-
-// Uppercase aliases
-$routes->get('Botany', 'User\ConBotany::index');
-$routes->get('Botany/Plants', 'User\ConBotany::plants');
-$routes->get('Botany/Detail/(:num)', 'User\ConBotany::detail/$1');
-$routes->get('Botany/News', 'User\ConBotany::news');
-$routes->get('Botany/NewsDetail/(:num)', 'User\ConBotany::newsDetail/$1');
-$routes->get('Botany/Login', 'User\ConBotanyLogin::index');
-$routes->post('Botany/Login/Auth', 'User\ConBotanyLogin::auth');
-$routes->get('Botany/Logout', 'User\ConBotanyLogin::logout');
 
 
 $routes->match(['GET', 'POST'],'News', 'User\ConNews::NewsMain');
@@ -157,42 +138,6 @@ $routes->group('Admin', ['filter' => 'permission', 'namespace' => 'App\Controlle
     $routes->get('Student', 'ConAdminStudent::index', ['filter' => 'permission:Admin']);
 });
 
-$routes->group('Admin/Botany', ['filter' => 'botany_auth', 'namespace' => 'App\Controllers\Admin'], function ($routes) {
-    $routes->get('/', 'ConAdminBotany::BotanyMain');
-    $routes->get('List', 'ConAdminBotany::BotanyList');
-    $routes->post('BotanyOnoff', 'ConAdminBotany::BotanyOnoff');
-    $routes->post('Add', 'ConAdminBotany::BotanyAdd');
-    $routes->post('Edit', 'ConAdminBotany::BotanyEdit');
-    $routes->post('Update', 'ConAdminBotany::BotanyUpdate');
-    $routes->post('Delete', 'ConAdminBotany::BotanyDelete');
-
-    // News
-    $routes->get('News', 'ConAdminBotany::NewsList');
-    $routes->post('NewsOnoff', 'ConAdminBotany::NewsOnoff');
-    $routes->post('NewsAdd', 'ConAdminBotany::NewsAdd');
-    $routes->post('NewsEdit', 'ConAdminBotany::NewsEdit');
-    $routes->post('NewsUpdate', 'ConAdminBotany::NewsUpdate');
-    $routes->post('NewsDelete', 'ConAdminBotany::NewsDelete');
-    $routes->post('NewsDeleteImage', 'ConAdminBotany::NewsDeleteImage');
-});
-
-// Also keep lowercase for compatibility
-$routes->group('admin/botany', ['filter' => 'botany_auth', 'namespace' => 'App\Controllers\Admin'], function ($routes) {
-    $routes->get('/', 'ConAdminBotany::BotanyMain');
-    $routes->get('list', 'ConAdminBotany::BotanyList');
-    $routes->post('botanyonoff', 'ConAdminBotany::BotanyOnoff');
-    $routes->post('add', 'ConAdminBotany::BotanyAdd');
-    $routes->post('edit', 'ConAdminBotany::BotanyEdit');
-    $routes->post('update', 'ConAdminBotany::BotanyUpdate');
-    $routes->post('delete', 'ConAdminBotany::BotanyDelete');
-    $routes->get('news', 'ConAdminBotany::NewsList');
-    $routes->post('newsonoff', 'ConAdminBotany::NewsOnoff');
-    $routes->post('newsadd', 'ConAdminBotany::NewsAdd');
-    $routes->post('newsedit', 'ConAdminBotany::NewsEdit');
-    $routes->post('newsupdate', 'ConAdminBotany::NewsUpdate');
-    $routes->post('newsdelete', 'ConAdminBotany::NewsDelete');
-    $routes->post('newsdeleteimage', 'ConAdminBotany::NewsDeleteImage');
-});
 
 $routes->group('Manager', ['filter' => 'permission:Manager,ผู้บริหาร,ผู้บริหารสถานศึกษา', 'namespace' => 'App\Controllers\Manager'], function ($routes) {
     $routes->get('Dashboard', 'ConManagerDashboard::index');

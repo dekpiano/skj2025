@@ -6,7 +6,7 @@
     <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport">
 
     <title><?= $title ?> | SKJ</title>
-    <meta name="description" content="<?= $description ?? 'งานสวนพฤกษศาสตร์โรงเรียน สวนกุหลาบวิทยาลัย (จิรประวัติ) นครสวรรค์' ?>" />
+    <meta name="description" content="<?= $description ?? 'โรงเรียนสวนกุหลาบวิทยาลัย (จิรประวัติ) นครสวรรค์' ?>" />
     <meta
         content="โรงเรียนสวนกุหลาบวิทยาลัย,โรงเรียน,สวนกุหลาบ,จิรประวัติ,นครสวรรค์,สวนกุหลาบจิรประวัติ,โรงเรียนสวนกุหลาบ"
         name="keywords">
@@ -16,7 +16,7 @@
     <meta name="author" content="Dekpiano" />
     <meta property="og:url" content="<?= $full_url ?>" />
     <meta property="og:title" content="<?= $title ?> | SKJ" />
-    <meta property="og:description" content="<?= $description ?? 'งานสวนพฤกษศาสตร์โรงเรียน สวนกุหลาบวิทยาลัย (จิรประวัติ) นครสวรรค์' ?>" />
+    <meta property="og:description" content="<?= $description ?? 'โรงเรียนสวนกุหลาบวิทยาลัย (จิรประวัติ) นครสวรรค์' ?>" />
     <meta property="og:type" content="website" />
     <?php if ($uri->getSegment(1) == "News" && $uri->getSegment(2) == "Detail") : ?>
     <meta property="og:image" content="<?= $banner; ?>" />
@@ -270,9 +270,7 @@ gtag('config', 'G-4XVY09LWJ8');
             padding-top: 110px !important;
             padding-bottom: 60px !important;
         }
-        .board-container, 
-        .botany-container, 
-        .botany-detail-container {
+        .board-container {
             padding-top: 120px !important;
             padding-bottom: 80px !important;
         }
@@ -306,9 +304,7 @@ gtag('config', 'G-4XVY09LWJ8');
             padding-top: 95px !important;
             padding-bottom: 50px !important;
         }
-        .board-container, 
-        .botany-container, 
-        .botany-detail-container {
+        .board-container {
             padding-top: 100px !important;
             padding-bottom: 60px !important;
         }

@@ -128,3 +128,6 @@ nb-configuration.xml
 # User Uploads
 uploads/
 
+# Scratch directory
+scratch/
+

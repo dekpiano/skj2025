@@ -41,8 +41,10 @@
                 </div>
                 <!-- Social Links -->
                 <div class="social-links-nav d-flex gap-2">
-                    <a href="https://www.facebook.com/SKJNS160" target="_blank" class="social-btn-nav fb" title="Facebook"><i class="bi bi-facebook"></i></a>
-                    <a href="https://youtube.com/channel/UC7p4cQQuIFLyrF68p7JbWDw?si=qOHoQSymoleB3ntP" target="_blank" class="social-btn-nav yt" title="YouTube"><i class="bi bi-youtube"></i></a>
+                    <a href="https://www.facebook.com/SKJNS160" target="_blank" class="social-btn-nav fb"
+                        title="Facebook"><i class="bi bi-facebook"></i></a>
+                    <a href="https://youtube.com/channel/UC7p4cQQuIFLyrF68p7JbWDw?si=qOHoQSymoleB3ntP" target="_blank"
+                        class="social-btn-nav yt" title="YouTube"><i class="bi bi-youtube"></i></a>
                 </div>
             </div>
         </div>
@@ -54,7 +56,7 @@
     /* Premium Top Bar Styles - Meteor Shower Line Art */
     .top-bar-premium {
         background-color: #ffffff;
-        background-image: 
+        background-image:
             url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200' viewBox='0 0 400 200'%3E%3Cg stroke='%23249ffd' stroke-width='1.5' stroke-opacity='0.15' stroke-linecap='round'%3E%3Cline x1='350' y1='-20' x2='300' y2='80' /%3E%3Cline x1='150' y1='20' x2='100' y2='120' /%3E%3Cline x1='420' y1='50' x2='380' y2='130' /%3E%3C/g%3E%3Cg stroke='%23000000' stroke-width='1' stroke-opacity='0.1' stroke-linecap='round'%3E%3Cline x1='250' y1='10' x2='220' y2='70' /%3E%3Cline x1='50' y1='100' x2='20' y2='160' /%3E%3Cline x1='380' y1='150' x2='360' y2='190' /%3E%3Cline x1='120' y1='-10' x2='100' y2='30' /%3E%3C/g%3E%3C/svg%3E"),
             linear-gradient(135deg, rgba(251, 126, 156, 0.05) 0%, rgba(36, 159, 253, 0.05) 100%);
         background-size: 400px 200px, cover;
@@ -63,10 +65,11 @@
         position: relative;
         overflow: hidden;
     }
-        background-attachment: fixed;
-        border-bottom: 1px solid rgba(251, 126, 156, 0.1);
-        position: relative;
-        overflow: hidden;
+
+    background-attachment: fixed;
+    border-bottom: 1px solid rgba(251, 126, 156, 0.1);
+    position: relative;
+    overflow: hidden;
     }
 
     /* Decorative background blobs */
@@ -103,7 +106,7 @@
         transform: translateY(-2px);
         box-shadow: 0 8px 20px rgba(251, 126, 156, 0.2);
     }
-    
+
     .navbar-brand-premium:hover .logo-wrapper-nav img {
         transform: scale(1.05);
     }
@@ -113,7 +116,8 @@
     }
 
     .text-thai-nav {
-        color: #1a2a4d; /* Darker for better contrast on colorful bg */
+        color: #1a2a4d;
+        /* Darker for better contrast on colorful bg */
         font-weight: 800;
         font-size: 1.35rem;
         line-height: 1.1;
@@ -138,7 +142,7 @@
         display: flex;
         align-items: center;
         padding: 0 20px;
-        border-right: 1px solid rgba(0,0,0,0.08);
+        border-right: 1px solid rgba(0, 0, 0, 0.08);
     }
 
     .info-icon-nav {
@@ -150,7 +154,7 @@
         justify-content: center;
         font-size: 1.2rem;
         color: #fff;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         transition: all 0.3s ease;
     }
 
@@ -158,9 +162,17 @@
         transform: scale(1.1) rotate(5deg);
     }
 
-    .time-grad { background: linear-gradient(135deg, #249ffd 0%, #1a2a4d 100%); }
-    .phone-grad { background: linear-gradient(135deg, #FB7E9C 0%, #ff5e62 100%); }
-    .email-grad { background: linear-gradient(135deg, #3ab5ff 0%, #249ffd 100%); }
+    .time-grad {
+        background: linear-gradient(135deg, #249ffd 0%, #1a2a4d 100%);
+    }
+
+    .phone-grad {
+        background: linear-gradient(135deg, #FB7E9C 0%, #ff5e62 100%);
+    }
+
+    .email-grad {
+        background: linear-gradient(135deg, #3ab5ff 0%, #249ffd 100%);
+    }
 
     .info-label-nav {
         font-size: 0.7rem;
@@ -191,9 +203,20 @@
         text-decoration: none;
     }
 
-    .social-btn-nav.fb { background: #1877F2; box-shadow: 0 4px 10px rgba(24, 119, 242, 0.3); }
-    .social-btn-nav.yt { background: #FF0000; box-shadow: 0 4px 10px rgba(255, 0, 0, 0.3); }
-    .social-btn-nav.line { background: #06C755; box-shadow: 0 4px 10px rgba(6, 199, 85, 0.3); }
+    .social-btn-nav.fb {
+        background: #1877F2;
+        box-shadow: 0 4px 10px rgba(24, 119, 242, 0.3);
+    }
+
+    .social-btn-nav.yt {
+        background: #FF0000;
+        box-shadow: 0 4px 10px rgba(255, 0, 0, 0.3);
+    }
+
+    .social-btn-nav.line {
+        background: #06C755;
+        box-shadow: 0 4px 10px rgba(6, 199, 85, 0.3);
+    }
 
     .social-btn-nav:hover {
         transform: translateY(-3px);
@@ -203,35 +226,77 @@
 
     /* Responsive Top Bar Info Adjustments */
     @media (min-width: 1200px) and (max-width: 1400px) {
-        .info-item-nav { padding: 0 10px; }
-        .text-thai-nav { font-size: 1.1rem; }
-        .text-eng-nav { font-size: 0.7rem; }
-        .logo-wrapper-nav img { height: 45px; }
-        .logo-wrapper-nav { padding: 5px; }
-        .info-icon-nav { width: 32px; height: 32px; font-size: 0.9rem; border-radius: 10px; }
-        .info-value-nav { font-size: 0.75rem; }
-        .info-label-nav { font-size: 0.6rem; letter-spacing: 0.5px; }
-        .top-info-container { gap: 0.8rem; }
+        .info-item-nav {
+            padding: 0 10px;
+        }
+
+        .text-thai-nav {
+            font-size: 1.1rem;
+        }
+
+        .text-eng-nav {
+            font-size: 0.7rem;
+        }
+
+        .logo-wrapper-nav img {
+            height: 45px;
+        }
+
+        .logo-wrapper-nav {
+            padding: 5px;
+        }
+
+        .info-icon-nav {
+            width: 32px;
+            height: 32px;
+            font-size: 0.9rem;
+            border-radius: 10px;
+        }
+
+        .info-value-nav {
+            font-size: 0.75rem;
+        }
+
+        .info-label-nav {
+            font-size: 0.6rem;
+            letter-spacing: 0.5px;
+        }
+
+        .top-info-container {
+            gap: 0.8rem;
+        }
+
         /* Add Nav link compression here - EXTRA COMPACT */
         .navbar-skj .nav-link {
-            padding: 8px 6px !important; /* บีบระยะห่างให้เหลือเท่าที่จำเป็น */
-            font-size: 0.85rem !important; /* ลดขนาดเล็กลงเพื่อให้พอดีแนวนอน (iPad Pro Landscape) */
-            gap: 4px; /* ช่องไฟระหว่างไอคอนกับตัวอักษร */
+            padding: 8px 6px !important;
+            /* บีบระยะห่างให้เหลือเท่าที่จำเป็น */
+            font-size: 0.85rem !important;
+            /* ลดขนาดเล็กลงเพื่อให้พอดีแนวนอน (iPad Pro Landscape) */
+            gap: 4px;
+            /* ช่องไฟระหว่างไอคอนกับตัวอักษร */
             margin: 0 1px;
-            white-space: nowrap !important; /* บังคับให้อยู่บรรทัดเดียว ห้ามตกลงมาทับกัน */
-            letter-spacing: -0.2px; /* บีบช่องไฟของตัวอักษรเล็กน้อย */
+            white-space: nowrap !important;
+            /* บังคับให้อยู่บรรทัดเดียว ห้ามตกลงมาทับกัน */
+            letter-spacing: -0.2px;
+            /* บีบช่องไฟของตัวอักษรเล็กน้อย */
         }
+
         .navbar-skj .navbar-nav {
-            flex-wrap: nowrap !important; /* ห้ามเมนูร่วงมาบรรทัดใหม่ */
+            flex-wrap: nowrap !important;
+            /* ห้ามเมนูร่วงมาบรรทัดใหม่ */
         }
+
         .navbar-skj {
-            margin: 10px 15px; 
-            padding: 2px 15px !important; /* ลดความหนาของตัวแถบเพื่อให้หน้าเว็บดูโปร่งขึ้น */
+            margin: 10px 15px;
+            padding: 2px 15px !important;
+            /* ลดความหนาของตัวแถบเพื่อให้หน้าเว็บดูโปร่งขึ้น */
         }
     }
 
     @media (max-width: 1250px) {
-        .social-links-nav { display: none !important; }
+        .social-links-nav {
+            display: none !important;
+        }
     }
 
 
@@ -265,7 +330,8 @@
     }
 
     .navbar-skj .nav-link:hover {
-        background: rgba(36, 159, 253, 0.15); /* Soft Blue background on hover */
+        background: rgba(36, 159, 253, 0.15);
+        /* Soft Blue background on hover */
         color: #fff !important;
         transform: translateY(-2px);
         box-shadow: 0 5px 15px rgba(36, 159, 253, 0.2);
@@ -276,14 +342,14 @@
         margin: 8px 15px;
         padding: 5px 25px !important;
         background: rgba(251, 126, 156, 0.98) !important;
-        box-shadow: 
+        box-shadow:
             0 10px 30px rgba(0, 0, 0, 0.1),
             0 1px 3px rgba(0, 0, 0, 0.05);
         border: 1px solid rgba(255, 255, 255, 0.1);
         top: 8px !important;
         transform: scale(0.995);
     }
-    
+
     .navbar-skj.navbar-scrolled .nav-link {
         padding: 8px 15px !important;
         font-size: 0.92rem;
@@ -304,7 +370,8 @@
         .navbar-skj {
             margin: 5px 5px !important;
             border-radius: 20px !important;
-            padding: 5px 8px !important; /* Reduced padding to push items outward */
+            padding: 5px 8px !important;
+            /* Reduced padding to push items outward */
             top: 5px !important;
             position: fixed !important;
             width: calc(100% - 10px);
@@ -316,11 +383,12 @@
         }
 
         .navbar-skj .nav-link {
-            padding: 10px 15px !important; /* Compact by default for mobile */
+            padding: 10px 15px !important;
+            /* Compact by default for mobile */
             font-size: 0.9rem !important;
             border-radius: 0;
             margin: 0;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
     }
 
@@ -336,7 +404,7 @@
     .dropdown-menu-skj {
         border: none;
         border-radius: 15px;
-        box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
         padding: 15px;
         margin-top: 0;
         background: #fff;
@@ -355,23 +423,28 @@
         margin-bottom: 5px;
     }
 
-    .dropdown-item-skj:last-child { margin-bottom: 0; }
+    .dropdown-item-skj:last-child {
+        margin-bottom: 0;
+    }
 
     .dropdown-item-skj:hover {
-        background: rgba(36, 159, 253, 0.1); /* Soft Blue background */
-        color: #249ffd; /* Blue text */
+        background: rgba(36, 159, 253, 0.1);
+        /* Soft Blue background */
+        color: #249ffd;
+        /* Blue text */
         transform: translateX(5px);
     }
 
     .dropdown-item-skj i {
         font-size: 1.1rem;
-        color: #249ffd; /* Blue icons */
+        color: #249ffd;
+        /* Blue icons */
     }
 
     /* Mega Menu Premium - Desktop Specific */
     @media (min-width: 1200px) {
         .navbar-skj .nav-item.dropdown {
-            position: relative; 
+            position: relative;
         }
 
         .mega-menu-premium {
@@ -379,7 +452,8 @@
             min-width: 800px;
             max-width: calc(100vw - 40px);
             padding: 35px !important;
-            left: 0; /* Default alignment */
+            left: 0;
+            /* Default alignment */
             transform: none;
             border-radius: 0 20px 20px 20px !important;
             margin-top: 0 !important;
@@ -415,12 +489,15 @@
         border-bottom: 2px solid #f8f9fa;
     }
 
-    .mega-column-title i { color: #249ffd; }
+    .mega-column-title i {
+        color: #249ffd;
+    }
 
     /* Mobile Brand & Menu */
     .navbar-skj .container-fluid {
         display: flex !important;
-        flex-wrap: wrap !important; /* Allow wrapping for the collapse menu */
+        flex-wrap: wrap !important;
+        /* Allow wrapping for the collapse menu */
         align-items: center;
         justify-content: space-between;
     }
@@ -433,7 +510,8 @@
         }
 
         .navbar-collapse {
-            flex-basis: 100%; /* Force collapse menu to take full width and wrap to next line */
+            flex-basis: 100%;
+            /* Force collapse menu to take full width and wrap to next line */
             margin-top: 10px;
         }
     }
@@ -441,27 +519,31 @@
     .navbar-brand-mobile {
         display: flex;
         align-items: center;
-        gap: 8px; /* Balanced gap */
+        gap: 8px;
+        /* Balanced gap */
         text-decoration: none;
         min-width: 0;
     }
 
     .navbar-brand-mobile img {
-        height: 45px; /* Increased from 32px */
+        height: 45px;
+        /* Increased from 32px */
         flex-shrink: 0;
         transition: all 0.3s ease;
     }
 
     @media (max-width: 375px) {
         .navbar-brand-mobile img {
-            height: 40px; /* Slightly smaller on very narrow screens but still large */
+            height: 40px;
+            /* Slightly smaller on very narrow screens but still large */
         }
     }
 
     .brand-text-mobile {
         color: #fff;
         font-weight: 700;
-        font-size: clamp(0.5rem, 3.9vw, 0.95rem); /* Default mobile scaling */
+        font-size: clamp(0.5rem, 3.9vw, 0.95rem);
+        /* Default mobile scaling */
         line-height: 1;
         display: flex;
         flex-direction: column;
@@ -473,7 +555,8 @@
     /* Tablet Specific: Adjust size to prevent text overflow */
     @media (min-width: 768px) and (max-width: 1199px) {
         .brand-text-mobile {
-            font-size: 1.15rem; /* ขยับขึ้นมานิดนึงเพื่อให้สมดุลกับจอแท็บเล็ตที่กว้างขึ้น */
+            font-size: 1.15rem;
+            /* ขยับขึ้นมานิดนึงเพื่อให้สมดุลกับจอแท็บเล็ตที่กว้างขึ้น */
         }
     }
 
@@ -499,37 +582,44 @@
         padding: 5px;
         outline: none !important;
         box-shadow: none !important;
-        flex-shrink: 0; /* Keep toggler from shrinking */
+        flex-shrink: 0;
+        /* Keep toggler from shrinking */
     }
 
     .toggler-icon-premium {
-        width: 35px; /* Increased from 30px */
-        height: 3px; /* Slightly thicker */
+        width: 35px;
+        /* Increased from 30px */
+        height: 3px;
+        /* Slightly thicker */
         background: #fff;
         display: block;
-        margin: 7px 0; /* More spacing */
+        margin: 7px 0;
+        /* More spacing */
         transition: all 0.3s ease;
         border-radius: 3px;
     }
 
     @media (max-width: 1199px) {
         .navbar-collapse {
-            background: #249ffd !important; /* Changed from navy to theme blue */
+            background: #249ffd !important;
+            /* Changed from navy to theme blue */
             margin-top: 15px;
             border-radius: 20px;
             padding: 20px;
             max-height: 80vh;
             overflow-y: auto;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
 
         .navbar-skj .nav-link {
             padding: 15px 10px !important;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             color: #fff !important;
         }
 
-        .navbar-skj .nav-link::after { display: none; }
+        .navbar-skj .nav-link::after {
+            display: none;
+        }
 
         .dropdown-menu-skj,
         .mega-menu-premium {
@@ -539,15 +629,18 @@
             background: transparent !important;
             box-shadow: none !important;
             padding: 0 !important;
-            position: static !important; /* Stack normally on mobile */
-            animation: none !important; /* Disable animations on mobile for better performance and visibility */
+            position: static !important;
+            /* Stack normally on mobile */
+            animation: none !important;
+            /* Disable animations on mobile for better performance and visibility */
             margin-top: 0 !important;
         }
 
         .mega-column-title {
-            color: #fff !important; /* Changed from blue to white for visibility */
+            color: #fff !important;
+            /* Changed from blue to white for visibility */
             margin-top: 20px;
-            border-bottom-color: rgba(255,255,255,0.2);
+            border-bottom-color: rgba(255, 255, 255, 0.2);
             font-size: 1.1rem;
         }
 
@@ -556,11 +649,11 @@
         }
 
         .dropdown-item-skj {
-            color: rgba(255,255,255,0.9);
+            color: rgba(255, 255, 255, 0.9);
         }
 
         .dropdown-item-skj:hover {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             color: #fff;
         }
 
@@ -571,7 +664,8 @@
 
     /* Countdown Styling - Using styles from newyear_snow.css */
     #nav-countdown {
-        flex-shrink: 0; /* Prevent countdown from shrinking or taking too much space */
+        flex-shrink: 0;
+        /* Prevent countdown from shrinking or taking too much space */
     }
 
     @media (max-width: 1199px) {
@@ -582,55 +676,64 @@
     }
 
     @keyframes fadeInDown {
-        from { opacity: 0; transform: translateY(-10px); }
-        to { opacity: 1; transform: translateY(0); }
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     /* Desktop Hover Fix */
     @media (min-width: 1200px) {
+
         /* --- Absolute Fix for Login Dropdown --- */
-    .login-container-nav .dropdown-menu-skj {
-        display: none; 
-        opacity: 1 !important;
-        visibility: visible !important;
-        transform: none !important;
-        z-index: 9999 !important;
-        margin-top: 5px !important;
-        background: #ffffff !important;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2) !important;
-        pointer-events: auto !important;
-    }
-
-    .login-container-nav .dropdown.show .dropdown-menu-skj,
-    .login-container-nav .dropdown-menu-skj.show,
-    .login-container-nav .dropdown:hover > .dropdown-menu-skj {
-        display: block !important;
-    }
-
-    /* Keep other dropdowns with premium effect */
-    @media (min-width: 1200px) {
-        .navbar-nav .nav-item.dropdown:hover > .dropdown-menu-skj {
-            display: block !important;
+        .login-container-nav .dropdown-menu-skj {
+            display: none;
             opacity: 1 !important;
             visibility: visible !important;
-            transform: translateY(0) !important;
+            transform: none !important;
+            z-index: 9999 !important;
             margin-top: 5px !important;
+            background: #ffffff !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
+            pointer-events: auto !important;
         }
-        
-        .navbar-nav .dropdown-menu-skj {
-            transform: translateY(10px);
-            transition: all 0.3s ease;
-            display: block;
-            visibility: hidden;
-            opacity: 0;
-        }
-    }
 
-    .login-container-nav {
-        position: relative;
-        z-index: 1080 !important;
-    }
-    .dropdown-menu-skj::before {
+        .login-container-nav .dropdown.show .dropdown-menu-skj,
+        .login-container-nav .dropdown-menu-skj.show,
+        .login-container-nav .dropdown:hover>.dropdown-menu-skj {
+            display: block !important;
+        }
+
+        /* Keep other dropdowns with premium effect */
+        @media (min-width: 1200px) {
+            .navbar-nav .nav-item.dropdown:hover>.dropdown-menu-skj {
+                display: block !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+                transform: translateY(0) !important;
+                margin-top: 5px !important;
+            }
+
+            .navbar-nav .dropdown-menu-skj {
+                transform: translateY(10px);
+                transition: all 0.3s ease;
+                display: block;
+                visibility: hidden;
+                opacity: 0;
+            }
+        }
+
+        .login-container-nav {
+            position: relative;
+            z-index: 1080 !important;
+        }
+
+        .dropdown-menu-skj::before {
             content: '';
             position: absolute;
             top: -15px;
@@ -645,7 +748,8 @@
     /* Ensure navbar internal clicks work and nothing blocks them */
     .login-container-nav {
         position: relative;
-        z-index: 1060 !important; /* Extremely high to be on top */
+        z-index: 1060 !important;
+        /* Extremely high to be on top */
         pointer-events: auto !important;
         cursor: pointer;
     }
@@ -668,7 +772,8 @@
             </div>
         </a>
 
-        <button type="button" class="navbar-toggler navbar-toggler-skj" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+        <button type="button" class="navbar-toggler navbar-toggler-skj" data-bs-toggle="collapse"
+            data-bs-target="#navbarCollapse">
             <span class="toggler-icon-premium"></span>
             <span class="toggler-icon-premium" style="width: 20px;"></span>
             <span class="toggler-icon-premium"></span>
@@ -681,15 +786,16 @@
                         <i class="bi bi-house-door"></i> เกี่ยวกับ สกจ
                     </a>
                     <div class="dropdown-menu dropdown-menu-skj">
-                        <?php foreach ($AboutSchool as $key => $v_AboutSchool) : ?>
-                        <a href="<?= base_url('About/' . urlencode($v_AboutSchool->about_menu)) ?>" class="dropdown-item dropdown-item-skj">
-                            <i class="bi bi-info-circle"></i> <?= $v_AboutSchool->about_menu ?>
-                        </a>
+                        <?php foreach ($AboutSchool as $key => $v_AboutSchool): ?>
+                            <a href="<?= base_url('About/' . urlencode($v_AboutSchool->about_menu)) ?>"
+                                class="dropdown-item dropdown-item-skj">
+                                <i class="bi bi-info-circle"></i> <?= $v_AboutSchool->about_menu ?>
+                            </a>
                         <?php endforeach; ?>
                         <a href="<?= base_url('Board') ?>" class="dropdown-item dropdown-item-skj">
                             <i class="bi bi-people-fill"></i> คณะกรรมการสถานศึกษา
                         </a>
-                        <a href="<?= base_url('Botany') ?>" class="dropdown-item dropdown-item-skj">
+                        <a href="https://botany.skj.ac.th/" class="dropdown-item dropdown-item-skj">
                             <i class="bi bi-tree-fill"></i> งานสวนพฤกษศาสตร์
                         </a>
                     </div>
@@ -703,29 +809,41 @@
                         <div class="row">
                             <div class="col-lg-3">
                                 <h6 class="mega-column-title"><i class="bi bi-briefcase"></i> ฝ่ายบริหารงาน</h6>
-                                <a href="https://academic.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i class="bi bi-book"></i> งานวิชาการ</a>
-                                <a href="https://general.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i class="bi bi-gear"></i> งานทั่วไป</a>
-                                <a href="https://personnel.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i class="bi bi-person-badge"></i> งานบุคคล</a>
-                                <a href="https://budgetplan.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i class="bi bi-bar-chart-line"></i> งานงบประมาณและแผน</a>
+                                <a href="https://academic.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i
+                                        class="bi bi-book"></i> งานวิชาการ</a>
+                                <a href="https://general.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i
+                                        class="bi bi-gear"></i> งานทั่วไป</a>
+                                <a href="https://personnel.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i
+                                        class="bi bi-person-badge"></i> งานบุคคล</a>
+                                <a href="https://budgetplan.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i
+                                        class="bi bi-bar-chart-line"></i> งานงบประมาณและแผน</a>
                             </div>
                             <div class="col-lg-3">
                                 <h6 class="mega-column-title"><i class="bi bi-person-badge"></i> คณะผู้บริหาร</h6>
-                                <a href="<?= base_url('Personnal/Executive') ?>" class="dropdown-item dropdown-item-skj"><i class="bi bi-person-video2"></i> ผู้บริหารสถานศึกษา</a>
+                                <a href="<?= base_url('Personnal/Executive') ?>"
+                                    class="dropdown-item dropdown-item-skj"><i class="bi bi-person-video2"></i>
+                                    ผู้บริหารสถานศึกษา</a>
                             </div>
                             <div class="col-lg-3">
                                 <h6 class="mega-column-title"><i class="bi bi-mortarboard"></i> บุคลากรสายการสอน</h6>
-                                <a href="https://personnel.skj.ac.th/directory" class="dropdown-item dropdown-item-skj"><b><i class="bi bi-people-fill"></i> บุคลากรทั้งหมด</b></a>
-                                <?php foreach ($Lear as $key => $v_Lear) : ?>
-                                    <a href="<?= base_url('Personnal/' . urlencode("สายการสอน") . '/' . str_replace(" ", "-", urlencode($v_Lear->lear_namethai))) ?>" class="dropdown-item dropdown-item-skj">
+                                <a href="https://personnel.skj.ac.th/directory"
+                                    class="dropdown-item dropdown-item-skj"><b><i class="bi bi-people-fill"></i>
+                                        บุคลากรทั้งหมด</b></a>
+                                <?php foreach ($Lear as $key => $v_Lear): ?>
+                                    <a href="<?= base_url('Personnal/' . urlencode("สายการสอน") . '/' . str_replace(" ", "-", urlencode($v_Lear->lear_namethai))) ?>"
+                                        class="dropdown-item dropdown-item-skj">
                                         <i class="bi bi-chevron-right small"></i> <?= $v_Lear->lear_namethai; ?>
                                     </a>
                                 <?php endforeach; ?>
                             </div>
                             <div class="col-lg-3">
                                 <h6 class="mega-column-title"><i class="bi bi-tools"></i> สายสนับสนุน</h6>
-                                <a href="<?= base_url('Personnal/' . urlencode("สายสนับสนุน")) ?>" class="dropdown-item dropdown-item-skj"><b><i class="bi bi-person-gear"></i> สายสนับสนุนทั้งหมด</b></a>
-                                <?php foreach ($PosiOther as $key => $v_PosiOther) : ?>
-                                    <a href="<?= base_url('Personnal/' . urlencode("สายสนับสนุน") . '/' . str_replace(" ", "-", urlencode($v_PosiOther->posi_name))) ?>" class="dropdown-item dropdown-item-skj">
+                                <a href="<?= base_url('Personnal/' . urlencode("สายสนับสนุน")) ?>"
+                                    class="dropdown-item dropdown-item-skj"><b><i class="bi bi-person-gear"></i>
+                                        สายสนับสนุนทั้งหมด</b></a>
+                                <?php foreach ($PosiOther as $key => $v_PosiOther): ?>
+                                    <a href="<?= base_url('Personnal/' . urlencode("สายสนับสนุน") . '/' . str_replace(" ", "-", urlencode($v_PosiOther->posi_name))) ?>"
+                                        class="dropdown-item dropdown-item-skj">
                                         <i class="bi bi-chevron-right small"></i> <?= $v_PosiOther->posi_name; ?>
                                     </a>
                                 <?php endforeach; ?>
@@ -750,60 +868,92 @@
                         <div class="row">
                             <div class="col-lg-3">
                                 <h6 class="mega-column-title">นักเรียน & การเรียน</h6>
-                                <a href="https://admission.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i class="bi bi-person-plus"></i> รับสมัครนักเรียน</a>
-                                <a href="https://academic.skj.ac.th/LearningOnline" class="dropdown-item dropdown-item-skj"><i class="bi bi-globe"></i> ห้องเรียนออนไลน์</a>
-                                <a href="https://learnsuan.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i class="bi bi-journal-text"></i> สวนกุหลาบศึกษา</a>
-                                <a href="<?= base_url('guidance') ?>" class="dropdown-item dropdown-item-skj"><i class="bi bi-mortarboard"></i> ทุนการศึกษา</a>
+                                <a href="https://admission.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i
+                                        class="bi bi-person-plus"></i> รับสมัครนักเรียน</a>
+                                <a href="https://academic.skj.ac.th/LearningOnline"
+                                    class="dropdown-item dropdown-item-skj"><i class="bi bi-globe"></i>
+                                    ห้องเรียนออนไลน์</a>
+                                <a href="https://learnsuan.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i
+                                        class="bi bi-journal-text"></i> สวนกุหลาบศึกษา</a>
+                                <a href="<?= base_url('guidance') ?>" class="dropdown-item dropdown-item-skj"><i
+                                        class="bi bi-mortarboard"></i> ทุนการศึกษา</a>
                             </div>
                             <div class="col-lg-3">
                                 <h6 class="mega-column-title">ระบบจอง & แจ้งซ่อม</h6>
-                                <a href="https://general.skj.ac.th/Booking" class="dropdown-item dropdown-item-skj"><i class="bi bi-building-up"></i> จองอาคารสถานที่</a>
-                                <a href="https://general.skj.ac.th/CarBooking" class="dropdown-item dropdown-item-skj"><i class="bi bi-car-front"></i> จองยานพาหนะ</a>
-                                <a href="https://general.skj.ac.th/Repair" class="dropdown-item dropdown-item-skj"><i class="bi bi-tools"></i> แจ้งซ่อมออนไลน์</a>
-                                <a href="https://general.skj.ac.th/FoodReport" class="dropdown-item dropdown-item-skj"><i class="bi bi-pie-chart"></i> รายงานอาหาร</a>
+                                <a href="https://general.skj.ac.th/Booking" class="dropdown-item dropdown-item-skj"><i
+                                        class="bi bi-building-up"></i> จองอาคารสถานที่</a>
+                                <a href="https://general.skj.ac.th/CarBooking"
+                                    class="dropdown-item dropdown-item-skj"><i class="bi bi-car-front"></i>
+                                    จองยานพาหนะ</a>
+                                <a href="https://general.skj.ac.th/Repair" class="dropdown-item dropdown-item-skj"><i
+                                        class="bi bi-tools"></i> แจ้งซ่อมออนไลน์</a>
+                                <a href="https://general.skj.ac.th/FoodReport"
+                                    class="dropdown-item dropdown-item-skj"><i class="bi bi-pie-chart"></i>
+                                    รายงานอาหาร</a>
                             </div>
                             <div class="col-lg-3">
                                 <h6 class="mega-column-title">ข้อมูล & เอกสาร</h6>
-                                <a href="<?= base_url('Yearbook') ?>" class="dropdown-item dropdown-item-skj"><i class="bi bi-book"></i> หนังสือรุ่นดิจิทัล</a>
-                                <a href="<?= base_url('PageGroup') ?>" class="dropdown-item dropdown-item-skj"><i class="bi bi-facebook"></i> Facebook กลุ่ม</a>
-                                <a href="<?= base_url('Email') ?>" class="dropdown-item dropdown-item-skj"><i class="bi bi-envelope-at"></i> อีเมลโรงเรียน</a>
-                                <a href="https://documentcenter.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i class="bi bi-file-earmark-arrow-down"></i> โหลดเอกสาร</a>
-                                <a href="<?= base_url('Botany') ?>" class="dropdown-item dropdown-item-skj"><i class="bi bi-tree-fill"></i> งานสวนพฤกษศาสตร์</a>
+                                <a href="<?= base_url('Yearbook') ?>" class="dropdown-item dropdown-item-skj"><i
+                                        class="bi bi-book"></i> หนังสือรุ่นดิจิทัล</a>
+                                <a href="<?= base_url('PageGroup') ?>" class="dropdown-item dropdown-item-skj"><i
+                                        class="bi bi-facebook"></i> Facebook กลุ่ม</a>
+                                <a href="<?= base_url('Email') ?>" class="dropdown-item dropdown-item-skj"><i
+                                        class="bi bi-envelope-at"></i> อีเมลโรงเรียน</a>
+                                <a href="https://documentcenter.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i
+                                        class="bi bi-file-earmark-arrow-down"></i> โหลดเอกสาร</a>
+                                <a href="https://botany.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i
+                                        class="bi bi-tree-fill"></i> งานสวนพฤกษศาสตร์</a>
                             </div>
                             <div class="col-lg-3">
                                 <h6 class="mega-column-title">อื่นๆ</h6>
-                                <a href="<?= base_url('Procurements') ?>" class="dropdown-item dropdown-item-skj"><i class="bi bi-cart-check"></i> จัดซื้อจัดจ้าง</a>
-                                <a href="https://sites.google.com/skj.ac.th/skj68/home" class="dropdown-item dropdown-item-skj"><i class="bi bi-shield-check"></i> ประกันคุณภาพฯ</a>
+                                <a href="<?= base_url('Procurements') ?>" class="dropdown-item dropdown-item-skj"><i
+                                        class="bi bi-cart-check"></i> จัดซื้อจัดจ้าง</a>
+                                <a href="https://sites.google.com/skj.ac.th/skj68/home"
+                                    class="dropdown-item dropdown-item-skj"><i class="bi bi-shield-check"></i>
+                                    ประกันคุณภาพฯ</a>
                             </div>
                         </div>
-                         <div class="row mt-3">
+                        <div class="row mt-3">
                             <div class="col-lg-3">
                                 <h6 class="mega-column-title">กีฬา</h6>
-                                <a href="https://sportbase.skj.ac.th/User/Match" class="dropdown-item dropdown-item-skj"><i class="bi bi-calendar-event"></i> ตารางแข่งขัน</a>
-                                <a href="https://sportbase.skj.ac.th/User/Athlete" class="dropdown-item dropdown-item-skj"><i class="bi bi-people"></i> ทำเนียบนักกีฬา</a>
-                                <a href="https://sportbase.skj.ac.th/User/Attendance" class="dropdown-item dropdown-item-skj"><i class="bi bi-clipboard-check"></i> สถานะภาพนักกีฬาประจำวัน</a>
+                                <a href="https://sportbase.skj.ac.th/User/Match"
+                                    class="dropdown-item dropdown-item-skj"><i class="bi bi-calendar-event"></i>
+                                    ตารางแข่งขัน</a>
+                                <a href="https://sportbase.skj.ac.th/User/Athlete"
+                                    class="dropdown-item dropdown-item-skj"><i class="bi bi-people"></i>
+                                    ทำเนียบนักกีฬา</a>
+                                <a href="https://sportbase.skj.ac.th/User/Attendance"
+                                    class="dropdown-item dropdown-item-skj"><i class="bi bi-clipboard-check"></i>
+                                    สถานะภาพนักกีฬาประจำวัน</a>
                             </div>
-                            </div>
+                        </div>
                     </div>
-            </div>
-        </div>
-
-        <!-- Moved Outside Collapse to ensure clickable/hoverable -->
-        <div class="d-flex align-items-center gap-2 py-3 py-xl-0 login-container-nav ms-xl-3">
-            <div class="dropdown">
-                <button class="btn btn-outline-light btn-sm rounded-pill px-4 dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
-                    <i class="bi bi-box-arrow-in-right"></i> เข้าสู่ระบบ
-                </button>
-                <div class="dropdown-menu dropdown-menu-end dropdown-menu-skj mt-2">
-                    <a href="https://student.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i class="bi bi-person-fill"></i> สำหรับนักเรียน</a>
-                    <a href="https://teacher.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i class="bi bi-person-workspace"></i> สำหรับครูผู้สอน</a>
-                    <a href="<?= base_url('Manager/Dashboard') ?>" class="dropdown-item dropdown-item-skj"><i class="bi bi-bar-chart-line-fill"></i> สำหรับผู้บริหาร</a>
-                    <a href="<?= base_url('Support/SupportAttendance') ?>" class="dropdown-item dropdown-item-skj"><i class="bi bi-person-gear"></i> สำหรับฝ่ายสนับสนุน</a>
                 </div>
             </div>
-        </div>
 
-    </div>
+            <!-- Moved Outside Collapse to ensure clickable/hoverable -->
+            <div class="d-flex align-items-center gap-2 py-3 py-xl-0 login-container-nav ms-xl-3">
+                <div class="dropdown">
+                    <button
+                        class="btn btn-outline-light btn-sm rounded-pill px-4 dropdown-toggle d-flex align-items-center gap-2"
+                        type="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-box-arrow-in-right"></i> เข้าสู่ระบบ
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end dropdown-menu-skj mt-2">
+                        <a href="https://student.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i
+                                class="bi bi-person-fill"></i> สำหรับนักเรียน</a>
+                        <a href="https://teacher.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i
+                                class="bi bi-person-workspace"></i> สำหรับครูผู้สอน</a>
+                        <a href="<?= base_url('Manager/Dashboard') ?>" class="dropdown-item dropdown-item-skj"><i
+                                class="bi bi-bar-chart-line-fill"></i> สำหรับผู้บริหาร</a>
+                        <a href="<?= base_url('Support/SupportAttendance') ?>"
+                            class="dropdown-item dropdown-item-skj"><i class="bi bi-person-gear"></i>
+                            สำหรับฝ่ายสนับสนุน</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
 </nav>
 <!-- Navbar End -->
 
@@ -818,7 +968,7 @@
         const adjustPosition = (menu) => {
             // Reset positions first
             menu.classList.remove('shift-left', 'shift-right');
-            
+
             const rect = menu.getBoundingClientRect();
             const viewportWidth = window.innerWidth;
 
