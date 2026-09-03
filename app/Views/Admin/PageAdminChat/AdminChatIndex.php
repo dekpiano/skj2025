@@ -591,6 +591,10 @@
                             <i class="bx bx-bot fs-5"></i>
                             <span class="position-absolute top-0 start-100 translate-middle p-1 bg-secondary border border-light rounded-circle" id="aiStatusDot" title="สถานะ AI" style="width: 10px; height: 10px;"></span>
                         </button>
+                        <button type="button" class="btn btn-sm btn-outline-warning rounded-circle p-0 position-relative" onclick="openKnowledgeModal()" title="คลังความรู้ AI (Knowledge Base - อ่านเว็บไซต์ & เอกสาร)" style="width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center;">
+                            <i class="bx bx-book-open fs-5"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark border border-light" id="knowledgeCountBadge" style="font-size: 0.62rem; padding: 2px 4px; display: none;">0</span>
+                        </button>
                         <button type="button" class="btn btn-sm btn-outline-info rounded-circle p-0" onclick="openTelegramModal()" title="ตั้งค่า Telegram Bot แจ้งเตือน" style="width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center;">
                             <i class="bx bxl-telegram fs-5"></i>
                         </button>
@@ -866,11 +870,29 @@
                             <div class="col-md-5">
                                 <label class="form-label fw-bold text-dark" style="font-size: 0.86rem;">โมเดล AI (Model)</label>
                                 <select class="form-select" id="aiModel">
-                                    <option value="gemini-3.5-flash" selected>gemini-3.5-flash (แนะนำ ฉลาด ตอบเร็ว ฟรี)</option>
-                                    <option value="gemini-3.5-flash-lite">gemini-3.5-flash-lite (รุ่นประหยัด ตอบเร็วมาก)</option>
+                                    <option value="gemini-3.6-flash" selected>gemini-3.6-flash (แนะนำ ล่าสุด ฉลาด ตอบเร็ว เสถียรที่สุด)</option>
+                                    <option value="gemini-3.1-flash-lite">gemini-3.1-flash-lite (รุ่นประหยัด ตอบเร็วพิเศษ)</option>
+                                    <option value="gemini-3-flash-preview">gemini-3-flash-preview (Gemini 3.0 Flash Preview)</option>
+                                    <option value="gemini-3.5-flash">gemini-3.5-flash (Gemini 3.5 Flash)</option>
                                     <option value="gemini-flash-latest">gemini-flash-latest (รุ่น Flash ล่าสุดอัตโนมัติ)</option>
                                 </select>
                             </div>
+                        </div>
+
+                        <!-- Knowledge Base Shortcut Banner inside AI Settings -->
+                        <div class="d-flex align-items-center justify-content-between mt-3 pt-3 border-top">
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                                    <i class="bx bx-book-open fs-5"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0 fw-bold text-dark" style="font-size: 0.86rem;">คลังความรู้ AI (Knowledge Base)</h6>
+                                    <small class="text-muted" style="font-size: 0.74rem;">ให้ AI อ่านระเบียบจากเว็บไซต์และไฟล์เอกสารที่บันทึกไว้</small>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-outline-warning btn-sm rounded-pill px-3" onclick="openKnowledgeModalFromAi()">
+                                <i class="bx bx-cog me-1"></i> จัดการคลังความรู้ <span class="badge bg-warning text-dark ms-1" id="aiModalKnowledgeBadge">0</span>
+                            </button>
                         </div>
                     </div>
 
@@ -891,10 +913,15 @@
 
                     <!-- Live AI Test Sandbox -->
                     <div class="card border-0 shadow-sm rounded-4 p-3 mb-3" style="background: #ffffff; border: 1.5px dashed #cbd5e1 !important;">
-                        <h6 class="fw-bold text-dark mb-1" style="font-size: 0.88rem;">
-                            <i class="bx bx-test-tube text-primary me-1"></i> ทดสอบถาม-ตอบ AI (Live Test Sandbox)
-                        </h6>
-                        <small class="text-muted mb-2 d-block" style="font-size: 0.76rem;">พิมพ์คำถามทดสอบเพื่อลองดูว่า AI จะตอบกลับผู้ใช้อย่างไร</small>
+                        <div class="d-flex align-items-center justify-content-between mb-1">
+                            <h6 class="fw-bold text-dark mb-0" style="font-size: 0.88rem;">
+                                <i class="bx bx-test-tube text-primary me-1"></i> ทดสอบถาม-ตอบ AI (Live Test Sandbox)
+                            </h6>
+                            <span class="badge bg-label-warning text-dark small" id="sandboxKnowledgeBadge">
+                                <i class="bx bx-book-open me-1"></i> เชื่อมโยงคลังความรู้: 0 แหล่งข้อมูล
+                            </span>
+                        </div>
+                        <small class="text-muted mb-2 d-block" style="font-size: 0.76rem;">พิมพ์คำถามทดสอบเพื่อลองดูว่า AI จะตอบกลับผู้ใช้โดยใช้คลังความรู้อย่างไร</small>
                         
                         <div class="input-group mb-2">
                             <input type="text" class="form-control" id="aiTestInput" placeholder="เช่น โรงเรียนเปิดรับสมัคร ม.1 วันไหนบ้าง หรือ มีสายการเรียนอะไรบ้าง" style="font-size: 0.85rem;">
@@ -920,6 +947,397 @@
                             <button type="button" class="btn btn-light rounded-pill px-3" data-bs-dismiss="modal">ปิดหน้าต่าง</button>
                             <button type="submit" class="btn btn-primary rounded-pill px-4" id="btnSaveAi">
                                 <i class="bx bx-save me-1"></i> บันทึกการตั้งค่า
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================================
+     AI KNOWLEDGE BASE MODAL (WEBSITES & DOCUMENTS READER)
+     ========================================================== -->
+<div class="modal fade" id="aiKnowledgeModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content rounded-4 border-0 shadow">
+            <div class="modal-header border-bottom px-4 py-3" style="background: linear-gradient(135deg, #d97706 0%, #f59e0b 50%, #fbbf24 100%); color: #ffffff;">
+                <div class="d-flex align-items-center gap-2">
+                    <div class="bg-white text-warning rounded-circle p-2 d-flex align-items-center justify-content-center shadow-sm" style="width: 40px; height: 40px;">
+                        <i class="bx bx-book-open fs-3 text-warning"></i>
+                    </div>
+                    <div>
+                        <h5 class="modal-title text-white fw-bold mb-0" style="font-size: 1.15rem;">คลังความรู้ AI (AI Knowledge Base - เว็บไซต์ & ไฟล์เอกสาร)</h5>
+                        <small class="text-white opacity-75" style="font-size: 0.78rem;">บันทึกเว็บไซต์หรืออัปโหลดไฟล์เอกสาร เพื่อให้ AI อ่านและใช้ตอบคำถามผู้ใช้ได้อย่างแม่นยำ</small>
+                    </div>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body p-4" style="background: #f8fafc;">
+                <!-- Knowledge Stats Bar -->
+                <div class="row g-3 mb-3">
+                    <div class="col-sm-4">
+                        <div class="card border-0 shadow-sm rounded-4 p-3 bg-white d-flex flex-row align-items-center gap-3">
+                            <div class="rounded-circle bg-label-primary p-3 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px;">
+                                <i class="bx bx-collection fs-4 text-primary"></i>
+                            </div>
+                            <div>
+                                <small class="text-muted d-block" style="font-size: 0.76rem;">แหล่งข้อมูลทั้งหมด</small>
+                                <h5 class="mb-0 fw-bold text-dark" id="kbStatTotal">0 รายการ</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="card border-0 shadow-sm rounded-4 p-3 bg-white d-flex flex-row align-items-center gap-3">
+                            <div class="rounded-circle bg-label-success p-3 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px;">
+                                <i class="bx bx-check-shield fs-4 text-success"></i>
+                            </div>
+                            <div>
+                                <small class="text-muted d-block" style="font-size: 0.76rem;">เปิดใช้งานให้ AI อ่าน</small>
+                                <h5 class="mb-0 fw-bold text-success" id="kbStatActive">0 รายการ</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="card border-0 shadow-sm rounded-4 p-3 bg-white d-flex flex-row align-items-center gap-3">
+                            <div class="rounded-circle bg-label-warning p-3 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px;">
+                                <i class="bx bx-text fs-4 text-warning"></i>
+                            </div>
+                            <div>
+                                <small class="text-muted d-block" style="font-size: 0.76rem;">ปริมาณข้อความรวม</small>
+                                <h5 class="mb-0 fw-bold text-dark" id="kbStatChars">0 ตัวอักษร</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nav Tabs for Knowledge Base -->
+                <ul class="nav nav-pills nav-fill mb-3 bg-white p-2 rounded-4 shadow-sm border" id="kbNavTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active rounded-pill fw-bold" id="tab-kb-list-btn" data-bs-toggle="pill" data-bs-target="#tab-kb-list" type="button" role="tab" style="font-size: 0.88rem;">
+                            <i class="bx bx-list-ul me-1"></i> รายการคลังความรู้ทั้งหมด (<span id="kbTabListCount">0</span>)
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link rounded-pill fw-bold" id="tab-kb-url-btn" data-bs-toggle="pill" data-bs-target="#tab-kb-url" type="button" role="tab" style="font-size: 0.88rem;">
+                            <i class="bx bx-globe me-1"></i> 🌐 เพิ่มเว็บไซต์ (URL)
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link rounded-pill fw-bold" id="tab-kb-file-btn" data-bs-toggle="pill" data-bs-target="#tab-kb-file" type="button" role="tab" style="font-size: 0.88rem;">
+                            <i class="bx bx-file me-1"></i> 📄 อัปโหลดไฟล์ (PDF / DOCX)
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link rounded-pill fw-bold" id="tab-kb-text-btn" data-bs-toggle="pill" data-bs-target="#tab-kb-text" type="button" role="tab" style="font-size: 0.88rem;">
+                            <i class="bx bx-edit me-1"></i> ✍️ เพิ่มข้อความ/FAQ เอง
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link rounded-pill fw-bold" id="tab-kb-db-btn" data-bs-toggle="pill" data-bs-target="#tab-kb-db" type="button" role="tab" style="font-size: 0.88rem;" onclick="loadDatabaseStats()">
+                            <i class="bx bx-data me-1"></i> 🗄️ ดึงจากฐานข้อมูล (DB Sync)
+                        </button>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="kbTabContent">
+                    
+                    <!-- TAB 1: ALL KNOWLEDGE LIST -->
+                    <div class="tab-pane fade show active" id="tab-kb-list" role="tabpanel">
+                        <div class="card border-0 shadow-sm rounded-4 p-3 bg-white">
+                            <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+                                <div class="d-flex align-items-center gap-2">
+                                    <h6 class="fw-bold text-dark mb-0" style="font-size: 0.95rem;">
+                                        <i class="bx bx-book-bookmark text-warning me-1"></i> ข้อมูลที่ AI จดจำและใช้อ้างอิง
+                                    </h6>
+                                    <small class="text-muted">คลิกเปิด/ปิด เพื่อเลือกเอกสารที่ต้องการให้ AI ตอบ</small>
+                                </div>
+                                <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill" onclick="loadKnowledgeList()">
+                                    <i class="bx bx-refresh me-1"></i> รีเฟรชรายการ
+                                </button>
+                            </div>
+
+                            <div id="kbListContainer" class="table-responsive" style="max-height: 480px; overflow-y: auto;">
+                                <div class="text-center py-5 text-muted">
+                                    <div class="spinner-border spinner-border-sm text-warning mb-2" role="status"></div>
+                                    <div class="small">กำลังโหลดรายการคลังความรู้...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: ADD WEBSITE URL -->
+                    <div class="tab-pane fade" id="tab-kb-url" role="tabpanel">
+                        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+                            <div class="d-flex align-items-start gap-3 mb-3">
+                                <div class="rounded-circle bg-label-info p-2 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
+                                    <i class="bx bx-globe fs-4 text-info"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold text-dark mb-1">เพิ่มข้อมูลจากหน้าเว็บไซต์ (Web Scraper & Reader)</h6>
+                                    <p class="text-muted small mb-0" style="font-size: 0.8rem; line-height: 1.5;">
+                                        ระบบจะดึงเนื้อหา ตัวหนังสือ และหัวข้อจากหน้าเว็บไซต์มาสกัดเป็นข้อความสะอาด เพื่อให้ AI เข้าใจและใช้ตอบคำถามผู้ใช้ได้ทันที
+                                    </p>
+                                </div>
+                            </div>
+
+                            <form id="kbUrlForm" onsubmit="saveKnowledgeUrlSubmit(event)">
+                                <div class="row g-3 mb-3">
+                                    <div class="col-md-8">
+                                        <label class="form-label fw-bold text-dark" style="font-size: 0.86rem;">URL หน้าเว็บไซต์ <span class="text-danger">*</span></label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light"><i class="bx bx-link"></i></span>
+                                            <input type="url" class="form-control" id="kbUrlInput" placeholder="เช่น https://skj.ac.th/admission หรือ https://skj.ac.th/about" required>
+                                            <button class="btn btn-outline-primary" type="button" id="btnPreviewUrl" onclick="previewKnowledgeUrl()">
+                                                <i class="bx bx-download me-1"></i> ดึงตัวอย่างเนื้อหา
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label fw-bold text-dark" style="font-size: 0.86rem;">ชื่อหัวข้อ / แหล่งข้อมูล (ไม่บังคับ)</label>
+                                        <input type="text" class="form-control" id="kbUrlTitle" placeholder="เช่น ข้อมูลการรับสมัครนักเรียน ม.1">
+                                    </div>
+                                </div>
+
+                                <!-- URL Preview Box -->
+                                <div id="kbUrlPreviewWrap" style="display: none;" class="p-3 mb-3 rounded-4 bg-light border">
+                                    <div class="d-flex align-items-center justify-content-between mb-2 pb-2 border-bottom">
+                                        <span class="fw-bold text-primary small" id="kbUrlPreviewTitle"></span>
+                                        <span class="badge bg-success small" id="kbUrlPreviewChars">0 ตัวอักษร</span>
+                                    </div>
+                                    <div class="small text-muted mb-0" id="kbUrlPreviewSnippet" style="max-height: 150px; overflow-y: auto; white-space: pre-line; line-height: 1.5; font-size: 0.8rem;"></div>
+                                </div>
+
+                                <div id="kbUrlAlertBox" style="display: none;" class="alert alert-sm mb-3"></div>
+
+                                <div class="d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-warning rounded-pill px-4 fw-bold" id="btnSaveUrl">
+                                        <i class="bx bx-save me-1"></i> บันทึกลงคลังความรู้ AI
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- TAB 3: UPLOAD DOCUMENT -->
+                    <div class="tab-pane fade" id="tab-kb-file" role="tabpanel">
+                        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+                            <div class="d-flex align-items-start gap-3 mb-3">
+                                <div class="rounded-circle bg-label-danger p-2 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
+                                    <i class="bx bx-file fs-4 text-danger"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold text-dark mb-1">อัปโหลดไฟล์เอกสาร (PDF, DOCX, TXT, CSV)</h6>
+                                    <p class="text-muted small mb-0" style="font-size: 0.8rem; line-height: 1.5;">
+                                        ระบบจะแกะข้อความจากไฟล์เอกสารเพื่อแปลงเป็นความรู้ให้ AI เช่น ระเบียบการรับสมัคร, หลักสูตรสถานศึกษา, คู่มือนักเรียน
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="alert alert-info border-0 rounded-3 p-3 mb-3" style="font-size: 0.82rem;">
+                                <i class="bx bx-info-circle me-1 fs-5 align-middle"></i>
+                                <b>รูปแบบไฟล์ที่รองรับ:</b> <code>.pdf</code> (PDF ข้อความ), <code>.docx</code> (Word), <code>.txt</code>, <code>.csv</code>, <code>.md</code> (ขนาดไม่เกิน 15MB)
+                                <br><small class="text-muted">*กรณีไฟล์ PDF หากเป็นรูปภาพสแกนที่ไม่มีตัวหนังสือแนะนำให้ใช้ไฟล์ DOCX หรือแปลงเป็นข้อความก่อนอัปโหลดเพื่อความแม่นยำสูงสุด</small>
+                            </div>
+
+                            <form id="kbFileForm" onsubmit="uploadKnowledgeFileSubmit(event)">
+                                <div class="row g-3 mb-3">
+                                    <div class="col-md-7">
+                                        <label class="form-label fw-bold text-dark" style="font-size: 0.86rem;">เลือกไฟล์เอกสาร <span class="text-danger">*</span></label>
+                                        <input type="file" class="form-control" id="kbFileInput" accept=".pdf,.docx,.txt,.csv,.md,.json" required onchange="handleKbFileSelect(event)">
+                                    </div>
+                                    <div class="col-md-5">
+                                        <label class="form-label fw-bold text-dark" style="font-size: 0.86rem;">ชื่อหัวข้อเอกสาร (ไม่บังคับ)</label>
+                                        <input type="text" class="form-control" id="kbFileTitle" placeholder="เช่น คู่มือนักเรียน ม.ต้น">
+                                    </div>
+                                </div>
+
+                                <div id="kbFileAlertBox" style="display: none;" class="alert alert-sm mb-3"></div>
+
+                                <div class="d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-warning rounded-pill px-4 fw-bold" id="btnUploadKbFile">
+                                        <i class="bx bx-upload me-1"></i> อัปโหลดและสกัดข้อความ
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- TAB 4: ADD CUSTOM TEXT / FAQ -->
+                    <div class="tab-pane fade" id="tab-kb-text" role="tabpanel">
+                        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+                            <div class="d-flex align-items-start gap-3 mb-3">
+                                <div class="rounded-circle bg-label-success p-2 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
+                                    <i class="bx bx-edit fs-4 text-success"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold text-dark mb-1">เพิ่มข้อความ / ระเบียบโรงเรียน / คำถาม-คำตอบ (FAQ)</h6>
+                                    <p class="text-muted small mb-0" style="font-size: 0.8rem; line-height: 1.5;">
+                                        พิมพ์ประกาศ กฎเกณฑ์ หรือข้อมูลสำคัญที่ต้องการให้ AI ตอบตรงตามที่ระบุไว้
+                                    </p>
+                                </div>
+                            </div>
+
+                            <form id="kbTextForm" onsubmit="saveKnowledgeTextSubmit(event)">
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold text-dark" style="font-size: 0.86rem;">หัวข้อ / หมวดหมู่ <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="kbTextTitle" placeholder="เช่น กำหนดการสอบปลายภาคเรียนที่ 2/2567 หรือ อัตราค่าบำรุงการศึกษา" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold text-dark" style="font-size: 0.86rem;">เนื้อหา / รายละเอียด <span class="text-danger">*</span></label>
+                                    <textarea class="form-control" id="kbTextContent" rows="7" placeholder="กรอกรายละเอียด หรือคำถามที่พบบ่อยพร้อมคำตอบที่ถูกต้อง..." required style="font-size: 0.84rem; line-height: 1.5;"></textarea>
+                                </div>
+
+                                <div id="kbTextAlertBox" style="display: none;" class="alert alert-sm mb-3"></div>
+
+                                <div class="d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-warning rounded-pill px-4 fw-bold" id="btnSaveKbText">
+                                        <i class="bx bx-save me-1"></i> บันทึกข้อความลงคลัง
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    <!-- TAB 5: SYNC FROM SCHOOL DATABASES -->
+                    <div class="tab-pane fade" id="tab-kb-db" role="tabpanel">
+                        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+                            <div class="d-flex align-items-start gap-3 mb-3">
+                                <div class="rounded-circle bg-label-primary p-2 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
+                                    <i class="bx bx-data fs-4 text-primary"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold text-dark mb-1">เชื่อมต่อและดึงข้อมูลจากฐานข้อมูลของโรงเรียน (Database Grounding)</h6>
+                                    <p class="text-muted small mb-0" style="font-size: 0.8rem; line-height: 1.5;">
+                                        นำเข้าข้อมูลจริงจากระบบฐานข้อมูล เพื่อให้ AI ตอบคำถามได้ถูกต้อง แม่นยำ และเป็นทางการ โดยระบบจะคัดกรองข้อมูลส่วนบุคคล (PDPA) ออกอัตโนมัติ
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div id="kbDbAlertBox" style="display: none;" class="alert alert-sm mb-3"></div>
+
+                            <div class="row g-3">
+                                <!-- Card 1: Personnel -->
+                                <div class="col-md-4">
+                                    <div class="card h-100 border rounded-4 p-3 shadow-none bg-light d-flex flex-column justify-content-between">
+                                        <div>
+                                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <div class="bg-primary text-white rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                                                        <i class="bx bx-user-pin fs-5"></i>
+                                                    </div>
+                                                    <h6 class="fw-bold text-dark mb-0" style="font-size: 0.9rem;">ข้อมูลบุคลากร & คณะครู</h6>
+                                                </div>
+                                                <span class="badge bg-primary rounded-pill small" id="dbStatPersonnel">กำลังโหลด...</span>
+                                            </div>
+                                            <p class="text-muted small mb-3" style="font-size: 0.78rem; line-height: 1.5;">
+                                                ดึงรายชื่อผู้บริหาร, ฝ่ายบริหารงาน, คณะครูแยกตาม 8 กลุ่มสาระการเรียนรู้ และแนะแนว (ไม่รวมข้อมูลส่วนตัว)
+                                            </p>
+                                        </div>
+                                        <button type="button" class="btn btn-primary rounded-pill btn-sm w-100 py-2 fw-bold" onclick="syncFromDatabase('personnel', this)">
+                                            <i class="bx bx-sync me-1"></i> ซิงค์ข้อมูลบุคลากรเข้าคลัง AI
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Card 2: Academic Subjects -->
+                                <div class="col-md-4">
+                                    <div class="card h-100 border rounded-4 p-3 shadow-none bg-light d-flex flex-column justify-content-between">
+                                        <div>
+                                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <div class="bg-success text-white rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                                                        <i class="bx bx-book-bookmark fs-5"></i>
+                                                    </div>
+                                                    <h6 class="fw-bold text-dark mb-0" style="font-size: 0.9rem;">หลักสูตร & รายวิชา ม.1-ม.6</h6>
+                                                </div>
+                                                <span class="badge bg-success rounded-pill small" id="dbStatAcademic">กำลังโหลด...</span>
+                                            </div>
+                                            <p class="text-muted small mb-3" style="font-size: 0.78rem; line-height: 1.5;">
+                                                ดึงรายวิชาพื้นฐานและเพิ่มเติม รหัสวิชา ชื่อวิชา หน่วยกิต จำนวนคาบ และกลุ่มสาระการเรียนรู้
+                                            </p>
+                                        </div>
+                                        <button type="button" class="btn btn-success rounded-pill btn-sm w-100 py-2 fw-bold" onclick="syncFromDatabase('academic', this)">
+                                            <i class="bx bx-sync me-1"></i> ซิงค์ข้อมูลรายวิชาเข้าคลัง AI
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Card 3: News -->
+                                <div class="col-md-4">
+                                    <div class="card h-100 border rounded-4 p-3 shadow-none bg-light d-flex flex-column justify-content-between">
+                                        <div>
+                                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <div class="bg-info text-white rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                                                        <i class="bx bx-news fs-5"></i>
+                                                    </div>
+                                                    <h6 class="fw-bold text-dark mb-0" style="font-size: 0.9rem;">ข่าวประชาสัมพันธ์ล่าสุด</h6>
+                                                </div>
+                                                <span class="badge bg-info rounded-pill small" id="dbStatNews">กำลังโหลด...</span>
+                                            </div>
+                                            <p class="text-muted small mb-3" style="font-size: 0.78rem; line-height: 1.5;">
+                                                ดึง 25 ข่าวประชาสัมพันธ์และกิจกรรมล่าสุดของโรงเรียน พร้อมวันที่และสรุปเนื้อหาข่าว
+                                            </p>
+                                        </div>
+                                        <button type="button" class="btn btn-info text-white rounded-pill btn-sm w-100 py-2 fw-bold" onclick="syncFromDatabase('news', this)">
+                                            <i class="bx bx-sync me-1"></i> ซิงค์ข่าวสารล่าสุดเข้าคลัง AI
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer bg-white border-top px-4 py-3 d-flex justify-content-between">
+                <small class="text-muted">AI จะนำข้อมูลที่เปิดสถานะ "เปิดใช้งาน" ไปประมวลผลตอบคำถามผู้ใช้โดยอัตโนมัติ</small>
+                <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">ปิดหน้าต่าง</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================================
+     KNOWLEDGE DETAIL & EDIT MODAL
+     ========================================================== -->
+<div class="modal fade" id="knowledgeDetailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content rounded-4 border-0 shadow">
+            <div class="modal-header border-bottom px-4 py-3">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bx bx-file-find fs-4 text-warning"></i>
+                    <h5 class="modal-title fw-bold mb-0" id="detailModalTitle" style="font-size: 1.05rem;">ดูและแก้ไขเนื้อหาคลังความรู้</h5>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="kbEditForm" onsubmit="saveKnowledgeDetailSubmit(event)">
+                    <input type="hidden" id="editKbId">
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-dark" style="font-size: 0.86rem;">ชื่อหัวข้อ</label>
+                        <input type="text" class="form-control" id="editKbTitle" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="d-flex align-items-center justify-content-between mb-1">
+                            <label class="form-label fw-bold text-dark mb-0" style="font-size: 0.86rem;">เนื้อหาที่ AI ใช้อ่าน</label>
+                            <span class="badge bg-light text-muted border" id="editKbChars">0 ตัวอักษร</span>
+                        </div>
+                        <textarea class="form-control" id="editKbContent" rows="12" style="font-size: 0.84rem; line-height: 1.5; font-family: 'Prompt', monospace;" required></textarea>
+                    </div>
+
+                    <div id="editKbAlertBox" style="display: none;" class="alert alert-sm mb-3"></div>
+
+                    <div class="d-flex align-items-center justify-content-between pt-2 border-top">
+                        <span class="text-muted small" id="editKbSourceInfo" style="font-size: 0.76rem;"></span>
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn btn-light rounded-pill px-3" data-bs-dismiss="modal">ยกเลิก</button>
+                            <button type="submit" class="btn btn-primary rounded-pill px-4" id="btnSaveKbEdit">
+                                <i class="bx bx-save me-1"></i> บันทึกการแก้ไข
                             </button>
                         </div>
                     </div>
@@ -995,6 +1413,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         updateAdminSoundIcon();
         checkAiStatusOnLoad();
+        loadKnowledgeList(true);
         loadSessions(false);
         pollInterval = setInterval(function() {
             loadSessions(false, true);
@@ -1547,10 +1966,32 @@
 
     const THAI_MONTHS_SHORT = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
 
+    function parseSafeChatDate(input) {
+        if (!input) return null;
+        if (input instanceof Date) return input;
+        if (typeof input !== 'string') return null;
+
+        // Try direct parse (works for ISO strings like 2026-09-03T10:33:33.799Z)
+        let d = new Date(input);
+        if (!isNaN(d.getTime())) return d;
+
+        // Try MySQL "YYYY-MM-DD HH:mm:ss" -> replace space with 'T'
+        d = new Date(input.replace(' ', 'T'));
+        if (!isNaN(d.getTime())) return d;
+
+        // Fallback: replace dashes with slashes only if no 'T'
+        if (!input.includes('T')) {
+            d = new Date(input.replace(/-/g, '/'));
+            if (!isNaN(d.getTime())) return d;
+        }
+
+        return null;
+    }
+
     function formatShortDateTime(dateStr) {
         if (!dateStr) return '';
-        const d = new Date(dateStr.replace(/-/g, '/'));
-        if (isNaN(d.getTime())) return dateStr;
+        const d = parseSafeChatDate(dateStr);
+        if (!d) return dateStr;
 
         const now = new Date();
         const isToday = (d.toDateString() === now.toDateString());
@@ -1567,22 +2008,23 @@
         const hours = String(d.getHours()).padStart(2, '0');
         const minutes = String(d.getMinutes()).padStart(2, '0');
         const timePart = `${hours}:${minutes} น.`;
+        const timePartShort = `${hours}:${minutes}`;
 
         if (isToday) {
-            return `วันนี้ ${timePart}`;
+            return `${timePart}`;
         } else if (isYesterday) {
-            return `เมื่อวาน ${timePart}`;
+            return `เมื่อวาน ${timePartShort}`;
         } else if (isThisYear) {
-            return `${day} ${month} ${timePart}`;
+            return `${day} ${month} ${timePartShort}`;
         } else {
-            return `${day} ${month} ${thaiYearShort} ${timePart}`;
+            return `${day} ${month} ${thaiYearShort} ${timePartShort}`;
         }
     }
 
     function formatSessionCardTime(dateStr) {
         if (!dateStr) return '';
-        const d = new Date(dateStr.replace(/-/g, '/'));
-        if (isNaN(d.getTime())) return dateStr;
+        const d = parseSafeChatDate(dateStr);
+        if (!d) return dateStr;
 
         const now = new Date();
         const isToday = (d.toDateString() === now.toDateString());
@@ -1705,13 +2147,19 @@
 
 ข้อมูลด้านวิชาการและการรับสมัคร:
 - ระดับชั้นที่เปิดสอน: มัธยมศึกษาปีที่ 1 ถึง 6
-- การรับสมัคร: รับสมัครช่วงกุมภาพันธ์ - มีนาคม ของทุกปี (ระดับ ม.1 และ ม.4) ทั้งระบบออนไลน์ผ่านเว็บไซต์ https://skj.ac.th และที่อาคารอำนวยการ
-- แผนการเรียน ม.ปลาย: วิทยาศาสตร์-คณิตศาสตร์, ศิลป์-ภาษา, ศิลป์-สังคม และเทคโนโลยีสารสนเทศ
+- 5 เสาหลักสูตรความเป็นเลิศ:
+  1. ด้านวิชาการ (Academics / SMT): วิทย์-คณิตขั้นสูง, IoT, AI & หุ่นยนต์, One Classroom One Project มุ่งสู่แพทย์ วิศวะ วิทยาศาสตร์
+  2. ด้านกีฬา (Athletics / Sports): วิทยาศาสตร์การกีฬา, ฟุตบอล, วอลเลย์บอล, แบดมินตัน, ว่ายน้ำ มุ่งสู่โควตานักกีฬามหาวิทยาลัยและสโมสร
+  3. ด้านศิลปะ ดนตรี และการแสดง (Art & Performance): ทัศนศิลป์, ดนตรีไทย-สากล, ขับร้อง, นาฏศิลป์, ออกแบบกราฟิก มุ่งสู่นิเทศศาสตร์ ศิลปกรรม ดุริยางคศิลป์
+  4. ด้านวิชาชีพ (Skills & Career / Vocational): ช่างโครงสร้าง, งานไม้, งานเชื่อม, ไฟฟ้า-อิเล็กทรอนิกส์, ธุรกิจและการประกอบการ มุ่งสู่วิศวกรรมและสายอาชีพ
+  5. ด้านภาษา (Global Languages / IEP): ภาษาอังกฤษและภาษาจีนเข้มข้น, ทักษะการท่องเที่ยว-โรงแรม, การพูดในที่สาธารณะ, ภาวะผู้นำสากล มุ่งสู่อักษรศาสตร์ มนุษยศาสตร์ ธุรกิจการบิน ล่ามและการทูต
+- การรับสมัคร: รับสมัครช่วงกุมภาพันธ์ - มีนาคม ของทุกปี (ระดับ ม.1 และ ม.4) ทั้งระบบออนไลน์ผ่านเว็บไซต์ https://admission.skj.ac.th และที่อาคารอำนวยการ
 - การชำระเงิน/ค่าเทอม: ชำระผ่านระบบออนไลน์หรือที่ห้องการเงิน หากโอนแล้วสามารถแนบรูปถ่ายสลิปเข้ามาในช่องแชทนี้ได้ทันที
 
 กฎการตอบคำถาม:
-1. ตอบเป็นภาษาไทยที่สุภาพ กระชับ อ่านเข้าใจง่าย ใช้ emoji หรือ bullet point ประกอบให้อ่านสบายตา
-2. หากเป็นเรื่องนอกเหนือข้อมูลโรงเรียน หรือเรื่องที่ต้องให้ครู/เจ้าหน้าที่ตรวจสอบเฉพาะบุคคล (เช่น ผลการเรียนรายบุคคล, แก้เกรด, การขอใบ ปพ.) ให้แนะนำให้ติดต่อเบอร์โทร 056-009-667 ในวันและเวลาทำการ หรือพิมพ์ฝากชื่อและเบอร์โทรศัพท์ไว้ในแชทเพื่อให้เจ้าหน้าที่ติดต่อกลับ`;
+1. หากผู้ใช้สอบถามเรื่องหลักสูตรความเป็นเลิศ ให้ตอบครบถ้วนทั้ง 5 ด้านเสมอ (ห้ามตอบขาดหรือตอบไม่ครบทั้ง 5 ด้าน)
+2. ตอบเป็นภาษาไทยที่สุภาพ กระชับ อ่านเข้าใจง่าย ใช้ emoji หรือ bullet point ประกอบให้อ่านสบายตา
+3. หากเป็นเรื่องนอกเหนือข้อมูลโรงเรียน หรือเรื่องที่ต้องให้ครู/เจ้าหน้าที่ตรวจสอบเฉพาะบุคคล (เช่น ผลการเรียนรายบุคคล, แก้เกรด, การขอใบ ปพ.) ให้แนะนำให้ติดต่อเบอร์โทร 056-009-667 ในวันและเวลาทำการ หรือพิมพ์ฝากชื่อและเบอร์โทรศัพท์ไว้ในแชทเพื่อให้เจ้าหน้าที่ติดต่อกลับ`;
 
     function updateAiStatusBadge(isOn) {
         const dot = document.getElementById('aiStatusDot');
@@ -1747,7 +2195,9 @@
             if (data.status === 'success' && data.config) {
                 const c = data.config;
                 document.getElementById('aiApiKey').value = c.ai_api_key || '';
-                document.getElementById('aiModel').value = c.ai_model || 'gemini-3.5-flash';
+                let savedModel = c.ai_model || 'gemini-3.6-flash';
+                if (savedModel === 'gemini-2.0-flash' || savedModel === 'gemini-1.5-flash') savedModel = 'gemini-3.6-flash';
+                document.getElementById('aiModel').value = savedModel;
                 document.getElementById('aiStatus').checked = (c.ai_status === 'on');
                 document.getElementById('aiSystemPrompt').value = c.ai_system_prompt || DEFAULT_SKJ_AI_PROMPT;
                 
@@ -1760,6 +2210,7 @@
             }
             document.getElementById('aiAlertBox').style.display = 'none';
             document.getElementById('aiTestResultWrap').style.display = 'none';
+            loadKnowledgeList(true);
             const modal = new bootstrap.Modal(document.getElementById('aiSettingsModal'));
             modal.show();
         })
@@ -1768,6 +2219,14 @@
             const modal = new bootstrap.Modal(document.getElementById('aiSettingsModal'));
             modal.show();
         });
+    }
+
+    function openKnowledgeModalFromAi() {
+        const aiModal = bootstrap.Modal.getInstance(document.getElementById('aiSettingsModal'));
+        if (aiModal) aiModal.hide();
+        setTimeout(() => {
+            openKnowledgeModal();
+        }, 350);
     }
 
     function updateAiStatusUI() {
@@ -1879,7 +2338,13 @@
             if (data.status === 'success') {
                 resultWrap.style.display = 'block';
                 replyBody.innerText = data.reply;
+                const kbCount = data.knowledge_count || 0;
                 latencyBadge.innerText = (data.latency_ms || 0) + ' ms (' + (data.model || model) + ')';
+                if (kbCount > 0) {
+                    document.getElementById('aiTestResultHeader').innerHTML = `🤖 คำตอบจาก AI <span class="badge bg-warning text-dark ms-2 font-monospace"><i class="bx bx-book-open me-1"></i>อ้างอิงจากคลังความรู้ ${kbCount} รายการ</span>:`;
+                } else {
+                    document.getElementById('aiTestResultHeader').innerText = '🤖 คำตอบจาก AI:';
+                }
             } else {
                 alertBox.className = 'alert alert-danger alert-sm mb-3';
                 alertBox.innerText = data.message || 'เกิดข้อผิดพลาดในการเรียกใช้ AI';
@@ -1892,6 +2357,660 @@
             alertBox.className = 'alert alert-danger alert-sm mb-3';
             alertBox.innerText = 'เกิดข้อผิดพลาดในการเชื่อมต่อเครือข่าย';
             alertBox.style.display = 'block';
+        });
+    }
+
+    // ==========================================
+    // AI KNOWLEDGE BASE (WEBSITES & DOCUMENTS) LOGIC
+    // ==========================================
+    let allKnowledgeItems = [];
+
+    function openKnowledgeModal() {
+        loadKnowledgeList(false);
+        const modal = new bootstrap.Modal(document.getElementById('aiKnowledgeModal'));
+        modal.show();
+    }
+
+    function updateKnowledgeBadges(total, active, chars) {
+        // Badges in header & modals
+        const countBadge = document.getElementById('knowledgeCountBadge');
+        if (countBadge) {
+            countBadge.innerText = active;
+            countBadge.style.display = active > 0 ? 'inline-block' : 'none';
+        }
+        const aiModalBadge = document.getElementById('aiModalKnowledgeBadge');
+        if (aiModalBadge) aiModalBadge.innerText = `${active} เปิดใช้`;
+
+        const sandboxBadge = document.getElementById('sandboxKnowledgeBadge');
+        if (sandboxBadge) {
+            sandboxBadge.innerHTML = `<i class="bx bx-book-open me-1"></i> เชื่อมโยงคลังความรู้: ${active} แหล่งข้อมูล`;
+        }
+
+        // Stats in Knowledge Modal
+        const totalEl = document.getElementById('kbStatTotal');
+        if (totalEl) totalEl.innerText = `${total} รายการ`;
+        const activeEl = document.getElementById('kbStatActive');
+        if (activeEl) activeEl.innerText = `${active} รายการ`;
+        const charsEl = document.getElementById('kbStatChars');
+        if (charsEl) charsEl.innerText = `${Number(chars).toLocaleString()} ตัวอักษร`;
+        const tabListCount = document.getElementById('kbTabListCount');
+        if (tabListCount) tabListCount.innerText = total;
+    }
+
+    function loadKnowledgeList(silent = false) {
+        if (!silent) {
+            const container = document.getElementById('kbListContainer');
+            if (container) {
+                container.innerHTML = `
+                    <div class="text-center py-5 text-muted">
+                        <div class="spinner-border spinner-border-sm text-warning mb-2" role="status"></div>
+                        <div class="small">กำลังโหลดข้อมูลคลังความรู้...</div>
+                    </div>`;
+            }
+        }
+
+        fetch('<?= site_url('admin/live-chat/knowledge') ?>', {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success') {
+                allKnowledgeItems = data.items || [];
+                updateKnowledgeBadges(data.total_count || 0, data.active_count || 0, data.total_chars || 0);
+                renderKnowledgeList(allKnowledgeItems);
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            if (!silent) {
+                const container = document.getElementById('kbListContainer');
+                if (container) {
+                    container.innerHTML = `<div class="text-center py-4 text-danger small">โหลดข้อมูลไม่สำเร็จ</div>`;
+                }
+            }
+        });
+    }
+
+    function renderKnowledgeList(items) {
+        const container = document.getElementById('kbListContainer');
+        if (!container) return;
+
+        if (!items || items.length === 0) {
+            container.innerHTML = `
+                <div class="text-center py-5 text-muted">
+                    <i class="bx bx-book-open fs-1 text-warning opacity-50 mb-2"></i>
+                    <h6 class="fw-bold text-dark mb-1">ยังไม่มีข้อมูลในคลังความรู้ AI</h6>
+                    <p class="small text-muted mb-3" style="max-width: 400px; margin: 0 auto;">
+                        ท่านสามารถเพิ่มลิงก์หน้าเว็บไซต์ของโรงเรียน หรืออัปโหลดไฟล์เอกสาร (PDF, DOCX) เพื่อให้ AI ใช้ตอบคำถามได้อย่างแม่นยำ
+                    </p>
+                    <div class="d-flex justify-content-center gap-2">
+                        <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="document.getElementById('tab-kb-url-btn').click()">
+                            <i class="bx bx-globe me-1"></i> เพิ่มเว็บไซต์
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3" onclick="document.getElementById('tab-kb-file-btn').click()">
+                            <i class="bx bx-file me-1"></i> อัปโหลดไฟล์เอกสาร
+                        </button>
+                    </div>
+                </div>`;
+            return;
+        }
+
+        let html = `
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr style="font-size: 0.8rem;">
+                    <th style="width: 50px;">ประเภท</th>
+                    <th>หัวข้อ & ที่มา</th>
+                    <th style="width: 120px;" class="text-center">ขนาดข้อความ</th>
+                    <th style="width: 140px;" class="text-center">ซิงค์ล่าสุด</th>
+                    <th style="width: 100px;" class="text-center">เปิด/ปิดให้ AI อ่าน</th>
+                    <th style="width: 130px;" class="text-end">จัดการ</th>
+                </tr>
+            </thead>
+            <tbody style="font-size: 0.86rem;">`;
+
+        items.forEach(item => {
+            let iconBadge = '';
+            let sourceInfo = '';
+            let canSync = false;
+
+            if (item.source_type === 'url') {
+                iconBadge = '<span class="badge bg-label-info p-2 rounded-circle" title="เว็บไซต์"><i class="bx bx-globe fs-5"></i></span>';
+                sourceInfo = `<a href="${escapeHtml(item.source_url)}" target="_blank" class="text-primary small text-truncate d-inline-block" style="max-width: 320px;"><i class="bx bx-link-external me-1"></i>${escapeHtml(item.source_url)}</a>`;
+                canSync = true;
+            } else if (item.source_type === 'database') {
+                iconBadge = '<span class="badge bg-label-primary p-2 rounded-circle" title="ฐานข้อมูลโรงเรียน"><i class="bx bx-data fs-5"></i></span>';
+                sourceInfo = `<span class="text-primary small font-monospace"><i class="bx bx-cylinder me-1"></i>${escapeHtml(item.source_url || 'ฐานข้อมูลโรงเรียน')}</span>`;
+                canSync = true;
+            } else if (item.source_type === 'file') {
+                const ext = (item.file_type || '').toLowerCase();
+                const iconClass = (ext === 'pdf') ? 'bxs-file-pdf text-danger' : (ext === 'docx' ? 'bxs-file-doc text-primary' : 'bx-file text-secondary');
+                iconBadge = `<span class="badge bg-label-secondary p-2 rounded-circle" title="ไฟล์เอกสาร"><i class="bx ${iconClass} fs-5"></i></span>`;
+                sourceInfo = `<span class="text-muted small text-truncate d-inline-block" style="max-width: 300px;"><i class="bx bx-paperclip me-1"></i>${escapeHtml(item.file_name || 'ไฟล์เอกสาร')} (${ext.toUpperCase()})</span>`;
+            } else {
+                iconBadge = '<span class="badge bg-label-success p-2 rounded-circle" title="ข้อความกำหนดเอง"><i class="bx bx-edit fs-5"></i></span>';
+                sourceInfo = '<span class="text-muted small">ข้อความกำหนดเอง / ประกาศ</span>';
+            }
+
+            const isChecked = item.status === 'on' ? 'checked' : '';
+            const charCountFormatted = Number(item.char_count || 0).toLocaleString();
+            const timeStr = formatShortDateTime(item.last_synced_at || item.updated_at);
+
+            html += `
+            <tr>
+                <td class="text-center">${iconBadge}</td>
+                <td>
+                    <div class="fw-bold text-dark mb-0">${escapeHtml(item.title)}</div>
+                    <div>${sourceInfo}</div>
+                </td>
+                <td class="text-center">
+                    <span class="badge bg-light text-dark border font-monospace" style="font-size: 0.78rem;">${charCountFormatted} ตัวอักษร</span>
+                </td>
+                <td class="text-center text-muted small">${timeStr}</td>
+                <td class="text-center">
+                    <div class="form-check form-switch d-inline-block">
+                        <input class="form-check-input" type="checkbox" id="kbSwitch_${item.knowledge_id}" ${isChecked} onchange="toggleKnowledgeStatus(${item.knowledge_id})">
+                    </div>
+                </td>
+                <td class="text-end">
+                    <div class="btn-group btn-group-sm">
+                        ${canSync ? `
+                        <button type="button" class="btn btn-outline-info" onclick="syncKnowledgeUrl(${item.knowledge_id}, this)" title="ซิงค์ดึงเนื้อหาล่าสุดจากเว็บ">
+                            <i class="bx bx-sync"></i>
+                        </button>` : ''}
+                        <button type="button" class="btn btn-outline-primary" onclick="viewKnowledgeDetail(${item.knowledge_id})" title="ดู/แก้ไขเนื้อหา">
+                            <i class="bx bx-edit-alt"></i>
+                        </button>
+                        <button type="button" class="btn btn-outline-danger" onclick="deleteKnowledge(${item.knowledge_id})" title="ลบรายการนี้">
+                            <i class="bx bx-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>`;
+        });
+
+        html += `</tbody></table>`;
+        container.innerHTML = html;
+    }
+
+    function previewKnowledgeUrl() {
+        const urlInput = document.getElementById('kbUrlInput');
+        const url = urlInput.value.trim();
+        const alertBox = document.getElementById('kbUrlAlertBox');
+        const previewWrap = document.getElementById('kbUrlPreviewWrap');
+        const btn = document.getElementById('btnPreviewUrl');
+
+        alertBox.style.display = 'none';
+        if (!url) {
+            alertBox.className = 'alert alert-warning alert-sm mb-3';
+            alertBox.innerText = 'กรุณากรอก URL หน้าเว็บไซต์ก่อนครับ';
+            alertBox.style.display = 'block';
+            urlInput.focus();
+            return;
+        }
+
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> กำลังดึงข้อมูล...';
+
+        const formData = new FormData();
+        formData.append('<?= csrf_token() ?>', '<?= csrf_hash() ?>');
+        formData.append('url', url);
+
+        fetch('<?= site_url('admin/live-chat/knowledge/fetch-preview') ?>', {
+            method: 'POST',
+            body: formData,
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(res => res.json())
+        .then(data => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bx bx-download me-1"></i> ดึงตัวอย่างเนื้อหา';
+
+            if (data.status === 'success') {
+                previewWrap.style.display = 'block';
+                document.getElementById('kbUrlPreviewTitle').innerText = data.title;
+                document.getElementById('kbUrlPreviewChars').innerText = Number(data.char_count).toLocaleString() + ' ตัวอักษร';
+                document.getElementById('kbUrlPreviewSnippet').innerText = data.preview + '...';
+
+                // Pre-fill title if empty
+                const titleInput = document.getElementById('kbUrlTitle');
+                if (!titleInput.value.trim()) {
+                    titleInput.value = data.title;
+                }
+            } else {
+                alertBox.className = 'alert alert-danger alert-sm mb-3';
+                alertBox.innerText = data.message || 'ดึงข้อมูลไม่สำเร็จ';
+                alertBox.style.display = 'block';
+            }
+        })
+        .catch(() => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bx bx-download me-1"></i> ดึงตัวอย่างเนื้อหา';
+            alertBox.className = 'alert alert-danger alert-sm mb-3';
+            alertBox.innerText = 'เกิดข้อผิดพลาดในการเชื่อมต่อเครือข่าย';
+            alertBox.style.display = 'block';
+        });
+    }
+
+    function saveKnowledgeUrlSubmit(e) {
+        e.preventDefault();
+        const btn = document.getElementById('btnSaveUrl');
+        const alertBox = document.getElementById('kbUrlAlertBox');
+        const url = document.getElementById('kbUrlInput').value.trim();
+        const title = document.getElementById('kbUrlTitle').value.trim();
+
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> กำลังดึงและบันทึก...';
+        alertBox.style.display = 'none';
+
+        const formData = new FormData();
+        formData.append('<?= csrf_token() ?>', '<?= csrf_hash() ?>');
+        formData.append('url', url);
+        formData.append('title', title);
+
+        fetch('<?= site_url('admin/live-chat/knowledge/save-url') ?>', {
+            method: 'POST',
+            body: formData,
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(res => res.json())
+        .then(data => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bx bx-save me-1"></i> บันทึกลงคลังความรู้ AI';
+
+            if (data.status === 'success') {
+                alertBox.className = 'alert alert-success alert-sm mb-3';
+                alertBox.innerText = data.message;
+                alertBox.style.display = 'block';
+
+                document.getElementById('kbUrlInput').value = '';
+                document.getElementById('kbUrlTitle').value = '';
+                document.getElementById('kbUrlPreviewWrap').style.display = 'none';
+
+                loadKnowledgeList(true);
+                setTimeout(() => {
+                    document.getElementById('tab-kb-list-btn').click();
+                    alertBox.style.display = 'none';
+                }, 1200);
+            } else {
+                alertBox.className = 'alert alert-danger alert-sm mb-3';
+                alertBox.innerText = data.message || 'บันทึกไม่สำเร็จ';
+                alertBox.style.display = 'block';
+            }
+        })
+        .catch(() => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bx bx-save me-1"></i> บันทึกลงคลังความรู้ AI';
+            alertBox.className = 'alert alert-danger alert-sm mb-3';
+            alertBox.innerText = 'เกิดข้อผิดพลาดในการเชื่อมต่อเครือข่าย';
+            alertBox.style.display = 'block';
+        });
+    }
+
+    function handleKbFileSelect(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const titleInput = document.getElementById('kbFileTitle');
+            if (!titleInput.value.trim()) {
+                const nameWithoutExt = file.name.replace(/\.[^/.]+$/, "");
+                titleInput.value = nameWithoutExt;
+            }
+        }
+    }
+
+    function uploadKnowledgeFileSubmit(e) {
+        e.preventDefault();
+        const fileInput = document.getElementById('kbFileInput');
+        const file = fileInput.files[0];
+        const title = document.getElementById('kbFileTitle').value.trim();
+        const alertBox = document.getElementById('kbFileAlertBox');
+        const btn = document.getElementById('btnUploadKbFile');
+
+        if (!file) {
+            alertBox.className = 'alert alert-warning alert-sm mb-3';
+            alertBox.innerText = 'กรุณาเลือกไฟล์เอกสารก่อนครับ';
+            alertBox.style.display = 'block';
+            return;
+        }
+
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> กำลังอัปโหลดและสกัดข้อความ...';
+        alertBox.style.display = 'none';
+
+        const formData = new FormData();
+        formData.append('<?= csrf_token() ?>', '<?= csrf_hash() ?>');
+        formData.append('file', file);
+        formData.append('title', title);
+
+        fetch('<?= site_url('admin/live-chat/knowledge/upload-file') ?>', {
+            method: 'POST',
+            body: formData,
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(res => res.json())
+        .then(data => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bx bx-upload me-1"></i> อัปโหลดและสกัดข้อความ';
+
+            if (data.status === 'success') {
+                alertBox.className = 'alert alert-success alert-sm mb-3';
+                alertBox.innerText = data.message;
+                alertBox.style.display = 'block';
+
+                fileInput.value = '';
+                document.getElementById('kbFileTitle').value = '';
+
+                loadKnowledgeList(true);
+                setTimeout(() => {
+                    document.getElementById('tab-kb-list-btn').click();
+                    alertBox.style.display = 'none';
+                }, 1200);
+            } else {
+                alertBox.className = 'alert alert-danger alert-sm mb-3';
+                alertBox.innerText = data.message || 'อัปโหลดไม่สำเร็จ';
+                alertBox.style.display = 'block';
+            }
+        })
+        .catch(() => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bx bx-upload me-1"></i> อัปโหลดและสกัดข้อความ';
+            alertBox.className = 'alert alert-danger alert-sm mb-3';
+            alertBox.innerText = 'เกิดข้อผิดพลาดในการเชื่อมต่อเครือข่าย';
+            alertBox.style.display = 'block';
+        });
+    }
+
+    function saveKnowledgeTextSubmit(e) {
+        e.preventDefault();
+        const title = document.getElementById('kbTextTitle').value.trim();
+        const content = document.getElementById('kbTextContent').value.trim();
+        const alertBox = document.getElementById('kbTextAlertBox');
+        const btn = document.getElementById('btnSaveKbText');
+
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> กำลังบันทึก...';
+        alertBox.style.display = 'none';
+
+        const formData = new FormData();
+        formData.append('<?= csrf_token() ?>', '<?= csrf_hash() ?>');
+        formData.append('title', title);
+        formData.append('content', content);
+
+        fetch('<?= site_url('admin/live-chat/knowledge/save-text') ?>', {
+            method: 'POST',
+            body: formData,
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(res => res.json())
+        .then(data => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bx bx-save me-1"></i> บันทึกข้อความลงคลัง';
+
+            if (data.status === 'success') {
+                alertBox.className = 'alert alert-success alert-sm mb-3';
+                alertBox.innerText = data.message;
+                alertBox.style.display = 'block';
+
+                document.getElementById('kbTextTitle').value = '';
+                document.getElementById('kbTextContent').value = '';
+
+                loadKnowledgeList(true);
+                setTimeout(() => {
+                    document.getElementById('tab-kb-list-btn').click();
+                    alertBox.style.display = 'none';
+                }, 1200);
+            } else {
+                alertBox.className = 'alert alert-danger alert-sm mb-3';
+                alertBox.innerText = data.message || 'บันทึกไม่สำเร็จ';
+                alertBox.style.display = 'block';
+            }
+        })
+        .catch(() => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bx bx-save me-1"></i> บันทึกข้อความลงคลัง';
+            alertBox.className = 'alert alert-danger alert-sm mb-3';
+            alertBox.innerText = 'เกิดข้อผิดพลาดในการเชื่อมต่อเครือข่าย';
+            alertBox.style.display = 'block';
+        });
+    }
+
+    function toggleKnowledgeStatus(id) {
+        fetch(`<?= site_url('admin/live-chat/knowledge/toggle') ?>/${id}`, {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': '<?= csrf_hash() ?>'
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success') {
+                loadKnowledgeList(true);
+            } else {
+                alert(data.message || 'เปลี่ยนสถานะไม่สำเร็จ');
+            }
+        })
+        .catch(() => alert('เกิดข้อผิดพลาดในการเปลี่ยนสถานะ'));
+    }
+
+    function syncKnowledgeUrl(id, btnEl) {
+        const originalHtml = btnEl ? btnEl.innerHTML : '';
+        if (btnEl) {
+            btnEl.disabled = true;
+            btnEl.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
+        }
+
+        fetch(`<?= site_url('admin/live-chat/knowledge/sync') ?>/${id}`, {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': '<?= csrf_hash() ?>'
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (btnEl) {
+                btnEl.disabled = false;
+                btnEl.innerHTML = originalHtml;
+            }
+            if (data.status === 'success') {
+                loadKnowledgeList(true);
+            } else {
+                alert(data.message || 'ซิงค์ไม่สำเร็จ');
+            }
+        })
+        .catch(() => {
+            if (btnEl) {
+                btnEl.disabled = false;
+                btnEl.innerHTML = originalHtml;
+            }
+            alert('เกิดข้อผิดพลาดในการซิงค์ข้อมูล');
+        });
+    }
+
+    function deleteKnowledge(id) {
+        if (!confirm('คุณต้องการลบข้อมูลนี้ออกจากคลังความรู้ AI ใช่หรือไม่? AI จะไม่สามารถนำข้อมูลนี้มาตอบคำถามได้อีก')) return;
+
+        fetch(`<?= site_url('admin/live-chat/knowledge/delete') ?>/${id}`, {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': '<?= csrf_hash() ?>'
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success') {
+                loadKnowledgeList(true);
+            } else {
+                alert(data.message || 'ลบไม่สำเร็จ');
+            }
+        })
+        .catch(() => alert('เกิดข้อผิดพลาดในการลบข้อมูล'));
+    }
+
+    function viewKnowledgeDetail(id) {
+        fetch(`<?= site_url('admin/live-chat/knowledge/get') ?>/${id}`, {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success' && data.item) {
+                const item = data.item;
+                document.getElementById('editKbId').value = item.knowledge_id;
+                document.getElementById('editKbTitle').value = item.title;
+                document.getElementById('editKbContent').value = item.content;
+                document.getElementById('editKbChars').innerText = Number(item.char_count || 0).toLocaleString() + ' ตัวอักษร';
+
+                let srcDesc = '';
+                if (item.source_type === 'url') {
+                    srcDesc = `<i class="bx bx-globe me-1 text-primary"></i> เว็บไซต์: <a href="${escapeHtml(item.source_url)}" target="_blank">${escapeHtml(item.source_url)}</a>`;
+                } else if (item.source_type === 'database') {
+                    srcDesc = `<i class="bx bx-data me-1 text-primary"></i> ฐานข้อมูลโรงเรียน: <code>${escapeHtml(item.source_url)}</code>`;
+                } else if (item.source_type === 'file') {
+                    srcDesc = `<i class="bx bx-file me-1 text-danger"></i> ไฟล์: ${escapeHtml(item.file_name)} (${(item.file_type || '').toUpperCase()})`;
+                } else {
+                    srcDesc = `<i class="bx bx-edit me-1 text-success"></i> ข้อความที่บันทึกโดยตรง`;
+                }
+                document.getElementById('editKbSourceInfo').innerHTML = srcDesc;
+                document.getElementById('editKbAlertBox').style.display = 'none';
+
+                const contentArea = document.getElementById('editKbContent');
+                contentArea.oninput = function() {
+                    document.getElementById('editKbChars').innerText = Number(this.value.length).toLocaleString() + ' ตัวอักษร';
+                };
+
+                const modal = new bootstrap.Modal(document.getElementById('knowledgeDetailModal'));
+                modal.show();
+            } else {
+                alert(data.message || 'ไม่พบข้อมูล');
+            }
+        })
+        .catch(() => alert('โหลดข้อมูลไม่สำเร็จ'));
+    }
+
+    function saveKnowledgeDetailSubmit(e) {
+        e.preventDefault();
+        const id = document.getElementById('editKbId').value;
+        const title = document.getElementById('editKbTitle').value.trim();
+        const content = document.getElementById('editKbContent').value.trim();
+        const alertBox = document.getElementById('editKbAlertBox');
+        const btn = document.getElementById('btnSaveKbEdit');
+
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> กำลังบันทึก...';
+        alertBox.style.display = 'none';
+
+        const formData = new FormData();
+        formData.append('<?= csrf_token() ?>', '<?= csrf_hash() ?>');
+        formData.append('title', title);
+        formData.append('content', content);
+
+        fetch(`<?= site_url('admin/live-chat/knowledge/update') ?>/${id}`, {
+            method: 'POST',
+            body: formData,
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(res => res.json())
+        .then(data => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bx bx-save me-1"></i> บันทึกการแก้ไข';
+
+            if (data.status === 'success') {
+                alertBox.className = 'alert alert-success alert-sm mb-3';
+                alertBox.innerText = data.message;
+                alertBox.style.display = 'block';
+
+                loadKnowledgeList(true);
+                setTimeout(() => {
+                    bootstrap.Modal.getInstance(document.getElementById('knowledgeDetailModal'))?.hide();
+                }, 1000);
+            } else {
+                alertBox.className = 'alert alert-danger alert-sm mb-3';
+                alertBox.innerText = data.message || 'บันทึกไม่สำเร็จ';
+                alertBox.style.display = 'block';
+            }
+        })
+        .catch(() => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bx bx-save me-1"></i> บันทึกการแก้ไข';
+            alertBox.className = 'alert alert-danger alert-sm mb-3';
+            alertBox.innerText = 'เกิดข้อผิดพลาดในการเชื่อมต่อเครือข่าย';
+            alertBox.style.display = 'block';
+        });
+    }
+
+    function loadDatabaseStats() {
+        fetch('<?= site_url('admin/live-chat/knowledge/db-stats') ?>', {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success') {
+                const p = document.getElementById('dbStatPersonnel');
+                if (p) p.innerText = `${data.personnel_count || 0} คน`;
+                const a = document.getElementById('dbStatAcademic');
+                if (a) a.innerText = `${data.academic_count || 0} รายวิชา`;
+                const n = document.getElementById('dbStatNews');
+                if (n) n.innerText = `${data.news_count || 0} ข่าว`;
+            }
+        })
+        .catch(() => {});
+    }
+
+    function syncFromDatabase(type, btnEl) {
+        const originalHtml = btnEl ? btnEl.innerHTML : '';
+        if (btnEl) {
+            btnEl.disabled = true;
+            btnEl.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> กำลังซิงค์ข้อมูลจากฐานข้อมูล...';
+        }
+
+        const alertBox = document.getElementById('kbDbAlertBox');
+        if (alertBox) alertBox.style.display = 'none';
+
+        fetch(`<?= site_url('admin/live-chat/knowledge/sync-db') ?>/${type}`, {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': '<?= csrf_hash() ?>'
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (btnEl) {
+                btnEl.disabled = false;
+                btnEl.innerHTML = originalHtml;
+            }
+            if (data.status === 'success') {
+                if (alertBox) {
+                    alertBox.className = 'alert alert-success alert-sm mb-3';
+                    alertBox.innerText = data.message || 'ซิงค์ข้อมูลสำเร็จ';
+                    alertBox.style.display = 'block';
+                }
+                loadKnowledgeList(true);
+                loadDatabaseStats();
+                setTimeout(() => {
+                    document.getElementById('tab-kb-list-btn').click();
+                    if (alertBox) alertBox.style.display = 'none';
+                }, 1200);
+            } else {
+                if (alertBox) {
+                    alertBox.className = 'alert alert-danger alert-sm mb-3';
+                    alertBox.innerText = data.message || 'ซิงค์ไม่สำเร็จ';
+                    alertBox.style.display = 'block';
+                }
+            }
+        })
+        .catch(() => {
+            if (btnEl) {
+                btnEl.disabled = false;
+                btnEl.innerHTML = originalHtml;
+            }
+            if (alertBox) {
+                alertBox.className = 'alert alert-danger alert-sm mb-3';
+                alertBox.innerText = 'เกิดข้อผิดพลาดในการเชื่อมต่อเครือข่าย';
+                alertBox.style.display = 'block';
+            }
         });
     }
 </script>

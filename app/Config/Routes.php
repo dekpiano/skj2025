@@ -233,8 +233,35 @@ $routes->post('Admin/live-chat/ai-test', 'Admin\AdminControlChat::testAiResponse
 $routes->post('admin/live-chat/toggle-bot/(:num)', 'Admin\AdminControlChat::toggleSessionBot/$1');
 $routes->post('Admin/live-chat/toggle-bot/(:num)', 'Admin\AdminControlChat::toggleSessionBot/$1');
 
+// Live Chat AI Knowledge Base Routes
+$routes->get('admin/live-chat/knowledge', 'Admin\AdminControlChat::getKnowledgeList');
+$routes->get('Admin/live-chat/knowledge', 'Admin\AdminControlChat::getKnowledgeList');
+$routes->post('admin/live-chat/knowledge/fetch-preview', 'Admin\AdminControlChat::fetchUrlPreview');
+$routes->post('Admin/live-chat/knowledge/fetch-preview', 'Admin\AdminControlChat::fetchUrlPreview');
+$routes->post('admin/live-chat/knowledge/save-url', 'Admin\AdminControlChat::saveKnowledgeUrl');
+$routes->post('Admin/live-chat/knowledge/save-url', 'Admin\AdminControlChat::saveKnowledgeUrl');
+$routes->post('admin/live-chat/knowledge/upload-file', 'Admin\AdminControlChat::uploadKnowledgeFile');
+$routes->post('Admin/live-chat/knowledge/upload-file', 'Admin\AdminControlChat::uploadKnowledgeFile');
+$routes->post('admin/live-chat/knowledge/save-text', 'Admin\AdminControlChat::saveKnowledgeText');
+$routes->post('Admin/live-chat/knowledge/save-text', 'Admin\AdminControlChat::saveKnowledgeText');
+$routes->post('admin/live-chat/knowledge/toggle/(:num)', 'Admin\AdminControlChat::toggleKnowledgeStatus/$1');
+$routes->post('Admin/live-chat/knowledge/toggle/(:num)', 'Admin\AdminControlChat::toggleKnowledgeStatus/$1');
+$routes->post('admin/live-chat/knowledge/sync/(:num)', 'Admin\AdminControlChat::syncKnowledgeUrl/$1');
+$routes->post('Admin/live-chat/knowledge/sync/(:num)', 'Admin\AdminControlChat::syncKnowledgeUrl/$1');
+$routes->post('admin/live-chat/knowledge/delete/(:num)', 'Admin\AdminControlChat::deleteKnowledge/$1');
+$routes->post('Admin/live-chat/knowledge/delete/(:num)', 'Admin\AdminControlChat::deleteKnowledge/$1');
+$routes->get('admin/live-chat/knowledge/get/(:num)', 'Admin\AdminControlChat::getKnowledgeDetail/$1');
+$routes->get('Admin/live-chat/knowledge/get/(:num)', 'Admin\AdminControlChat::getKnowledgeDetail/$1');
+$routes->post('admin/live-chat/knowledge/update/(:num)', 'Admin\AdminControlChat::updateKnowledgeDetail/$1');
+$routes->post('Admin/live-chat/knowledge/update/(:num)', 'Admin\AdminControlChat::updateKnowledgeDetail/$1');
+$routes->get('admin/live-chat/knowledge/db-stats', 'Admin\AdminControlChat::getDatabaseStats');
+$routes->get('Admin/live-chat/knowledge/db-stats', 'Admin\AdminControlChat::getDatabaseStats');
+$routes->post('admin/live-chat/knowledge/sync-db/(:segment)', 'Admin\AdminControlChat::syncFromDatabase/$1');
+$routes->post('Admin/live-chat/knowledge/sync-db/(:segment)', 'Admin\AdminControlChat::syncFromDatabase/$1');
+
 $routes->post('api/chat/init', 'Api\ChatApi::initSession');
 $routes->post('api/chat/send', 'Api\ChatApi::sendMessage');
 $routes->post('api/chat/upload', 'Api\ChatApi::uploadAttachment');
 $routes->get('api/chat/messages', 'Api\ChatApi::getMessages');
+
 

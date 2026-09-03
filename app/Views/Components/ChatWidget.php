@@ -312,30 +312,27 @@
 
     .skj-chat-quick-chips {
         display: flex;
+        flex-wrap: wrap;
         gap: 6px;
-        overflow-x: auto;
-        padding: 9px 12px;
+        padding: 8px 12px;
         background: #ffffff;
         border-top: 1px solid #f1f5f9;
-        scrollbar-width: none;
     }
-    .skj-chat-quick-chips::-webkit-scrollbar { display: none; }
 
     .skj-quick-chip {
-        font-size: 0.76rem;
+        font-size: 0.75rem;
         font-weight: 600;
         white-space: nowrap;
         background: #f8fafc;
-        border: 1.5px solid #e2e8f0;
+        border: 1px solid #e2e8f0;
         border-radius: 20px;
-        padding: 5px 12px;
+        padding: 4px 10px;
         cursor: pointer;
         color: #334155;
         display: inline-flex;
         align-items: center;
-        gap: 5px;
+        gap: 4px;
         transition: all 0.2s ease;
-        flex-shrink: 0;
     }
     .skj-quick-chip:hover {
         background: #fff0f3;
@@ -478,11 +475,11 @@
 
 <div id="skjChatContainerWrap">
     <!-- Floating Launcher Icon -->
-    <div class="skj-chat-launcher" id="skjChatLauncher" onclick="toggleChatWindow()" title="สนทนาสดกับโรงเรียน">
+    <div class="skj-chat-launcher" id="skjChatLauncher" onclick="toggleChatWindow()" title="สอบถามข้อมูล">
         <i class="bx bxs-chat" id="chatLauncherIcon"></i>
         <span class="badge-unread" id="chatUnreadBadge" style="display: none;">0</span>
         <div class="skj-chat-launcher-pill" id="skjChatLauncherPill">
-            <span>💬 สอบถามเจ้าหน้าที่สด</span>
+            <span>💬 สอบถามข้อมูล</span>
         </div>
     </div>
 
@@ -540,8 +537,8 @@
             <span class="skj-quick-chip" onclick="quickSendQuestion('ขอทราบแผนการเรียนและหลักสูตรครับ')">📚 แผนการเรียน</span>
             <span class="skj-quick-chip" onclick="quickSendQuestion('ขอทราบข้อมูลการติดต่อโรงเรียนครับ')">📞 ติดต่อเรา</span>
             <span class="skj-quick-chip" onclick="quickSendQuestion('ขอทราบเวลาทำการของโรงเรียนครับ')">⏰ เวลาทำการ</span>
-            <span class="skj-quick-chip" onclick="quickSendQuestion('ขอสอบถามเรื่องค่าธรรมเนียมการศึกษา/ส่งสลิปครับ')">💳 ค่าเทอม/สลิป</span>
-            <span class="skj-quick-chip" onclick="quickSendQuestion('ขอทราบแผนที่และเส้นทางมาโรงเรียนครับ')">📍 แผนที่โรงเรียน</span>
+            <span class="skj-quick-chip" onclick="quickSendQuestion('ขอสอบถามเรื่องค่าธรรมเนียมการศึกษา/ส่งสลิปครับ')">💳 ค่าเทอม</span>
+            <span class="skj-quick-chip" onclick="quickSendQuestion('ขอทราบแผนที่และเส้นทางมาโรงเรียนครับ')">📍 แผนที่</span>
         </div>
 
         <!-- Footer Input Bar -->
@@ -733,7 +730,7 @@
         saveChatProfile();
         
         // Optimistic append
-        const nowStr = formatChatTime(new Date().toISOString());
+        const nowStr = formatChatTime(new Date());
         appendUserMessageRow('user', 'คุณ', text, nowStr, attachment ? attachment.file_url : null, attachment ? attachment.attachment_type : null);
         
         input.value = '';
@@ -956,10 +953,32 @@
 
     const THAI_MONTHS_SHORT = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
 
-    function formatChatTime(dateStr) {
-        if (!dateStr) return '';
-        const d = new Date(dateStr.replace(/-/g, '/'));
-        if (isNaN(d.getTime())) return dateStr;
+    function parseSafeChatDate(input) {
+        if (!input) return null;
+        if (input instanceof Date) return input;
+        if (typeof input !== 'string') return null;
+
+        // Try direct parse (works for ISO strings like 2026-09-03T10:33:33.799Z)
+        let d = new Date(input);
+        if (!isNaN(d.getTime())) return d;
+
+        // Try MySQL "YYYY-MM-DD HH:mm:ss" -> replace space with 'T'
+        d = new Date(input.replace(' ', 'T'));
+        if (!isNaN(d.getTime())) return d;
+
+        // Fallback: replace dashes with slashes only if no 'T'
+        if (!input.includes('T')) {
+            d = new Date(input.replace(/-/g, '/'));
+            if (!isNaN(d.getTime())) return d;
+        }
+
+        return null;
+    }
+
+    function formatChatTime(dateInput) {
+        if (!dateInput) return '';
+        const d = parseSafeChatDate(dateInput);
+        if (!d) return dateInput;
 
         const now = new Date();
         const isToday = (d.toDateString() === now.toDateString());
@@ -976,15 +995,16 @@
         const hours = String(d.getHours()).padStart(2, '0');
         const minutes = String(d.getMinutes()).padStart(2, '0');
         const timePart = `${hours}:${minutes} น.`;
+        const timePartShort = `${hours}:${minutes}`;
 
         if (isToday) {
-            return `วันนี้ ${timePart}`;
+            return `${timePart}`;
         } else if (isYesterday) {
-            return `เมื่อวาน ${timePart}`;
+            return `เมื่อวาน ${timePartShort}`;
         } else if (isThisYear) {
-            return `${day} ${month} ${timePart}`;
+            return `${day} ${month} ${timePartShort}`;
         } else {
-            return `${day} ${month} ${thaiYearShort} ${timePart}`;
+            return `${day} ${month} ${thaiYearShort} ${timePartShort}`;
         }
     }
 </script>

@@ -405,7 +405,7 @@
                         </p>
                     </div>
                     <button type="button" class="btn btn-outline-danger py-2 px-4 rounded-pill fw-bold d-flex align-items-center justify-content-center gap-2" onclick="if(typeof toggleChatWindow==='function'){toggleChatWindow();}else{window.location.href='https://www.facebook.com/SKJNS160';}" style="border-color: #e11d48; color: #be123c; border-width: 2px; font-size: 0.95rem;">
-                        <span>💬 ทักแชทสอบถามสด</span>
+                        <span>💬 ทักแชทสอบถามข้อมูล</span>
                     </button>
                 </div>
             </div>

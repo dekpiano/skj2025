@@ -164,6 +164,28 @@ class ChatApi extends BaseController
                     'updated_at'       => date('Y-m-d H:i:s')
                 ]);
             }
+
+            // Ensure tb_chat_ai_knowledge exists for AI Knowledge Base
+            $sqlKnowledge = "CREATE TABLE IF NOT EXISTS tb_chat_ai_knowledge (
+                knowledge_id INT(11) NOT NULL AUTO_INCREMENT,
+                title VARCHAR(255) NOT NULL,
+                source_type VARCHAR(20) NOT NULL DEFAULT 'url',
+                source_url VARCHAR(500) NULL,
+                file_path VARCHAR(255) NULL,
+                file_name VARCHAR(255) NULL,
+                file_type VARCHAR(50) NULL,
+                file_size INT(11) DEFAULT 0,
+                content MEDIUMTEXT NOT NULL,
+                char_count INT(11) DEFAULT 0,
+                status ENUM('on', 'off') DEFAULT 'on',
+                last_synced_at DATETIME NULL,
+                created_at DATETIME NOT NULL,
+                updated_at DATETIME NOT NULL,
+                PRIMARY KEY (knowledge_id),
+                INDEX idx_status (status),
+                INDEX idx_source (source_type)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
+            $this->db->query($sqlKnowledge);
         } catch (\Throwable $e) {
             log_message('error', '[ensureChatTablesExist] ' . $e->getMessage());
         }
@@ -482,10 +504,37 @@ class ChatApi extends BaseController
             }
 
             $apiKey = trim($aiConfig->ai_api_key);
-            $model = !empty($aiConfig->ai_model) ? trim($aiConfig->ai_model) : 'gemini-3.5-flash';
+            $model = !empty($aiConfig->ai_model) ? trim($aiConfig->ai_model) : 'gemini-3.6-flash';
+            if ($model === 'gemini-2.0-flash' || $model === 'gemini-1.5-flash') {
+                $model = 'gemini-3.6-flash';
+            }
             $systemPrompt = !empty($aiConfig->ai_system_prompt) ? trim($aiConfig->ai_system_prompt) : '';
             $temperature = isset($aiConfig->ai_temperature) ? (float)$aiConfig->ai_temperature : 0.7;
-            $maxTokens = isset($aiConfig->ai_max_tokens) ? (int)$aiConfig->ai_max_tokens : 500;
+            $maxTokens = isset($aiConfig->ai_max_tokens) ? (int)$aiConfig->ai_max_tokens : 800;
+
+            // Fetch active Knowledge Base items from tb_chat_ai_knowledge
+            $activeKnowledge = $this->db->table('tb_chat_ai_knowledge')
+                ->where('status', 'on')
+                ->orderBy('updated_at', 'DESC')
+                ->get()
+                ->getResult();
+
+            $knowledgeContext = "";
+            if (!empty($activeKnowledge)) {
+                $sections = [];
+                foreach ($activeKnowledge as $k) {
+                    $srcDesc = ($k->source_type === 'url') ? "ลิงก์เว็บไซต์: {$k->source_url}" : (($k->source_type === 'file') ? "ไฟล์เอกสาร: {$k->file_name}" : "ข้อความ/ประกาศโรงเรียน");
+                    $snippet = mb_substr($k->content, 0, 10000);
+                    $sections[] = "=== [แหล่งข้อมูล: {$k->title} ({$srcDesc})] ===\n{$snippet}";
+                }
+                $knowledgeContext = "\n\n--- คลังข้อมูลอ้างอิงและระเบียบของโรงเรียน (SKJ KNOWLEDGE BASE) ---\n"
+                    . "คำสั่งพิเศษ: จงใช้ข้อมูลจาก 'คลังข้อมูลอ้างอิงของโรงเรียน' ด้านล่างนี้เป็นฐานความรู้หลักในการตอบคำถามผู้ปกครองและนักเรียน หากมีข้อมูลที่ตรงกับคำถาม ให้ตอบตามเนื้อหานั้นอย่างถูกต้อง สุภาพ อ่านง่าย หากมีลิงก์เว็บไซต์ประกอบ ให้อ้างอิงหรือแนะนำลิงก์ให้ผู้ใช้ด้วย:\n\n"
+                    . implode("\n\n", $sections)
+                    . "\n--- สิ้นสุดคลังข้อมูลอ้างอิง ---\n";
+            }
+
+            $formatRule = "\n\nกฎสำคัญ: จงตอบเฉพาะข้อความสุดท้ายที่จะส่งให้ผู้ใช้เป็นภาษาไทยที่สุภาพเท่านั้น ห้ามพิมพ์กระบวนการคิด (Thinking/Chain of thought) หรือข้อความประเภท 'Check guidelines' ออกมาโดยเด็ดขาด\n";
+            $fullSystemPrompt = $systemPrompt . $knowledgeContext . $formatRule;
 
             // Fetch last 3-4 recent messages for conversational context
             $recentMsgs = $this->db->table('tb_chat_messages')
@@ -516,7 +565,7 @@ class ChatApi extends BaseController
             $payload = [
                 'system_instruction' => [
                     'parts' => [
-                        ['text' => $systemPrompt]
+                        ['text' => $fullSystemPrompt]
                     ]
                 ],
                 'contents' => [
@@ -529,10 +578,7 @@ class ChatApi extends BaseController
                 ],
                 'generationConfig' => [
                     'temperature'     => $temperature,
-                    'maxOutputTokens' => 1200,
-                    'thinkingConfig'  => [
-                        'thinkingBudget' => 0
-                    ]
+                    'maxOutputTokens' => !empty($maxTokens) ? max($maxTokens, 2500) : 2500
                 ]
             ];
 
@@ -559,13 +605,28 @@ class ChatApi extends BaseController
             }
 
             $resJson = json_decode($response, true);
-            $aiAnswer = $resJson['candidates'][0]['content']['parts'][0]['text'] ?? null;
+            $parts = $resJson['candidates'][0]['content']['parts'] ?? [];
+            $aiAnswer = '';
+            foreach ($parts as $p) {
+                if (!empty($p['thought'])) continue;
+                if (!empty($p['text'])) $aiAnswer .= $p['text'];
+            }
+            if (empty(trim($aiAnswer)) && !empty($parts[0]['text'])) {
+                $aiAnswer = $parts[0]['text'];
+            }
 
-            if (empty($aiAnswer)) {
-                return null;
+            // Guard against internal reasoning leaks (e.g. "* Check guidelines:")
+            if (preg_match('/^\s*\**\s*\*\s*Check guidelines:/is', $aiAnswer)) {
+                $cleaned = preg_replace('/^\s*\**\s*\*\s*Check guidelines:.*?(?=(\n\n|\n[^\*\s]|$))/is', '', $aiAnswer);
+                if (!empty(trim($cleaned))) {
+                    $aiAnswer = trim($cleaned);
+                }
             }
 
             $aiAnswer = trim($aiAnswer);
+            if (empty($aiAnswer)) {
+                return null;
+            }
 
             $botMsg = [
                 'session_id'      => $session->session_id,
