@@ -224,6 +224,15 @@ $routes->post('Admin/live-chat/telegram-config', 'Admin\AdminControlChat::saveTe
 $routes->post('admin/live-chat/telegram-test', 'Admin\AdminControlChat::testTelegramNotification');
 $routes->post('Admin/live-chat/telegram-test', 'Admin\AdminControlChat::testTelegramNotification');
 
+$routes->get('admin/live-chat/ai-config', 'Admin\AdminControlChat::getAiConfig');
+$routes->get('Admin/live-chat/ai-config', 'Admin\AdminControlChat::getAiConfig');
+$routes->post('admin/live-chat/ai-config', 'Admin\AdminControlChat::saveAiConfig');
+$routes->post('Admin/live-chat/ai-config', 'Admin\AdminControlChat::saveAiConfig');
+$routes->post('admin/live-chat/ai-test', 'Admin\AdminControlChat::testAiResponse');
+$routes->post('Admin/live-chat/ai-test', 'Admin\AdminControlChat::testAiResponse');
+$routes->post('admin/live-chat/toggle-bot/(:num)', 'Admin\AdminControlChat::toggleSessionBot/$1');
+$routes->post('Admin/live-chat/toggle-bot/(:num)', 'Admin\AdminControlChat::toggleSessionBot/$1');
+
 $routes->post('api/chat/init', 'Api\ChatApi::initSession');
 $routes->post('api/chat/send', 'Api\ChatApi::sendMessage');
 $routes->post('api/chat/upload', 'Api\ChatApi::uploadAttachment');

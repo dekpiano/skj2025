@@ -81,6 +81,18 @@ class ChatApi extends BaseController
             if (!in_array('attachment_type', $columns)) {
                 $this->db->query("ALTER TABLE tb_chat_messages ADD COLUMN attachment_type VARCHAR(50) NULL AFTER attachment_url");
             }
+
+            // Ensure columns in tb_chat_sessions
+            $sessionCols = $this->db->getFieldNames('tb_chat_sessions');
+            if (!in_array('admin_active_at', $sessionCols)) {
+                $this->db->query("ALTER TABLE tb_chat_sessions ADD COLUMN admin_active_at DATETIME NULL DEFAULT NULL AFTER unread_admin_count");
+            }
+            if (!in_array('last_admin_reply_at', $sessionCols)) {
+                $this->db->query("ALTER TABLE tb_chat_sessions ADD COLUMN last_admin_reply_at DATETIME NULL DEFAULT NULL AFTER admin_active_at");
+            }
+            if (!in_array('is_bot_paused', $sessionCols)) {
+                $this->db->query("ALTER TABLE tb_chat_sessions ADD COLUMN is_bot_paused TINYINT(1) NOT NULL DEFAULT 0 AFTER last_admin_reply_at");
+            }
             // Ensure tb_telegram_config exists
             $sqlTelegram = "CREATE TABLE IF NOT EXISTS tb_telegram_config (
                 telegram_id INT(11) NOT NULL AUTO_INCREMENT,
@@ -102,6 +114,54 @@ class ChatApi extends BaseController
                     'telegram_chat_title'=> 'SKJ Live Chat Notifications',
                     'telegram_status'    => 'on',
                     'updated_at'         => date('Y-m-d H:i:s')
+                ]);
+            }
+
+            // Ensure tb_chat_ai_config exists for Google Gemini AI Chatbot
+            $sqlAiConfig = "CREATE TABLE IF NOT EXISTS tb_chat_ai_config (
+                ai_id INT(11) NOT NULL AUTO_INCREMENT,
+                ai_provider VARCHAR(50) DEFAULT 'gemini',
+                ai_api_key VARCHAR(255) NULL,
+                ai_model VARCHAR(100) DEFAULT 'gemini-1.5-flash',
+                ai_system_prompt MEDIUMTEXT NULL,
+                ai_status ENUM('on', 'off') DEFAULT 'off',
+                ai_temperature FLOAT DEFAULT 0.7,
+                ai_max_tokens INT(11) DEFAULT 500,
+                updated_at DATETIME NOT NULL,
+                PRIMARY KEY (ai_id)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
+            $this->db->query($sqlAiConfig);
+
+            $hasAiConfig = $this->db->table('tb_chat_ai_config')->where('ai_id', 1)->countAllResults();
+            if ($hasAiConfig == 0) {
+                $defaultPrompt = "คุณคือ \"น้องกุหลาบ (SKJ AI Assistant)\" ผู้ช่วยประชาสัมพันธ์อัจฉริยะของโรงเรียนสวนกุหลาบวิทยาลัย (จิรประวัติ) นครสวรรค์ สังกัดองค์การบริหารส่วนจังหวัดนครสวรรค์\n"
+                    . "หน้าที่ของคุณคือตอบคำถามของผู้ปกครอง นักเรียน ศิษย์เก่า และประชาชนทั่วไปอย่างสุภาพ อบอุ่น มีไมตรีจิต และถูกต้องกระชับ (ลงท้ายด้วย ครับ/ค่ะ อย่างเหมาะสม)\n\n"
+                    . "ข้อมูลพื้นฐานของโรงเรียน:\n"
+                    . "- ชื่อสถานศึกษา: โรงเรียนสวนกุหลาบวิทยาลัย (จิรประวัติ) นครสวรรค์\n"
+                    . "- ที่ตั้ง: 160 หมู่ 1 ตำบลนครสวรรค์ออก อำเภอเมือง จังหวัดนครสวรรค์ 60000\n"
+                    . "- โทรศัพท์สำนักงาน: 056-009-667\n"
+                    . "- เวลาทำการ: วันจันทร์ - ศุกร์ เวลา 08:00 - 16:30 น. (ปิดทำการวันเสาร์-อาทิตย์ และวันหยุดนักขัตฤกษ์)\n"
+                    . "- สีประจำโรงเรียน: ชมพู - ฟ้า (ดอกกุหลาบสีชมพู)\n"
+                    . "- คำขวัญ/อัตลักษณ์: สุภาพชน คนสวนฯ เป็นผู้นำ รักเพื่อน นับถือพี่ เคารพครู กตัญญูพ่อแม่ ดูแลน้อง สนองคุณแผ่นดิน\n\n"
+                    . "ข้อมูลด้านวิชาการและการรับสมัคร:\n"
+                    . "- ระดับชั้นที่เปิดสอน: มัธยมศึกษาปีที่ 1 ถึง 6\n"
+                    . "- การรับสมัคร: รับสมัครช่วงกุมภาพันธ์ - มีนาคม ของทุกปี (ระดับ ม.1 และ ม.4) ทั้งระบบออนไลน์ผ่านเว็บไซต์ https://skj.ac.th และที่อาคารอำนวยการ\n"
+                    . "- แผนการเรียน ม.ปลาย: วิทยาศาสตร์-คณิตศาสตร์, ศิลป์-ภาษา, ศิลป์-สังคม และเทคโนโลยีสารสนเทศ\n"
+                    . "- การชำระเงิน/ค่าเทอม: ชำระผ่านระบบออนไลน์หรือที่ห้องการเงิน หากโอนแล้วสามารถแนบรูปถ่ายสลิปเข้ามาในช่องแชทนี้ได้ทันที\n\n"
+                    . "กฎการตอบคำถาม:\n"
+                    . "1. ตอบเป็นภาษาไทยที่สุภาพ กระชับ อ่านเข้าใจง่าย ใช้ emoji หรือ bullet point ประกอบให้อ่านสบายตา\n"
+                    . "2. หากเป็นเรื่องนอกเหนือข้อมูลโรงเรียน หรือเรื่องที่ต้องให้ครู/เจ้าหน้าที่ตรวจสอบเฉพาะบุคคล (เช่น ผลการเรียนรายบุคคล, แก้เกรด, การขอใบ ปพ.) ให้แนะนำให้ติดต่อเบอร์โทร 056-009-667 ในวันและเวลาทำการ หรือพิมพ์ฝากชื่อและเบอร์โทรศัพท์ไว้ในแชทเพื่อให้เจ้าหน้าที่ติดต่อกลับ";
+
+                $this->db->table('tb_chat_ai_config')->insert([
+                    'ai_id'            => 1,
+                    'ai_provider'      => 'gemini',
+                    'ai_api_key'       => '',
+                    'ai_model'         => 'gemini-1.5-flash',
+                    'ai_system_prompt' => $defaultPrompt,
+                    'ai_status'        => 'off',
+                    'ai_temperature'   => 0.7,
+                    'ai_max_tokens'    => 500,
+                    'updated_at'       => date('Y-m-d H:i:s')
                 ]);
             }
         } catch (\Throwable $e) {
@@ -293,8 +353,21 @@ class ChatApi extends BaseController
 
         $newMsg = $this->db->table('tb_chat_messages')->where('message_id', $messageId)->get()->getRow();
 
-        // Check Smart FAQ Auto Reply Bot
-        $botReply = $this->checkSmartAutoReply($session, $messageText);
+        // Check if Human Staff / Admin is currently active in this room or bot is paused
+        $isStaffActive = $this->isStaffActiveInSession($session);
+
+        $botReply = null;
+        if (!$isStaffActive) {
+            // 1. Try Gemini AI Auto Reply first (if enabled and configured)
+            $botReply = $this->getAiAutoReply($session, $messageText);
+
+            // 2. Fallback to Local Smart FAQ Matcher if AI is disabled, unconfigured, or timed out
+            if (!$botReply) {
+                $botReply = $this->checkSmartAutoReply($session, $messageText);
+            }
+        } else {
+            log_message('info', "[ChatApi] AI Auto-reply skipped for session #{$session->session_id} (Staff is active in room or bot paused).");
+        }
 
         return $this->response->setJSON([
             'status'    => 'success',
@@ -346,6 +419,179 @@ class ChatApi extends BaseController
             'status'   => 'success',
             'messages' => $messages
         ]);
+    }
+
+    /**
+     * Check if human staff / admin is currently active, conversing, or paused bot for this session
+     */
+    private function isStaffActiveInSession($session)
+    {
+        if (!$session) return false;
+
+        // Fresh fetch to get latest status
+        $freshSession = $this->db->table('tb_chat_sessions')->where('session_id', $session->session_id)->get()->getRow();
+        if ($freshSession) {
+            $session = $freshSession;
+        }
+
+        // 1. Manually paused by staff
+        if (isset($session->is_bot_paused) && (int)$session->is_bot_paused === 1) {
+            return true;
+        }
+
+        $now = time();
+
+        // 2. Staff is actively viewing this room in Admin panel (admin_active_at within last 25 seconds)
+        if (!empty($session->admin_active_at)) {
+            $diffSec = $now - strtotime($session->admin_active_at);
+            if ($diffSec >= 0 && $diffSec <= 25) {
+                return true;
+            }
+        }
+
+        // 3. Staff replied recently (last_admin_reply_at within last 300 seconds / 5 mins)
+        if (!empty($session->last_admin_reply_at)) {
+            $diffReply = $now - strtotime($session->last_admin_reply_at);
+            if ($diffReply >= 0 && $diffReply <= 300) {
+                return true;
+            }
+        }
+
+        // 4. Double check tb_chat_messages for any recent admin message within last 5 mins
+        $recentAdminCount = $this->db->table('tb_chat_messages')
+            ->where('session_id', $session->session_id)
+            ->where('sender_type', 'admin')
+            ->where('created_at >=', date('Y-m-d H:i:s', $now - 300))
+            ->countAllResults();
+
+        if ($recentAdminCount > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function getAiAutoReply($session, $userText)
+    {
+        if (empty($userText)) return null;
+
+        try {
+            $aiConfig = $this->db->table('tb_chat_ai_config')->where('ai_id', 1)->get()->getRow();
+            if (!$aiConfig || $aiConfig->ai_status !== 'on' || empty($aiConfig->ai_api_key)) {
+                return null;
+            }
+
+            $apiKey = trim($aiConfig->ai_api_key);
+            $model = !empty($aiConfig->ai_model) ? trim($aiConfig->ai_model) : 'gemini-3.5-flash';
+            $systemPrompt = !empty($aiConfig->ai_system_prompt) ? trim($aiConfig->ai_system_prompt) : '';
+            $temperature = isset($aiConfig->ai_temperature) ? (float)$aiConfig->ai_temperature : 0.7;
+            $maxTokens = isset($aiConfig->ai_max_tokens) ? (int)$aiConfig->ai_max_tokens : 500;
+
+            // Fetch last 3-4 recent messages for conversational context
+            $recentMsgs = $this->db->table('tb_chat_messages')
+                ->where('session_id', $session->session_id)
+                ->orderBy('created_at', 'DESC')
+                ->limit(4)
+                ->get()
+                ->getResult();
+
+            $contextSummary = "";
+            if (!empty($recentMsgs)) {
+                $recentMsgs = array_reverse($recentMsgs);
+                $historyLines = [];
+                foreach ($recentMsgs as $rm) {
+                    $who = ($rm->sender_type === 'user') ? 'ผู้ใช้' : 'บอท/เจ้าหน้าที่';
+                    $msgPreview = mb_substr(strip_tags($rm->message), 0, 150);
+                    if (!empty($msgPreview)) {
+                        $historyLines[] = "{$who}: {$msgPreview}";
+                    }
+                }
+                if (!empty($historyLines)) {
+                    $contextSummary = "บทสนทนาก่อนหน้านี้:\n" . implode("\n", $historyLines) . "\n\n";
+                }
+            }
+
+            $userPrompt = (!empty($contextSummary) ? $contextSummary : "") . "ข้อความล่าสุดจากผู้ใช้: " . trim($userText);
+
+            $payload = [
+                'system_instruction' => [
+                    'parts' => [
+                        ['text' => $systemPrompt]
+                    ]
+                ],
+                'contents' => [
+                    [
+                        'role' => 'user',
+                        'parts' => [
+                            ['text' => $userPrompt]
+                        ]
+                    ]
+                ],
+                'generationConfig' => [
+                    'temperature'     => $temperature,
+                    'maxOutputTokens' => 1200,
+                    'thinkingConfig'  => [
+                        'thinkingBudget' => 0
+                    ]
+                ]
+            ];
+
+            $url = "https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent?key=" . urlencode($apiKey);
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 8);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 20);
+            $response = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            $curlError = curl_error($ch);
+            curl_close($ch);
+
+            if ($curlError || $httpCode !== 200 || empty($response)) {
+                log_message('warning', "[ChatApi::getAiAutoReply] Gemini API call failed (HTTP {$httpCode}): " . ($curlError ?: $response));
+                return null;
+            }
+
+            $resJson = json_decode($response, true);
+            $aiAnswer = $resJson['candidates'][0]['content']['parts'][0]['text'] ?? null;
+
+            if (empty($aiAnswer)) {
+                return null;
+            }
+
+            $aiAnswer = trim($aiAnswer);
+
+            $botMsg = [
+                'session_id'      => $session->session_id,
+                'sender_type'     => 'system',
+                'sender_name'     => '🤖 น้องกุหลาบ (SKJ AI Assistant)',
+                'message'         => $aiAnswer,
+                'attachment_url'  => null,
+                'attachment_type' => null,
+                'is_bot'          => 1,
+                'is_read'         => 0,
+                'created_at'      => date('Y-m-d H:i:s')
+            ];
+            $this->db->table('tb_chat_messages')->insert($botMsg);
+            $botMsg['message_id'] = $this->db->insertID();
+
+            $this->db->table('tb_chat_sessions')->where('session_id', $session->session_id)->update([
+                'updated_at'        => date('Y-m-d H:i:s'),
+                'unread_user_count' => ($session->unread_user_count ?? 0) + 1
+            ]);
+
+            return (object)$botMsg;
+
+        } catch (\Throwable $e) {
+            log_message('error', '[ChatApi::getAiAutoReply] Exception: ' . $e->getMessage());
+            return null;
+        }
     }
 
     private function checkSmartAutoReply($session, $userText)

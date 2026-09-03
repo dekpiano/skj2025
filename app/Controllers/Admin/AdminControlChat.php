@@ -91,9 +91,16 @@ class AdminControlChat extends BaseController
             ->where('is_read', 0)
             ->update(['is_read' => 1]);
 
+        $now = date('Y-m-d H:i:s');
         $this->db->table('tb_chat_sessions')
             ->where('session_id', $sessionId)
-            ->update(['unread_admin_count' => 0]);
+            ->update([
+                'unread_admin_count' => 0,
+                'admin_active_at'    => $now
+            ]);
+
+        // Re-fetch updated session with fresh admin_active_at & is_bot_paused
+        $session = $this->db->table('tb_chat_sessions')->where('session_id', $sessionId)->get()->getRow();
 
         $messages = $this->db->table('tb_chat_messages')
             ->where('session_id', $sessionId)
@@ -145,10 +152,13 @@ class AdminControlChat extends BaseController
         $this->db->table('tb_chat_messages')->insert($insertMsg);
         $messageId = $this->db->insertID();
 
+        $now = date('Y-m-d H:i:s');
         $this->db->table('tb_chat_sessions')->where('session_id', $sessionId)->update([
-            'updated_at'        => date('Y-m-d H:i:s'),
-            'unread_user_count' => ($session->unread_user_count ?? 0) + 1,
-            'status'            => 'active'
+            'updated_at'          => $now,
+            'unread_user_count'   => ($session->unread_user_count ?? 0) + 1,
+            'status'              => 'active',
+            'admin_active_at'     => $now,
+            'last_admin_reply_at' => $now
         ]);
 
         $newMsg = $this->db->table('tb_chat_messages')->where('message_id', $messageId)->get()->getRow();
@@ -228,6 +238,34 @@ class AdminControlChat extends BaseController
         return $this->response->setJSON([
             'status'     => 'success',
             'new_status' => $newStatus
+        ]);
+    }
+
+    public function toggleSessionBot($sessionId)
+    {
+        if ($redir = $this->checkAuth()) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Unauthorized'])->setStatusCode(401);
+        }
+
+        $session = $this->db->table('tb_chat_sessions')->where('session_id', $sessionId)->get()->getRow();
+        if (!$session) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Session not found']);
+        }
+
+        $currentPaused = isset($session->is_bot_paused) ? (int)$session->is_bot_paused : 0;
+        $newPaused = ($currentPaused === 1) ? 0 : 1;
+
+        $this->db->table('tb_chat_sessions')
+            ->where('session_id', $sessionId)
+            ->update([
+                'is_bot_paused' => $newPaused,
+                'updated_at'    => date('Y-m-d H:i:s')
+            ]);
+
+        return $this->response->setJSON([
+            'status'        => 'success',
+            'is_bot_paused' => $newPaused,
+            'message'       => $newPaused ? 'พักการตอบของ AI ในห้องนี้ชั่วคราวแล้ว' : 'เปิดให้ AI ช่วยตอบในห้องนี้ตามปกติแล้ว'
         ]);
     }
 
@@ -374,6 +412,245 @@ class AdminControlChat extends BaseController
         return $this->response->setJSON([
             'status'  => 'error',
             'message' => 'ส่งไม่สำเร็จ: ' . $errMsg
+        ]);
+    }
+
+    private function ensureAiConfigTable()
+    {
+        try {
+            $sqlAiConfig = "CREATE TABLE IF NOT EXISTS tb_chat_ai_config (
+                ai_id INT(11) NOT NULL AUTO_INCREMENT,
+                ai_provider VARCHAR(50) DEFAULT 'gemini',
+                ai_api_key VARCHAR(255) NULL,
+                ai_model VARCHAR(100) DEFAULT 'gemini-1.5-flash',
+                ai_system_prompt MEDIUMTEXT NULL,
+                ai_status ENUM('on', 'off') DEFAULT 'off',
+                ai_temperature FLOAT DEFAULT 0.7,
+                ai_max_tokens INT(11) DEFAULT 500,
+                updated_at DATETIME NOT NULL,
+                PRIMARY KEY (ai_id)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
+            $this->db->query($sqlAiConfig);
+
+            $hasAiConfig = $this->db->table('tb_chat_ai_config')->where('ai_id', 1)->countAllResults();
+            if ($hasAiConfig == 0) {
+                $defaultPrompt = "คุณคือ \"น้องกุหลาบ (SKJ AI Assistant)\" ผู้ช่วยประชาสัมพันธ์อัจฉริยะของโรงเรียนสวนกุหลาบวิทยาลัย (จิรประวัติ) นครสวรรค์ สังกัดองค์การบริหารส่วนจังหวัดนครสวรรค์\n"
+                    . "หน้าที่ของคุณคือตอบคำถามของผู้ปกครอง นักเรียน ศิษย์เก่า และประชาชนทั่วไปอย่างสุภาพ อบอุ่น มีไมตรีจิต และถูกต้องกระชับ (ลงท้ายด้วย ครับ/ค่ะ อย่างเหมาะสม)\n\n"
+                    . "ข้อมูลพื้นฐานของโรงเรียน:\n"
+                    . "- ชื่อสถานศึกษา: โรงเรียนสวนกุหลาบวิทยาลัย (จิรประวัติ) นครสวรรค์\n"
+                    . "- ที่ตั้ง: 160 หมู่ 1 ตำบลนครสวรรค์ออก อำเภอเมือง จังหวัดนครสวรรค์ 60000\n"
+                    . "- โทรศัพท์สำนักงาน: 056-009-667\n"
+                    . "- เวลาทำการ: วันจันทร์ - ศุกร์ เวลา 08:00 - 16:30 น. (ปิดทำการวันเสาร์-อาทิตย์ และวันหยุดนักขัตฤกษ์)\n"
+                    . "- สีประจำโรงเรียน: ชมพู - ฟ้า (ดอกกุหลาบสีชมพู)\n"
+                    . "- คำขวัญ/อัตลักษณ์: สุภาพชน คนสวนฯ เป็นผู้นำ รักเพื่อน นับถือพี่ เคารพครู กตัญญูพ่อแม่ ดูแลน้อง สนองคุณแผ่นดิน\n\n"
+                    . "ข้อมูลด้านวิชาการและการรับสมัคร:\n"
+                    . "- ระดับชั้นที่เปิดสอน: มัธยมศึกษาปีที่ 1 ถึง 6\n"
+                    . "- การรับสมัคร: รับสมัครช่วงกุมภาพันธ์ - มีนาคม ของทุกปี (ระดับ ม.1 และ ม.4) ทั้งระบบออนไลน์ผ่านเว็บไซต์ https://skj.ac.th และที่อาคารอำนวยการ\n"
+                    . "- แผนการเรียน ม.ปลาย: วิทยาศาสตร์-คณิตศาสตร์, ศิลป์-ภาษา, ศิลป์-สังคม และเทคโนโลยีสารสนเทศ\n"
+                    . "- การชำระเงิน/ค่าเทอม: ชำระผ่านระบบออนไลน์หรือที่ห้องการเงิน หากโอนแล้วสามารถแนบรูปถ่ายสลิปเข้ามาในช่องแชทนี้ได้ทันที\n\n"
+                    . "กฎการตอบคำถาม:\n"
+                    . "1. ตอบเป็นภาษาไทยที่สุภาพ กระชับ อ่านเข้าใจง่าย ใช้ emoji หรือ bullet point ประกอบให้อ่านสบายตา\n"
+                    . "2. หากเป็นเรื่องนอกเหนือข้อมูลโรงเรียน หรือเรื่องที่ต้องให้ครู/เจ้าหน้าที่ตรวจสอบเฉพาะบุคคล (เช่น ผลการเรียนรายบุคคล, แก้เกรด, การขอใบ ปพ.) ให้แนะนำให้ติดต่อเบอร์โทร 056-009-667 ในวันและเวลาทำการ หรือพิมพ์ฝากชื่อและเบอร์โทรศัพท์ไว้ในแชทเพื่อให้เจ้าหน้าที่ติดต่อกลับ";
+
+                $this->db->table('tb_chat_ai_config')->insert([
+                    'ai_id'            => 1,
+                    'ai_provider'      => 'gemini',
+                    'ai_api_key'       => '',
+                    'ai_model'         => 'gemini-1.5-flash',
+                    'ai_system_prompt' => $defaultPrompt,
+                    'ai_status'        => 'off',
+                    'ai_temperature'   => 0.7,
+                    'ai_max_tokens'    => 500,
+                    'updated_at'       => date('Y-m-d H:i:s')
+                ]);
+            }
+        } catch (\Throwable $e) {
+            log_message('error', '[ensureAiConfigTable] ' . $e->getMessage());
+        }
+    }
+
+    public function getAiConfig()
+    {
+        if ($redir = $this->checkAuth()) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Unauthorized'])->setStatusCode(401);
+        }
+
+        $this->ensureAiConfigTable();
+
+        $config = $this->db->table('tb_chat_ai_config')->where('ai_id', 1)->get()->getRow();
+        if (!$config) {
+            $config = (object)[
+                'ai_provider'      => 'gemini',
+                'ai_api_key'       => '',
+                'ai_model'         => 'gemini-1.5-flash',
+                'ai_system_prompt' => '',
+                'ai_status'        => 'off',
+                'ai_temperature'   => 0.7,
+                'ai_max_tokens'    => 500
+            ];
+        }
+
+        return $this->response->setJSON([
+            'status' => 'success',
+            'config' => $config
+        ]);
+    }
+
+    public function saveAiConfig()
+    {
+        if ($redir = $this->checkAuth()) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Unauthorized'])->setStatusCode(401);
+        }
+
+        $this->ensureAiConfigTable();
+
+        $apiKey       = trim($this->request->getPost('ai_api_key') ?? '');
+        $model        = trim($this->request->getPost('ai_model') ?? 'gemini-3.5-flash');
+        $systemPrompt = trim($this->request->getPost('ai_system_prompt') ?? '');
+        $status       = $this->request->getPost('ai_status') === 'on' ? 'on' : 'off';
+        $temperature  = (float)($this->request->getPost('ai_temperature') ?? 0.7);
+        $maxTokens    = (int)($this->request->getPost('ai_max_tokens') ?? 500);
+
+        $allowedModels = ['gemini-3.5-flash', 'gemini-3.5-flash-lite', 'gemini-3-flash-preview', 'gemini-flash-latest', 'gemini-2.5-flash'];
+        if (!in_array($model, $allowedModels)) {
+            $model = 'gemini-3.5-flash';
+        }
+
+        $data = [
+            'ai_provider'      => 'gemini',
+            'ai_api_key'       => $apiKey,
+            'ai_model'         => $model,
+            'ai_system_prompt' => $systemPrompt,
+            'ai_status'        => $status,
+            'ai_temperature'   => $temperature,
+            'ai_max_tokens'    => $maxTokens,
+            'updated_at'       => date('Y-m-d H:i:s')
+        ];
+
+        $hasRow = $this->db->table('tb_chat_ai_config')->where('ai_id', 1)->countAllResults();
+        if ($hasRow > 0) {
+            $this->db->table('tb_chat_ai_config')->where('ai_id', 1)->update($data);
+        } else {
+            $data['ai_id'] = 1;
+            $this->db->table('tb_chat_ai_config')->insert($data);
+        }
+
+        return $this->response->setJSON([
+            'status'  => 'success',
+            'message' => 'บันทึกการตั้งค่า AI Smart Chatbot เรียบร้อยแล้ว'
+        ]);
+    }
+
+    public function testAiResponse()
+    {
+        if ($redir = $this->checkAuth()) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Unauthorized'])->setStatusCode(401);
+        }
+
+        $this->ensureAiConfigTable();
+
+        $testMsg      = trim($this->request->getPost('test_message') ?? '');
+        $apiKey       = trim($this->request->getPost('ai_api_key') ?? '');
+        $model        = trim($this->request->getPost('ai_model') ?? '');
+        $systemPrompt = trim($this->request->getPost('ai_system_prompt') ?? '');
+
+        if (empty($testMsg)) {
+            $testMsg = 'โรงเรียนเปิดรับสมัคร ม.1 วันไหนบ้าง และมีสายการเรียนอะไรบ้างครับ';
+        }
+
+        if (empty($apiKey) || empty($model) || empty($systemPrompt)) {
+            $config = $this->db->table('tb_chat_ai_config')->where('ai_id', 1)->get()->getRow();
+            if ($config) {
+                if (empty($apiKey)) $apiKey = $config->ai_api_key;
+                if (empty($model)) $model = $config->ai_model;
+                if (empty($systemPrompt)) $systemPrompt = $config->ai_system_prompt;
+            }
+        }
+
+        if (empty($apiKey)) {
+            return $this->response->setJSON([
+                'status'  => 'error',
+                'message' => 'กรุณากรอก Gemini API Key ก่อนทำการทดสอบครับ'
+            ]);
+        }
+
+        if (empty($model)) {
+            $model = 'gemini-3.5-flash';
+        }
+
+        $payload = [
+            'system_instruction' => [
+                'parts' => [
+                    ['text' => $systemPrompt]
+                ]
+            ],
+            'contents' => [
+                [
+                    'role' => 'user',
+                    'parts' => [
+                        ['text' => $testMsg]
+                    ]
+                ]
+            ],
+            'generationConfig' => [
+                'temperature'     => 0.7,
+                'maxOutputTokens' => 1200,
+                'thinkingConfig'  => [
+                    'thinkingBudget' => 0
+                ]
+            ]
+        ];
+
+        $url = "https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent?key=" . urlencode($apiKey);
+
+        $startTime = microtime(true);
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 25);
+
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $curlErr  = curl_error($ch);
+        curl_close($ch);
+        $elapsedTime = round((microtime(true) - $startTime) * 1000);
+
+        if ($curlErr) {
+            return $this->response->setJSON([
+                'status'  => 'error',
+                'message' => 'เชื่อมต่อไปยัง Google Gemini ไม่สำเร็จ: ' . $curlErr
+            ]);
+        }
+
+        $resJson = json_decode($response, true);
+        if ($httpCode !== 200) {
+            $errorMsg = $resJson['error']['message'] ?? "HTTP Error $httpCode: $response";
+            return $this->response->setJSON([
+                'status'  => 'error',
+                'message' => 'Gemini API แจ้งเตือน: ' . $errorMsg
+            ]);
+        }
+
+        $aiAnswer = $resJson['candidates'][0]['content']['parts'][0]['text'] ?? null;
+        if (empty($aiAnswer)) {
+            return $this->response->setJSON([
+                'status'  => 'error',
+                'message' => 'ไม่พบคำตอบจากโมเดล AI (รูปแบบข้อมูลไม่ถูกต้อง)'
+            ]);
+        }
+
+        return $this->response->setJSON([
+            'status'     => 'success',
+            'reply'      => trim($aiAnswer),
+            'model'      => $model,
+            'latency_ms' => $elapsedTime,
+            'message'    => 'AI ตอบกลับสำเร็จแล้ว (' . $elapsedTime . ' ms)'
         ]);
     }
 }

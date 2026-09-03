@@ -587,6 +587,10 @@
                         </div>
                     </div>
                     <div class="d-flex align-items-center gap-1">
+                        <button type="button" class="btn btn-sm btn-outline-primary rounded-circle p-0 position-relative" onclick="openAiModal()" title="ตั้งค่า AI Smart Chatbot (Google Gemini ฟรี)" style="width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center;">
+                            <i class="bx bx-bot fs-5"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle p-1 bg-secondary border border-light rounded-circle" id="aiStatusDot" title="สถานะ AI" style="width: 10px; height: 10px;"></span>
+                        </button>
                         <button type="button" class="btn btn-sm btn-outline-info rounded-circle p-0" onclick="openTelegramModal()" title="ตั้งค่า Telegram Bot แจ้งเตือน" style="width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center;">
                             <i class="bx bxl-telegram fs-5"></i>
                         </button>
@@ -653,19 +657,29 @@
                             U
                         </div>
                         <div class="overflow-hidden">
-                            <div class="d-flex align-items-center gap-2">
+                            <div class="d-flex align-items-center gap-2 flex-wrap">
                                 <h6 class="mb-0 fw-bold text-dark text-truncate" id="currentUserName" style="font-size: 1.0rem;">ผู้ติดต่อ</h6>
                                 <span class="badge bg-label-success rounded-pill px-2 py-0 small font-monospace flex-shrink-0" id="currentStatusBadge">Active</span>
+                                <span class="badge bg-label-info rounded-pill px-2 py-0 small flex-shrink-0" id="sessionBotBadge" style="cursor: pointer;" onclick="toggleSessionBotForCurrent()" title="คลิกเพื่อ สลับเปิด/พักการตอบของ AI ในห้องนี้">
+                                    <i class="bx bx-user-check me-1"></i> เจ้าหน้าที่กำลังดูห้องนี้ (AI หยุดตอบชั่วคราว)
+                                </span>
                             </div>
-                            <div class="d-flex align-items-center gap-2 mt-1">
+                            <div class="d-flex align-items-center gap-2 mt-1 flex-wrap">
                                 <small class="text-muted text-truncate" id="currentUserTel">
                                     <i class="bx bx-phone text-primary me-1"></i> -
+                                </small>
+                                <span class="text-muted opacity-50 d-none d-sm-inline">|</span>
+                                <small class="text-muted text-truncate" id="currentSessionTime">
+                                    <i class="bx bx-time-five text-secondary me-1"></i> เริ่ม: -
                                 </small>
                             </div>
                         </div>
                     </div>
 
                     <div class="d-flex align-items-center gap-1 room-header-actions flex-shrink-0">
+                        <button type="button" class="btn btn-outline-warning btn-sm rounded-pill px-2 px-sm-3" id="btnToggleSessionBot" onclick="toggleSessionBotForCurrent()" title="สลับเปิด/พักการทำงานของ AI ในห้องนี้">
+                            <i class="bx bx-pause-circle me-1"></i> <span class="d-none d-sm-inline" id="btnToggleSessionBotText">พัก AI</span>
+                        </button>
                         <a href="javascript:void(0);" class="btn btn-outline-success btn-sm rounded-pill px-2 px-sm-3" id="btnCallUser" target="_blank" style="display: none;">
                             <i class="bx bx-phone me-1"></i> <span class="d-none d-sm-inline">โทรหา</span>
                         </a>
@@ -791,6 +805,130 @@
     </div>
 </div>
 
+<!-- AI Smart Chatbot Settings Modal (Google Gemini Free) -->
+<div class="modal fade" id="aiSettingsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content rounded-4 border-0 shadow">
+            <div class="modal-header border-bottom px-4 py-3" style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #db2777 100%); color: #ffffff;">
+                <div class="d-flex align-items-center gap-2">
+                    <div class="bg-white text-primary rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                        <i class="bx bx-bot fs-3 text-primary"></i>
+                    </div>
+                    <div>
+                        <h5 class="modal-title text-white fw-bold mb-0" style="font-size: 1.15rem;">ตั้งค่า AI Smart Chatbot (Google Gemini - ฟรี 100%)</h5>
+                        <small class="text-white opacity-75" style="font-size: 0.78rem;">ระบบตอบกลับอัตโนมัติอัจฉริยะสำหรับงานประชาสัมพันธ์และแชทสดโรงเรียน</small>
+                    </div>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4" style="background: #f8fafc;">
+                <!-- Free API Key Guide Banner -->
+                <div class="card border-0 shadow-sm rounded-4 mb-3 p-3" style="background: linear-gradient(135deg, #eff6ff 0%, #f5f3ff 100%); border-left: 4px solid #6366f1 !important;">
+                    <div class="d-flex align-items-start gap-3">
+                        <i class="bx bx-bulb text-primary fs-3 mt-1"></i>
+                        <div class="flex-grow-1">
+                            <h6 class="fw-bold text-dark mb-1" style="font-size: 0.92rem;">วิธีขอรับ Google Gemini API Key ฟรี (ไม่เสียค่าใช้จ่าย & ไม่ต้องผูกบัตร)</h6>
+                            <p class="text-muted small mb-2" style="font-size: 0.8rem; line-height: 1.4;">
+                                1. เข้าไปที่ <a href="https://aistudio.google.com/" target="_blank" class="fw-bold text-primary text-decoration-underline">Google AI Studio <i class="bx bx-link-external"></i></a> แล้วล็อกอินด้วยบัญชี Gmail ใดก็ได้<br>
+                                2. กดปุ่ม <b>"Get API key"</b> แล้วกด <b>"Create API key"</b><br>
+                                3. คัดลอก Key มาวางในช่องด้านล่าง แล้วกดสวิตช์เปิดใช้งานได้ทันที (ฟรีวันละ 1,500 ข้อความ)
+                            </p>
+                            <a href="https://aistudio.google.com/" target="_blank" class="btn btn-sm btn-primary rounded-pill px-3 py-1" style="font-size: 0.78rem;">
+                                <i class="bx bx-key me-1"></i> รับ Gemini API Key ฟรีที่ Google AI Studio
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="aiConfigForm" onsubmit="saveAiSettings(event)">
+                    <div class="card border-0 shadow-sm rounded-4 p-3 mb-3 bg-white">
+                        <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
+                            <div>
+                                <h6 class="fw-bold text-dark mb-0">สถานะการทำงานของ AI</h6>
+                                <small class="text-muted" style="font-size: 0.76rem;">หากปิด AI ระบบจะสลับไปใช้ระบบคำตอบด่วน (Smart FAQ) อัตโนมัติ</small>
+                            </div>
+                            <div class="form-check form-switch fs-4 mb-0">
+                                <input class="form-check-input" type="checkbox" id="aiStatus" onchange="updateAiStatusUI()">
+                            </div>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-7">
+                                <label class="form-label fw-bold text-dark" style="font-size: 0.86rem;">Google Gemini API Key <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i class="bx bx-key text-muted"></i></span>
+                                    <input type="password" class="form-control border-start-0 border-end-0" id="aiApiKey" placeholder="AIzaSy..." autocomplete="off">
+                                    <button class="btn btn-light border border-start-0" type="button" onclick="toggleApiKeyVisibility()" title="แสดง/ซ่อนคีย์">
+                                        <i class="bx bx-show" id="aiKeyEyeIcon"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="form-label fw-bold text-dark" style="font-size: 0.86rem;">โมเดล AI (Model)</label>
+                                <select class="form-select" id="aiModel">
+                                    <option value="gemini-3.5-flash" selected>gemini-3.5-flash (แนะนำ ฉลาด ตอบเร็ว ฟรี)</option>
+                                    <option value="gemini-3.5-flash-lite">gemini-3.5-flash-lite (รุ่นประหยัด ตอบเร็วมาก)</option>
+                                    <option value="gemini-flash-latest">gemini-flash-latest (รุ่น Flash ล่าสุดอัตโนมัติ)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card border-0 shadow-sm rounded-4 p-3 mb-3 bg-white">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <label class="form-label fw-bold text-dark mb-0" style="font-size: 0.86rem;">
+                                ข้อมูลโรงเรียน & บุคลิก AI (System Prompt) <span class="text-danger">*</span>
+                            </label>
+                            <button type="button" class="btn btn-sm btn-link text-primary text-decoration-none p-0" onclick="resetDefaultAiPrompt()" style="font-size: 0.78rem;">
+                                <i class="bx bx-reset me-1"></i> โหลดข้อความแนะนำ
+                            </button>
+                        </div>
+                        <small class="text-muted d-block mb-2" style="font-size: 0.75rem;">
+                            ป้อนข้อมูลโรงเรียน ประวัติ หลักสูตร เวลาทำการ เบอร์โทรศัพท์ และกฎการตอบเพื่อให้ AI ตอบได้แม่นยำ
+                        </small>
+                        <textarea class="form-control" id="aiSystemPrompt" rows="8" style="font-size: 0.84rem; line-height: 1.5; font-family: 'Prompt', 'Sarabun', sans-serif;" placeholder="กำหนดบริบทและข้อมูลโรงเรียนที่นี่..."></textarea>
+                    </div>
+
+                    <!-- Live AI Test Sandbox -->
+                    <div class="card border-0 shadow-sm rounded-4 p-3 mb-3" style="background: #ffffff; border: 1.5px dashed #cbd5e1 !important;">
+                        <h6 class="fw-bold text-dark mb-1" style="font-size: 0.88rem;">
+                            <i class="bx bx-test-tube text-primary me-1"></i> ทดสอบถาม-ตอบ AI (Live Test Sandbox)
+                        </h6>
+                        <small class="text-muted mb-2 d-block" style="font-size: 0.76rem;">พิมพ์คำถามทดสอบเพื่อลองดูว่า AI จะตอบกลับผู้ใช้อย่างไร</small>
+                        
+                        <div class="input-group mb-2">
+                            <input type="text" class="form-control" id="aiTestInput" placeholder="เช่น โรงเรียนเปิดรับสมัคร ม.1 วันไหนบ้าง หรือ มีสายการเรียนอะไรบ้าง" style="font-size: 0.85rem;">
+                            <button class="btn btn-primary px-3" type="button" id="btnTestAi" onclick="testAiSandbox()">
+                                <i class="bx bx-paper-plane me-1"></i> ทดสอบถาม AI
+                            </button>
+                        </div>
+
+                        <div id="aiTestResultWrap" style="display: none;" class="p-3 rounded-3 bg-light border">
+                            <div class="d-flex align-items-center justify-content-between mb-1">
+                                <span class="fw-bold text-primary small" id="aiTestResultHeader">🤖 คำตอบจาก AI:</span>
+                                <span class="badge bg-light text-muted border small" id="aiTestLatency">0 ms</span>
+                            </div>
+                            <div class="text-dark small" id="aiTestReplyBody" style="white-space: pre-line; line-height: 1.6;"></div>
+                        </div>
+                    </div>
+
+                    <div id="aiAlertBox" style="display: none;" class="alert alert-sm mb-3"></div>
+
+                    <div class="d-flex align-items-center justify-content-between pt-2 border-top">
+                        <span class="text-muted small" id="aiLastUpdatedInfo" style="font-size: 0.75rem;"></span>
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn btn-light rounded-pill px-3" data-bs-dismiss="modal">ปิดหน้าต่าง</button>
+                            <button type="submit" class="btn btn-primary rounded-pill px-4" id="btnSaveAi">
+                                <i class="bx bx-save me-1"></i> บันทึกการตั้งค่า
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
@@ -856,6 +994,7 @@
 
     document.addEventListener('DOMContentLoaded', function() {
         updateAdminSoundIcon();
+        checkAiStatusOnLoad();
         loadSessions(false);
         pollInterval = setInterval(function() {
             loadSessions(false, true);
@@ -945,7 +1084,7 @@
             const unreadCount = parseInt(s.unread_admin_count) || 0;
             const unreadBadge = unreadCount > 0 ? `<span class="unread-pill-badge">${unreadCount}</span>` : '';
             const initial = (s.user_name || 'U').charAt(0).toUpperCase();
-            const timeStr = formatTime(s.last_message_time || s.updated_at);
+            const timeStr = formatSessionCardTime(s.last_message_time || s.updated_at);
             const gradient = avatarGradients[s.session_id % avatarGradients.length];
             const isOnline = s.status === 'active';
 
@@ -1057,6 +1196,11 @@
                     callBtn.style.display = 'none';
                 }
 
+                const sessionTimeEl = document.getElementById('currentSessionTime');
+                if (sessionTimeEl && s.created_at) {
+                    sessionTimeEl.innerHTML = `<i class="bx bx-time-five text-secondary me-1"></i> เริ่ม: ${formatShortDateTime(s.created_at)}`;
+                }
+
                 const statusBadge = document.getElementById('currentStatusBadge');
                 const btnToggle = document.getElementById('btnToggleStatus');
                 if (s.status === 'active') {
@@ -1067,6 +1211,28 @@
                     statusBadge.className = 'badge bg-label-secondary rounded-pill px-2 py-0 small font-monospace';
                     statusBadge.innerText = 'Closed';
                     btnToggle.innerHTML = '<i class="bx bx-refresh me-1"></i> เปิดการสนทนาใหม่';
+                }
+
+                // Update session bot paused / active badge
+                const botBadge = document.getElementById('sessionBotBadge');
+                const btnToggleBot = document.getElementById('btnToggleSessionBot');
+                const btnToggleBotText = document.getElementById('btnToggleSessionBotText');
+                if (botBadge && btnToggleBot) {
+                    const isPaused = (parseInt(s.is_bot_paused) === 1);
+                    if (isPaused) {
+                        botBadge.className = 'badge bg-label-secondary rounded-pill px-2 py-0 small flex-shrink-0';
+                        botBadge.innerHTML = '<i class="bx bx-pause-circle me-1"></i> AI พักการตอบ (แมนนวล)';
+                        btnToggleBot.className = 'btn btn-outline-success btn-sm rounded-pill px-2 px-sm-3';
+                        btnToggleBotText.innerText = 'เปิด AI';
+                        btnToggleBot.title = 'คลิกเพื่อเปิดให้ AI ช่วยตอบ';
+                    } else {
+                        // Admin is actively viewing this room, so AI is paused automatically
+                        botBadge.className = 'badge bg-label-info rounded-pill px-2 py-0 small flex-shrink-0';
+                        botBadge.innerHTML = '<i class="bx bx-user-check me-1"></i> เจ้าหน้าที่กำลังดูห้องนี้ (AI หยุดตอบชั่วคราว)';
+                        btnToggleBot.className = 'btn btn-outline-warning btn-sm rounded-pill px-2 px-sm-3';
+                        btnToggleBotText.innerText = 'พัก AI';
+                        btnToggleBot.title = 'คลิกเพื่อพักการตอบของ AI ในห้องนี้';
+                    }
                 }
 
                 if (newMsgHash !== lastMessagesHash || !silent) {
@@ -1232,6 +1398,26 @@
         });
     }
 
+    function toggleSessionBotForCurrent() {
+        if (!currentSessionId) return;
+        fetch(`<?= site_url('admin/live-chat/toggle-bot') ?>/${currentSessionId}`, {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': '<?= csrf_hash() ?>'
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success') {
+                loadSessionMessages(currentSessionId, false);
+            } else {
+                alert(data.message || 'เกิดข้อผิดพลาด');
+            }
+        })
+        .catch(err => console.error(err));
+    }
+
     function insertQuickReply(text) {
         const input = document.getElementById('adminReplyInput');
         input.value = text;
@@ -1359,13 +1545,73 @@
         document.getElementById('adminChatLightbox').style.display = 'none';
     }
 
-    function formatTime(dateStr) {
+    const THAI_MONTHS_SHORT = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+
+    function formatShortDateTime(dateStr) {
         if (!dateStr) return '';
         const d = new Date(dateStr.replace(/-/g, '/'));
         if (isNaN(d.getTime())) return dateStr;
+
+        const now = new Date();
+        const isToday = (d.toDateString() === now.toDateString());
+
+        const yesterday = new Date(now);
+        yesterday.setDate(now.getDate() - 1);
+        const isYesterday = (d.toDateString() === yesterday.toDateString());
+
+        const isThisYear = (d.getFullYear() === now.getFullYear());
+
+        const day = d.getDate();
+        const month = THAI_MONTHS_SHORT[d.getMonth()];
+        const thaiYearShort = String((d.getFullYear() + 543) % 100).padStart(2, '0');
         const hours = String(d.getHours()).padStart(2, '0');
         const minutes = String(d.getMinutes()).padStart(2, '0');
-        return `${hours}:${minutes} น.`;
+        const timePart = `${hours}:${minutes} น.`;
+
+        if (isToday) {
+            return `วันนี้ ${timePart}`;
+        } else if (isYesterday) {
+            return `เมื่อวาน ${timePart}`;
+        } else if (isThisYear) {
+            return `${day} ${month} ${timePart}`;
+        } else {
+            return `${day} ${month} ${thaiYearShort} ${timePart}`;
+        }
+    }
+
+    function formatSessionCardTime(dateStr) {
+        if (!dateStr) return '';
+        const d = new Date(dateStr.replace(/-/g, '/'));
+        if (isNaN(d.getTime())) return dateStr;
+
+        const now = new Date();
+        const isToday = (d.toDateString() === now.toDateString());
+
+        const yesterday = new Date(now);
+        yesterday.setDate(now.getDate() - 1);
+        const isYesterday = (d.toDateString() === yesterday.toDateString());
+
+        const isThisYear = (d.getFullYear() === now.getFullYear());
+
+        const day = d.getDate();
+        const month = THAI_MONTHS_SHORT[d.getMonth()];
+        const thaiYearShort = String((d.getFullYear() + 543) % 100).padStart(2, '0');
+        const hours = String(d.getHours()).padStart(2, '0');
+        const minutes = String(d.getMinutes()).padStart(2, '0');
+
+        if (isToday) {
+            return `${hours}:${minutes} น.`;
+        } else if (isYesterday) {
+            return `เมื่อวาน`;
+        } else if (isThisYear) {
+            return `${day} ${month}`;
+        } else {
+            return `${day} ${month} ${thaiYearShort}`;
+        }
+    }
+
+    function formatTime(dateStr) {
+        return formatShortDateTime(dateStr);
     }
 
     function escapeHtml(str) {
@@ -1441,6 +1687,212 @@
         safe = safe.replace(/\n/g, '<br>');
 
         return safe;
+    }
+
+    // ==========================================
+    // AI SMART CHATBOT (GOOGLE GEMINI) LOGIC
+    // ==========================================
+    const DEFAULT_SKJ_AI_PROMPT = `คุณคือ "น้องกุหลาบ (SKJ AI Assistant)" ผู้ช่วยประชาสัมพันธ์อัจฉริยะของโรงเรียนสวนกุหลาบวิทยาลัย (จิรประวัติ) นครสวรรค์ สังกัดองค์การบริหารส่วนจังหวัดนครสวรรค์
+หน้าที่ของคุณคือตอบคำถามของผู้ปกครอง นักเรียน ศิษย์เก่า และประชาชนทั่วไปอย่างสุภาพ อบอุ่น มีไมตรีจิต และถูกต้องกระชับ (ลงท้ายด้วย ครับ/ค่ะ อย่างเหมาะสม)
+
+ข้อมูลพื้นฐานของโรงเรียน:
+- ชื่อสถานศึกษา: โรงเรียนสวนกุหลาบวิทยาลัย (จิรประวัติ) นครสวรรค์
+- ที่ตั้ง: 160 หมู่ 1 ตำบลนครสวรรค์ออก อำเภอเมือง จังหวัดนครสวรรค์ 60000
+- โทรศัพท์สำนักงาน: 056-009-667
+- เวลาทำการ: วันจันทร์ - ศุกร์ เวลา 08:00 - 16:30 น. (ปิดทำการวันเสาร์-อาทิตย์ และวันหยุดนักขัตฤกษ์)
+- สีประจำโรงเรียน: ชมพู - ฟ้า (ดอกกุหลาบสีชมพู)
+- คำขวัญ/อัตลักษณ์: สุภาพชน คนสวนฯ เป็นผู้นำ รักเพื่อน นับถือพี่ เคารพครู กตัญญูพ่อแม่ ดูแลน้อง สนองคุณแผ่นดิน
+
+ข้อมูลด้านวิชาการและการรับสมัคร:
+- ระดับชั้นที่เปิดสอน: มัธยมศึกษาปีที่ 1 ถึง 6
+- การรับสมัคร: รับสมัครช่วงกุมภาพันธ์ - มีนาคม ของทุกปี (ระดับ ม.1 และ ม.4) ทั้งระบบออนไลน์ผ่านเว็บไซต์ https://skj.ac.th และที่อาคารอำนวยการ
+- แผนการเรียน ม.ปลาย: วิทยาศาสตร์-คณิตศาสตร์, ศิลป์-ภาษา, ศิลป์-สังคม และเทคโนโลยีสารสนเทศ
+- การชำระเงิน/ค่าเทอม: ชำระผ่านระบบออนไลน์หรือที่ห้องการเงิน หากโอนแล้วสามารถแนบรูปถ่ายสลิปเข้ามาในช่องแชทนี้ได้ทันที
+
+กฎการตอบคำถาม:
+1. ตอบเป็นภาษาไทยที่สุภาพ กระชับ อ่านเข้าใจง่าย ใช้ emoji หรือ bullet point ประกอบให้อ่านสบายตา
+2. หากเป็นเรื่องนอกเหนือข้อมูลโรงเรียน หรือเรื่องที่ต้องให้ครู/เจ้าหน้าที่ตรวจสอบเฉพาะบุคคล (เช่น ผลการเรียนรายบุคคล, แก้เกรด, การขอใบ ปพ.) ให้แนะนำให้ติดต่อเบอร์โทร 056-009-667 ในวันและเวลาทำการ หรือพิมพ์ฝากชื่อและเบอร์โทรศัพท์ไว้ในแชทเพื่อให้เจ้าหน้าที่ติดต่อกลับ`;
+
+    function updateAiStatusBadge(isOn) {
+        const dot = document.getElementById('aiStatusDot');
+        if (!dot) return;
+        if (isOn) {
+            dot.className = 'position-absolute top-0 start-100 translate-middle p-1 bg-success border border-light rounded-circle';
+            dot.title = 'สถานะ AI: เปิดใช้งาน (ON)';
+        } else {
+            dot.className = 'position-absolute top-0 start-100 translate-middle p-1 bg-secondary border border-light rounded-circle';
+            dot.title = 'สถานะ AI: ปิดการทำงาน (OFF)';
+        }
+    }
+
+    function checkAiStatusOnLoad() {
+        fetch('<?= site_url('admin/live-chat/ai-config') ?>', {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success' && data.config) {
+                updateAiStatusBadge(data.config.ai_status === 'on');
+            }
+        })
+        .catch(() => {});
+    }
+
+    function openAiModal() {
+        fetch('<?= site_url('admin/live-chat/ai-config') ?>', {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success' && data.config) {
+                const c = data.config;
+                document.getElementById('aiApiKey').value = c.ai_api_key || '';
+                document.getElementById('aiModel').value = c.ai_model || 'gemini-3.5-flash';
+                document.getElementById('aiStatus').checked = (c.ai_status === 'on');
+                document.getElementById('aiSystemPrompt').value = c.ai_system_prompt || DEFAULT_SKJ_AI_PROMPT;
+                
+                if (c.updated_at) {
+                    document.getElementById('aiLastUpdatedInfo').innerText = 'อัปเดตล่าสุด: ' + formatShortDateTime(c.updated_at);
+                }
+                updateAiStatusBadge(c.ai_status === 'on');
+            } else {
+                document.getElementById('aiSystemPrompt').value = DEFAULT_SKJ_AI_PROMPT;
+            }
+            document.getElementById('aiAlertBox').style.display = 'none';
+            document.getElementById('aiTestResultWrap').style.display = 'none';
+            const modal = new bootstrap.Modal(document.getElementById('aiSettingsModal'));
+            modal.show();
+        })
+        .catch(() => {
+            document.getElementById('aiSystemPrompt').value = DEFAULT_SKJ_AI_PROMPT;
+            const modal = new bootstrap.Modal(document.getElementById('aiSettingsModal'));
+            modal.show();
+        });
+    }
+
+    function updateAiStatusUI() {
+        const isChecked = document.getElementById('aiStatus').checked;
+        updateAiStatusBadge(isChecked);
+    }
+
+    function toggleApiKeyVisibility() {
+        const input = document.getElementById('aiApiKey');
+        const icon = document.getElementById('aiKeyEyeIcon');
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.className = 'bx bx-hide';
+        } else {
+            input.type = 'password';
+            icon.className = 'bx bx-show';
+        }
+    }
+
+    function resetDefaultAiPrompt() {
+        if (confirm('คุณต้องการโหลดข้อความแนะนำข้อมูลโรงเรียนและบุคลิกภาพ AI กลับมาเป็นค่าเริ่มต้นใช่หรือไม่?')) {
+            document.getElementById('aiSystemPrompt').value = DEFAULT_SKJ_AI_PROMPT;
+        }
+    }
+
+    function saveAiSettings(e) {
+        e.preventDefault();
+        const btn = document.getElementById('btnSaveAi');
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> กำลังบันทึก...';
+
+        const formData = new FormData();
+        formData.append('<?= csrf_token() ?>', '<?= csrf_hash() ?>');
+        formData.append('ai_api_key', document.getElementById('aiApiKey').value.trim());
+        formData.append('ai_model', document.getElementById('aiModel').value);
+        formData.append('ai_system_prompt', document.getElementById('aiSystemPrompt').value.trim());
+        formData.append('ai_status', document.getElementById('aiStatus').checked ? 'on' : 'off');
+
+        fetch('<?= site_url('admin/live-chat/ai-config') ?>', {
+            method: 'POST',
+            body: formData,
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(res => res.json())
+        .then(data => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bx bx-save me-1"></i> บันทึกการตั้งค่า';
+            const alertBox = document.getElementById('aiAlertBox');
+            if (data.status === 'success') {
+                updateAiStatusBadge(document.getElementById('aiStatus').checked);
+                alertBox.className = 'alert alert-success alert-sm mb-3';
+                alertBox.innerText = data.message || 'บันทึกสำเร็จ!';
+                alertBox.style.display = 'block';
+                setTimeout(() => {
+                    bootstrap.Modal.getInstance(document.getElementById('aiSettingsModal'))?.hide();
+                }, 1200);
+            } else {
+                alertBox.className = 'alert alert-danger alert-sm mb-3';
+                alertBox.innerText = data.message || 'เกิดข้อผิดพลาดในการบันทึก';
+                alertBox.style.display = 'block';
+            }
+        })
+        .catch(() => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bx bx-save me-1"></i> บันทึกการตั้งค่า';
+        });
+    }
+
+    function testAiSandbox() {
+        const btn = document.getElementById('btnTestAi');
+        const testInput = document.getElementById('aiTestInput');
+        const userMsg = testInput.value.trim() || 'โรงเรียนเปิดรับสมัคร ม.1 วันไหนบ้าง และมีสายการเรียนอะไรบ้าง';
+        const apiKey = document.getElementById('aiApiKey').value.trim();
+        const model = document.getElementById('aiModel').value;
+        const prompt = document.getElementById('aiSystemPrompt').value.trim();
+        const alertBox = document.getElementById('aiAlertBox');
+        const resultWrap = document.getElementById('aiTestResultWrap');
+        const replyBody = document.getElementById('aiTestReplyBody');
+        const latencyBadge = document.getElementById('aiTestLatency');
+
+        if (!apiKey) {
+            alertBox.className = 'alert alert-warning alert-sm mb-3';
+            alertBox.innerText = 'กรุณากรอก Google Gemini API Key ก่อนทำการทดสอบครับ';
+            alertBox.style.display = 'block';
+            document.getElementById('aiApiKey').focus();
+            return;
+        }
+
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> กำลังถาม AI...';
+        alertBox.style.display = 'none';
+
+        const formData = new FormData();
+        formData.append('<?= csrf_token() ?>', '<?= csrf_hash() ?>');
+        formData.append('test_message', userMsg);
+        formData.append('ai_api_key', apiKey);
+        formData.append('ai_model', model);
+        formData.append('ai_system_prompt', prompt);
+
+        fetch('<?= site_url('admin/live-chat/ai-test') ?>', {
+            method: 'POST',
+            body: formData,
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(res => res.json())
+        .then(data => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bx bx-paper-plane me-1"></i> ทดสอบถาม AI';
+            if (data.status === 'success') {
+                resultWrap.style.display = 'block';
+                replyBody.innerText = data.reply;
+                latencyBadge.innerText = (data.latency_ms || 0) + ' ms (' + (data.model || model) + ')';
+            } else {
+                alertBox.className = 'alert alert-danger alert-sm mb-3';
+                alertBox.innerText = data.message || 'เกิดข้อผิดพลาดในการเรียกใช้ AI';
+                alertBox.style.display = 'block';
+            }
+        })
+        .catch(err => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bx bx-paper-plane me-1"></i> ทดสอบถาม AI';
+            alertBox.className = 'alert alert-danger alert-sm mb-3';
+            alertBox.innerText = 'เกิดข้อผิดพลาดในการเชื่อมต่อเครือข่าย';
+            alertBox.style.display = 'block';
+        });
     }
 </script>
 <?= $this->endSection() ?>

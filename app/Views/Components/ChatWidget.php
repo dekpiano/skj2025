@@ -844,7 +844,14 @@
         const displayName = isUser ? 'คุณ' : (type === 'admin' ? (name || 'Admin ระบบ') : (name || 'ระบบตอบรับอัตโนมัติ'));
 
         let html = '';
-        if (!isSystem) {
+        if (isSystem) {
+            html += `<div class="d-flex align-items-center gap-1 mb-1">
+                <span class="badge bg-primary text-white rounded-pill px-2 py-0" style="font-size: 0.68rem; font-weight: 600;">
+                    ${(name && name.includes('AI')) ? '🤖 AI ประชาสัมพันธ์' : '✨ ระบบตอบกลับ'}
+                </span>
+                <small class="text-muted fw-bold" style="font-size: 0.70rem;">${displayName}</small>
+            </div>`;
+        } else {
             html += `<small class="text-muted fw-bold mb-1" style="font-size: 0.72rem; ${isUser ? 'text-align: right;' : ''}">${displayName}</small>`;
         }
         
@@ -863,9 +870,7 @@
         }
 
         html += `<div class="skj-msg-bubble ${type}">${bubbleContent}</div>`;
-        if (!isSystem) {
-            html += `<small class="text-muted mt-1" style="font-size: 0.68rem; ${isUser ? 'text-align: right;' : ''}">${timeStr}</small>`;
-        }
+        html += `<small class="text-muted mt-1" style="font-size: 0.68rem; ${isUser ? 'text-align: right;' : ''}">${timeStr}</small>`;
 
         row.innerHTML = html;
         body.appendChild(row);
@@ -949,12 +954,37 @@
         document.getElementById('skjChatLightbox').style.display = 'none';
     }
 
+    const THAI_MONTHS_SHORT = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+
     function formatChatTime(dateStr) {
         if (!dateStr) return '';
         const d = new Date(dateStr.replace(/-/g, '/'));
         if (isNaN(d.getTime())) return dateStr;
+
+        const now = new Date();
+        const isToday = (d.toDateString() === now.toDateString());
+
+        const yesterday = new Date(now);
+        yesterday.setDate(now.getDate() - 1);
+        const isYesterday = (d.toDateString() === yesterday.toDateString());
+
+        const isThisYear = (d.getFullYear() === now.getFullYear());
+
+        const day = d.getDate();
+        const month = THAI_MONTHS_SHORT[d.getMonth()];
+        const thaiYearShort = String((d.getFullYear() + 543) % 100).padStart(2, '0');
         const hours = String(d.getHours()).padStart(2, '0');
         const minutes = String(d.getMinutes()).padStart(2, '0');
-        return `${hours}:${minutes} น.`;
+        const timePart = `${hours}:${minutes} น.`;
+
+        if (isToday) {
+            return `วันนี้ ${timePart}`;
+        } else if (isYesterday) {
+            return `เมื่อวาน ${timePart}`;
+        } else if (isThisYear) {
+            return `${day} ${month} ${timePart}`;
+        } else {
+            return `${day} ${month} ${thaiYearShort} ${timePart}`;
+        }
     }
 </script>
