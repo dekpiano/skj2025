@@ -9,7 +9,7 @@
         <!-- Header -->
         <div class="skj-cookie-header d-flex align-items-center justify-content-between mb-2">
             <div class="d-flex align-items-center gap-2">
-                <img src="<?= base_url('assets/img/logo/Logo-nav.png') ?>" alt="SKJ Logo" class="skj-cookie-logo">
+                <img src="<?= base_url('uploads/logoSchool/LogoSKJ_4.png') ?>" alt="SKJ Logo" class="skj-cookie-logo">
                 <div>
                     <h6 class="mb-0 fw-bold text-dark skj-cookie-title">การใช้งาน Cookies</h6>
                     <small class="text-muted skj-cookie-sub">รร.สวนกุหลาบวิทยาลัย (จิรประวัติ) นครสวรรค์</small>
@@ -60,7 +60,7 @@
         <div class="modal-content border-0 shadow-lg" style="border-radius: 18px;">
             <div class="modal-header border-bottom py-3 px-4 bg-light">
                 <div class="d-flex align-items-center gap-2">
-                    <img src="<?= base_url('assets/img/logo/Logo-nav.png') ?>" alt="Logo" style="height: 32px;">
+                    <img src="<?= base_url('uploads/logoSchool/LogoSKJ_4.png') ?>" alt="Logo" style="height: 32px;">
                     <div>
                         <h5 class="modal-title fw-bold text-dark mb-0" id="skjCookieSettingsModalLabel">ศูนย์จัดการความยินยอมคุกกี้ (Cookie Preferences)</h5>
                         <small class="text-muted">ปรับแต่งตัวเลือกคุกกี้ที่คุณอนุญาตให้ใช้งานบนเว็บไซต์</small>

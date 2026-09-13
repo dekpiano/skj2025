@@ -111,7 +111,7 @@
                 <div class="nav-col nav-col-center">
                     <a href="<?= base_url('/'); ?>" class="logo-banner-link">
                         <div class="logo-banner-shape">
-                            <img src="<?= base_url() ?>/assets/img/logo/Logo-nav.png" alt="SKJ Logo">
+                            <img src="<?= base_url('uploads/logoSchool/LogoSKJ_4.png') ?>" alt="SKJ Logo">
                             <div class="logo-banner-name">สวนกุหลาบวิทยาลัย</div>
                             <div class="logo-banner-sub">(จิรประวัติ) นครสวรรค์</div>
                         </div>
@@ -211,7 +211,7 @@
             <!-- Mobile Header (Modern App Bar) -->
             <div class="mobile-header d-flex d-lg-none align-items-center justify-content-between py-2 px-3">
                 <a href="<?= base_url('/'); ?>" class="mobile-brand d-flex align-items-center text-decoration-none">
-                    <img src="<?= base_url() ?>/assets/img/logo/Logo-nav.png" alt="SKJ Logo" class="mobile-logo-img">
+                    <img src="<?= base_url('uploads/logoSchool/LogoSKJ_4.png') ?>" alt="SKJ Logo" class="mobile-logo-img">
                     <div class="ms-2 brand-text-wrap">
                         <div class="mobile-brand-text">สวนกุหลาบวิทยาลัย (จิรประวัติ)</div>
                         <div class="mobile-brand-sub">SUANKULARB WITTAYALAI NAKHON SAWAN</div>
@@ -246,7 +246,7 @@
     <!-- Offcanvas Header -->
     <div class="offcanvas-header mobile-offcanvas-header">
         <div class="d-flex align-items-center gap-2">
-            <img src="<?= base_url() ?>/assets/img/logo/Logo-nav.png" alt="SKJ" height="38">
+            <img src="<?= base_url('uploads/logoSchool/LogoSKJ_4.png') ?>" alt="SKJ" height="38">
             <div>
                 <h6 class="offcanvas-title fw-bold text-white mb-0" id="mobileMenuOffcanvasLabel">เมนูหลัก (SKJ Menu)
                 </h6>

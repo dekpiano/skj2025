@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $title ?> | SKJ School</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="<?= base_url('uploads/logoSchool/LogoSKJ_4.png') ?>">
     <link rel="stylesheet" href="<?= base_url('assets/admin/assets/vendor/fonts/boxicons.css') ?>">
     <link rel="stylesheet" href="<?= base_url('assets/admin/assets/vendor/css/core.css') ?>">
     <link rel="stylesheet" href="<?= base_url('assets/admin/assets/vendor/css/theme-default.css') ?>">

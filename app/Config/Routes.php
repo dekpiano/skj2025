@@ -43,6 +43,7 @@ $routes->get('/', 'User\ConHome::index');
 $routes->get('SelectSystem', 'User\ConLogin::selectSystem');
 $routes->post('/Admin/News/uploadImage', 'Admin\ConAdminNews::uploadImage');
 $routes->get('/Admin/News/uploadImage', 'Admin\ConAdminNews::uploadImage');
+$routes->get('About', 'User\ConAboutSchool::index');
 $routes->get('About/(:any)', 'User\ConAboutSchool::AboutDetail/$1');
 $routes->get('Board', 'User\ConBoard::index');
 

@@ -39,96 +39,174 @@
     }
 
     .team-card {
-        background: #fff;
-        border-radius: 20px;
-        overflow: hidden;
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        border: 1px solid rgba(0, 0, 0, 0.05);
-        height: 100%;
         position: relative;
+        border-radius: 28px;
+        overflow: hidden;
+        height: 420px;
+        background: linear-gradient(150deg, #fb7e9c 0%, #9b8ef4 48%, #53c0f3 100%);
+        border: 1px solid rgba(255, 255, 255, 0.45);
+        box-shadow: 0 12px 36px rgba(15, 23, 42, 0.08);
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
     }
 
     .team-card:hover {
-        transform: translateY(-15px);
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        transform: translateY(-8px);
+        box-shadow: 0 24px 48px rgba(15, 23, 42, 0.14), 0 8px 24px rgba(83, 192, 243, 0.25);
+        border-color: rgba(255, 255, 255, 0.8);
+    }
+
+    .director-card {
+        height: 470px;
+        background: linear-gradient(150deg, #fb7e9c 0%, #8978f0 45%, #4bb7ed 100%);
+        box-shadow: 0 16px 44px rgba(251, 126, 156, 0.2), 0 8px 24px rgba(83, 192, 243, 0.2);
+    }
+
+    .head-of-group {
+        height: 440px;
+        border: 2px solid rgba(255, 255, 255, 0.75);
     }
 
     .team-image-wrapper {
-        position: relative;
-        padding: 20px;
-        background: linear-gradient(135deg, #fb7e9c 0%, #53c0f3 100%);
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        padding-top: 4px;
+        padding-bottom: 0;
         overflow: hidden;
+        z-index: 1;
+        pointer-events: none;
     }
 
-    .team-image-wrapper::after {
-        content: '';
+    .team-img {
+        height: calc(100% - 4px);
+        width: auto;
+        min-width: 80%;
+        max-width: 165%;
+        transform: scale(1.08);
+        transform-origin: bottom center;
+        object-fit: contain;
+        object-position: bottom center;
+        border: none !important;
+        background: transparent !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.16));
+        -webkit-mask-image: linear-gradient(to bottom, #000 78%, rgba(0, 0, 0, 0.85) 88%, rgba(0, 0, 0, 0.25) 97%, transparent 100%);
+        mask-image: linear-gradient(to bottom, #000 78%, rgba(0, 0, 0, 0.85) 88%, rgba(0, 0, 0, 0.25) 97%, transparent 100%);
+        transition: transform 0.45s cubic-bezier(0.165, 0.84, 0.44, 1);
+        display: block;
+    }
+
+    .director-card .team-img,
+    .head-of-group .team-img {
+        height: calc(100% - 4px);
+        transform: scale(1.10);
+        transform-origin: bottom center;
+    }
+
+    .team-card:hover .team-img {
+        transform: scale(1.14) translateY(-3px);
+    }
+
+    .team-mist-layer {
         position: absolute;
         bottom: 0;
         left: 0;
         right: 0;
-        height: 50%;
-        background: linear-gradient(to top, #fff, transparent);
-    }
-
-    .team-img {
-        width: 180px;
-        height: 180px;
-        object-fit: cover;
-        border-radius: 50%;
-        border: 5px solid #fff;
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        position: relative;
-        z-index: 1;
-        transition: all 0.4s ease;
-    }
-
-    .team-card:hover .team-img {
-        transform: scale(1.05);
-        border-color: var(--primary);
+        height: 48%;
+        background: 
+            radial-gradient(ellipse 120% 85% at 50% 100%, 
+                rgba(255, 255, 255, 0.75) 0%, 
+                rgba(255, 255, 255, 0.55) 30%, 
+                rgba(255, 255, 255, 0.25) 65%, 
+                rgba(255, 255, 255, 0) 100%
+            ),
+            linear-gradient(
+                to top,
+                rgba(255, 255, 255, 0.82) 0%,
+                rgba(255, 255, 255, 0.70) 22%,
+                rgba(255, 255, 255, 0.48) 46%,
+                rgba(255, 255, 255, 0.22) 70%,
+                rgba(255, 255, 255, 0.05) 88%,
+                rgba(255, 255, 255, 0) 100%
+            );
+        -webkit-backdrop-filter: blur(12px);
+        backdrop-filter: blur(12px);
+        -webkit-mask-image: linear-gradient(to top, black 55%, transparent 100%);
+        mask-image: linear-gradient(to top, black 55%, transparent 100%);
+        pointer-events: none;
+        z-index: 2;
     }
 
     .team-content {
-        padding: 20px;
-        text-align: center;
+        position: relative;
+        z-index: 3;
+        padding: 22px 20px 20px;
+        text-align: left;
+        width: 100%;
     }
 
     .team-name {
+        font-family: 'Prompt', sans-serif;
         font-weight: 700;
-        color: #333;
-        margin-bottom: 5px;
-        font-size: 1.2rem;
+        color: #0f172a;
+        margin-bottom: 2px;
+        font-size: 1.15rem;
+        line-height: 1.3;
+        letter-spacing: -0.2px;
+        text-shadow: 0 1px 4px rgba(255, 255, 255, 0.7);
     }
 
     .team-pos {
-        color: var(--primary);
+        color: #475569;
         font-weight: 500;
-        font-size: 0.9rem;
-        margin-bottom: 15px;
-        display: block;
+        font-size: 0.84rem;
+        margin-bottom: 12px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        line-height: 1.4;
+    }
+
+    .team-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
     }
 
     .social-links {
         display: flex;
-        justify-content: center;
-        gap: 10px;
-        margin-top: 15px;
+        align-items: center;
+        gap: 6px;
+        margin: 0;
     }
 
     .social-btn {
-        width: 35px;
-        height: 35px;
+        width: 30px;
+        height: 30px;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
         color: #fff;
         text-decoration: none;
-        transition: all 0.3s ease;
-        font-size: 0.9rem;
+        transition: all 0.25s ease;
+        font-size: 0.78rem;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     }
 
     .social-btn:hover {
-        transform: scale(1.2) rotate(10deg);
+        transform: translateY(-2px) scale(1.12);
         color: #fff;
     }
 
@@ -138,55 +216,74 @@
     .line-btn { background: #00c300; }
     .yt-btn { background: #ff0000; }
 
+    .team-pill-badge {
+        background: #ffffff;
+        color: #0d6efd;
+        font-size: 0.76rem;
+        font-weight: 600;
+        padding: 5px 14px;
+        border-radius: 999px;
+        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+        border: 1px solid rgba(226, 232, 240, 0.8);
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        white-space: nowrap;
+        text-decoration: none;
+    }
+
     .director-badge {
         position: absolute;
-        top: 20px;
-        right: 20px;
-        background: gold;
+        top: 16px;
+        right: 16px;
+        background: linear-gradient(135deg, #ffd700 0%, #ffae00 100%);
         color: #000;
-        padding: 5px 15px;
-        border-radius: 20px;
-        font-weight: bold;
-        font-size: 0.7rem;
-        z-index: 2;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
-
-    .head-of-group {
-        border: 4px solid transparent;
-        background-image: linear-gradient(white, white), radial-gradient(circle at top left, #fb7e9c, #53c0f3);
-        background-origin: border-box;
-        background-clip: content-box, border-box;
-        transform: scale(1.1); /* Bigger scale */
-        box-shadow: 0 20px 45px rgba(251, 126, 156, 0.3);
-        z-index: 5;
-        margin-top: 20px;
-        margin-bottom: 20px;
-    }
-
-    .head-of-group .team-img {
-        width: 220px;
-        height: 220px;
-    }
-
-    .head-of-group:hover {
-        transform: scale(1.15) translateY(-15px) !important;
-        box-shadow: 0 30px 60px rgba(83, 192, 243, 0.4) !important;
+        padding: 6px 16px;
+        border-radius: 999px;
+        font-weight: 700;
+        font-size: 0.72rem;
+        z-index: 4;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+        letter-spacing: 0.3px;
     }
 
     .head-badge {
         position: absolute;
-        top: 15px;
-        left: 15px;
-        background: #ff4b2b;
+        top: 16px;
+        left: 16px;
+        background: linear-gradient(135deg, #ff4b2b 0%, #ff416c 100%);
         color: #fff;
-        padding: 4px 12px;
-        border-radius: 10px;
+        padding: 5px 14px;
+        border-radius: 999px;
         font-weight: 700;
-        font-size: 0.75rem;
-        z-index: 3;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        text-transform: uppercase;
+        font-size: 0.72rem;
+        z-index: 4;
+        box-shadow: 0 4px 14px rgba(255, 65, 108, 0.3);
+    }
+
+    .subhead-badge {
+        position: absolute;
+        top: 16px;
+        left: 16px;
+        background: linear-gradient(135deg, #0d6efd 0%, #00b4d8 100%);
+        color: #fff;
+        padding: 5px 14px;
+        border-radius: 999px;
+        font-weight: 700;
+        font-size: 0.72rem;
+        z-index: 4;
+        box-shadow: 0 4px 14px rgba(13, 110, 253, 0.3);
+    }
+
+    .subhead-of-group {
+        height: 430px;
+        border: 2px solid rgba(13, 110, 253, 0.45);
+    }
+
+    .subhead-of-group .team-img {
+        height: calc(100% - 4px);
+        transform: scale(1.09);
+        transform-origin: bottom center;
     }
 
     .section-divider {
@@ -211,6 +308,66 @@
         to {
             opacity: 1;
             transform: translateY(0);
+        }
+    }
+
+    /* Responsive adjustments across devices */
+    @media (max-width: 991.98px) {
+        .team-card {
+            height: 410px;
+        }
+        .director-card {
+            height: 450px;
+        }
+        .head-of-group {
+            height: 430px;
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        .team-card {
+            height: 400px;
+            max-width: 320px;
+            margin: 0 auto;
+        }
+        .director-card {
+            height: 430px;
+            max-width: 330px;
+        }
+        .head-of-group {
+            height: 410px;
+            max-width: 320px;
+        }
+        .team-content {
+            padding: 18px 16px 16px;
+        }
+        .team-name {
+            font-size: 1.05rem;
+        }
+        .team-pos {
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+        }
+        .team-pill-badge {
+            font-size: 0.72rem;
+            padding: 4px 10px;
+        }
+        .social-btn {
+            width: 28px;
+            height: 28px;
+            font-size: 0.75rem;
+        }
+    }
+
+    @media (max-width: 350px) {
+        .team-card {
+            height: 380px;
+        }
+        .director-card {
+            height: 400px;
+        }
+        .team-name {
+            font-size: 0.96rem;
         }
     }
 </style>
@@ -252,6 +409,7 @@
             $director = null;
             $deputies = [];
             $heads = [];
+            $subheads = [];
             $others = [];
 
             foreach ($Pers as $p) {
@@ -259,8 +417,16 @@
                     $director = $p;
                 } elseif ($p->pers_position === "posi_002") {
                     $deputies[] = $p;
-                } elseif ($p->pers_groupleade == 'หัวหน้ากลุ่มสาระ') {
+                } elseif (
+                    (!empty($p->pers_groupleade) && strpos($p->pers_groupleade, 'หัวหน้า') !== false && strpos($p->pers_groupleade, 'รอง') === false) ||
+                    (!empty($p->work_name) && strpos($p->work_name, 'หัวหน้ากลุ่ม') !== false && strpos($p->work_name, 'รอง') === false)
+                ) {
                     $heads[] = $p;
+                } elseif (
+                    (!empty($p->pers_groupleade) && strpos($p->pers_groupleade, 'รอง') !== false) ||
+                    (!empty($p->work_name) && strpos($p->work_name, 'รองหัวหน้า') !== false)
+                ) {
+                    $subheads[] = $p;
                 } elseif ($p->pers_status == "กำลังใช้งาน") {
                     $others[] = $p;
                 }
@@ -269,21 +435,25 @@
 
             <!-- Render Director First -->
             <?php if ($director): ?>
-                <div class="col-12 mb-5 personnel-item" data-name="<?= $director->pers_firstname . ' ' . $director->pers_lastname ?>">
+                <div class="col-12 mb-5 personnel-item" data-name="<?= $director->pers_firstname . ' ' . $director->pers_lastname . ' ' . ($director->work_name ?: $director->posi_name) . ' ' . ($director->pers_academic ?? '') . ' ผู้อำนวยการ' ?>">
                     <div class="row justify-content-center">
-                        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                            <div class="team-card text-center">
-                                <div class="director-badge"><i class="bi bi-star-fill"></i> ผู้อำนวยการ</div>
+                        <div class="col-xl-4 col-lg-5 col-md-6 col-sm-8 col-12 wow fadeInUp" data-wow-delay="0.1s">
+                            <div class="team-card director-card">
+                                <div class="director-badge"><i class="bi bi-star-fill me-1"></i> ผู้อำนวยการ</div>
                                 <div class="team-image-wrapper">
                                     <img class="team-img" 
                                          src="<?= !empty($director->pers_img) ? 'https://personnel.skj.ac.th/uploads/admin/Personnal/' . $director->pers_img : base_url('uploads/presonnal/man.png') ?>" 
                                          alt="<?= $director->pers_firstname ?>"
                                          loading="lazy">
                                 </div>
+                                <div class="team-mist-layer"></div>
                                 <div class="team-content">
                                     <h5 class="team-name"><?= $director->pers_prefix . $director->pers_firstname . ' ' . $director->pers_lastname ?></h5>
-                                    <span class="team-pos"><?= $director->posi_name . ' ' . $director->pers_academic ?></span>
-                                    <?= renderSocialLinks($director) ?>
+                                    <div class="team-pos"><?= ($director->work_name == "" ? $director->posi_name : $director->work_name) . (!empty($director->pers_academic) ? ' ' . $director->pers_academic : '') ?></div>
+                                    <div class="team-footer">
+                                        <?= renderSocialLinks($director) ?>
+                                        <span class="team-pill-badge"><i class="bi bi-shield-check"></i> <?= !empty($director->posi_name) ? $director->posi_name : 'ผู้อำนวยการ' ?></span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -296,18 +466,22 @@
                 <div class="col-12 mb-5">
                     <div class="row g-4 justify-content-center">
                         <?php foreach ($deputies as $deputy): ?>
-                            <div class="col-lg-3 col-md-6 personnel-item" data-name="<?= $deputy->pers_firstname . ' ' . $deputy->pers_lastname ?>">
-                                <div class="team-card text-center wow fadeInUp" data-wow-delay="0.2s">
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12 personnel-item" data-name="<?= $deputy->pers_firstname . ' ' . $deputy->pers_lastname . ' ' . ($deputy->work_name ?: $deputy->posi_name) . ' ' . ($deputy->pers_academic ?? '') . ' รองผู้อำนวยการ' ?>">
+                                <div class="team-card wow fadeInUp" data-wow-delay="0.2s">
                                     <div class="team-image-wrapper">
                                         <img class="team-img" 
                                              src="<?= !empty($deputy->pers_img) ? 'https://personnel.skj.ac.th/uploads/admin/Personnal/' . $deputy->pers_img : base_url('uploads/presonnal/man.png') ?>" 
                                              alt="<?= $deputy->pers_firstname ?>"
                                              loading="lazy">
                                     </div>
+                                    <div class="team-mist-layer"></div>
                                     <div class="team-content">
                                         <h5 class="team-name"><?= $deputy->pers_prefix . $deputy->pers_firstname . ' ' . $deputy->pers_lastname ?></h5>
-                                        <span class="team-pos"><?= $deputy->posi_name . ' ' . $deputy->pers_academic ?></span>
-                                        <?= renderSocialLinks($deputy) ?>
+                                        <div class="team-pos"><?= ($deputy->work_name == "" ? $deputy->posi_name : $deputy->work_name) . (!empty($deputy->pers_academic) ? ' ' . $deputy->pers_academic : '') ?></div>
+                                        <div class="team-footer">
+                                            <?= renderSocialLinks($deputy) ?>
+                                            <span class="team-pill-badge"><?= !empty($deputy->posi_name) ? $deputy->posi_name : 'รองผู้อำนวยการ' ?></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -316,29 +490,67 @@
                 </div>
             <?php endif; ?>
 
-            <!-- Render Heads -->
+            <!-- Render Heads (Alone on own row) -->
             <?php foreach ($heads as $head): ?>
-                <div class="col-lg-4 col-md-6 personnel-item mb-5" data-name="<?= $head->pers_firstname . ' ' . $head->pers_lastname ?>">
-                    <div class="team-card head-of-group wow fadeInUp" data-wow-delay="0.2s">
-                        <div class="head-badge"><i class="bi bi-award-fill"></i> หัวหน้ากลุ่มสาระ</div>
-                        <div class="team-image-wrapper">
-                            <img class="team-img" 
-                                 src="<?= !empty($head->pers_img) ? 'https://personnel.skj.ac.th/uploads/admin/Personnal/' . $head->pers_img : base_url('uploads/presonnal/man.png') ?>" 
-                                 alt="<?= $head->pers_firstname ?>"
-                                 loading="lazy">
-                        </div>
-                        <div class="team-content">
-                            <h5 class="team-name"><?= $head->pers_prefix . $head->pers_firstname . ' ' . $head->pers_lastname ?></h5>
-                            <span class="team-pos"><?= $head->posi_name . ' ' . $head->pers_academic ?></span>
-                            <?= renderSocialLinks($head) ?>
+                <div class="col-12 mb-5 personnel-item" data-name="<?= $head->pers_firstname . ' ' . $head->pers_lastname . ' ' . ($head->work_name ?: $head->posi_name) . ' ' . ($head->pers_academic ?? '') . ' หัวหน้ากลุ่มสาระ ' . ($head->pers_groupleade ?? '') ?>">
+                    <div class="row justify-content-center">
+                        <div class="col-xl-4 col-lg-5 col-md-6 col-sm-8 col-12 wow fadeInUp" data-wow-delay="0.2s">
+                            <div class="team-card head-of-group">
+                                <div class="head-badge"><i class="bi bi-award-fill me-1"></i> หัวหน้ากลุ่มสาระ</div>
+                                <div class="team-image-wrapper">
+                                    <img class="team-img" 
+                                         src="<?= !empty($head->pers_img) ? 'https://personnel.skj.ac.th/uploads/admin/Personnal/' . $head->pers_img : base_url('uploads/presonnal/man.png') ?>" 
+                                         alt="<?= $head->pers_firstname ?>"
+                                         loading="lazy">
+                                </div>
+                                <div class="team-mist-layer"></div>
+                                <div class="team-content">
+                                    <h5 class="team-name"><?= $head->pers_prefix . $head->pers_firstname . ' ' . $head->pers_lastname ?></h5>
+                                    <div class="team-pos"><?= ($head->work_name == "" ? $head->posi_name : $head->work_name) . (!empty($head->pers_academic) ? ' ' . $head->pers_academic : '') ?></div>
+                                    <div class="team-footer">
+                                        <?= renderSocialLinks($head) ?>
+                                        <span class="team-pill-badge"><?= !empty($head->pers_groupleade) ? $head->pers_groupleade : (!empty($head->posi_name) ? $head->posi_name : 'หัวหน้ากลุ่มสาระ') ?></span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             <?php endforeach; ?>
 
+            <!-- Render Deputy Heads (Below Head of Group) -->
+            <?php if (!empty($subheads)): ?>
+                <div class="col-12 mb-5">
+                    <div class="row g-4 justify-content-center">
+                        <?php foreach ($subheads as $subhead): ?>
+                            <div class="col-xl-4 col-lg-5 col-md-6 col-sm-8 col-12 personnel-item" data-name="<?= $subhead->pers_firstname . ' ' . $subhead->pers_lastname . ' ' . ($subhead->work_name ?: $subhead->posi_name) . ' ' . ($subhead->pers_academic ?? '') . ' รองหัวหน้ากลุ่มสาระ ' . ($subhead->pers_groupleade ?? '') ?>">
+                                <div class="team-card subhead-of-group wow fadeInUp" data-wow-delay="0.25s">
+                                    <div class="subhead-badge"><i class="bi bi-award me-1"></i> รองหัวหน้ากลุ่มสาระ</div>
+                                    <div class="team-image-wrapper">
+                                        <img class="team-img" 
+                                             src="<?= !empty($subhead->pers_img) ? 'https://personnel.skj.ac.th/uploads/admin/Personnal/' . $subhead->pers_img : base_url('uploads/presonnal/man.png') ?>" 
+                                             alt="<?= $subhead->pers_firstname ?>"
+                                             loading="lazy">
+                                    </div>
+                                    <div class="team-mist-layer"></div>
+                                    <div class="team-content">
+                                        <h5 class="team-name"><?= $subhead->pers_prefix . $subhead->pers_firstname . ' ' . $subhead->pers_lastname ?></h5>
+                                        <div class="team-pos"><?= ($subhead->work_name == "" ? $subhead->posi_name : $subhead->work_name) . (!empty($subhead->pers_academic) ? ' ' . $subhead->pers_academic : '') ?></div>
+                                        <div class="team-footer">
+                                            <?= renderSocialLinks($subhead) ?>
+                                            <span class="team-pill-badge"><?= !empty($subhead->pers_groupleade) ? $subhead->pers_groupleade : (!empty($subhead->posi_name) ? $subhead->posi_name : 'รองหัวหน้ากลุ่มสาระ') ?></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            <?php endif; ?>
+
             <!-- Render Others -->
             <?php foreach ($others as $p): ?>
-                <div class="col-lg-3 col-md-6 personnel-item" data-name="<?= $p->pers_firstname . ' ' . $p->pers_lastname ?>">
+                <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12 personnel-item" data-name="<?= $p->pers_firstname . ' ' . $p->pers_lastname . ' ' . ($p->work_name ?: $p->posi_name) . ' ' . ($p->pers_academic ?? '') ?>">
                     <div class="team-card wow fadeInUp" data-wow-delay="0.3s">
                         <div class="team-image-wrapper">
                             <img class="team-img" 
@@ -346,10 +558,14 @@
                                  alt="<?= $p->pers_firstname ?>"
                                  loading="lazy">
                         </div>
+                        <div class="team-mist-layer"></div>
                         <div class="team-content">
                             <h5 class="team-name"><?= $p->pers_prefix . $p->pers_firstname . ' ' . $p->pers_lastname ?></h5>
-                            <span class="team-pos"><?= ($p->work_name == "" ? $p->posi_name : $p->work_name) . ' ' . $p->pers_academic ?></span>
-                            <?= renderSocialLinks($p) ?>
+                            <div class="team-pos"><?= ($p->work_name == "" ? $p->posi_name : $p->work_name) . (!empty($p->pers_academic) ? ' ' . $p->pers_academic : '') ?></div>
+                            <div class="team-footer">
+                                <?= renderSocialLinks($p) ?>
+                                <span class="team-pill-badge"><?= !empty($p->work_name) ? $p->work_name : (!empty($p->posi_name) ? $p->posi_name : 'บุคลากร') ?></span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -367,14 +583,15 @@
 <?php
 function renderSocialLinks($p) {
     $html = '<div class="social-links">';
-    if (!empty($p->pers_facebook)) $html .= '<a href="' . $p->pers_facebook . '" target="_blank" class="social-btn fb-btn"><i class="fab fa-facebook-f"></i></a>';
-    if (!empty($p->pers_instagram)) $html .= '<a href="' . $p->pers_instagram . '" target="_blank" class="social-btn ig-btn"><i class="fab fa-instagram"></i></a>';
-    if (!empty($p->pers_twitter)) $html .= '<a href="' . $p->pers_twitter . '" target="_blank" class="social-btn tw-btn"><i class="fab fa-twitter"></i></a>';
-    if (!empty($p->pers_line)) $html .= '<a href="https://line.me/ti/p/~' . $p->pers_line . '" target="_blank" class="social-btn line-btn"><i class="fab fa-line"></i></a>';
-    if (!empty($p->pers_youtube)) $html .= '<a href="' . $p->pers_youtube . '" target="_blank" class="social-btn yt-btn"><i class="fab fa-youtube"></i></a>';
+    $hasSocial = false;
+    if (!empty($p->pers_facebook)) { $html .= '<a href="' . $p->pers_facebook . '" target="_blank" class="social-btn fb-btn" title="Facebook"><i class="fab fa-facebook-f"></i></a>'; $hasSocial = true; }
+    if (!empty($p->pers_instagram)) { $html .= '<a href="' . $p->pers_instagram . '" target="_blank" class="social-btn ig-btn" title="Instagram"><i class="fab fa-instagram"></i></a>'; $hasSocial = true; }
+    if (!empty($p->pers_twitter)) { $html .= '<a href="' . $p->pers_twitter . '" target="_blank" class="social-btn tw-btn" title="Twitter"><i class="fab fa-twitter"></i></a>'; $hasSocial = true; }
+    if (!empty($p->pers_line)) { $html .= '<a href="https://line.me/ti/p/~' . $p->pers_line . '" target="_blank" class="social-btn line-btn" title="Line"><i class="fab fa-line"></i></a>'; $hasSocial = true; }
+    if (!empty($p->pers_youtube)) { $html .= '<a href="' . $p->pers_youtube . '" target="_blank" class="social-btn yt-btn" title="YouTube"><i class="fab fa-youtube"></i></a>'; $hasSocial = true; }
     
-    if (empty($p->pers_facebook) && empty($p->pers_instagram) && empty($p->pers_line)) {
-        $html .= '<span class="text-muted small">ไม่มีข้อมูลโซเชียล</span>';
+    if (!$hasSocial) {
+        $html .= '<span class="text-muted" style="font-size: 0.72rem; opacity: 0.75;"><i class="bi bi-person-circle me-1"></i>สกจ.</span>';
     }
     $html .= '</div>';
     return $html;

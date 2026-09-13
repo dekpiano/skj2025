@@ -5,7 +5,7 @@
             <a href="<?= base_url('/'); ?>" class="navbar-brand-premium">
                 <div class="d-flex align-items-center">
                     <div class="logo-wrapper-nav">
-                        <img src="<?= base_url() ?>/assets/img/logo/Logo-nav.png" alt="SKJ Logo" class="img-fluid">
+                        <img src="<?= base_url('uploads/logoSchool/LogoSKJ_4.png') ?>" alt="SKJ Logo" class="img-fluid">
                     </div>
                     <div class="brand-text-nav ms-3">
                         <div class="text-thai-nav">สวนกุหลาบวิทยาลัย (จิรประวัติ) นครสวรรค์</div>
@@ -764,7 +764,7 @@
     <div class="container-fluid px-2 px-xl-5">
         <a href="<?= base_url('/'); ?>" class="navbar-brand d-xl-none">
             <div class="navbar-brand-mobile">
-                <img src="<?= base_url() ?>/assets/img/logo/Logo-nav.png" alt="Logo">
+                <img src="<?= base_url('uploads/logoSchool/LogoSKJ_4.png') ?>" alt="Logo">
                 <div class="brand-text-mobile">
                     <span class="thai-name">สวนกุหลาบวิทยาลัย (จิรประวัติ) นครสวรรค์</span>
                     <span class="eng-name">Suankularb Wittayalai (Jiraprawat) Nakhon Sawan</span>

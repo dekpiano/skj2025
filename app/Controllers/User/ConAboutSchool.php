@@ -13,6 +13,13 @@ use App\Models\AboutModel;
 
 class ConAboutSchool extends BaseController
 {
+    protected $PosiModel;
+    protected $LearModel;
+    protected $PersModel;
+    protected $NewsModel;
+    protected $BannerModel;
+    protected $AboutModel;
+
     public function __construct(){
         parent::__construct();
         $this->PosiModel = new PositionModel();
@@ -34,13 +41,38 @@ class ConAboutSchool extends BaseController
         return $data;
     }
 
-    public function AboutDetail($Key)
+    public function index()
+    {
+        $first = $this->AboutModel->orderBy('id', 'ASC')->first();
+        if ($first) {
+            $menu = is_array($first) ? $first['about_menu'] : $first->about_menu;
+            return redirect()->to(base_url('About/' . urlencode($menu)));
+        }
+        return redirect()->to(base_url('/'));
+    }
+
+    public function AboutDetail($Key = null)
     {        
+        if (empty($Key)) {
+            return $this->index();
+        }
+
+        $Key = urldecode($Key);
         $page_data = $this->DataMain();
 
-        $page_data['AboutDetail'] = $this->AboutModel->where('about_menu',$Key)->get()->getRow();
-        $page_data['title'] = "โรงเรียนสวนกุหลาบวิทยาลัย (จิรประวัติ) นครสวรรค์";
-        $page_data['description'] = "เป็นผู้นำ รักเพื่อน นับถือพี่ เคารพครู กตัญญูพ่อแม่ ดูแลน้อง สนองคุณแผ่นดิน โรงเรียนสวนกุหลาบวิทยาลัย (จิรประวัติ) นครสวรรค์";
+        $about = $this->AboutModel->where('about_menu', $Key)->get()->getRow();
+        if (!$about) {
+            $first = $this->AboutModel->orderBy('id', 'ASC')->first();
+            if ($first) {
+                $menu = is_array($first) ? $first['about_menu'] : $first->about_menu;
+                return redirect()->to(base_url('About/' . urlencode($menu)));
+            }
+            return redirect()->to(base_url('/'));
+        }
+
+        $page_data['AboutDetail'] = $about;
+        $page_data['title'] = $about->about_menu . " | โรงเรียนสวนกุหลาบวิทยาลัย (จิรประวัติ) นครสวรรค์";
+        $page_data['description'] = "ข้อมูล" . $about->about_menu . " โรงเรียนสวนกุหลาบวิทยาลัย (จิรประวัติ) นครสวรรค์";
                                
         $data = array_merge($this->data, $page_data);
       
@@ -49,5 +81,4 @@ class ConAboutSchool extends BaseController
         .view('User/PageAboutSchool/PageAboutSchoolDetail', $data)
         .view('User/layout/footer', $data);
     }
-
 }

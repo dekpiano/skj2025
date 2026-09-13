@@ -99,7 +99,7 @@
     <div class="container">
         <div class="slogan-container">
             <div class="slogan-logo-wrapper wow zoomIn" data-wow-delay="0.2s">
-                <img src="<?=base_url()?>/assets/img/logo/Logo-nav.png" alt="Logo" loading="lazy">
+                <img src="<?= base_url('uploads/logoSchool/LogoSKJ_4.png') ?>" alt="Logo" loading="lazy">
             </div>
             
             <div class="slogan-text-group">
