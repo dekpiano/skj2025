@@ -72,6 +72,9 @@
         padding: 120px 0;
         position: relative;
         overflow: hidden;
+        width: 100%;
+        max-width: 100%;
+        isolation: isolate;
     }
 
     /* LUXURIOUS SVG OVERLAYS */

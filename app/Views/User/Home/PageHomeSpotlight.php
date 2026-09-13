@@ -1,9 +1,14 @@
 <?php if (!empty($spotlights)) : ?>
 <style>
+/* เอาพื้นขาวออกจาก section ให้เป็นโปร่งใส */
+.skj-spotlight-section {
+    background: transparent !important;
+}
+
 /* กำหนดความสูงของพื้นที่ข่าวเด่น (สำคัญมาก) */
 .spotlight-carousel {
     height: 500px;
-    background-color: #f8f9fa;
+    background-color: transparent !important;
 }
 
 /* ตั้งค่าให้ Slide ซ้อนทับกันทั้งหมด และซ่อนตัวที่ไม่ได้ Active */

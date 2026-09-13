@@ -29,7 +29,7 @@
                     </p>
 
                     <h6 class="mb-0">CALL US</h6>
-                    <h4 class="mb-0">056-009-667</h4>
+                    <h4 class="mb-0"><a href="tel:056200765" class="text-decoration-none text-dark">056-200-765</a></h4>
                 </a>
             </div>
             <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s"

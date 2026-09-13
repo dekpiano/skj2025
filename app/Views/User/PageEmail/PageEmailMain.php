@@ -645,7 +645,7 @@
                             <i class="bi bi-telephone-fill"></i>
                             <div>
                                 <h6 class="text-white mb-0 fw-bold">เบอร์โทรศัพท์สำนักงาน</h6>
-                                <small style="color: #cbd5e1; font-weight: 600;">056-009-667</small>
+                                <small style="color: #cbd5e1; font-weight: 600;"><a href="tel:056200765" class="text-white text-decoration-none">056-200-765</a></small>
                             </div>
                         </div>
                         <div class="info-item-email">

@@ -285,6 +285,9 @@
                         <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal"
                             class="text-white-50 text-decoration-none">Admin Login</a>
                         <span class="text-white-50">|</span>
+                        <a href="javascript:void(0);" onclick="window.SKJCookieConsent && window.SKJCookieConsent.openSettings();"
+                            class="text-white-50 text-decoration-none" title="ตั้งค่าความเป็นส่วนตัวและคุกกี้"><i class="bi bi-shield-check me-1"></i>ตั้งค่าคุกกี้</a>
+                        <span class="text-white-50">|</span>
                         <span class="text-white-50"><?= get_app_version() ?></span>
                     </div>
                 </div>
@@ -378,7 +381,7 @@
                         settings: {
                             arrows: false,
                             centerMode: true,
-                            centerPadding: '30px',
+                            centerPadding: '16px',
                             slidesToShow: 1
                         }
                     }
@@ -434,7 +437,7 @@
                         settings: {
                             arrows: false,
                             centerMode: true,
-                            centerPadding: '30px',
+                            centerPadding: '16px',
                             slidesToShow: 1
                         }
                     }
@@ -442,31 +445,24 @@
             });
         }
 
-        // SKJ Main Banner Slick Slider (Wider Luxurious Peek Mode)
+        // SKJ Main Banner Slick Slider (Aligns with Navbar width)
         if ($('#main-banner-slick').length) {
             $('#main-banner-slick').slick({
-                centerMode: true,
-                centerPadding: '5%',
+                centerMode: false,
                 slidesToShow: 1,
                 dots: true,
                 infinite: true,
-                speed: 800,
+                speed: 700,
                 autoplay: true,
                 autoplaySpeed: 4000,
-                pauseOnHover: false,
+                pauseOnHover: true,
                 arrows: true,
                 responsive: [
                     {
-                        breakpoint: 1200,
-                        settings: {
-                            centerPadding: '4%'
-                        }
-                    },
-                    {
                         breakpoint: 768,
                         settings: {
-                            centerPadding: '30px',
-                            arrows: false
+                            arrows: false,
+                            dots: true
                         }
                     }
                 ]
@@ -555,3 +551,6 @@
 
 <!-- SKJ Live Chat Floating Widget -->
 <?= view('Components/ChatWidget') ?>
+
+<!-- SKJ Cookie Consent (PDPA Compliant) System -->
+<?= view('Components/CookieConsent') ?>

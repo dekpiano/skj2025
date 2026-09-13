@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
 
     <title><?= $title ?> | SKJ</title>
     <meta name="description" content="<?= $description ?? 'โรงเรียนสวนกุหลาบวิทยาลัย (จิรประวัติ) นครสวรรค์' ?>" />
@@ -55,8 +55,8 @@
     <link href="https://cdn.datatables.net/2.0.7/css/dataTables.bootstrap5.min.css" rel="stylesheet">
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <!-- Template Stylesheet -->
-    <link href="<?=base_url()?>/assets/css/style.css?v=10" rel="stylesheet">
-    <link href="<?=base_url()?>/assets/css/media.css?v=5" rel="stylesheet">
+    <link href="<?=base_url()?>/assets/css/style.css?v=11" rel="stylesheet">
+    <link href="<?=base_url()?>/assets/css/media.css?v=7" rel="stylesheet">
     
     <?php if(isset($festival_status) && $festival_status == 'on'): ?>
     <!-- New Year Theme -->
@@ -86,21 +86,125 @@ gtag('config', 'G-4XVY09LWJ8');
 
 <body style="font-family: 'K2D', sans-serif;">
 
+    <!-- Global Aurora Animated Background -->
+    <?= view('Components/AuroraBackground') ?>
+
     <!-- <div class="ribbon">
         <img src="<?=base_url()?>/uploads/ari/black_ribbon_top_right.png" alt="ริบบิ้น" />
     </div> -->
 
 
-    <!-- Spinner Start -->
-    <div id="spinner"
-        class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-        <div class="spinner-border position-relative text-primary" style="width: 6rem; height: 6rem;" role="status">
+    <!-- SKJ Page Loader Start -->
+    <div id="spinner" class="show skj-page-loader" aria-hidden="true">
+        <div class="skj-loader-content">
+            <!-- Dual Gradient Ring Spinner (SKJ Pink & Blue) -->
+            <div class="skj-loader-spinner"></div>
+            <!-- School Logo in Center -->
+            <img src="<?= base_url('uploads/logoSchool/LogoSKJ_4.png') ?>" alt="SKJ Logo" class="skj-loader-logo">
         </div>
-        <img data-src="<?=base_url('uploads/logoSchool/LogoSKJ_4.png')?>" style="width: 5rem; height: 5rem;" alt=""
-            class="position-absolute top-50 start-50 translate-middle">
-
     </div>
-    <!-- Spinner End -->
+
+    <style>
+    /* ==========================================================================
+       SKJ PAGE LOADER - SMOOTH, BRANDED & BULLETPROOF
+       ========================================================================== */
+    .skj-page-loader {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        max-width: 100%;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 999999;
+        opacity: 1;
+        visibility: visible;
+        transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.35s ease;
+        pointer-events: auto;
+    }
+
+    .skj-page-loader.loaded,
+    .skj-page-loader:not(.show) {
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+    }
+
+    .skj-loader-content {
+        position: relative;
+        width: 96px;
+        height: 96px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Dual Gradient Ring Spinner (SKJ Pink #fb7e9c & Blue #249ffd) */
+    .skj-loader-spinner {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        border: 4px solid transparent;
+        border-top-color: #fb7e9c;
+        border-right-color: #249ffd;
+        border-bottom-color: rgba(251, 126, 156, 0.25);
+        border-left-color: rgba(36, 159, 253, 0.25);
+        animation: skjLoaderSpin 0.95s cubic-bezier(0.5, 0.1, 0.5, 0.9) infinite;
+    }
+
+    @keyframes skjLoaderSpin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    /* Pulsing Logo in Center */
+    .skj-loader-logo {
+        width: 52px;
+        height: 52px;
+        object-fit: contain;
+        position: relative;
+        z-index: 2;
+        animation: skjLogoPulse 1.4s ease-in-out infinite alternate;
+    }
+
+    @keyframes skjLogoPulse {
+        0% { transform: scale(0.92); opacity: 0.88; }
+        100% { transform: scale(1.05); opacity: 1; }
+    }
+    </style>
+
+    <script>
+    (function () {
+        // ระบบปลดล็อก Loader แบบ 3 ชั้น (ไม่มีวันค้าง)
+        function dismissPageLoader() {
+            var loader = document.getElementById('spinner');
+            if (loader && !loader.classList.contains('loaded')) {
+                loader.classList.add('loaded');
+                loader.classList.remove('show');
+                // เอาออกจาก DOM Tree หลัง Fade จบ
+                setTimeout(function () {
+                    loader.style.display = 'none';
+                }, 400);
+            }
+        }
+
+        // ชั้นที่ 1: เมื่อหน้าและรูปภาพโหลดเสร็จสมบูรณ์
+        window.addEventListener('load', dismissPageLoader);
+
+        // ชั้นที่ 2: เมื่อ DOM พร้อม (กันเหนียว delay 350ms)
+        document.addEventListener('DOMContentLoaded', function () {
+            setTimeout(dismissPageLoader, 350);
+        });
+
+        // ชั้นที่ 3: ระบบตัดเวลาฉุกเฉินสูงสุด 1.2 วินาที (ป้องกันสคริปต์ภายนอกค้าง)
+        setTimeout(dismissPageLoader, 1200);
+    })();
+    </script>
+    <!-- SKJ Page Loader End -->
     <style>
     /* html, body {
         max-width: 100%;

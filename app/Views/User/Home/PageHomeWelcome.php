@@ -4,7 +4,9 @@
        ========================================================================== */
     .welcome-section {
         padding: 90px 0;
-        background: #ffffff;
+        background: rgba(255, 255, 255, 0.45);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
         position: relative;
         overflow: hidden;
     }

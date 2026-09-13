@@ -1,29 +1,27 @@
 <style>
+    /* ปรับความกว้าง Carousel ให้เท่ากับแถบ Navbar (.header-upper) ด้านบนเป๊ะทุกอุปกรณ์ */
     .hero-carousel-wrapper {
-        padding: 15px 0 40px 0; /* ลดด้านบนให้ขยับขึ้นไปชิด Navbar มากขึ้น (Navbar มี margin-bottom อยู่แล้ว) */
-        background: #fff;
+        padding: 0 25px 35px 25px; /* ซ้าย-ขวา 25px เท่ากับ margin ของ Navbar บน Desktop */
+        background: transparent;
         overflow: hidden;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
     }
 
     /* Slick Slider Custom Styles */
     .main-slider .slider-item {
-        padding: 0 5px;
-        transition: all 0.5s ease;
-        opacity: 0.5;
-        transform: scale(0.95);
+        padding: 0 !important; /* ปลด padding ขอบสไลด์ออก เพื่อให้กว้างแนบสนิทเท่า Navbar */
         outline: none;
-    }
-
-    .main-slider .slick-center.slider-item {
-        opacity: 1;
-        transform: scale(1);
+        transition: opacity 0.4s ease;
     }
 
     .slider-img-container {
-        border-radius: 30px;
+        border-radius: 20px; /* ขอบมน 20px เท่ากับขอบของ Navbar บน Desktop */
         overflow: hidden;
-        box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        box-shadow: 0 15px 35px rgba(36, 159, 253, 0.18);
         background: #f8f9fa;
+        width: 100%;
     }
 
     #main-banner-slick img {
@@ -35,39 +33,70 @@
     /* --- Desktop View (Default) --- */
     @media screen and (min-width: 768px) {
         #main-banner-slick img {
-            aspect-ratio: 21 / 9; /* ปรับเป็น 21:9 ตามที่คุณต้องการ */
+            aspect-ratio: 21 / 9; /* ปรับเป็น 21:9 */
             object-fit: cover;
-            /* max-height: 550px; จำกัดความสูงไว้ที่ 450px เพื่อความลงตัว */
         }
     }
 
     /* --- Tablet / iPad View (768px to 1199px) --- */
     @media screen and (min-width: 768px) and (max-width: 1199px) {
         .hero-carousel-wrapper {
-            padding: 10px 0 30px 0; /* ลดด้านบนลงอีก */
+            padding: 0 15px 30px 15px; /* เท่ากับ margin: 10px 15px ของ Navbar บน iPad/Tablet */
+        }
+        .slider-img-container {
+            border-radius: 20px;
         }
     }
 
-    /* --- Smartphone View --- */
+    /* ป้องกันการกระตุกหรือขยายล้นจอก่อนที่ Slick Slider จะถูกเรียกทำงาน (Prevent FOUC / Layout Shift) */
+    #main-banner-slick:not(.slick-initialized) {
+        display: flex;
+        overflow: hidden;
+        width: 100%;
+        max-width: 100%;
+    }
+    #main-banner-slick:not(.slick-initialized) .slider-item:not(:first-child) {
+        display: none;
+    }
+    #main-banner-slick:not(.slick-initialized) .slider-item {
+        width: 100%;
+        flex: 0 0 100%;
+    }
+
+    /* --- Smartphone View (สัดส่วน 9:16 ตามความต้องการ) --- */
     @media screen and (max-width: 767px) {
         .hero-carousel-wrapper {
-            padding: 5px 0 25px 0;
+            padding: 0 12px 25px 12px; /* เท่ากับ margin: 8px 12px ของ Navbar บนสมาร์ตโฟน */
+            overflow: hidden;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+        .main-slider .slider-item {
+            padding: 0 !important;
+            transform: none !important;
+            opacity: 1 !important;
         }
         .slider-img-container {
-            border-radius: 18px;
-            margin: 0 4px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border-radius: 16px; /* ขอบมน 16px เท่ากับ Navbar บนมือถือ */
+            margin: 0;
+            box-shadow: 0 8px 22px rgba(0,0,0,0.1);
             overflow: hidden;
-        }
-        #main-banner-slick img {
-            aspect-ratio: 9 / 16;
-            object-fit: cover;
             width: 100%;
-            max-height: 75vh;
+            background: #f1f5f9;
+        }
+        /* กำหนดสัดส่วนภาพแบนเนอร์บนสมาร์ตโฟนเป็น 9:16 แน่นอน */
+        #main-banner-slick img,
+        #main-banner-slick .slider-img-container img {
+            aspect-ratio: 9 / 16 !important;
+            object-fit: cover !important;
+            width: 100% !important;
+            height: auto !important;
+            display: block !important;
         }
         /* Slick dots on mobile */
         #main-banner-slick .slick-dots { 
-            bottom: -22px; 
+            bottom: -20px; 
         }
         #main-banner-slick .slick-prev, #main-banner-slick .slick-next { 
             display: none !important; 
@@ -76,17 +105,24 @@
 
     /* Slick Arrows & Dots Styling */
     #main-banner-slick .slick-prev, #main-banner-slick .slick-next {
-        width: 45px;
-        height: 45px;
-        background: rgba(255, 255, 255, 0.8) !important;
+        width: 44px;
+        height: 44px;
+        background: rgba(255, 255, 255, 0.88) !important;
         border-radius: 50%;
         z-index: 10;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.18);
+        backdrop-filter: blur(6px);
+        transition: all 0.25s ease;
     }
-    #main-banner-slick .slick-prev { left: 50px; }
-    #main-banner-slick .slick-next { right: 50px; }
+    #main-banner-slick .slick-prev:hover, #main-banner-slick .slick-next:hover {
+        background: #ffffff !important;
+        transform: scale(1.08);
+    }
+    #main-banner-slick .slick-prev { left: 20px; }
+    #main-banner-slick .slick-next { right: 20px; }
     #main-banner-slick .slick-prev:before, #main-banner-slick .slick-next:before {
         font-family: 'bootstrap-icons';
-        color: #000;
+        color: #1e293b;
         font-size: 20px;
     }
     #main-banner-slick .slick-prev:before { content: "\f12c"; }

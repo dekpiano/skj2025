@@ -138,7 +138,7 @@ class ConNews extends BaseController
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound("ไม่พบข้อมูลข่าวที่ระบุ");
         }
 
-        $page_data['NewsLatest'] = $this->NewsModel->limit(3)->orderBy('news_date', 'DESC')->get()->getResult();
+        $page_data['NewsLatest'] = $this->NewsModel->where('news_id !=', $KeyNews)->limit(10)->orderBy('news_date', 'DESC')->get()->getResult();
         $page_data['NewsAlbum'] = $this->NewsImageModel->where('news_id', $KeyNews)->orderBy('news_img_id', 'ASC')->findAll();
 
         $page_data['title'] = $page_data['news']->news_topic ." | สกจ. ประชาสัมพันธ์";

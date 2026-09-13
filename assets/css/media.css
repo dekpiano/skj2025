@@ -1,3 +1,30 @@
+/* ==========================================================================
+   SMARTPHONE FIRST & VIEWPORT STABILIZATION RULES
+   ป้องกันปัญหาหน้าเว็บขยาย/ล้นจอแนวนอนบนสมาร์ตโฟน (Prevent horizontal overflow/zoom)
+   ========================================================================== */
+html, body {
+    overflow-x: hidden !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    position: relative;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+/* ป้องกันสื่อต่างๆ ล้นจอ */
+img, video, canvas, svg, iframe {
+    max-width: 100%;
+}
+
+/* ป้องกัน Slick Slider / Carousel ล้นขอบจอ */
+.slick-slider, .slick-list {
+    max-width: 100% !important;
+}
+
 /* // X-Small & Small Mobile devices (portrait phones, less than 768px / 992px) */
 
 @media (max-width: 991.98px) {
