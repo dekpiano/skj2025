@@ -787,6 +787,160 @@ class AdminControlChat extends BaseController
         ]);
     }
 
+    public function discoverSiteLinks()
+    {
+        if ($redir = $this->checkAuth()) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Unauthorized'])->setStatusCode(401);
+        }
+
+        $baseUrl = trim($this->request->getPost('base_url') ?? '');
+        $maxLinks = (int)($this->request->getPost('max_links') ?? 30);
+        if ($maxLinks < 5) $maxLinks = 5;
+        if ($maxLinks > 60) $maxLinks = 60;
+
+        if (empty($baseUrl) || !filter_var($baseUrl, FILTER_VALIDATE_URL)) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'กรุณาระบุ URL เว็บไซต์ที่ถูกต้อง เช่น https://skj.ac.th']);
+        }
+
+        $parsedBase = parse_url($baseUrl);
+        $baseHost = strtolower($parsedBase['host'] ?? '');
+        $baseScheme = $parsedBase['scheme'] ?? 'http';
+        $rootDomain = $baseScheme . '://' . $baseHost;
+
+        // Fetch HTML of the base URL
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $baseUrl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_MAXREDIRS, 5);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 20);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        $userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36';
+        curl_setopt($ch, CURLOPT_USERAGENT, $userAgent);
+        $html = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $curlErr = curl_error($ch);
+        curl_close($ch);
+
+        if ($curlErr || $httpCode >= 400 || empty($html)) {
+            return $this->response->setJSON([
+                'status'  => 'error',
+                'message' => 'ไม่สามารถเชื่อมต่อเว็บไซต์เพื่อค้นหาหน้าเพจได้ (' . ($curlErr ?: "HTTP $httpCode") . ')'
+            ]);
+        }
+
+        $discovered = [];
+        $baseTitle = 'หน้าแรก / หน้าหลัก';
+        if (preg_match('/<title[^>]*>(.*?)<\/title>/is', $html, $tm)) {
+            $t = trim(html_entity_decode(strip_tags($tm[1]), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+            if (!empty($t)) $baseTitle = $t;
+        }
+        $normalizedBaseUrl = rtrim($baseUrl, '/');
+        $discovered[$normalizedBaseUrl] = [
+            'url'     => $normalizedBaseUrl,
+            'title'   => $baseTitle,
+            'is_root' => true
+        ];
+
+        if (preg_match_all('/<a\b[^>]*href=["\']([^"\']+)["\'][^>]*>(.*?)<\/a>/is', $html, $matches, PREG_SET_ORDER)) {
+            $ignoredExts = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'ico', 'pdf', 'zip', 'rar', 'mp4', 'mp3', 'doc', 'docx', 'xls', 'xlsx', 'css', 'js'];
+
+            foreach ($matches as $m) {
+                if (count($discovered) >= $maxLinks) break;
+
+                $rawHref = trim($m[1]);
+                $rawText = trim(preg_replace('/\s+/', ' ', strip_tags($m[2])));
+
+                if (empty($rawHref) || strpos($rawHref, '#') === 0 || strpos($rawHref, 'javascript:') === 0 || strpos($rawHref, 'mailto:') === 0 || strpos($rawHref, 'tel:') === 0) {
+                    continue;
+                }
+
+                $absUrl = '';
+                if (preg_match('/^https?:\/\//i', $rawHref)) {
+                    $absUrl = $rawHref;
+                } elseif (strpos($rawHref, '//') === 0) {
+                    $absUrl = $baseScheme . ':' . $rawHref;
+                } elseif (strpos($rawHref, '/') === 0) {
+                    $absUrl = $rootDomain . $rawHref;
+                } else {
+                    $baseDir = rtrim(dirname($parsedBase['path'] ?? '/'), '/\\');
+                    $absUrl = $rootDomain . ($baseDir ? $baseDir . '/' : '/') . $rawHref;
+                }
+
+                $urlParts = parse_url($absUrl);
+                if (!$urlParts || empty($urlParts['host'])) continue;
+
+                $targetHost = strtolower($urlParts['host']);
+                if ($targetHost !== $baseHost && !str_ends_with($targetHost, '.' . $baseHost)) {
+                    continue;
+                }
+
+                $cleanUrl = ($urlParts['scheme'] ?? $baseScheme) . '://' . $targetHost . ($urlParts['path'] ?? '/');
+                if (!empty($urlParts['query'])) {
+                    $cleanUrl .= '?' . $urlParts['query'];
+                }
+                $cleanUrl = rtrim($cleanUrl, '/');
+
+                $pathOnly = parse_url($cleanUrl, PHP_URL_PATH) ?? '';
+                $ext = strtolower(pathinfo($pathOnly, PATHINFO_EXTENSION));
+                if (in_array($ext, $ignoredExts)) continue;
+
+                $lowerPath = strtolower($pathOnly);
+                if (preg_match('/(\/admin|\/login|\/logout|\/auth|\/register|\/wp-admin|\/cart)/i', $lowerPath)) {
+                    continue;
+                }
+
+                if (!isset($discovered[$cleanUrl])) {
+                    $title = !empty($rawText) && mb_strlen($rawText) > 2 ? $rawText : ($pathOnly ?: $cleanUrl);
+                    if (mb_strlen($title) > 80) {
+                        $title = mb_substr($title, 0, 80) . '...';
+                    }
+                    $discovered[$cleanUrl] = [
+                        'url'     => $cleanUrl,
+                        'title'   => $title,
+                        'is_root' => false
+                    ];
+                }
+            }
+        }
+
+        $this->ensureAiKnowledgeTable();
+        $urlsList = array_keys($discovered);
+        $existingMap = [];
+        if (!empty($urlsList)) {
+            $existingRows = $this->db->table('tb_chat_ai_knowledge')
+                ->select('knowledge_id, source_url, status, updated_at, char_count')
+                ->whereIn('source_url', $urlsList)
+                ->get()
+                ->getResult();
+            foreach ($existingRows as $row) {
+                $existingMap[$row->source_url] = $row;
+            }
+        }
+
+        $items = [];
+        foreach ($discovered as $url => $info) {
+            $exists = isset($existingMap[$url]);
+            $items[] = [
+                'url'         => $url,
+                'title'       => $info['title'],
+                'is_root'     => $info['is_root'],
+                'is_existing' => $exists,
+                'char_count'  => $exists ? (int)$existingMap[$url]->char_count : 0,
+                'updated_at'  => $exists ? $existingMap[$url]->updated_at : null
+            ];
+        }
+
+        return $this->response->setJSON([
+            'status'     => 'success',
+            'base_url'   => $baseUrl,
+            'count'      => count($items),
+            'links'      => $items,
+            'message'    => 'สแกนพบหน้าเพจภายในเว็บไซต์ทั้งหมด ' . count($items) . ' หน้า'
+        ]);
+    }
+
     public function saveKnowledgeUrl()
     {
         if ($redir = $this->checkAuth()) {
@@ -825,15 +979,30 @@ class AdminControlChat extends BaseController
             'updated_at'     => $now
         ];
 
-        $this->db->table('tb_chat_ai_knowledge')->insert($data);
-        $insertId = $this->db->insertID();
+        $existing = $this->db->table('tb_chat_ai_knowledge')->where('source_url', $url)->get()->getRow();
+        if ($existing) {
+            $this->db->table('tb_chat_ai_knowledge')->where('knowledge_id', $existing->knowledge_id)->update([
+                'title'          => $title,
+                'content'        => $extracted['content'],
+                'char_count'     => $extracted['char_count'],
+                'status'         => 'on',
+                'last_synced_at' => $now,
+                'updated_at'     => $now
+            ]);
+            $insertId = $existing->knowledge_id;
+            $msg = "อัปเดตข้อมูลเว็บไซต์เรียบร้อยแล้ว ({$extracted['char_count']} ตัวอักษร)";
+        } else {
+            $this->db->table('tb_chat_ai_knowledge')->insert($data);
+            $insertId = $this->db->insertID();
+            $msg = "บันทึกข้อมูลเว็บไซต์สำเร็จ ({$extracted['char_count']} ตัวอักษร)";
+        }
 
         return $this->response->setJSON([
             'status'       => 'success',
             'knowledge_id' => $insertId,
             'title'        => $title,
             'char_count'   => $extracted['char_count'],
-            'message'      => "บันทึกข้อมูลเว็บไซต์สำเร็จ ({$extracted['char_count']} ตัวอักษร)"
+            'message'      => $msg
         ]);
     }
 
@@ -1043,32 +1212,106 @@ class AdminControlChat extends BaseController
             return $this->response->setJSON(['status' => 'error', 'message' => 'Unauthorized'])->setStatusCode(401);
         }
 
-        try {
-            $dbPersonnel = \Config\Database::connect('personnal');
-            $personnelCount = $dbPersonnel->table('tb_personnel')->where('pers_status', 'กำลังใช้งาน')->countAllResults();
-        } catch (\Throwable $e) {
-            $personnelCount = 0;
-        }
+        $this->ensureAiKnowledgeTable();
 
-        try {
-            $dbAcademic = \Config\Database::connect('academic');
-            $academicCount = $dbAcademic->table('tb_subjects')->countAllResults();
-        } catch (\Throwable $e) {
-            $academicCount = 0;
-        }
+        $counts = [
+            'about'       => 0,
+            'personnel'   => 0,
+            'board'       => 0,
+            'academic'    => 0,
+            'study_plans' => 0,
+            'clubs'       => 0,
+            'admission'   => 0,
+            'locations'   => 0,
+            'timetable'   => 0,
+            'news'        => 0,
+        ];
 
+        // 1. About & News from default (skjacth_skj)
         try {
             $dbDefault = \Config\Database::connect('default');
-            $newsCount = $dbDefault->table('tb_news')->countAllResults();
-        } catch (\Throwable $e) {
-            $newsCount = 0;
+            $counts['about'] = $dbDefault->table('tb_aboutschool')->where("about_menu != ''")->countAllResults();
+            $counts['news'] = $dbDefault->table('tb_news')->countAllResults();
+        } catch (\Throwable $e) {}
+
+        // 2. Personnel & Board from personnal (skjacth_personnel)
+        try {
+            $dbPersonnel = \Config\Database::connect('personnal');
+            $counts['personnel'] = $dbPersonnel->table('tb_personnel')->where('pers_status', 'กำลังใช้งาน')->countAllResults();
+            $counts['board'] = $dbPersonnel->table('tb_board')->countAllResults();
+        } catch (\Throwable $e) {}
+
+        // 3. Academic, Study Plans, Clubs from academic (skjacth_academic)
+        try {
+            $dbAcademic = \Config\Database::connect('academic');
+            $counts['academic'] = $dbAcademic->table('tb_subjects')->countAllResults();
+            $counts['study_plans'] = $dbAcademic->table('tb_classroom_study_plans')->countAllResults();
+            $counts['clubs'] = $dbAcademic->table('tb_clubs')->where("club_status = 'open' OR club_status IS NULL")->countAllResults();
+        } catch (\Throwable $e) {}
+
+        // 4. Admission from admission (skjacth_admission)
+        try {
+            $dbAdmission = \Config\Database::connect('admission');
+            $counts['admission'] = $dbAdmission->table('tb_admission_schedule')->countAllResults();
+        } catch (\Throwable $e) {}
+
+        // 5. Locations from general (skjacth_general)
+        try {
+            $dbGeneral = \Config\Database::connect('general');
+            $counts['locations'] = $dbGeneral->table('tb_location')->countAllResults();
+        } catch (\Throwable $e) {}
+
+        // 6. Timetable from timetable (skjacth_timetable)
+        try {
+            $dbTimetable = \Config\Database::connect('timetable');
+            $counts['timetable'] = $dbTimetable->table('tb_timetable_config_periods')->countAllResults();
+        } catch (\Throwable $e) {}
+
+        $dbUrls = [
+            'about'       => 'db://skjacth_skj/tb_aboutschool',
+            'personnel'   => 'db://skjacth_personnel/tb_personnel',
+            'board'       => 'db://skjacth_personnel/tb_board',
+            'academic'    => 'db://skjacth_academic/tb_subjects',
+            'study_plans' => 'db://skjacth_academic/tb_classroom_study_plans',
+            'clubs'       => 'db://skjacth_academic/tb_clubs',
+            'admission'   => 'db://skjacth_admission/tb_admission_schedule',
+            'locations'   => 'db://skjacth_general/tb_location',
+            'timetable'   => 'db://skjacth_timetable/tb_timetable_config_periods',
+            'news'        => 'db://skjacth_skj/tb_news',
+        ];
+
+        $syncedRows = $this->db->table('tb_chat_ai_knowledge')
+            ->select('knowledge_id, title, source_url, char_count, status, updated_at')
+            ->whereIn('source_url', array_values($dbUrls))
+            ->get()
+            ->getResult();
+
+        $syncedMap = [];
+        foreach ($syncedRows as $r) {
+            $syncedMap[$r->source_url] = $r;
+        }
+
+        $databases = [];
+        foreach ($dbUrls as $key => $srcUrl) {
+            $has = isset($syncedMap[$srcUrl]);
+            $databases[$key] = [
+                'exists'       => $has,
+                'knowledge_id' => $has ? (int)$syncedMap[$srcUrl]->knowledge_id : null,
+                'title'        => $has ? $syncedMap[$srcUrl]->title : '',
+                'char_count'   => $has ? (int)$syncedMap[$srcUrl]->char_count : 0,
+                'status'       => $has ? $syncedMap[$srcUrl]->status : 'off',
+                'updated_at'   => $has ? $syncedMap[$srcUrl]->updated_at : null,
+                'record_count' => $counts[$key] ?? 0
+            ];
         }
 
         return $this->response->setJSON([
             'status'          => 'success',
-            'personnel_count' => $personnelCount,
-            'academic_count'  => $academicCount,
-            'news_count'      => $newsCount
+            'personnel_count' => $counts['personnel'],
+            'academic_count'  => $counts['academic'],
+            'news_count'      => $counts['news'],
+            'counts'          => $counts,
+            'databases'       => $databases
         ]);
     }
 
@@ -1081,33 +1324,113 @@ class AdminControlChat extends BaseController
         $this->ensureAiKnowledgeTable();
         $now = date('Y-m-d H:i:s');
 
+        // =======================================================
+        // 1. ABOUT SCHOOL (ประวัติ วิสัยทัศน์ อัตลักษณ์ ข้อมูลติดต่อ)
+        // =======================================================
+        if ($type === 'about') {
+            try {
+                $dbSkj = \Config\Database::connect('default');
+
+                $aboutRows = $dbSkj->table('tb_aboutschool')
+                    ->where("about_menu != ''")
+                    ->orderBy('about_id', 'ASC')
+                    ->get()
+                    ->getResultArray();
+
+                if (empty($aboutRows)) {
+                    return $this->response->setJSON(['status' => 'error', 'message' => 'ไม่พบข้อมูลเกี่ยวกับโรงเรียน']);
+                }
+
+                $content = "=== ข้อมูลพื้นฐาน อัตลักษณ์ ประวัติ และโครงสร้าง โรงเรียนสวนกุหลาบวิทยาลัย (จิรประวัติ) นครสวรรค์ ===\n";
+                $content .= "(ข้อมูลเชื่อมโยงจากฐานข้อมูลเว็บไซต์หลัก ณ วันที่ " . date('d/m/Y H:i') . ")\n\n";
+
+                // Contact & Web settings
+                try {
+                    $settings = $dbSkj->table('tb_web_settings')->get()->getResultArray();
+                    if (!empty($settings)) {
+                        $content .= "【ข้อมูลการติดต่อโรงเรียน】\n";
+                        foreach ($settings as $st) {
+                            $k = trim($st['setting_name'] ?? $st['name'] ?? '');
+                            $v = trim($st['setting_value'] ?? $st['value'] ?? '');
+                            if (!empty($k) && !empty($v)) {
+                                $content .= "- {$k}: {$v}\n";
+                            }
+                        }
+                        $content .= "\n";
+                    }
+                } catch (\Throwable $e) {}
+
+                foreach ($aboutRows as $ab) {
+                    $menuTitle = trim($ab['about_menu']);
+                    $rawText = $ab['about_detail'] ?? '';
+                    // Clean HTML
+                    $cleanText = strip_tags(html_entity_decode($rawText, ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+                    $cleanText = preg_replace("/\r\n|\r/", "\n", $cleanText);
+                    $cleanText = preg_replace("/\n{3,}/", "\n\n", $cleanText);
+                    $cleanText = trim($cleanText);
+
+                    // Truncate if massive (e.g. over 15000 chars)
+                    if (mb_strlen($cleanText, 'UTF-8') > 15000) {
+                        $cleanText = mb_substr($cleanText, 0, 15000, 'UTF-8') . "\n... (เนื้อหาขนาดยาวตัดทอนเพื่อความเหมาะสม)";
+                    }
+
+                    $content .= "========================================\n";
+                    $content .= "【หัวข้อ: {$menuTitle}】\n";
+                    $content .= "========================================\n";
+                    $content .= $cleanText . "\n\n";
+                }
+
+                $title = "ข้อมูลพื้นฐาน ประวัติ วิสัยทัศน์ และอัตลักษณ์โรงเรียน (" . count($aboutRows) . " หมวด)";
+                $sourceUrl = "db://skjacth_skj/tb_aboutschool";
+                $charCount = mb_strlen($content, 'UTF-8');
+
+                $kId = $this->saveOrUpdateKnowledgeRecord($title, 'database', $sourceUrl, $content, $charCount, $now);
+
+                return $this->response->setJSON([
+                    'status'       => 'success',
+                    'knowledge_id' => $kId,
+                    'title'        => $title,
+                    'char_count'   => $charCount,
+                    'record_count' => count($aboutRows),
+                    'message'      => "ซิงค์ข้อมูลพื้นฐานโรงเรียนสำเร็จ ({$charCount} ตัวอักษร)"
+                ]);
+            } catch (\Throwable $e) {
+                return $this->response->setJSON(['status' => 'error', 'message' => 'เกิดข้อผิดพลาดในการดึงข้อมูลพื้นฐานโรงเรียน: ' . $e->getMessage()]);
+            }
+        }
+
+        // =======================================================
+        // 2. PERSONNEL (คณะผู้บริหาร ครู บุคลากร)
+        // =======================================================
         if ($type === 'personnel') {
             try {
                 $dbPersonnel = \Config\Database::connect('personnal');
                 $dbSkj = \Config\Database::connect('default');
 
-                // Map learnings
                 $learningMap = [];
-                $learnRows = $dbSkj->table('tb_learning')->get()->getResultArray();
-                foreach ($learnRows as $lr) {
-                    $learningMap[$lr['lear_id']] = trim($lr['lear_namethai']);
-                }
+                try {
+                    $learnRows = $dbSkj->table('tb_learning')->get()->getResultArray();
+                    foreach ($learnRows as $lr) {
+                        $learningMap[$lr['lear_id']] = trim($lr['lear_namethai']);
+                    }
+                } catch (\Throwable $e) {}
 
-                // Map positions
                 $posMap = [];
-                $posRows = $dbSkj->table('tb_position')->get()->getResultArray();
-                foreach ($posRows as $pr) {
-                    $posMap[$pr['posi_id']] = trim($pr['posi_name']);
-                }
+                try {
+                    $posRows = $dbSkj->table('tb_position')->get()->getResultArray();
+                    foreach ($posRows as $pr) {
+                        $posMap[$pr['posi_id']] = trim($pr['posi_name']);
+                    }
+                } catch (\Throwable $e) {}
 
-                // Map departments
                 $deptMap = [];
-                $deptRows = $dbSkj->table('tb_department')->get()->getResultArray();
-                foreach ($deptRows as $dr) {
-                    $deptMap[$dr['depart_id']] = trim($dr['depart_name']);
-                }
+                try {
+                    $deptRows = $dbSkj->table('tb_department')->get()->getResultArray();
+                    foreach ($deptRows as $dr) {
+                        $deptMap[$dr['depart_id']] = trim($dr['depart_name']);
+                    }
+                } catch (\Throwable $e) {}
 
-                // Active personnel
                 $teachers = $dbPersonnel->table('tb_personnel')
                     ->where('pers_status', 'กำลังใช้งาน')
                     ->orderBy('pers_numberGroup', 'ASC')
@@ -1166,49 +1489,74 @@ class AdminControlChat extends BaseController
                 $sourceUrl = "db://skjacth_personnel/tb_personnel";
                 $charCount = mb_strlen($content, 'UTF-8');
 
-                $existing = $this->db->table('tb_chat_ai_knowledge')->where('source_url', $sourceUrl)->get()->getRow();
-                if ($existing) {
-                    $this->db->table('tb_chat_ai_knowledge')->where('knowledge_id', $existing->knowledge_id)->update([
-                        'title'          => $title,
-                        'content'        => $content,
-                        'char_count'     => $charCount,
-                        'status'         => 'on',
-                        'last_synced_at' => $now,
-                        'updated_at'     => $now
-                    ]);
-                    $kId = $existing->knowledge_id;
-                } else {
-                    $this->db->table('tb_chat_ai_knowledge')->insert([
-                        'title'          => $title,
-                        'source_type'    => 'database',
-                        'source_url'     => $sourceUrl,
-                        'content'        => $content,
-                        'char_count'     => $charCount,
-                        'status'         => 'on',
-                        'last_synced_at' => $now,
-                        'created_at'     => $now,
-                        'updated_at'     => $now
-                    ]);
-                    $kId = $this->db->insertID();
-                }
+                $kId = $this->saveOrUpdateKnowledgeRecord($title, 'database', $sourceUrl, $content, $charCount, $now);
 
                 return $this->response->setJSON([
-                    'status'         => 'success',
-                    'knowledge_id'   => $kId,
-                    'title'          => $title,
-                    'char_count'     => $charCount,
-                    'record_count'   => count($teachers),
-                    'message'        => "ซิงค์ข้อมูลบุคลากรสำเร็จ " . count($teachers) . " ท่าน ({$charCount} ตัวอักษร)"
+                    'status'       => 'success',
+                    'knowledge_id' => $kId,
+                    'title'        => $title,
+                    'char_count'   => $charCount,
+                    'record_count' => count($teachers),
+                    'message'      => "ซิงค์ข้อมูลบุคลากรสำเร็จ " . count($teachers) . " ท่าน ({$charCount} ตัวอักษร)"
                 ]);
-
             } catch (\Throwable $e) {
                 return $this->response->setJSON(['status' => 'error', 'message' => 'เกิดข้อผิดพลาดในการเชื่อมต่อฐานข้อมูลบุคลากร: ' . $e->getMessage()]);
             }
-        } elseif ($type === 'academic') {
+        }
+
+        // =======================================================
+        // 3. BOARD (คณะกรรมการสถานศึกษา)
+        // =======================================================
+        if ($type === 'board') {
+            try {
+                $dbPersonnel = \Config\Database::connect('personnal');
+                $boards = $dbPersonnel->table('tb_board')
+                    ->orderBy('board_sort', 'ASC')
+                    ->get()
+                    ->getResultArray();
+
+                if (empty($boards)) {
+                    return $this->response->setJSON(['status' => 'error', 'message' => 'ไม่พบข้อมูลคณะกรรมการสถานศึกษา']);
+                }
+
+                $content = "=== ข้อมูลคณะกรรมการสถานศึกษาขั้นพื้นฐาน โรงเรียนสวนกุหลาบวิทยาลัย (จิรประวัติ) นครสวรรค์ ===\n";
+                $content .= "(ข้อมูลเชื่อมโยงจากฐานข้อมูล ณ วันที่ " . date('d/m/Y H:i') . " รวม " . count($boards) . " ท่าน)\n\n";
+
+                $idx = 1;
+                foreach ($boards as $b) {
+                    $name = trim($b['board_prefix'] . $b['board_firstname'] . ' ' . $b['board_lastname']);
+                    $pos = trim($b['board_position']);
+                    $btype = !empty($b['board_type']) ? " ({$b['board_type']})" : '';
+                    $content .= "{$idx}. {$name} - ตำแหน่ง: {$pos}{$btype}\n";
+                    $idx++;
+                }
+
+                $title = "ข้อมูลคณะกรรมการสถานศึกษาขั้นพื้นฐาน (" . count($boards) . " ท่าน)";
+                $sourceUrl = "db://skjacth_personnel/tb_board";
+                $charCount = mb_strlen($content, 'UTF-8');
+
+                $kId = $this->saveOrUpdateKnowledgeRecord($title, 'database', $sourceUrl, $content, $charCount, $now);
+
+                return $this->response->setJSON([
+                    'status'       => 'success',
+                    'knowledge_id' => $kId,
+                    'title'        => $title,
+                    'char_count'   => $charCount,
+                    'record_count' => count($boards),
+                    'message'      => "ซิงค์คณะกรรมการสถานศึกษาสำเร็จ " . count($boards) . " ท่าน ({$charCount} ตัวอักษร)"
+                ]);
+            } catch (\Throwable $e) {
+                return $this->response->setJSON(['status' => 'error', 'message' => 'เกิดข้อผิดพลาดในการดึงข้อมูลคณะกรรมการ: ' . $e->getMessage()]);
+            }
+        }
+
+        // =======================================================
+        // 4. ACADEMIC (หลักสูตรและรายวิชา ม.1 - ม.6)
+        // =======================================================
+        if ($type === 'academic') {
             try {
                 $dbAcademic = \Config\Database::connect('academic');
 
-                // Query subjects active in recent years (2567, 2568)
                 $subjects = $dbAcademic->table('tb_subjects')
                     ->select('SubjectCode, SubjectName, SubjectClass, SubjectUnit, SubjectHour, SubjectType, FirstGroup, MAX(SubjectYear) as LatestYear')
                     ->where("SubjectYear LIKE '%2567%' OR SubjectYear LIKE '%2568%'")
@@ -1219,7 +1567,6 @@ class AdminControlChat extends BaseController
                     ->get()
                     ->getResultArray();
 
-                // If empty fallback to all
                 if (empty($subjects)) {
                     $subjects = $dbAcademic->table('tb_subjects')
                         ->select('SubjectCode, SubjectName, SubjectClass, SubjectUnit, SubjectHour, SubjectType, FirstGroup, MAX(SubjectYear) as LatestYear')
@@ -1235,7 +1582,6 @@ class AdminControlChat extends BaseController
                     return $this->response->setJSON(['status' => 'error', 'message' => 'ไม่พบข้อมูลรายวิชาในฐานข้อมูล']);
                 }
 
-                // Group by Class (ม.1 ถึง ม.6)
                 $byClass = [];
                 foreach ($subjects as $s) {
                     $c = !empty($s['SubjectClass']) ? $s['SubjectClass'] : 'วิชาทั่วไป';
@@ -1287,45 +1633,353 @@ class AdminControlChat extends BaseController
                 $sourceUrl = "db://skjacth_academic/tb_subjects";
                 $charCount = mb_strlen($content, 'UTF-8');
 
-                $existing = $this->db->table('tb_chat_ai_knowledge')->where('source_url', $sourceUrl)->get()->getRow();
-                if ($existing) {
-                    $this->db->table('tb_chat_ai_knowledge')->where('knowledge_id', $existing->knowledge_id)->update([
-                        'title'          => $title,
-                        'content'        => $content,
-                        'char_count'     => $charCount,
-                        'status'         => 'on',
-                        'last_synced_at' => $now,
-                        'updated_at'     => $now
-                    ]);
-                    $kId = $existing->knowledge_id;
-                } else {
-                    $this->db->table('tb_chat_ai_knowledge')->insert([
-                        'title'          => $title,
-                        'source_type'    => 'database',
-                        'source_url'     => $sourceUrl,
-                        'content'        => $content,
-                        'char_count'     => $charCount,
-                        'status'         => 'on',
-                        'last_synced_at' => $now,
-                        'created_at'     => $now,
-                        'updated_at'     => $now
-                    ]);
-                    $kId = $this->db->insertID();
-                }
+                $kId = $this->saveOrUpdateKnowledgeRecord($title, 'database', $sourceUrl, $content, $charCount, $now);
 
                 return $this->response->setJSON([
-                    'status'         => 'success',
-                    'knowledge_id'   => $kId,
-                    'title'          => $title,
-                    'char_count'     => $charCount,
-                    'record_count'   => count($subjects),
-                    'message'        => "ซิงค์ข้อมูลรายวิชาสำเร็จ " . count($subjects) . " วิชา ({$charCount} ตัวอักษร)"
+                    'status'       => 'success',
+                    'knowledge_id' => $kId,
+                    'title'        => $title,
+                    'char_count'   => $charCount,
+                    'record_count' => count($subjects),
+                    'message'      => "ซิงค์ข้อมูลรายวิชาสำเร็จ " . count($subjects) . " วิชา ({$charCount} ตัวอักษร)"
                 ]);
-
             } catch (\Throwable $e) {
                 return $this->response->setJSON(['status' => 'error', 'message' => 'เกิดข้อผิดพลาดในการเชื่อมต่อฐานข้อมูลรายวิชา: ' . $e->getMessage()]);
             }
-        } elseif ($type === 'news') {
+        }
+
+        // =======================================================
+        // 5. STUDY PLANS & CLASSROOMS (แผนการเรียนและห้องเรียน)
+        // =======================================================
+        if ($type === 'study_plans') {
+            try {
+                $dbAcademic = \Config\Database::connect('academic');
+
+                $plans = $dbAcademic->table('tb_classroom_study_plans')
+                    ->orderBy('grade_level', 'ASC')
+                    ->orderBy('room', 'ASC')
+                    ->get()
+                    ->getResultArray();
+
+                if (empty($plans)) {
+                    return $this->response->setJSON(['status' => 'error', 'message' => 'ไม่พบข้อมูลแผนการเรียนห้องเรียน']);
+                }
+
+                $byGrade = [];
+                foreach ($plans as $p) {
+                    $g = trim($p['grade_level'] ?? 'ไม่ระบุระดับชั้น');
+                    $byGrade[$g][] = $p;
+                }
+
+                $content = "=== ข้อมูลห้องเรียนและแผนการเรียน (Study Plans) โรงเรียนสวนกุหลาบวิทยาลัย (จิรประวัติ) นครสวรรค์ ===\n";
+                $content .= "(ข้อมูลเชื่อมโยงจากฐานข้อมูลวิชาการ รวม " . count($plans) . " ห้องเรียน ณ วันที่ " . date('d/m/Y H:i') . ")\n\n";
+
+                foreach ($byGrade as $grade => $rooms) {
+                    $content .= "========================================\n";
+                    $content .= "【ระดับชั้น {$grade}】 (จำนวน " . count($rooms) . " ห้องเรียน)\n";
+                    $content .= "========================================\n";
+                    foreach ($rooms as $r) {
+                        $cName = trim($r['class_name'] ?? "{$grade}/{$r['room']}");
+                        $sPlan = trim($r['study_plan'] ?? 'ทั่วไป');
+                        $count = !empty($r['student_count']) ? " (จำนวนนักเรียน {$r['student_count']} คน)" : '';
+                        $content .= "• ห้อง {$cName}: แผนการเรียน {$sPlan}{$count}\n";
+                    }
+                    $content .= "\n";
+                }
+
+                // Add general plan tracks if available
+                try {
+                    $tracks = $dbAcademic->table('tb_plans')->get()->getResultArray();
+                    if (!empty($tracks)) {
+                        $content .= "【สายการเรียน/แผนการเรียนระดับมัธยมศึกษาตอนปลาย】\n";
+                        foreach ($tracks as $tr) {
+                            $sp = trim($tr['StudentPlan'] ?? '');
+                            if (!empty($sp)) $content .= "- {$sp}\n";
+                        }
+                    }
+                } catch (\Throwable $e) {}
+
+                $title = "ข้อมูลแผนการเรียนและห้องเรียน ม.1 - ม.6 (" . count($plans) . " ห้องเรียน)";
+                $sourceUrl = "db://skjacth_academic/tb_classroom_study_plans";
+                $charCount = mb_strlen($content, 'UTF-8');
+
+                $kId = $this->saveOrUpdateKnowledgeRecord($title, 'database', $sourceUrl, $content, $charCount, $now);
+
+                return $this->response->setJSON([
+                    'status'       => 'success',
+                    'knowledge_id' => $kId,
+                    'title'        => $title,
+                    'char_count'   => $charCount,
+                    'record_count' => count($plans),
+                    'message'      => "ซิงค์ข้อมูลแผนการเรียนสำเร็จ " . count($plans) . " ห้องเรียน ({$charCount} ตัวอักษร)"
+                ]);
+            } catch (\Throwable $e) {
+                return $this->response->setJSON(['status' => 'error', 'message' => 'เกิดข้อผิดพลาดในการดึงข้อมูลแผนการเรียน: ' . $e->getMessage()]);
+            }
+        }
+
+        // =======================================================
+        // 6. CLUBS (กิจกรรมชุมนุมและชมรมพัฒนาผู้เรียน)
+        // =======================================================
+        if ($type === 'clubs') {
+            try {
+                $dbAcademic = \Config\Database::connect('academic');
+
+                $clubs = $dbAcademic->table('tb_clubs')
+                    ->where("club_status = 'open' OR club_status IS NULL")
+                    ->orderBy('club_level', 'ASC')
+                    ->orderBy('club_name', 'ASC')
+                    ->get()
+                    ->getResultArray();
+
+                if (empty($clubs)) {
+                    return $this->response->setJSON(['status' => 'error', 'message' => 'ไม่พบข้อมูลกิจกรรมชุมนุมที่เปิดรับ']);
+                }
+
+                $byLevel = [];
+                foreach ($clubs as $c) {
+                    $lvl = !empty($c['club_level']) ? trim($c['club_level']) : 'ทุกระดับชั้น';
+                    $byLevel[$lvl][] = $c;
+                }
+
+                $content = "=== ข้อมูลกิจกรรมพัฒนาผู้เรียน / ชุมนุมนักเรียน โรงเรียนสวนกุหลาบวิทยาลัย (จิรประวัติ) นครสวรรค์ ===\n";
+                $content .= "(ข้อมูลเชื่อมโยงจากฐานข้อมูลชุมนุม รวม " . count($clubs) . " ชุมนุม ณ วันที่ " . date('d/m/Y H:i') . ")\n\n";
+
+                foreach ($byLevel as $lvl => $list) {
+                    $content .= "========================================\n";
+                    $content .= "【กลุ่มระดับชั้น: {$lvl}】 (จำนวน " . count($list) . " ชุมนุม)\n";
+                    $content .= "========================================\n";
+                    foreach ($list as $cl) {
+                        $cName = trim($cl['club_name']);
+                        $cDesc = trim(preg_replace('/\s+/', ' ', $cl['club_description'] ?? ''));
+                        $max = !empty($cl['club_max_participants']) ? " (รับสูงสุด {$cl['club_max_participants']} คน)" : '';
+                        $content .= "• ชุมนุม: {$cName}{$max}\n";
+                        if (!empty($cDesc)) {
+                            $content .= "  รายละเอียด: {$cDesc}\n";
+                        }
+                    }
+                    $content .= "\n";
+                }
+
+                $title = "ข้อมูลกิจกรรมชุมนุมพัฒนาผู้เรียน (" . count($clubs) . " ชุมนุม)";
+                $sourceUrl = "db://skjacth_academic/tb_clubs";
+                $charCount = mb_strlen($content, 'UTF-8');
+
+                $kId = $this->saveOrUpdateKnowledgeRecord($title, 'database', $sourceUrl, $content, $charCount, $now);
+
+                return $this->response->setJSON([
+                    'status'       => 'success',
+                    'knowledge_id' => $kId,
+                    'title'        => $title,
+                    'char_count'   => $charCount,
+                    'record_count' => count($clubs),
+                    'message'      => "ซิงค์ข้อมูลกิจกรรมชุมนุมสำเร็จ " . count($clubs) . " ชุมนุม ({$charCount} ตัวอักษร)"
+                ]);
+            } catch (\Throwable $e) {
+                return $this->response->setJSON(['status' => 'error', 'message' => 'เกิดข้อผิดพลาดในการดึงข้อมูลชุมนุม: ' . $e->getMessage()]);
+            }
+        }
+
+        // =======================================================
+        // 7. ADMISSION (การรับสมัครนักเรียน กำหนดการ และหลักสูตร)
+        // =======================================================
+        if ($type === 'admission') {
+            try {
+                $dbAdmission = \Config\Database::connect('admission');
+
+                $schedules = $dbAdmission->table('tb_admission_schedule')
+                    ->orderBy('schedule_id', 'DESC')
+                    ->get()
+                    ->getResultArray();
+
+                $courses = $dbAdmission->table('tb_course')
+                    ->get()
+                    ->getResultArray();
+
+                $content = "=== ข้อมูลการรับสมัครนักเรียนใหม่ โรงเรียนสวนกุหลาบวิทยาลัย (จิรประวัติ) นครสวรรค์ ===\n";
+                $content .= "(ข้อมูลเชื่อมโยงจากระบบรับสมัครนักเรียน ณ วันที่ " . date('d/m/Y H:i') . ")\n\n";
+
+                if (!empty($schedules)) {
+                    $content .= "【กำหนดการและปฏิทินการรับสมัครนักเรียน (ม.1 และ ม.4)】\n";
+                    foreach ($schedules as $sc) {
+                        $year = trim($sc['schedule_year'] ?? '');
+                        $round = trim($sc['schedule_round'] ?? '');
+                        $level = trim($sc['schedule_level'] ?? '');
+                        $start = !empty($sc['schedule_recruit_start']) ? date('d/m/Y H:i', strtotime($sc['schedule_recruit_start'])) : '-';
+                        $end = !empty($sc['schedule_recruit_end']) ? date('d/m/Y H:i', strtotime($sc['schedule_recruit_end'])) : '-';
+                        $exam = !empty($sc['schedule_exam']) ? date('d/m/Y', strtotime($sc['schedule_exam'])) : '-';
+                        $announce = !empty($sc['schedule_announce']) ? date('d/m/Y', strtotime($sc['schedule_announce'])) : '-';
+                        $report = !empty($sc['schedule_report']) ? date('d/m/Y', strtotime($sc['schedule_report'])) : '-';
+
+                        $content .= "■ ปึงบประมาณ/ปีการศึกษา: {$year} | รอบ: {$round} | ระดับชั้น: {$level}\n";
+                        $content .= "  - รับสมัคร: {$start} ถึง {$end}\n";
+                        $content .= "  - สอบคัดเลือก: {$exam}\n";
+                        $content .= "  - ประกาศผลสอบ: {$announce}\n";
+                        $content .= "  - รายงานตัวและมอบตัว: {$report}\n";
+                        if (!empty($sc['schedule_note'])) {
+                            $content .= "  - หมายเหตุ: " . trim($sc['schedule_note']) . "\n";
+                        }
+                        $content .= "\n";
+                    }
+                }
+
+                if (!empty($courses)) {
+                    $content .= "========================================\n";
+                    $content .= "【หลักสูตรและห้องเรียนพิเศษที่เปิดรับสมัคร】\n";
+                    $content .= "========================================\n";
+                    foreach ($courses as $c) {
+                        $full = trim($c['course_fullname']);
+                        $ini = !empty($c['course_initials']) ? " ({$c['course_initials']})" : '';
+                        $branch = !empty($c['course_branch']) ? " | แผน: {$c['course_branch']}" : '';
+                        $lvl = !empty($c['course_gradelevel']) ? " [{$c['course_gradelevel']}]" : '';
+                        $content .= "• {$full}{$ini}{$branch}{$lvl}\n";
+                    }
+                    $content .= "\n";
+                }
+
+                // Add quota information if available
+                try {
+                    $quotas = $dbAdmission->table('tb_quota')->get()->getResultArray();
+                    if (!empty($quotas)) {
+                        $content .= "【ข้อมูลโควตาและประเภทการรับ】\n";
+                        foreach ($quotas as $q) {
+                            $qName = $q['quota_name'] ?? $q['name'] ?? '';
+                            $qDetail = $q['quota_detail'] ?? $q['detail'] ?? '';
+                            if (!empty($qName)) {
+                                $content .= "- โควตา: {$qName} " . (!empty($qDetail) ? "({$qDetail})" : "") . "\n";
+                            }
+                        }
+                    }
+                } catch (\Throwable $e) {}
+
+                $title = "ข้อมูลกำหนดการและหลักสูตรการรับสมัครนักเรียน (ม.1 และ ม.4)";
+                $sourceUrl = "db://skjacth_admission/tb_admission_schedule";
+                $charCount = mb_strlen($content, 'UTF-8');
+
+                $kId = $this->saveOrUpdateKnowledgeRecord($title, 'database', $sourceUrl, $content, $charCount, $now);
+
+                return $this->response->setJSON([
+                    'status'       => 'success',
+                    'knowledge_id' => $kId,
+                    'title'        => $title,
+                    'char_count'   => $charCount,
+                    'record_count' => count($schedules) + count($courses),
+                    'message'      => "ซิงค์ข้อมูลการรับสมัครนักเรียนสำเร็จ ({$charCount} ตัวอักษร)"
+                ]);
+            } catch (\Throwable $e) {
+                return $this->response->setJSON(['status' => 'error', 'message' => 'เกิดข้อผิดพลาดในการดึงข้อมูลการรับสมัคร: ' . $e->getMessage()]);
+            }
+        }
+
+        // =======================================================
+        // 8. LOCATIONS (อาคาร สถานที่ ห้องประชุม และสนามกีฬา)
+        // =======================================================
+        if ($type === 'locations') {
+            try {
+                $dbGeneral = \Config\Database::connect('general');
+
+                $locations = $dbGeneral->table('tb_location')
+                    ->orderBy('location_category', 'ASC')
+                    ->orderBy('location_name', 'ASC')
+                    ->get()
+                    ->getResultArray();
+
+                if (empty($locations)) {
+                    return $this->response->setJSON(['status' => 'error', 'message' => 'ไม่พบข้อมูลอาคารและสถานที่']);
+                }
+
+                $content = "=== ข้อมูลอาคาร สถานที่ ห้องประชุม และสนามกีฬา โรงเรียนสวนกุหลาบวิทยาลัย (จิรประวัติ) นครสวรรค์ ===\n";
+                $content .= "(ข้อมูลเชื่อมโยงจากฐานข้อมูลบริหารทั่วไป รวม " . count($locations) . " สถานที่ ณ วันที่ " . date('d/m/Y H:i') . ")\n\n";
+
+                $byCat = [];
+                foreach ($locations as $l) {
+                    $cat = !empty($l['location_category']) ? trim($l['location_category']) : 'สถานที่ทั่วไป';
+                    $byCat[$cat][] = $l;
+                }
+
+                foreach ($byCat as $cat => $items) {
+                    $content .= "【หมวด: {$cat}】 (จำนวน " . count($items) . " แห่ง)\n";
+                    foreach ($items as $loc) {
+                        $lName = trim($loc['location_name']);
+                        $lNum = !empty($loc['location_number']) ? " | ที่ตั้ง: {$loc['location_number']}" : '';
+                        $seats = !empty($loc['location_seats']) ? " | ความจุ: {$loc['location_seats']} ที่นั่ง" : '';
+                        $desc = !empty($loc['location_detail']) ? " | รายละเอียด: " . trim($loc['location_detail']) : '';
+                        $content .= "• {$lName}{$lNum}{$seats}{$desc}\n";
+                    }
+                    $content .= "\n";
+                }
+
+                $title = "ข้อมูลอาคาร สถานที่ ห้องประชุม และสนามกีฬา (" . count($locations) . " แห่ง)";
+                $sourceUrl = "db://skjacth_general/tb_location";
+                $charCount = mb_strlen($content, 'UTF-8');
+
+                $kId = $this->saveOrUpdateKnowledgeRecord($title, 'database', $sourceUrl, $content, $charCount, $now);
+
+                return $this->response->setJSON([
+                    'status'       => 'success',
+                    'knowledge_id' => $kId,
+                    'title'        => $title,
+                    'char_count'   => $charCount,
+                    'record_count' => count($locations),
+                    'message'      => "ซิงค์ข้อมูลอาคารและสถานที่สำเร็จ " . count($locations) . " แห่ง ({$charCount} ตัวอักษร)"
+                ]);
+            } catch (\Throwable $e) {
+                return $this->response->setJSON(['status' => 'error', 'message' => 'เกิดข้อผิดพลาดในการดึงข้อมูลสถานที่: ' . $e->getMessage()]);
+            }
+        }
+
+        // =======================================================
+        // 9. TIMETABLE (ตารางเวลาคาบเรียนและการจัดเวลา)
+        // =======================================================
+        if ($type === 'timetable') {
+            try {
+                $dbTimetable = \Config\Database::connect('timetable');
+
+                $periods = $dbTimetable->table('tb_timetable_config_periods')
+                    ->orderBy('period_number', 'ASC')
+                    ->get()
+                    ->getResultArray();
+
+                if (empty($periods)) {
+                    return $this->response->setJSON(['status' => 'error', 'message' => 'ไม่พบข้อมูลตารางคาบเรียน']);
+                }
+
+                $content = "=== ข้อมูลตารางเวลาและคาบเรียนประจำวัน โรงเรียนสวนกุหลาบวิทยาลัย (จิรประวัติ) นครสวรรค์ ===\n";
+                $content .= "(ข้อมูลเชื่อมโยงจากฐานข้อมูลตารางเรียน ณ วันที่ " . date('d/m/Y H:i') . ")\n\n";
+
+                $content .= "【กำหนดการเวลาเรียนแต่ละคาบ】\n";
+                foreach ($periods as $p) {
+                    $num = $p['period_number'];
+                    $start = substr($p['start_time'], 0, 5);
+                    $end = substr($p['end_time'], 0, 5);
+                    $break = !empty($p['is_break']) ? " [ช่วงพักรับประทานอาหาร/พักผ่อน]" : '';
+                    $grp = !empty($p['level_group']) && $p['level_group'] !== 'ALL' ? " (เฉพาะ {$p['level_group']})" : '';
+                    $content .= "• คาบที่ {$num}: เวลา {$start} - {$end} น.{$break}{$grp}\n";
+                }
+
+                $title = "ข้อมูลตารางเวลาและคาบเรียนประจำวัน (" . count($periods) . " คาบ)";
+                $sourceUrl = "db://skjacth_timetable/tb_timetable_config_periods";
+                $charCount = mb_strlen($content, 'UTF-8');
+
+                $kId = $this->saveOrUpdateKnowledgeRecord($title, 'database', $sourceUrl, $content, $charCount, $now);
+
+                return $this->response->setJSON([
+                    'status'       => 'success',
+                    'knowledge_id' => $kId,
+                    'title'        => $title,
+                    'char_count'   => $charCount,
+                    'record_count' => count($periods),
+                    'message'      => "ซิงค์ข้อมูลตารางเวลาคาบเรียนสำเร็จ ({$charCount} ตัวอักษร)"
+                ]);
+            } catch (\Throwable $e) {
+                return $this->response->setJSON(['status' => 'error', 'message' => 'เกิดข้อผิดพลาดในการดึงข้อมูลตารางเวลา: ' . $e->getMessage()]);
+            }
+        }
+
+        // =======================================================
+        // 10. NEWS (ข่าวประชาสัมพันธ์ 25 ข่าวล่าสุด)
+        // =======================================================
+        if ($type === 'news') {
             try {
                 $dbDefault = \Config\Database::connect('default');
 
@@ -1366,47 +2020,106 @@ class AdminControlChat extends BaseController
                 $sourceUrl = "db://skjacth_skj/tb_news";
                 $charCount = mb_strlen($content, 'UTF-8');
 
-                $existing = $this->db->table('tb_chat_ai_knowledge')->where('source_url', $sourceUrl)->get()->getRow();
-                if ($existing) {
-                    $this->db->table('tb_chat_ai_knowledge')->where('knowledge_id', $existing->knowledge_id)->update([
-                        'title'          => $title,
-                        'content'        => $content,
-                        'char_count'     => $charCount,
-                        'status'         => 'on',
-                        'last_synced_at' => $now,
-                        'updated_at'     => $now
-                    ]);
-                    $kId = $existing->knowledge_id;
-                } else {
-                    $this->db->table('tb_chat_ai_knowledge')->insert([
-                        'title'          => $title,
-                        'source_type'    => 'database',
-                        'source_url'     => $sourceUrl,
-                        'content'        => $content,
-                        'char_count'     => $charCount,
-                        'status'         => 'on',
-                        'last_synced_at' => $now,
-                        'created_at'     => $now,
-                        'updated_at'     => $now
-                    ]);
-                    $kId = $this->db->insertID();
-                }
+                $kId = $this->saveOrUpdateKnowledgeRecord($title, 'database', $sourceUrl, $content, $charCount, $now);
 
                 return $this->response->setJSON([
-                    'status'         => 'success',
-                    'knowledge_id'   => $kId,
-                    'title'          => $title,
-                    'char_count'     => $charCount,
-                    'record_count'   => count($newsRows),
-                    'message'        => "ซิงค์ข่าวสารสำเร็จ 25 ข่าวล่าสุด ({$charCount} ตัวอักษร)"
+                    'status'       => 'success',
+                    'knowledge_id' => $kId,
+                    'title'        => $title,
+                    'char_count'   => $charCount,
+                    'record_count' => count($newsRows),
+                    'message'      => "ซิงค์ข่าวสารสำเร็จ 25 ข่าวล่าสุด ({$charCount} ตัวอักษร)"
                 ]);
-
             } catch (\Throwable $e) {
                 return $this->response->setJSON(['status' => 'error', 'message' => 'เกิดข้อผิดพลาดในการเชื่อมต่อฐานข้อมูลข่าวสาร: ' . $e->getMessage()]);
             }
         }
 
         return $this->response->setJSON(['status' => 'error', 'message' => 'ไม่รู้จักประเภทฐานข้อมูลที่ระบุ']);
+    }
+
+    private function saveOrUpdateKnowledgeRecord($title, $sourceType, $sourceUrl, $content, $charCount, $timestamp)
+    {
+        $existing = $this->db->table('tb_chat_ai_knowledge')->where('source_url', $sourceUrl)->get()->getRow();
+        if ($existing) {
+            $this->db->table('tb_chat_ai_knowledge')->where('knowledge_id', $existing->knowledge_id)->update([
+                'title'          => $title,
+                'content'        => $content,
+                'char_count'     => $charCount,
+                'status'         => 'on',
+                'last_synced_at' => $timestamp,
+                'updated_at'     => $timestamp
+            ]);
+            return $existing->knowledge_id;
+        } else {
+            $this->db->table('tb_chat_ai_knowledge')->insert([
+                'title'          => $title,
+                'source_type'    => $sourceType,
+                'source_url'     => $sourceUrl,
+                'content'        => $content,
+                'char_count'     => $charCount,
+                'status'         => 'on',
+                'last_synced_at' => $timestamp,
+                'created_at'     => $timestamp,
+                'updated_at'     => $timestamp
+            ]);
+            return $this->db->insertID();
+        }
+    }
+
+    public function deleteDatabaseKnowledge($type)
+    {
+        if ($redir = $this->checkAuth()) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Unauthorized'])->setStatusCode(401);
+        }
+
+        $this->ensureAiKnowledgeTable();
+
+        $dbUrls = [
+            'about'       => 'db://skjacth_skj/tb_aboutschool',
+            'personnel'   => 'db://skjacth_personnel/tb_personnel',
+            'board'       => 'db://skjacth_personnel/tb_board',
+            'academic'    => 'db://skjacth_academic/tb_subjects',
+            'study_plans' => 'db://skjacth_academic/tb_classroom_study_plans',
+            'clubs'       => 'db://skjacth_academic/tb_clubs',
+            'admission'   => 'db://skjacth_admission/tb_admission_schedule',
+            'locations'   => 'db://skjacth_general/tb_location',
+            'timetable'   => 'db://skjacth_timetable/tb_timetable_config_periods',
+            'news'        => 'db://skjacth_skj/tb_news',
+        ];
+
+        if (!isset($dbUrls[$type])) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'ไม่พบประเภทฐานข้อมูลที่ระบุ']);
+        }
+
+        $sourceUrl = $dbUrls[$type];
+        $existing = $this->db->table('tb_chat_ai_knowledge')->where('source_url', $sourceUrl)->get()->getRow();
+
+        if (!$existing) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'ข้อมูลนี้ไม่ได้อยู่ในคลังความรู้ AI']);
+        }
+
+        $this->db->table('tb_chat_ai_knowledge')->where('knowledge_id', $existing->knowledge_id)->delete();
+
+        $names = [
+            'about'       => 'ข้อมูลพื้นฐานและอัตลักษณ์โรงเรียน',
+            'personnel'   => 'ข้อมูลบุคลากรและคณะครู',
+            'board'       => 'ข้อมูลคณะกรรมการสถานศึกษา',
+            'academic'    => 'ข้อมูลหลักสูตรและรายวิชา',
+            'study_plans' => 'ข้อมูลแผนการเรียนและห้องเรียน',
+            'clubs'       => 'ข้อมูลกิจกรรมชุมนุมนักเรียน',
+            'admission'   => 'ข้อมูลการรับสมัครนักเรียน',
+            'locations'   => 'ข้อมูลอาคารและสถานที่',
+            'timetable'   => 'ข้อมูลตารางเวลาคาบเรียน',
+            'news'        => 'ข้อมูลข่าวประชาสัมพันธ์'
+        ];
+        $typeName = $names[$type] ?? 'ฐานข้อมูล';
+
+        return $this->response->setJSON([
+            'status'  => 'success',
+            'type'    => $type,
+            'message' => "ลบ{$typeName}ออกจากคลังความรู้ AI เรียบร้อยแล้ว (ข้อมูลจริงในระบบไม่ได้รับผลกระทบ)"
+        ]);
     }
 
 

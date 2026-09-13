@@ -238,6 +238,8 @@ $routes->get('admin/live-chat/knowledge', 'Admin\AdminControlChat::getKnowledgeL
 $routes->get('Admin/live-chat/knowledge', 'Admin\AdminControlChat::getKnowledgeList');
 $routes->post('admin/live-chat/knowledge/fetch-preview', 'Admin\AdminControlChat::fetchUrlPreview');
 $routes->post('Admin/live-chat/knowledge/fetch-preview', 'Admin\AdminControlChat::fetchUrlPreview');
+$routes->post('admin/live-chat/knowledge/discover-links', 'Admin\AdminControlChat::discoverSiteLinks');
+$routes->post('Admin/live-chat/knowledge/discover-links', 'Admin\AdminControlChat::discoverSiteLinks');
 $routes->post('admin/live-chat/knowledge/save-url', 'Admin\AdminControlChat::saveKnowledgeUrl');
 $routes->post('Admin/live-chat/knowledge/save-url', 'Admin\AdminControlChat::saveKnowledgeUrl');
 $routes->post('admin/live-chat/knowledge/upload-file', 'Admin\AdminControlChat::uploadKnowledgeFile');
@@ -258,6 +260,8 @@ $routes->get('admin/live-chat/knowledge/db-stats', 'Admin\AdminControlChat::getD
 $routes->get('Admin/live-chat/knowledge/db-stats', 'Admin\AdminControlChat::getDatabaseStats');
 $routes->post('admin/live-chat/knowledge/sync-db/(:segment)', 'Admin\AdminControlChat::syncFromDatabase/$1');
 $routes->post('Admin/live-chat/knowledge/sync-db/(:segment)', 'Admin\AdminControlChat::syncFromDatabase/$1');
+$routes->post('admin/live-chat/knowledge/delete-db/(:segment)', 'Admin\AdminControlChat::deleteDatabaseKnowledge/$1');
+$routes->post('Admin/live-chat/knowledge/delete-db/(:segment)', 'Admin\AdminControlChat::deleteDatabaseKnowledge/$1');
 
 $routes->post('api/chat/init', 'Api\ChatApi::initSession');
 $routes->post('api/chat/send', 'Api\ChatApi::sendMessage');

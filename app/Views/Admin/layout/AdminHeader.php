@@ -55,10 +55,10 @@
 
     <link rel="stylesheet" href="<?=base_url('assets/admin/assets/vendor/libs/apex-charts/apex-charts.css')?>" />
 
-    <!-- google font -->
+    <!-- Google Fonts: Prompt & Plus Jakarta Sans & Sarabun -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sarabun&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Prompt:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Helpers -->
     <script src="<?=base_url('assets/admin/assets/vendor/js/helpers.js')?>"></script>
@@ -77,10 +77,11 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
 
+    <!-- Modern Luxury Theme Extension -->
+    <link rel="stylesheet" href="<?=base_url('assets/admin/assets/css/admin-luxury-theme.css?v=1.0')?>" />
+
     <?= $this->renderSection('styles') ?>
     <?= $this->renderSection('css') ?>
   </head>
 
-  
-
-  <body style="font-family:'Sarabun';">
+  <body>

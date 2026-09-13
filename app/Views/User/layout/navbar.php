@@ -149,6 +149,8 @@
                                                 class="bi bi-car-front me-2"></i>จองยานพาหนะ</a>
                                         <a href="https://general.skj.ac.th/Repair"><i
                                                 class="bi bi-tools me-2"></i>แจ้งซ่อมออนไลน์</a>
+                                        <a href="https://general.skj.ac.th/Equipment" target="_blank"><i
+                                                class="bi bi-box-seam me-2"></i>ยืม-คืนพัสดุอุปกรณ์</a>
                                         <a href="https://general.skj.ac.th/FoodReport"><i
                                                 class="bi bi-pie-chart me-2"></i>รายงานอาหาร</a>
                                     </div>
@@ -393,6 +395,8 @@
                                 class="bi bi-car-front me-2"></i>จองยานพาหนะ</a></li>
                     <li><a href="https://general.skj.ac.th/Repair"><i class="bi bi-tools me-2"></i>แจ้งซ่อมออนไลน์</a>
                     </li>
+                    <li><a href="https://general.skj.ac.th/Equipment" target="_blank"><i class="bi bi-box-seam me-2"></i>ยืม-คืนพัสดุอุปกรณ์</a>
+                    </li>
                     <li><a href="https://general.skj.ac.th/FoodReport"><i
                                 class="bi bi-pie-chart me-2"></i>รายงานอาหาร</a></li>
 
@@ -580,6 +584,10 @@ $curSeg = $uriObj->getSegment(1);
             <a href="https://general.skj.ac.th/Repair" target="_blank" class="service-app-card">
                 <div class="service-icon-circle bg-rose-grad"><i class="bi bi-tools"></i></div>
                 <div class="service-label">แจ้งซ่อมออนไลน์</div>
+            </a>
+            <a href="https://general.skj.ac.th/Equipment" target="_blank" class="service-app-card">
+                <div class="service-icon-circle bg-teal-grad"><i class="bi bi-box-seam-fill"></i></div>
+                <div class="service-label">ยืมพัสดุอุปกรณ์</div>
             </a>
             <a href="https://general.skj.ac.th/FoodReport" target="_blank" class="service-app-card">
                 <div class="service-icon-circle bg-emerald-grad"><i class="bi bi-pie-chart-fill"></i></div>

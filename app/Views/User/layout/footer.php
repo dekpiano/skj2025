@@ -199,24 +199,26 @@
                                 class="bi bi-link-45deg me-1"></i> สวนกุหลาบวิทยาลัย</a>
                         <a class="footer-link" target="_blank" href="http://www.skn.ac.th/"><i
                                 class="bi bi-link-45deg me-1"></i> สวนกุหลาบวิทยาลัย นนทบุรี</a>
-                        <a class="footer-link" target="_blank" href="http://www.skr.ac.th/"><i
-                                class="bi bi-link-45deg me-1"></i> สวนกุหลาบวิทยาลัย รังสิต</a>
                         <a class="footer-link" target="_blank" href="http://www.sks.ac.th/"><i
                                 class="bi bi-link-45deg me-1"></i> นวมินทราชินูทิศ สวนกุหลาบวิทยาลัย สมุทรปราการ</a>
                         <a class="footer-link" target="_blank" href="http://www.skp.ac.th/"><i
                                 class="bi bi-link-45deg me-1"></i> นวมินทราชินูทิศ สวนกุหลาบวิทยาลัย ปทุมธานี</a>
+                        <a class="footer-link" target="_blank" href="http://www.skr.ac.th/"><i
+                                class="bi bi-link-45deg me-1"></i> สวนกุหลาบวิทยาลัย รังสิต</a>
+                        <a class="footer-link" target="_blank" href="http://www.suanchon.ac.th/"><i
+                                class="bi bi-link-45deg me-1"></i> สวนกุหลาบวิทยาลัย ชลบุรี</a>
                     </div>
                     <div class="col-md-6">
                         <a class="footer-link" target="_blank" href="http://www.skpb.ac.th/"><i
                                 class="bi bi-link-45deg me-1"></i> สวนกุหลาบวิทยาลัย เพชรบูรณ์</a>
                         <a class="footer-link" target="_blank" href="https://www.sksb.ac.th/"><i
                                 class="bi bi-link-45deg me-1"></i> สวนกุหลาบวิทยาลัย สระบุรี</a>
-                        <a class="footer-link" target="_blank" href="http://www.suanchon.ac.th/"><i
-                                class="bi bi-link-45deg me-1"></i> สวนกุหลาบวิทยาลัย ชลบุรี</a>
-                        <a class="footer-link" target="_blank" href="http://www.skns.ac.th/"><i
-                                class="bi bi-link-45deg me-1"></i> สวนกุหลาบวิทยาลัย นครศรีธรรมราช</a>
+                        <a class="footer-link" target="_blank" href="https://www.skj.ac.th/"><i
+                                class="bi bi-link-45deg me-1"></i> สวนกุหลาบวิทยาลัย (จิรประวัติ) นครสวรรค์</a>
                         <a class="footer-link" target="_blank" href="http://www.sk-thonburi.ac.th/"><i
                                 class="bi bi-link-45deg me-1"></i> สวนกุหลาบวิทยาลัย ธนบุรี</a>
+                        <a class="footer-link" target="_blank" href="http://www.skns.ac.th/"><i
+                                class="bi bi-link-45deg me-1"></i> สวนกุหลาบวิทยาลัย นครศรีธรรมราช</a>
                     </div>
                 </div>
             </div>
@@ -271,14 +273,20 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-md-6 text-center text-md-start mb-3 mb-md-0 fw-light text-white-50 small">
-                    &copy; <span class="text-white fw-bold">โรงเรียนเครือสวนกุหลาบวิทยาลัย (จิรประวัติ)
+                    &copy; <span class="text-white fw-bold">โรงเรียนสวนกุหลาบวิทยาลัย (จิรประวัติ)
                         นครสวรรค์</span>. All Rights Reserved.
                 </div>
                 <div class="col-md-6 text-center text-md-end text-white-50 small">
-                    Author By <a href="https://www.facebook.com/dekpiano"
-                        class="text-primary text-decoration-none fw-bold">Dekpiano</a> |
-                    <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal"
-                        class="text-white-50 text-decoration-none ms-2">Admin Login</a>
+                    <div
+                        class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-end gap-2">
+                        <span>Author By <a href="https://erc.nsnpao.go.th/itsupport/portfolio" target="_blank"
+                                class="text-primary text-decoration-none fw-bold">Dekpiano</a></span>
+                        <span class="text-white-50">|</span>
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal"
+                            class="text-white-50 text-decoration-none">Admin Login</a>
+                        <span class="text-white-50">|</span>
+                        <span class="text-white-50"><?= get_app_version() ?></span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -547,4 +555,3 @@
 
 <!-- SKJ Live Chat Floating Widget -->
 <?= view('Components/ChatWidget') ?>
-

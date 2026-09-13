@@ -1,20 +1,23 @@
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
-    <div class="app-brand demo">
-        <a href="<?= base_url('Admin/Dashboard'); ?>" class="app-brand-link">
+    <div class="app-brand demo d-flex align-items-center justify-content-between">
+        <a href="<?= base_url('Admin/Dashboard'); ?>" class="app-brand-link d-flex align-items-center text-decoration-none">
             <span class="app-brand-logo demo">
-                <img src="<?= base_url('uploads/logoSchool/LogoSKJ_4.png'); ?>" alt="SKJ Logo" style="width:36px">
+                <img src="<?= base_url('uploads/logoSchool/LogoSKJ_4.png'); ?>" alt="SKJ Logo" style="width:32px; height:auto;">
             </span>
-            <span class="app-brand-text demo menu-text fw-bolder ms-2" style="font-size: 0.95rem; line-height: 1.3;">ระบบงานสารสนเทศ<br><small class="text-muted fw-normal">เว็บไซต์โรงเรียน</small></span>
+            <div class="app-brand-text ms-3 d-flex flex-column">
+                <span class="fw-bold text-dark lh-1" style="font-size: 1.05rem;">ระบบหลังบ้าน</span>
+                <span class="text-muted fw-semibold" style="font-size: 0.75rem; letter-spacing: 0.04em;">SKJ PORTAL</span>
+            </div>
         </a>
 
-        <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+        <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none text-muted">
             <i class="bx bx-chevron-left bx-sm align-middle"></i>
         </a>
     </div>
 
     <div class="menu-inner-shadow"></div>
 
-    <ul class="menu-inner py-1">
+    <ul class="menu-inner py-2">
         
         <!-- ==================== หมวดหมู่: ภาพรวม ==================== -->
         <li class="menu-header small text-uppercase">
@@ -24,16 +27,19 @@
         <!-- Dashboard -->
         <li class="menu-item <?= $uri->getSegment(2) == 'Dashboard' ? "active" : "" ?>">
             <a href="<?= base_url('Admin/Dashboard'); ?>" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-home-circle"></i>
-                <div data-i18n="Analytics">หน้าแรก (Dashboard)</div>
+                <i class="menu-icon tf-icons bx bx-grid-alt"></i>
+                <div data-i18n="Analytics">แดชบอร์ด (Dashboard)</div>
             </a>
         </li>
 
         <!-- Live Chat -->
         <li class="menu-item <?= in_array(strtolower($uri->getSegment(2) ?? ''), ['livechat', 'live-chat']) ? "active" : "" ?>">
-            <a href="<?= base_url('Admin/LiveChat'); ?>" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-chat"></i>
-                <div data-i18n="Analytics">ศูนย์สนทนาสด (Live Chat)</div>
+            <a href="<?= base_url('Admin/LiveChat'); ?>" class="menu-link d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <i class="menu-icon tf-icons bx bx-chat"></i>
+                    <div data-i18n="Analytics">ศูนย์สนทนาสด</div>
+                </div>
+                <span class="badge bg-label-info rounded-pill px-2 py-1 ms-auto" style="font-size: 0.68rem;">Live</span>
             </a>
         </li>
 
@@ -55,7 +61,7 @@
         <li class="menu-item <?= $uri->getSegment(2) == 'Banner' ? "active" : "" ?>">
             <a href="<?= base_url('Admin/Banner'); ?>" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-images"></i>
-                <div data-i18n="Analytics">แบนเนอร์ประชาสัมพันธ์</div>
+                <div data-i18n="Analytics">แบนเนอร์สไลด์</div>
             </a>
         </li>
 
@@ -141,12 +147,12 @@
 
         <!-- Quick View Main Site -->
         <li class="menu-header small text-uppercase">
-            <span class="menu-header-text">หน้าเว็บไซต์</span>
+            <span class="menu-header-text">หน้าเว็บไซต์หลัก</span>
         </li>
         <li class="menu-item">
             <a href="<?= base_url('/'); ?>" class="menu-link" target="_blank">
-                <i class="menu-icon tf-icons bx bx-link-external"></i>
-                <div data-i18n="Analytics">เปิดดูหน้าเว็บไซต์หลัก</div>
+                <i class="menu-icon tf-icons bx bx-link-external text-primary"></i>
+                <div data-i18n="Analytics">เปิดดูหน้าเว็บไซต์</div>
             </a>
         </li>
 

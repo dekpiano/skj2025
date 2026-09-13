@@ -887,6 +887,8 @@
                                     จองยานพาหนะ</a>
                                 <a href="https://general.skj.ac.th/Repair" class="dropdown-item dropdown-item-skj"><i
                                         class="bi bi-tools"></i> แจ้งซ่อมออนไลน์</a>
+                                <a href="https://general.skj.ac.th/Equipment" class="dropdown-item dropdown-item-skj" target="_blank"><i
+                                        class="bi bi-box-seam"></i> ยืม-คืนพัสดุอุปกรณ์</a>
                                 <a href="https://general.skj.ac.th/FoodReport"
                                     class="dropdown-item dropdown-item-skj"><i class="bi bi-pie-chart"></i>
                                     รายงานอาหาร</a>

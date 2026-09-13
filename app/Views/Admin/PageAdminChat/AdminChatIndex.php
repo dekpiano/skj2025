@@ -1068,56 +1068,172 @@
                         </div>
                     </div>
 
-                    <!-- TAB 2: ADD WEBSITE URL -->
+                    <!-- TAB 2: ADD WEBSITE URL & FULL SITE CRAWLER -->
                     <div class="tab-pane fade" id="tab-kb-url" role="tabpanel">
                         <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
-                            <div class="d-flex align-items-start gap-3 mb-3">
-                                <div class="rounded-circle bg-label-info p-2 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
-                                    <i class="bx bx-globe fs-4 text-info"></i>
+                            
+                            <!-- Sub Navigation: Site Crawler vs Single URL -->
+                            <div class="d-flex align-items-center justify-content-between mb-4 pb-3 border-bottom flex-wrap gap-2">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="rounded-circle bg-label-info p-2 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
+                                        <i class="bx bx-globe fs-4 text-info"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="fw-bold text-dark mb-1">อ่านข้อมูลจากเว็บไซต์ (Web Scraper & Crawler)</h6>
+                                        <p class="text-muted small mb-0" style="font-size: 0.8rem; line-height: 1.5;">
+                                            สแกนอ่านเนื้อหาทุกหน้าเว็บอัตโนมัติ หรือระบุเฉพาะหน้าเว็บที่ต้องการ เพื่อให้ AI เข้าใจและใช้ตอบคำถาม
+                                        </p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h6 class="fw-bold text-dark mb-1">เพิ่มข้อมูลจากหน้าเว็บไซต์ (Web Scraper & Reader)</h6>
-                                    <p class="text-muted small mb-0" style="font-size: 0.8rem; line-height: 1.5;">
-                                        ระบบจะดึงเนื้อหา ตัวหนังสือ และหัวข้อจากหน้าเว็บไซต์มาสกัดเป็นข้อความสะอาด เพื่อให้ AI เข้าใจและใช้ตอบคำถามผู้ใช้ได้ทันที
-                                    </p>
+                                <div class="btn-group p-1 bg-light rounded-pill border" role="group">
+                                    <button type="button" class="btn btn-sm rounded-pill px-3 fw-bold active" id="btnModeCrawler" onclick="switchUrlMode('crawler')">
+                                        <i class="bx bx-radar me-1"></i> 🚀 สแกนทั้งเว็บ (Site Crawler)
+                                    </button>
+                                    <button type="button" class="btn btn-sm rounded-pill px-3 fw-bold text-secondary" id="btnModeSingle" onclick="switchUrlMode('single')">
+                                        <i class="bx bx-link me-1"></i> 🔗 เพิ่มหน้าเดี่ยว (Single URL)
+                                    </button>
                                 </div>
                             </div>
 
-                            <form id="kbUrlForm" onsubmit="saveKnowledgeUrlSubmit(event)">
-                                <div class="row g-3 mb-3">
-                                    <div class="col-md-8">
-                                        <label class="form-label fw-bold text-dark" style="font-size: 0.86rem;">URL หน้าเว็บไซต์ <span class="text-danger">*</span></label>
-                                        <div class="input-group">
-                                            <span class="input-group-text bg-light"><i class="bx bx-link"></i></span>
-                                            <input type="url" class="form-control" id="kbUrlInput" placeholder="เช่น https://skj.ac.th/admission หรือ https://skj.ac.th/about" required>
-                                            <button class="btn btn-outline-primary" type="button" id="btnPreviewUrl" onclick="previewKnowledgeUrl()">
-                                                <i class="bx bx-download me-1"></i> ดึงตัวอย่างเนื้อหา
+                            <!-- SUB-VIEW 1: SITE CRAWLER -->
+                            <div id="viewUrlCrawler">
+                                <div class="p-3 mb-3 rounded-4 bg-light border">
+                                    <div class="row g-2 align-items-end">
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-bold text-dark mb-1" style="font-size: 0.85rem;">
+                                                URL หน้าหลักของเว็บไซต์ (Domain / Homepage) <span class="text-danger">*</span>
+                                            </label>
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-white"><i class="bx bx-globe"></i></span>
+                                                <input type="url" class="form-control" id="crawlerBaseUrl" value="https://skj.ac.th" placeholder="https://skj.ac.th">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label fw-bold text-dark mb-1" style="font-size: 0.85rem;">จำนวนหน้าสูงสุด</label>
+                                            <select class="form-select" id="crawlerMaxLinks">
+                                                <option value="15">สแกนสูงสุด 15 หน้า</option>
+                                                <option value="30" selected>สแกนสูงสุด 30 หน้า (แนะนำ)</option>
+                                                <option value="50">สแกนสูงสุด 50 หน้า</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <button type="button" class="btn btn-primary w-100 fw-bold rounded-3" id="btnScanSite" onclick="scanSiteLinks()">
+                                                <i class="bx bx-search-alt-2 me-1"></i> สแกนค้นหาหน้าเว็บ
                                             </button>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <label class="form-label fw-bold text-dark" style="font-size: 0.86rem;">ชื่อหัวข้อ / แหล่งข้อมูล (ไม่บังคับ)</label>
-                                        <input type="text" class="form-control" id="kbUrlTitle" placeholder="เช่น ข้อมูลการรับสมัครนักเรียน ม.1">
+                                    <div class="d-flex align-items-center gap-2 mt-2">
+                                        <small class="text-muted" style="font-size: 0.75rem;">ทางลัด:</small>
+                                        <button type="button" class="btn btn-link btn-sm p-0 text-primary small text-decoration-none" onclick="document.getElementById('crawlerBaseUrl').value='https://skj.ac.th'">
+                                            🌐 https://skj.ac.th
+                                        </button>
+                                        <span class="text-muted opacity-50">|</span>
+                                        <small class="text-muted" style="font-size: 0.75rem;">ระบบจะค้นหาเฉพาะลิงก์ภายในโดเมนเดียวกัน และคัดกรองลิงก์ล็อกอิน/ไฟล์ขยะออกให้อัตโนมัติ</small>
                                     </div>
                                 </div>
 
-                                <!-- URL Preview Box -->
-                                <div id="kbUrlPreviewWrap" style="display: none;" class="p-3 mb-3 rounded-4 bg-light border">
-                                    <div class="d-flex align-items-center justify-content-between mb-2 pb-2 border-bottom">
-                                        <span class="fw-bold text-primary small" id="kbUrlPreviewTitle"></span>
-                                        <span class="badge bg-success small" id="kbUrlPreviewChars">0 ตัวอักษร</span>
+                                <div id="crawlerAlertBox" style="display: none;" class="alert alert-sm mb-3"></div>
+
+                                <!-- Crawler Progress Box -->
+                                <div id="crawlerProgressWrap" style="display: none;" class="card border-0 shadow-sm rounded-4 p-3 mb-3 bg-white border border-warning">
+                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="spinner-border spinner-border-sm text-warning" id="crawlerSpinner" role="status"></div>
+                                            <span class="fw-bold text-dark" id="crawlerProgressTitle" style="font-size: 0.9rem;">กำลังดึงข้อมูลเข้าคลังความรู้ AI...</span>
+                                        </div>
+                                        <span class="badge bg-warning text-dark font-monospace" id="crawlerPercentBadge">0%</span>
                                     </div>
-                                    <div class="small text-muted mb-0" id="kbUrlPreviewSnippet" style="max-height: 150px; overflow-y: auto; white-space: pre-line; line-height: 1.5; font-size: 0.8rem;"></div>
+                                    <div class="progress mb-2" style="height: 10px; border-radius: 10px;">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" id="crawlerProgressBar" role="progressbar" style="width: 0%"></div>
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-between text-muted small" style="font-size: 0.76rem;">
+                                        <span class="text-truncate me-2" id="crawlerStatusText">เตรียมพร้อม...</span>
+                                        <button type="button" class="btn btn-outline-danger btn-xs py-0 px-2 rounded-pill" id="btnCancelCrawl" onclick="cancelBatchCrawl()" style="display: none;">
+                                            <i class="bx bx-stop-circle me-1"></i> หยุดชั่วคราว
+                                        </button>
+                                    </div>
+                                    <div id="crawlerLiveLogs" class="mt-2 p-2 bg-light rounded-3 font-monospace small" style="max-height: 120px; overflow-y: auto; font-size: 0.73rem; line-height: 1.4; display: none;"></div>
                                 </div>
 
-                                <div id="kbUrlAlertBox" style="display: none;" class="alert alert-sm mb-3"></div>
+                                <!-- Discovered Links Results -->
+                                <div id="crawlerResultsWrap" style="display: none;" class="card border-0 shadow-sm rounded-4 p-3 bg-white border">
+                                    <div class="d-flex align-items-center justify-content-between mb-2 pb-2 border-bottom flex-wrap gap-2">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <span class="fw-bold text-dark" style="font-size: 0.92rem;">
+                                                <i class="bx bx-list-check text-primary me-1"></i> รายการหน้าเว็บที่พบ (<span id="crawlerFoundCount">0</span> หน้า)
+                                            </span>
+                                            <span class="badge bg-label-success rounded-pill small" id="crawlerSelectedBadge">เลือก 0 หน้า</span>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <button type="button" class="btn btn-outline-secondary btn-xs rounded-pill px-2" onclick="toggleAllDiscoveredLinks(true)">
+                                                เลือกทั้งหมด
+                                            </button>
+                                            <button type="button" class="btn btn-outline-secondary btn-xs rounded-pill px-2" onclick="toggleAllDiscoveredLinks(false)">
+                                                ยกเลิกทั้งหมด
+                                            </button>
+                                            <button type="button" class="btn btn-warning btn-sm rounded-pill px-3 fw-bold" id="btnStartCrawl" onclick="startBatchCrawl()">
+                                                <i class="bx bx-download me-1"></i> 🚀 เริ่มดึงข้อมูลทุกหน้าที่เลือก (<span id="btnStartCrawlCount">0</span>)
+                                            </button>
+                                        </div>
+                                    </div>
 
-                                <div class="d-flex justify-content-end">
-                                    <button type="submit" class="btn btn-warning rounded-pill px-4 fw-bold" id="btnSaveUrl">
-                                        <i class="bx bx-save me-1"></i> บันทึกลงคลังความรู้ AI
-                                    </button>
+                                    <div class="table-responsive" style="max-height: 360px; overflow-y: auto;">
+                                        <table class="table table-hover table-sm align-middle mb-0">
+                                            <thead class="table-light sticky-top">
+                                                <tr style="font-size: 0.78rem;">
+                                                    <th style="width: 40px;" class="text-center">
+                                                        <input class="form-check-input" type="checkbox" id="masterCrawlerCheck" checked onchange="toggleAllDiscoveredLinks(this.checked)">
+                                                    </th>
+                                                    <th>ชื่อหน้าเว็บ & URL</th>
+                                                    <th style="width: 140px;" class="text-center">สถานะในคลัง AI</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="crawlerLinksTableBody" style="font-size: 0.83rem;">
+                                                <!-- Dynamic links list -->
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
-                            </form>
+                            </div>
+
+                            <!-- SUB-VIEW 2: SINGLE URL FORM -->
+                            <div id="viewUrlSingle" style="display: none;">
+                                <form id="kbUrlForm" onsubmit="saveKnowledgeUrlSubmit(event)">
+                                    <div class="row g-3 mb-3">
+                                        <div class="col-md-8">
+                                            <label class="form-label fw-bold text-dark" style="font-size: 0.86rem;">URL หน้าเว็บไซต์ <span class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light"><i class="bx bx-link"></i></span>
+                                                <input type="url" class="form-control" id="kbUrlInput" placeholder="เช่น https://skj.ac.th/admission หรือ https://skj.ac.th/about" required>
+                                                <button class="btn btn-outline-primary" type="button" id="btnPreviewUrl" onclick="previewKnowledgeUrl()">
+                                                    <i class="bx bx-download me-1"></i> ดึงตัวอย่างเนื้อหา
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label fw-bold text-dark" style="font-size: 0.86rem;">ชื่อหัวข้อ / แหล่งข้อมูล (ไม่บังคับ)</label>
+                                            <input type="text" class="form-control" id="kbUrlTitle" placeholder="เช่น ข้อมูลการรับสมัครนักเรียน ม.1">
+                                        </div>
+                                    </div>
+
+                                    <!-- URL Preview Box -->
+                                    <div id="kbUrlPreviewWrap" style="display: none;" class="p-3 mb-3 rounded-4 bg-light border">
+                                        <div class="d-flex align-items-center justify-content-between mb-2 pb-2 border-bottom">
+                                            <span class="fw-bold text-primary small" id="kbUrlPreviewTitle"></span>
+                                            <span class="badge bg-success small" id="kbUrlPreviewChars">0 ตัวอักษร</span>
+                                        </div>
+                                        <div class="small text-muted mb-0" id="kbUrlPreviewSnippet" style="max-height: 150px; overflow-y: auto; white-space: pre-line; line-height: 1.5; font-size: 0.8rem;"></div>
+                                    </div>
+
+                                    <div id="kbUrlAlertBox" style="display: none;" class="alert alert-sm mb-3"></div>
+
+                                    <div class="d-flex justify-content-end">
+                                        <button type="submit" class="btn btn-warning rounded-pill px-4 fw-bold" id="btnSaveUrl">
+                                            <i class="bx bx-save me-1"></i> บันทึกลงคลังความรู้ AI
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
 
@@ -1200,90 +1316,390 @@
                                 </div>
                             </form>
                         </div>
+                    </div>
+
                     <!-- TAB 5: SYNC FROM SCHOOL DATABASES -->
                     <div class="tab-pane fade" id="tab-kb-db" role="tabpanel">
                         <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
-                            <div class="d-flex align-items-start gap-3 mb-3">
-                                <div class="rounded-circle bg-label-primary p-2 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
-                                    <i class="bx bx-data fs-4 text-primary"></i>
+                            <div class="d-flex align-items-start justify-content-between mb-3 pb-3 border-bottom flex-wrap gap-2">
+                                <div class="d-flex align-items-start gap-3">
+                                    <div class="rounded-circle bg-label-primary p-2 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
+                                        <i class="bx bx-data fs-4 text-primary"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="fw-bold text-dark mb-1">เชื่อมต่อและดึงข้อมูลจากฐานข้อมูลของโรงเรียน (Database Grounding)</h6>
+                                        <p class="text-muted small mb-0" style="font-size: 0.8rem; line-height: 1.5;">
+                                            เลือกและจัดการข้อมูลจริงจากฐานข้อมูลโรงเรียนเข้าสู่คลังความรู้ AI โดยการลบจะมีผลเฉพาะกับสมองของ AI เท่านั้น (ไม่กระทบข้อมูลจริงในระบบ)
+                                        </p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h6 class="fw-bold text-dark mb-1">เชื่อมต่อและดึงข้อมูลจากฐานข้อมูลของโรงเรียน (Database Grounding)</h6>
-                                    <p class="text-muted small mb-0" style="font-size: 0.8rem; line-height: 1.5;">
-                                        นำเข้าข้อมูลจริงจากระบบฐานข้อมูล เพื่อให้ AI ตอบคำถามได้ถูกต้อง แม่นยำ และเป็นทางการ โดยระบบจะคัดกรองข้อมูลส่วนบุคคล (PDPA) ออกอัตโนมัติ
-                                    </p>
+                                <div class="d-flex align-items-center gap-2">
+                                    <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill px-3" onclick="loadDatabaseStats(true)" title="รีเฟรชสถานะฐานข้อมูล">
+                                        <i class="bx bx-refresh me-1"></i> รีเฟรชสถานะ
+                                    </button>
                                 </div>
                             </div>
 
                             <div id="kbDbAlertBox" style="display: none;" class="alert alert-sm mb-3"></div>
 
+                            <!-- Batch Action Toolbar -->
+                            <div class="p-2 px-3 mb-3 bg-light rounded-4 d-flex align-items-center justify-content-between flex-wrap gap-2 border">
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="form-check mb-0">
+                                        <input class="form-check-input" type="checkbox" id="masterDbCheck" onchange="toggleAllDbChecks(this.checked)">
+                                        <label class="form-check-label fw-bold text-dark small" for="masterDbCheck">
+                                            เลือกทั้งหมด (<span id="dbSelectedCount">0</span>/10)
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <button type="button" class="btn btn-primary btn-sm rounded-pill px-3 fw-bold" id="btnBatchSyncDb" onclick="batchDatabaseAction('sync')" disabled>
+                                        <i class="bx bx-sync me-1"></i> ซิงค์รายการที่เลือกเข้าคลัง AI
+                                    </button>
+                                    <button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-3 fw-bold" id="btnBatchDeleteDb" onclick="batchDatabaseAction('delete')" disabled>
+                                        <i class="bx bx-trash me-1"></i> ลบรายการที่เลือกออกจากคลัง AI
+                                    </button>
+                                </div>
+                            </div>
+
                             <div class="row g-3">
-                                <!-- Card 1: Personnel -->
-                                <div class="col-md-4">
-                                    <div class="card h-100 border rounded-4 p-3 shadow-none bg-light d-flex flex-column justify-content-between">
+                                <!-- Card 1: About School -->
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="card h-100 border rounded-4 p-3 shadow-none bg-light d-flex flex-column justify-content-between position-relative" id="dbCard_about">
                                         <div>
-                                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                            <div class="d-flex align-items-start justify-content-between mb-2">
                                                 <div class="d-flex align-items-center gap-2">
+                                                    <input type="checkbox" class="form-check-input db-item-check" id="checkDb_about" value="about" onchange="updateDbSelectedCount()">
+                                                    <div class="bg-primary text-white rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                                                        <i class="bx bx-bank fs-5"></i>
+                                                    </div>
+                                                    <div>
+                                                        <h6 class="fw-bold text-dark mb-0" style="font-size: 0.88rem;">ข้อมูลพื้นฐาน & อัตลักษณ์</h6>
+                                                        <small class="text-muted" style="font-size: 0.70rem;">db://skjacth_skj/about</small>
+                                                    </div>
+                                                </div>
+                                                <span class="badge bg-primary rounded-pill small" id="dbStatAbout">กำลังโหลด...</span>
+                                            </div>
+                                            <p class="text-muted small mb-2" style="font-size: 0.76rem; line-height: 1.45;">
+                                                ประวัติโรงเรียน, วิสัยทัศน์, พันธกิจ, คติพจน์, ตราสัญลักษณ์, อัตลักษณ์, สี, ดอกไม้ และข้อมูลติดต่อ
+                                            </p>
+                                            <div class="p-2 rounded-3 bg-white border mb-3 small" id="dbStatusBox_about" style="font-size: 0.76rem;">
+                                                <div class="text-muted text-center py-1">
+                                                    <div class="spinner-border spinner-border-sm text-primary me-1" style="width: 12px; height: 12px;"></div> ตรวจสอบสถานะ...
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="dbActionWrap_about">
+                                            <button type="button" class="btn btn-primary rounded-pill btn-sm w-100 py-2 fw-bold" onclick="syncFromDatabase('about', this)">
+                                                <i class="bx bx-sync me-1"></i> ซิงค์ข้อมูลพื้นฐานโรงเรียน
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Card 2: Personnel -->
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="card h-100 border rounded-4 p-3 shadow-none bg-light d-flex flex-column justify-content-between position-relative" id="dbCard_personnel">
+                                        <div>
+                                            <div class="d-flex align-items-start justify-content-between mb-2">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <input type="checkbox" class="form-check-input db-item-check" id="checkDb_personnel" value="personnel" onchange="updateDbSelectedCount()">
                                                     <div class="bg-primary text-white rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
                                                         <i class="bx bx-user-pin fs-5"></i>
                                                     </div>
-                                                    <h6 class="fw-bold text-dark mb-0" style="font-size: 0.9rem;">ข้อมูลบุคลากร & คณะครู</h6>
+                                                    <div>
+                                                        <h6 class="fw-bold text-dark mb-0" style="font-size: 0.88rem;">ข้อมูลบุคลากร & ครู</h6>
+                                                        <small class="text-muted" style="font-size: 0.70rem;">db://skjacth_personnel</small>
+                                                    </div>
                                                 </div>
                                                 <span class="badge bg-primary rounded-pill small" id="dbStatPersonnel">กำลังโหลด...</span>
                                             </div>
-                                            <p class="text-muted small mb-3" style="font-size: 0.78rem; line-height: 1.5;">
-                                                ดึงรายชื่อผู้บริหาร, ฝ่ายบริหารงาน, คณะครูแยกตาม 8 กลุ่มสาระการเรียนรู้ และแนะแนว (ไม่รวมข้อมูลส่วนตัว)
+                                            <p class="text-muted small mb-2" style="font-size: 0.76rem; line-height: 1.45;">
+                                                ดึงรายชื่อผู้บริหาร, ฝ่ายบริหารงาน, คณะครู 8 กลุ่มสาระการเรียนรู้ และแนะแนว (ปลอดภัยตาม PDPA)
                                             </p>
+                                            <div class="p-2 rounded-3 bg-white border mb-3 small" id="dbStatusBox_personnel" style="font-size: 0.76rem;">
+                                                <div class="text-muted text-center py-1">
+                                                    <div class="spinner-border spinner-border-sm text-primary me-1" style="width: 12px; height: 12px;"></div> ตรวจสอบสถานะ...
+                                                </div>
+                                            </div>
                                         </div>
-                                        <button type="button" class="btn btn-primary rounded-pill btn-sm w-100 py-2 fw-bold" onclick="syncFromDatabase('personnel', this)">
-                                            <i class="bx bx-sync me-1"></i> ซิงค์ข้อมูลบุคลากรเข้าคลัง AI
-                                        </button>
+                                        <div id="dbActionWrap_personnel">
+                                            <button type="button" class="btn btn-primary rounded-pill btn-sm w-100 py-2 fw-bold" onclick="syncFromDatabase('personnel', this)">
+                                                <i class="bx bx-sync me-1"></i> ซิงค์ข้อมูลบุคลากรเข้าคลัง AI
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <!-- Card 2: Academic Subjects -->
-                                <div class="col-md-4">
-                                    <div class="card h-100 border rounded-4 p-3 shadow-none bg-light d-flex flex-column justify-content-between">
+                                <!-- Card 3: Board -->
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="card h-100 border rounded-4 p-3 shadow-none bg-light d-flex flex-column justify-content-between position-relative" id="dbCard_board">
                                         <div>
-                                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                            <div class="d-flex align-items-start justify-content-between mb-2">
                                                 <div class="d-flex align-items-center gap-2">
+                                                    <input type="checkbox" class="form-check-input db-item-check" id="checkDb_board" value="board" onchange="updateDbSelectedCount()">
+                                                    <div class="bg-warning text-white rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                                                        <i class="bx bx-award fs-5"></i>
+                                                    </div>
+                                                    <div>
+                                                        <h6 class="fw-bold text-dark mb-0" style="font-size: 0.88rem;">คณะกรรมการสถานศึกษา</h6>
+                                                        <small class="text-muted" style="font-size: 0.70rem;">db://skjacth_personnel/board</small>
+                                                    </div>
+                                                </div>
+                                                <span class="badge bg-warning text-dark rounded-pill small" id="dbStatBoard">กำลังโหลด...</span>
+                                            </div>
+                                            <p class="text-muted small mb-2" style="font-size: 0.76rem; line-height: 1.45;">
+                                                คณะกรรมการสถานศึกษาขั้นพื้นฐาน ประธานฝ่ายสงฆ์ ผู้ทรงคุณวุฒิ และบทบาทหน้าที่ในการกำกับดูแล
+                                            </p>
+                                            <div class="p-2 rounded-3 bg-white border mb-3 small" id="dbStatusBox_board" style="font-size: 0.76rem;">
+                                                <div class="text-muted text-center py-1">
+                                                    <div class="spinner-border spinner-border-sm text-warning me-1" style="width: 12px; height: 12px;"></div> ตรวจสอบสถานะ...
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="dbActionWrap_board">
+                                            <button type="button" class="btn btn-warning text-dark rounded-pill btn-sm w-100 py-2 fw-bold" onclick="syncFromDatabase('board', this)">
+                                                <i class="bx bx-sync me-1"></i> ซิงค์คณะกรรมการสถานศึกษา
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Card 4: Academic Subjects -->
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="card h-100 border rounded-4 p-3 shadow-none bg-light d-flex flex-column justify-content-between position-relative" id="dbCard_academic">
+                                        <div>
+                                            <div class="d-flex align-items-start justify-content-between mb-2">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <input type="checkbox" class="form-check-input db-item-check" id="checkDb_academic" value="academic" onchange="updateDbSelectedCount()">
                                                     <div class="bg-success text-white rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
                                                         <i class="bx bx-book-bookmark fs-5"></i>
                                                     </div>
-                                                    <h6 class="fw-bold text-dark mb-0" style="font-size: 0.9rem;">หลักสูตร & รายวิชา ม.1-ม.6</h6>
+                                                    <div>
+                                                        <h6 class="fw-bold text-dark mb-0" style="font-size: 0.88rem;">หลักสูตร & รายวิชา</h6>
+                                                        <small class="text-muted" style="font-size: 0.70rem;">db://skjacth_academic/subjects</small>
+                                                    </div>
                                                 </div>
                                                 <span class="badge bg-success rounded-pill small" id="dbStatAcademic">กำลังโหลด...</span>
                                             </div>
-                                            <p class="text-muted small mb-3" style="font-size: 0.78rem; line-height: 1.5;">
-                                                ดึงรายวิชาพื้นฐานและเพิ่มเติม รหัสวิชา ชื่อวิชา หน่วยกิต จำนวนคาบ และกลุ่มสาระการเรียนรู้
+                                            <p class="text-muted small mb-2" style="font-size: 0.76rem; line-height: 1.45;">
+                                                รายวิชาพื้นฐานและเพิ่มเติม ม.1 - ม.6 รหัสวิชา ชื่อวิชา หน่วยกิต จำนวนคาบ และกลุ่มสาระ
                                             </p>
+                                            <div class="p-2 rounded-3 bg-white border mb-3 small" id="dbStatusBox_academic" style="font-size: 0.76rem;">
+                                                <div class="text-muted text-center py-1">
+                                                    <div class="spinner-border spinner-border-sm text-success me-1" style="width: 12px; height: 12px;"></div> ตรวจสอบสถานะ...
+                                                </div>
+                                            </div>
                                         </div>
-                                        <button type="button" class="btn btn-success rounded-pill btn-sm w-100 py-2 fw-bold" onclick="syncFromDatabase('academic', this)">
-                                            <i class="bx bx-sync me-1"></i> ซิงค์ข้อมูลรายวิชาเข้าคลัง AI
-                                        </button>
+                                        <div id="dbActionWrap_academic">
+                                            <button type="button" class="btn btn-success rounded-pill btn-sm w-100 py-2 fw-bold" onclick="syncFromDatabase('academic', this)">
+                                                <i class="bx bx-sync me-1"></i> ซิงค์ข้อมูลรายวิชาเข้าคลัง AI
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <!-- Card 3: News -->
-                                <div class="col-md-4">
-                                    <div class="card h-100 border rounded-4 p-3 shadow-none bg-light d-flex flex-column justify-content-between">
+                                <!-- Card 5: Study Plans -->
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="card h-100 border rounded-4 p-3 shadow-none bg-light d-flex flex-column justify-content-between position-relative" id="dbCard_study_plans">
                                         <div>
-                                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                            <div class="d-flex align-items-start justify-content-between mb-2">
                                                 <div class="d-flex align-items-center gap-2">
+                                                    <input type="checkbox" class="form-check-input db-item-check" id="checkDb_study_plans" value="study_plans" onchange="updateDbSelectedCount()">
+                                                    <div class="rounded-circle p-2 d-flex align-items-center justify-content-center text-white" style="width: 36px; height: 36px; background: #6f42c1;">
+                                                        <i class="bx bx-git-branch fs-5"></i>
+                                                    </div>
+                                                    <div>
+                                                        <h6 class="fw-bold text-dark mb-0" style="font-size: 0.88rem;">แผนการเรียน & ห้องเรียน</h6>
+                                                        <small class="text-muted" style="font-size: 0.70rem;">db://skjacth_academic/plans</small>
+                                                    </div>
+                                                </div>
+                                                <span class="badge rounded-pill small text-white" style="background: #6f42c1;" id="dbStatStudyPlans">กำลังโหลด...</span>
+                                            </div>
+                                            <p class="text-muted small mb-2" style="font-size: 0.76rem; line-height: 1.45;">
+                                                แผนการเรียนประจำห้อง ม.1 - ม.6 (SMT, วิทย์-คณิต, ศิลป์-ภาษา, CEP) และสถิตินักเรียน
+                                            </p>
+                                            <div class="p-2 rounded-3 bg-white border mb-3 small" id="dbStatusBox_study_plans" style="font-size: 0.76rem;">
+                                                <div class="text-muted text-center py-1">
+                                                    <div class="spinner-border spinner-border-sm text-secondary me-1" style="width: 12px; height: 12px;"></div> ตรวจสอบสถานะ...
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="dbActionWrap_study_plans">
+                                            <button type="button" class="btn text-white rounded-pill btn-sm w-100 py-2 fw-bold" style="background: #6f42c1;" onclick="syncFromDatabase('study_plans', this)">
+                                                <i class="bx bx-sync me-1"></i> ซิงค์แผนการเรียนเข้าคลัง AI
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Card 6: Clubs -->
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="card h-100 border rounded-4 p-3 shadow-none bg-light d-flex flex-column justify-content-between position-relative" id="dbCard_clubs">
+                                        <div>
+                                            <div class="d-flex align-items-start justify-content-between mb-2">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <input type="checkbox" class="form-check-input db-item-check" id="checkDb_clubs" value="clubs" onchange="updateDbSelectedCount()">
+                                                    <div class="rounded-circle p-2 d-flex align-items-center justify-content-center text-white" style="width: 36px; height: 36px; background: #e83e8c;">
+                                                        <i class="bx bx-star fs-5"></i>
+                                                    </div>
+                                                    <div>
+                                                        <h6 class="fw-bold text-dark mb-0" style="font-size: 0.88rem;">กิจกรรมชุมนุมนักเรียน</h6>
+                                                        <small class="text-muted" style="font-size: 0.70rem;">db://skjacth_academic/clubs</small>
+                                                    </div>
+                                                </div>
+                                                <span class="badge rounded-pill small text-white" style="background: #e83e8c;" id="dbStatClubs">กำลังโหลด...</span>
+                                            </div>
+                                            <p class="text-muted small mb-2" style="font-size: 0.76rem; line-height: 1.45;">
+                                                รายชื่อชุมนุมพัฒนาผู้เรียน ม.ต้น และ ม.ปลาย, วัตถุประสงค์, ครูที่ปรึกษา และจำนวนรับ
+                                            </p>
+                                            <div class="p-2 rounded-3 bg-white border mb-3 small" id="dbStatusBox_clubs" style="font-size: 0.76rem;">
+                                                <div class="text-muted text-center py-1">
+                                                    <div class="spinner-border spinner-border-sm text-danger me-1" style="width: 12px; height: 12px;"></div> ตรวจสอบสถานะ...
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="dbActionWrap_clubs">
+                                            <button type="button" class="btn text-white rounded-pill btn-sm w-100 py-2 fw-bold" style="background: #e83e8c;" onclick="syncFromDatabase('clubs', this)">
+                                                <i class="bx bx-sync me-1"></i> ซิงค์กิจกรรมชุมนุมเข้าคลัง AI
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Card 7: Admission -->
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="card h-100 border rounded-4 p-3 shadow-none bg-light d-flex flex-column justify-content-between position-relative" id="dbCard_admission">
+                                        <div>
+                                            <div class="d-flex align-items-start justify-content-between mb-2">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <input type="checkbox" class="form-check-input db-item-check" id="checkDb_admission" value="admission" onchange="updateDbSelectedCount()">
+                                                    <div class="bg-danger text-white rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                                                        <i class="bx bx-id-card fs-5"></i>
+                                                    </div>
+                                                    <div>
+                                                        <h6 class="fw-bold text-dark mb-0" style="font-size: 0.88rem;">การรับสมัครนักเรียน & รอบสอบ</h6>
+                                                        <small class="text-muted" style="font-size: 0.70rem;">db://skjacth_admission</small>
+                                                    </div>
+                                                </div>
+                                                <span class="badge bg-danger rounded-pill small" id="dbStatAdmission">กำลังโหลด...</span>
+                                            </div>
+                                            <p class="text-muted small mb-2" style="font-size: 0.76rem; line-height: 1.45;">
+                                                กำหนดการรับสมัคร ม.1 และ ม.4, วันรับสมัคร, วันสอบ, วันประกาศผล, วันมอบตัว และหลักสูตร
+                                            </p>
+                                            <div class="p-2 rounded-3 bg-white border mb-3 small" id="dbStatusBox_admission" style="font-size: 0.76rem;">
+                                                <div class="text-muted text-center py-1">
+                                                    <div class="spinner-border spinner-border-sm text-danger me-1" style="width: 12px; height: 12px;"></div> ตรวจสอบสถานะ...
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="dbActionWrap_admission">
+                                            <button type="button" class="btn btn-danger rounded-pill btn-sm w-100 py-2 fw-bold" onclick="syncFromDatabase('admission', this)">
+                                                <i class="bx bx-sync me-1"></i> ซิงค์ข้อมูลการรับสมัครนักเรียน
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Card 8: Locations -->
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="card h-100 border rounded-4 p-3 shadow-none bg-light d-flex flex-column justify-content-between position-relative" id="dbCard_locations">
+                                        <div>
+                                            <div class="d-flex align-items-start justify-content-between mb-2">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <input type="checkbox" class="form-check-input db-item-check" id="checkDb_locations" value="locations" onchange="updateDbSelectedCount()">
+                                                    <div class="rounded-circle p-2 d-flex align-items-center justify-content-center text-white" style="width: 36px; height: 36px; background: #20c997;">
+                                                        <i class="bx bx-buildings fs-5"></i>
+                                                    </div>
+                                                    <div>
+                                                        <h6 class="fw-bold text-dark mb-0" style="font-size: 0.88rem;">อาคาร สถานที่ & ห้องประชุม</h6>
+                                                        <small class="text-muted" style="font-size: 0.70rem;">db://skjacth_general/location</small>
+                                                    </div>
+                                                </div>
+                                                <span class="badge rounded-pill small text-white" style="background: #20c997;" id="dbStatLocations">กำลังโหลด...</span>
+                                            </div>
+                                            <p class="text-muted small mb-2" style="font-size: 0.76rem; line-height: 1.45;">
+                                                ห้องประชุม 72 พรรษา, ห้องกลิ่นกุหลาบ, สนามกีฬา, ความจุที่นั่ง และสิ่งอำนวยความสะดวก
+                                            </p>
+                                            <div class="p-2 rounded-3 bg-white border mb-3 small" id="dbStatusBox_locations" style="font-size: 0.76rem;">
+                                                <div class="text-muted text-center py-1">
+                                                    <div class="spinner-border spinner-border-sm text-teal me-1" style="width: 12px; height: 12px;"></div> ตรวจสอบสถานะ...
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="dbActionWrap_locations">
+                                            <button type="button" class="btn text-white rounded-pill btn-sm w-100 py-2 fw-bold" style="background: #20c997;" onclick="syncFromDatabase('locations', this)">
+                                                <i class="bx bx-sync me-1"></i> ซิงค์ข้อมูลอาคารและสถานที่
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Card 9: Timetable -->
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="card h-100 border rounded-4 p-3 shadow-none bg-light d-flex flex-column justify-content-between position-relative" id="dbCard_timetable">
+                                        <div>
+                                            <div class="d-flex align-items-start justify-content-between mb-2">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <input type="checkbox" class="form-check-input db-item-check" id="checkDb_timetable" value="timetable" onchange="updateDbSelectedCount()">
+                                                    <div class="bg-secondary text-white rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                                                        <i class="bx bx-time-five fs-5"></i>
+                                                    </div>
+                                                    <div>
+                                                        <h6 class="fw-bold text-dark mb-0" style="font-size: 0.88rem;">ตารางเวลา & คาบเรียน</h6>
+                                                        <small class="text-muted" style="font-size: 0.70rem;">db://skjacth_timetable</small>
+                                                    </div>
+                                                </div>
+                                                <span class="badge bg-secondary rounded-pill small" id="dbStatTimetable">กำลังโหลด...</span>
+                                            </div>
+                                            <p class="text-muted small mb-2" style="font-size: 0.76rem; line-height: 1.45;">
+                                                ตารางเวลาคาบเรียนประจำวัน เวลาเริ่ม-เลิกเรียนในแต่ละคาบ และช่วงเวลาพักรับประทานอาหาร
+                                            </p>
+                                            <div class="p-2 rounded-3 bg-white border mb-3 small" id="dbStatusBox_timetable" style="font-size: 0.76rem;">
+                                                <div class="text-muted text-center py-1">
+                                                    <div class="spinner-border spinner-border-sm text-secondary me-1" style="width: 12px; height: 12px;"></div> ตรวจสอบสถานะ...
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="dbActionWrap_timetable">
+                                            <button type="button" class="btn btn-secondary rounded-pill btn-sm w-100 py-2 fw-bold" onclick="syncFromDatabase('timetable', this)">
+                                                <i class="bx bx-sync me-1"></i> ซิงค์ตารางเวลาคาบเรียน
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Card 10: News -->
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="card h-100 border rounded-4 p-3 shadow-none bg-light d-flex flex-column justify-content-between position-relative" id="dbCard_news">
+                                        <div>
+                                            <div class="d-flex align-items-start justify-content-between mb-2">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <input type="checkbox" class="form-check-input db-item-check" id="checkDb_news" value="news" onchange="updateDbSelectedCount()">
                                                     <div class="bg-info text-white rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
                                                         <i class="bx bx-news fs-5"></i>
                                                     </div>
-                                                    <h6 class="fw-bold text-dark mb-0" style="font-size: 0.9rem;">ข่าวประชาสัมพันธ์ล่าสุด</h6>
+                                                    <div>
+                                                        <h6 class="fw-bold text-dark mb-0" style="font-size: 0.88rem;">ข่าวประชาสัมพันธ์</h6>
+                                                        <small class="text-muted" style="font-size: 0.70rem;">db://skjacth_skj/news</small>
+                                                    </div>
                                                 </div>
                                                 <span class="badge bg-info rounded-pill small" id="dbStatNews">กำลังโหลด...</span>
                                             </div>
-                                            <p class="text-muted small mb-3" style="font-size: 0.78rem; line-height: 1.5;">
+                                            <p class="text-muted small mb-2" style="font-size: 0.76rem; line-height: 1.45;">
                                                 ดึง 25 ข่าวประชาสัมพันธ์และกิจกรรมล่าสุดของโรงเรียน พร้อมวันที่และสรุปเนื้อหาข่าว
                                             </p>
+                                            <div class="p-2 rounded-3 bg-white border mb-3 small" id="dbStatusBox_news" style="font-size: 0.76rem;">
+                                                <div class="text-muted text-center py-1">
+                                                    <div class="spinner-border spinner-border-sm text-info me-1" style="width: 12px; height: 12px;"></div> ตรวจสอบสถานะ...
+                                                </div>
+                                            </div>
                                         </div>
-                                        <button type="button" class="btn btn-info text-white rounded-pill btn-sm w-100 py-2 fw-bold" onclick="syncFromDatabase('news', this)">
-                                            <i class="bx bx-sync me-1"></i> ซิงค์ข่าวสารล่าสุดเข้าคลัง AI
-                                        </button>
+                                        <div id="dbActionWrap_news">
+                                            <button type="button" class="btn btn-info text-white rounded-pill btn-sm w-100 py-2 fw-bold" onclick="syncFromDatabase('news', this)">
+                                                <i class="bx bx-sync me-1"></i> ซิงค์ข่าวสารล่าสุดเข้าคลัง AI
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -2367,6 +2783,7 @@
 
     function openKnowledgeModal() {
         loadKnowledgeList(false);
+        loadDatabaseStats(true);
         const modal = new bootstrap.Modal(document.getElementById('aiKnowledgeModal'));
         modal.show();
     }
@@ -2645,6 +3062,285 @@
             alertBox.innerText = 'เกิดข้อผิดพลาดในการเชื่อมต่อเครือข่าย';
             alertBox.style.display = 'block';
         });
+    }
+
+    // ==========================================
+    // SITE CRAWLER JAVASCRIPT ENGINE
+    // ==========================================
+    let discoveredSiteLinks = [];
+    let isCrawlCancelled = false;
+
+    function switchUrlMode(mode) {
+        const btnCrawler = document.getElementById('btnModeCrawler');
+        const btnSingle = document.getElementById('btnModeSingle');
+        const viewCrawler = document.getElementById('viewUrlCrawler');
+        const viewSingle = document.getElementById('viewUrlSingle');
+
+        if (mode === 'crawler') {
+            btnCrawler.className = 'btn btn-sm rounded-pill px-3 fw-bold active';
+            btnSingle.className = 'btn btn-sm rounded-pill px-3 fw-bold text-secondary';
+            viewCrawler.style.display = 'block';
+            viewSingle.style.display = 'none';
+        } else {
+            btnSingle.className = 'btn btn-sm rounded-pill px-3 fw-bold active';
+            btnCrawler.className = 'btn btn-sm rounded-pill px-3 fw-bold text-secondary';
+            viewSingle.style.display = 'block';
+            viewCrawler.style.display = 'none';
+        }
+    }
+
+    function scanSiteLinks() {
+        const baseUrl = document.getElementById('crawlerBaseUrl').value.trim();
+        const maxLinks = document.getElementById('crawlerMaxLinks').value;
+        const alertBox = document.getElementById('crawlerAlertBox');
+        const btn = document.getElementById('btnScanSite');
+        const resultsWrap = document.getElementById('crawlerResultsWrap');
+
+        alertBox.style.display = 'none';
+        resultsWrap.style.display = 'none';
+
+        if (!baseUrl) {
+            alertBox.className = 'alert alert-warning alert-sm mb-3';
+            alertBox.innerText = 'กรุณาระบุ URL หน้าเว็บไซต์หลัก เช่น https://skj.ac.th';
+            alertBox.style.display = 'block';
+            return;
+        }
+
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> กำลังสแกนหาหน้าเว็บ...';
+
+        const formData = new FormData();
+        formData.append('<?= csrf_token() ?>', '<?= csrf_hash() ?>');
+        formData.append('base_url', baseUrl);
+        formData.append('max_links', maxLinks);
+
+        fetch('<?= site_url('admin/live-chat/knowledge/discover-links') ?>', {
+            method: 'POST',
+            body: formData,
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(res => res.json())
+        .then(data => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bx bx-search-alt-2 me-1"></i> สแกนค้นหาหน้าเว็บ';
+
+            if (data.status === 'success') {
+                discoveredSiteLinks = data.links || [];
+                renderDiscoveredLinks(discoveredSiteLinks);
+                alertBox.className = 'alert alert-success alert-sm mb-3';
+                alertBox.innerText = `สแกนสำเร็จ! พบหน้าเพจภายในเว็บไซต์ทั้งหมด ${discoveredSiteLinks.length} หน้า`;
+                alertBox.style.display = 'block';
+            } else {
+                alertBox.className = 'alert alert-danger alert-sm mb-3';
+                alertBox.innerText = data.message || 'ไม่สามารถสแกนหน้าเว็บได้';
+                alertBox.style.display = 'block';
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bx bx-search-alt-2 me-1"></i> สแกนค้นหาหน้าเว็บ';
+            alertBox.className = 'alert alert-danger alert-sm mb-3';
+            alertBox.innerText = 'เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์เพื่อสแกนเว็บไซต์';
+            alertBox.style.display = 'block';
+        });
+    }
+
+    function renderDiscoveredLinks(links) {
+        const resultsWrap = document.getElementById('crawlerResultsWrap');
+        const tbody = document.getElementById('crawlerLinksTableBody');
+        const foundCountEl = document.getElementById('crawlerFoundCount');
+
+        foundCountEl.innerText = links.length;
+        tbody.innerHTML = '';
+
+        if (!links || links.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="3" class="text-center text-muted py-3">ไม่พบหน้าเว็บภายในเว็บไซต์นี้</td></tr>';
+            resultsWrap.style.display = 'block';
+            return;
+        }
+
+        let html = '';
+        links.forEach((item, idx) => {
+            const statusBadge = item.is_existing
+                ? `<span class="badge bg-label-info rounded-pill small" title="มีในคลังแล้ว จะทำการอัปเดตข้อมูลให้ใหม่"><i class="bx bx-check me-1"></i>ในคลังแล้ว (${Number(item.char_count).toLocaleString()} อักษร)</span>`
+                : `<span class="badge bg-label-success rounded-pill small"><i class="bx bx-plus me-1"></i>หน้าใหม่</span>`;
+
+            const rootBadge = item.is_root ? `<span class="badge bg-primary rounded-pill me-1 small">หน้าแรก</span>` : '';
+
+            html += `
+            <tr id="crawlerRow_${idx}">
+                <td class="text-center">
+                    <input class="form-check-input crawler-item-check" type="checkbox" value="${idx}" checked onchange="updateCrawlerSelectedCount()">
+                </td>
+                <td>
+                    <div class="fw-bold text-dark d-flex align-items-center">
+                        ${rootBadge}
+                        <span class="text-truncate" style="max-width: 480px;">${escapeHtml(item.title)}</span>
+                    </div>
+                    <a href="${escapeHtml(item.url)}" target="_blank" class="text-muted small text-truncate d-block" style="max-width: 480px; font-size: 0.76rem;">
+                        <i class="bx bx-link-external me-1"></i>${escapeHtml(item.url)}
+                    </a>
+                </td>
+                <td class="text-center" id="crawlerRowStatus_${idx}">
+                    ${statusBadge}
+                </td>
+            </tr>`;
+        });
+
+        tbody.innerHTML = html;
+        resultsWrap.style.display = 'block';
+        updateCrawlerSelectedCount();
+    }
+
+    function toggleAllDiscoveredLinks(checked) {
+        const checkboxes = document.querySelectorAll('.crawler-item-check');
+        checkboxes.forEach(cb => cb.checked = checked);
+        document.getElementById('masterCrawlerCheck').checked = checked;
+        updateCrawlerSelectedCount();
+    }
+
+    function updateCrawlerSelectedCount() {
+        const checkedBoxes = document.querySelectorAll('.crawler-item-check:checked');
+        const count = checkedBoxes.length;
+        const total = document.querySelectorAll('.crawler-item-check').length;
+
+        document.getElementById('crawlerSelectedBadge').innerText = `เลือก ${count} จาก ${total} หน้า`;
+        document.getElementById('btnStartCrawlCount').innerText = `${count} หน้า`;
+        document.getElementById('btnStartCrawl').disabled = count === 0;
+        document.getElementById('masterCrawlerCheck').checked = (count === total && total > 0);
+    }
+
+    function cancelBatchCrawl() {
+        isCrawlCancelled = true;
+        const btnCancel = document.getElementById('btnCancelCrawl');
+        btnCancel.disabled = true;
+        btnCancel.innerText = 'กำลังหยุด...';
+    }
+
+    async function startBatchCrawl() {
+        const checkedBoxes = Array.from(document.querySelectorAll('.crawler-item-check:checked'));
+        if (checkedBoxes.length === 0) return;
+
+        isCrawlCancelled = false;
+        const progressWrap = document.getElementById('crawlerProgressWrap');
+        const progressBar = document.getElementById('crawlerProgressBar');
+        const percentBadge = document.getElementById('crawlerPercentBadge');
+        const statusText = document.getElementById('crawlerStatusText');
+        const progressTitle = document.getElementById('crawlerProgressTitle');
+        const btnStart = document.getElementById('btnStartCrawl');
+        const btnCancel = document.getElementById('btnCancelCrawl');
+        const liveLogs = document.getElementById('crawlerLiveLogs');
+        const spinner = document.getElementById('crawlerSpinner');
+
+        btnStart.disabled = true;
+        btnCancel.disabled = false;
+        btnCancel.style.display = 'inline-block';
+        btnCancel.innerHTML = '<i class="bx bx-stop-circle me-1"></i> หยุดชั่วคราว';
+        spinner.style.display = 'inline-block';
+        progressWrap.style.display = 'block';
+        liveLogs.style.display = 'block';
+        liveLogs.innerHTML = '';
+
+        progressTitle.innerText = `กำลังดึงข้อมูลเข้าคลังความรู้ AI (${checkedBoxes.length} หน้า)...`;
+        progressBar.style.width = '0%';
+        progressBar.className = 'progress-bar progress-bar-striped progress-bar-animated bg-warning';
+        percentBadge.innerText = '0%';
+
+        let successCount = 0;
+        let failCount = 0;
+        let totalChars = 0;
+
+        for (let i = 0; i < checkedBoxes.length; i++) {
+            if (isCrawlCancelled) {
+                const cancelLog = document.createElement('div');
+                cancelLog.className = 'text-warning';
+                cancelLog.innerText = `[${new Date().toLocaleTimeString()}] ⚠️ แอดมินสั่งหยุดการดึงข้อมูลชั่วคราว`;
+                liveLogs.appendChild(cancelLog);
+                liveLogs.scrollTop = liveLogs.scrollHeight;
+                break;
+            }
+
+            const itemIndex = parseInt(checkedBoxes[i].value);
+            const item = discoveredSiteLinks[itemIndex];
+            const currentNum = i + 1;
+            const pct = Math.round((currentNum / checkedBoxes.length) * 100);
+
+            progressBar.style.width = `${pct}%`;
+            percentBadge.innerText = `${pct}%`;
+            statusText.innerHTML = `กำลังดึงหน้า <b>${currentNum}/${checkedBoxes.length}</b>: <span class="text-primary">${escapeHtml(item.url)}</span>`;
+
+            // Row status indicator
+            const rowStatusEl = document.getElementById(`crawlerRowStatus_${itemIndex}`);
+            if (rowStatusEl) {
+                rowStatusEl.innerHTML = '<span class="badge bg-warning text-dark"><span class="spinner-border spinner-border-sm me-1" style="width: 10px; height: 10px;"></span>กำลังดึง...</span>';
+            }
+
+            try {
+                const formData = new FormData();
+                formData.append('<?= csrf_token() ?>', '<?= csrf_hash() ?>');
+                formData.append('url', item.url);
+                formData.append('title', item.title);
+
+                const res = await fetch('<?= site_url('admin/live-chat/knowledge/save-url') ?>', {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                });
+                const data = await res.json();
+
+                if (data.status === 'success') {
+                    successCount++;
+                    const chars = data.char_count || 0;
+                    totalChars += chars;
+
+                    if (rowStatusEl) {
+                        rowStatusEl.innerHTML = `<span class="badge bg-success rounded-pill"><i class="bx bx-check me-1"></i>สำเร็จ (${Number(chars).toLocaleString()} อักษร)</span>`;
+                    }
+
+                    const logEl = document.createElement('div');
+                    logEl.className = 'text-success';
+                    logEl.innerText = `[${new Date().toLocaleTimeString()}] ✅ [${currentNum}/${checkedBoxes.length}] ${item.title}: บันทึกสำเร็จ (${Number(chars).toLocaleString()} ตัวอักษร)`;
+                    liveLogs.appendChild(logEl);
+                } else {
+                    failCount++;
+                    if (rowStatusEl) {
+                        rowStatusEl.innerHTML = `<span class="badge bg-danger rounded-pill" title="${escapeHtml(data.message || 'ผิดพลาด')}"><i class="bx bx-x me-1"></i>ไม่สำเร็จ</span>`;
+                    }
+                    const logEl = document.createElement('div');
+                    logEl.className = 'text-danger';
+                    logEl.innerText = `[${new Date().toLocaleTimeString()}] ❌ [${currentNum}/${checkedBoxes.length}] ${item.url}: ${data.message || 'ผิดพลาด'}`;
+                    liveLogs.appendChild(logEl);
+                }
+            } catch (err) {
+                failCount++;
+                if (rowStatusEl) {
+                    rowStatusEl.innerHTML = '<span class="badge bg-danger rounded-pill"><i class="bx bx-x me-1"></i>เครือข่ายผิดพลาด</span>';
+                }
+                const logEl = document.createElement('div');
+                logEl.className = 'text-danger';
+                logEl.innerText = `[${new Date().toLocaleTimeString()}] ❌ [${currentNum}/${checkedBoxes.length}] เกิดข้อผิดพลาดในการเชื่อมต่อ`;
+                liveLogs.appendChild(logEl);
+            }
+
+            liveLogs.scrollTop = liveLogs.scrollHeight;
+            await new Promise(r => setTimeout(r, 250));
+        }
+
+        spinner.style.display = 'none';
+        btnCancel.style.display = 'none';
+        btnStart.disabled = false;
+
+        if (isCrawlCancelled) {
+            progressTitle.innerText = `หยุดการดึงข้อมูลแล้ว (ดึงสำเร็จ ${successCount} หน้า)`;
+            statusText.innerHTML = `<span class="text-warning">หยุดชั่วคราว ดึงสำเร็จ ${successCount} หน้า, ข้อความรวม ${Number(totalChars).toLocaleString()} ตัวอักษร</span>`;
+        } else {
+            progressBar.className = 'progress-bar bg-success';
+            progressTitle.innerText = `🎉 สแกนดึงข้อมูลเสร็จสมบูรณ์ (${successCount} หน้า)`;
+            statusText.innerHTML = `<span class="text-success fw-bold">ดึงสำเร็จทั้งหมด ${successCount} หน้า (รวม ${Number(totalChars).toLocaleString()} ตัวอักษร)${failCount > 0 ? `, ผิดพลาด ${failCount} หน้า` : ''}</span>`;
+        }
+
+        loadKnowledgeList(true);
     }
 
     function handleKbFileSelect(e) {
@@ -2940,29 +3636,176 @@
         });
     }
 
-    function loadDatabaseStats() {
+    let currentDbStatusData = {};
+
+    function toggleAllDbChecks(checked) {
+        document.querySelectorAll('.db-item-check').forEach(cb => cb.checked = checked);
+        updateDbSelectedCount();
+    }
+
+    function updateDbSelectedCount() {
+        const checked = document.querySelectorAll('.db-item-check:checked');
+        const count = checked.length;
+        const total = document.querySelectorAll('.db-item-check').length;
+
+        const countEl = document.getElementById('dbSelectedCount');
+        if (countEl) countEl.innerText = count;
+        const masterCheck = document.getElementById('masterDbCheck');
+        if (masterCheck) masterCheck.checked = (count === total && total > 0);
+
+        const btnSync = document.getElementById('btnBatchSyncDb');
+        const btnDel = document.getElementById('btnBatchDeleteDb');
+        if (btnSync) btnSync.disabled = count === 0;
+        if (btnDel) btnDel.disabled = count === 0;
+    }
+
+    function loadDatabaseStats(silent = false) {
         fetch('<?= site_url('admin/live-chat/knowledge/db-stats') ?>', {
             headers: { 'X-Requested-With': 'XMLHttpRequest' }
         })
         .then(res => res.json())
         .then(data => {
             if (data.status === 'success') {
-                const p = document.getElementById('dbStatPersonnel');
-                if (p) p.innerText = `${data.personnel_count || 0} คน`;
-                const a = document.getElementById('dbStatAcademic');
-                if (a) a.innerText = `${data.academic_count || 0} รายวิชา`;
-                const n = document.getElementById('dbStatNews');
-                if (n) n.innerText = `${data.news_count || 0} ข่าว`;
+                currentDbStatusData = data.databases || {};
+                const counts = data.counts || {};
+                
+                // Update badge counts
+                const bMap = {
+                    'about': document.getElementById('dbStatAbout'),
+                    'personnel': document.getElementById('dbStatPersonnel'),
+                    'board': document.getElementById('dbStatBoard'),
+                    'academic': document.getElementById('dbStatAcademic'),
+                    'study_plans': document.getElementById('dbStatStudyPlans'),
+                    'clubs': document.getElementById('dbStatClubs'),
+                    'admission': document.getElementById('dbStatAdmission'),
+                    'locations': document.getElementById('dbStatLocations'),
+                    'timetable': document.getElementById('dbStatTimetable'),
+                    'news': document.getElementById('dbStatNews')
+                };
+
+                const units = {
+                    'about': 'หมวด',
+                    'personnel': 'คน',
+                    'board': 'ท่าน',
+                    'academic': 'วิชา',
+                    'study_plans': 'ห้อง',
+                    'clubs': 'ชุมนุม',
+                    'admission': 'รอบ/แผน',
+                    'locations': 'แห่ง',
+                    'timetable': 'คาบ',
+                    'news': 'ข่าว'
+                };
+
+                for (const [k, el] of Object.entries(bMap)) {
+                    if (el) {
+                        const cnt = counts[k] !== undefined ? counts[k] : (data[`${k}_count`] || 0);
+                        el.innerText = `${cnt} ${units[k] || 'รายการ'}`;
+                    }
+                }
+
+                // Render each card status and action buttons
+                const allTypes = ['about', 'personnel', 'board', 'academic', 'study_plans', 'clubs', 'admission', 'locations', 'timetable', 'news'];
+                allTypes.forEach(type => {
+                    const info = currentDbStatusData[type] || { exists: false };
+                    renderDbCard(type, info);
+                });
+
+                updateDbSelectedCount();
             }
         })
-        .catch(() => {});
+        .catch(err => {
+            console.error('loadDatabaseStats error:', err);
+        });
+    }
+
+    function renderDbCard(type, info) {
+        const statusBox = document.getElementById(`dbStatusBox_${type}`);
+        const actionWrap = document.getElementById(`dbActionWrap_${type}`);
+        if (!statusBox || !actionWrap) return;
+
+        const names = {
+            'about': 'ข้อมูลพื้นฐานโรงเรียน',
+            'personnel': 'ข้อมูลบุคลากร',
+            'board': 'คณะกรรมการสถานศึกษา',
+            'academic': 'ข้อมูลรายวิชา',
+            'study_plans': 'แผนการเรียนห้องเรียน',
+            'clubs': 'กิจกรรมชุมนุม',
+            'admission': 'การรับสมัครนักเรียน',
+            'locations': 'อาคารและสถานที่',
+            'timetable': 'ตารางเวลาคาบเรียน',
+            'news': 'ข่าวสารล่าสุด'
+        };
+        const title = names[type] || 'ข้อมูล';
+
+        if (info.exists) {
+            const charsFormatted = Number(info.char_count || 0).toLocaleString();
+            const timeFormatted = formatShortDateTime(info.updated_at);
+            const isChecked = info.status === 'on' ? 'checked' : '';
+
+            statusBox.className = 'p-2 rounded-3 bg-white border mb-3 small border-success';
+            statusBox.innerHTML = `
+                <div class="d-flex align-items-center justify-content-between mb-1">
+                    <span class="badge bg-success rounded-pill font-monospace" style="font-size: 0.72rem;">
+                        <i class="bx bx-check me-1"></i>อยู่ในคลัง AI แล้ว
+                    </span>
+                    <div class="form-check form-switch mb-0 d-inline-block" title="เปิด/ปิดการให้ AI อ่าน">
+                        <input class="form-check-input" type="checkbox" ${isChecked} onchange="toggleKnowledgeStatus(${info.knowledge_id})">
+                    </div>
+                </div>
+                <div class="text-muted" style="font-size: 0.74rem;">
+                    <div><i class="bx bx-text me-1 text-warning"></i>ความยาว: <b>${charsFormatted}</b> ตัวอักษร</div>
+                    <div><i class="bx bx-time-five me-1 text-secondary"></i>ซิงค์ล่าสุด: ${timeFormatted}</div>
+                </div>`;
+
+            actionWrap.innerHTML = `
+                <div class="d-flex gap-1">
+                    <button type="button" class="btn btn-outline-primary btn-sm rounded-pill flex-grow-1" onclick="viewKnowledgeDetail(${info.knowledge_id})" title="ดูเนื้อหาที่สกัดได้">
+                        <i class="bx bx-show me-1"></i>ดูเนื้อหา
+                    </button>
+                    <button type="button" class="btn btn-outline-success btn-sm rounded-pill flex-grow-1" onclick="syncFromDatabase('${type}', this)" title="ซิงค์ดึงข้อมูลใหม่จากระบบ">
+                        <i class="bx bx-sync me-1"></i>ซิงค์ใหม่
+                    </button>
+                    <button type="button" class="btn btn-outline-danger btn-sm rounded-pill" onclick="deleteFromDatabase('${type}', this)" title="ลบออกจากคลัง AI">
+                        <i class="bx bx-trash"></i>
+                    </button>
+                </div>`;
+        } else {
+            statusBox.className = 'p-2 rounded-3 bg-white border mb-3 small text-muted';
+            statusBox.innerHTML = `
+                <div class="d-flex align-items-center justify-content-between">
+                    <span class="badge bg-secondary rounded-pill font-monospace" style="font-size: 0.72rem;">
+                        <i class="bx bx-minus me-1"></i>ยังไม่ได้นำเข้าคลัง AI
+                    </span>
+                    <small class="text-muted" style="font-size: 0.72rem;">พร้อมซิงค์</small>
+                </div>`;
+
+            const btnStyles = {
+                'about': { cls: 'btn-primary', extra: '' },
+                'personnel': { cls: 'btn-primary', extra: '' },
+                'board': { cls: 'btn-warning text-dark', extra: '' },
+                'academic': { cls: 'btn-success', extra: '' },
+                'study_plans': { cls: 'text-white', extra: 'background: #6f42c1;' },
+                'clubs': { cls: 'text-white', extra: 'background: #e83e8c;' },
+                'admission': { cls: 'btn-danger', extra: '' },
+                'locations': { cls: 'text-white', extra: 'background: #20c997;' },
+                'timetable': { cls: 'btn-secondary', extra: '' },
+                'news': { cls: 'btn-info text-white', extra: '' }
+            };
+            const bConf = btnStyles[type] || { cls: 'btn-primary', extra: '' };
+            const styleAttr = bConf.extra ? `style="${bConf.extra}"` : '';
+
+            actionWrap.innerHTML = `
+                <button type="button" class="btn ${bConf.cls} rounded-pill btn-sm w-100 py-2 fw-bold" ${styleAttr} onclick="syncFromDatabase('${type}', this)">
+                    <i class="bx bx-sync me-1"></i> ซิงค์${title}เข้าคลัง AI
+                </button>`;
+        }
     }
 
     function syncFromDatabase(type, btnEl) {
         const originalHtml = btnEl ? btnEl.innerHTML : '';
         if (btnEl) {
             btnEl.disabled = true;
-            btnEl.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> กำลังซิงค์ข้อมูลจากฐานข้อมูล...';
+            btnEl.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> กำลังซิงค์...';
         }
 
         const alertBox = document.getElementById('kbDbAlertBox');
@@ -2988,11 +3831,7 @@
                     alertBox.style.display = 'block';
                 }
                 loadKnowledgeList(true);
-                loadDatabaseStats();
-                setTimeout(() => {
-                    document.getElementById('tab-kb-list-btn').click();
-                    if (alertBox) alertBox.style.display = 'none';
-                }, 1200);
+                loadDatabaseStats(true);
             } else {
                 if (alertBox) {
                     alertBox.className = 'alert alert-danger alert-sm mb-3';
@@ -3012,6 +3851,146 @@
                 alertBox.style.display = 'block';
             }
         });
+    }
+
+    function deleteFromDatabase(type, btnEl) {
+        const names = {
+            'about': 'ข้อมูลพื้นฐานและอัตลักษณ์โรงเรียน',
+            'personnel': 'ข้อมูลบุคลากรและคณะครู',
+            'board': 'ข้อมูลคณะกรรมการสถานศึกษา',
+            'academic': 'ข้อมูลหลักสูตรและรายวิชา',
+            'study_plans': 'ข้อมูลแผนการเรียนและห้องเรียน',
+            'clubs': 'ข้อมูลกิจกรรมชุมนุมนักเรียน',
+            'admission': 'ข้อมูลการรับสมัครนักเรียน',
+            'locations': 'ข้อมูลอาคารและสถานที่',
+            'timetable': 'ข้อมูลตารางเวลาคาบเรียน',
+            'news': 'ข้อมูลข่าวประชาสัมพันธ์'
+        };
+        const title = names[type] || 'ฐานข้อมูล';
+
+        if (!confirm(`คุณต้องการลบ "${title}" ออกจากคลังความรู้ AI หรือไม่?\n\n(ระบบจะลบเฉพาะความรู้ที่ AI จำไว้เท่านั้น ข้อมูลจริงในระบบโรงเรียนจะไม่ได้รับผลกระทบ)`)) {
+            return;
+        }
+
+        const originalHtml = btnEl ? btnEl.innerHTML : '';
+        if (btnEl) {
+            btnEl.disabled = true;
+            btnEl.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
+        }
+
+        const alertBox = document.getElementById('kbDbAlertBox');
+        if (alertBox) alertBox.style.display = 'none';
+
+        fetch(`<?= site_url('admin/live-chat/knowledge/delete-db') ?>/${type}`, {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': '<?= csrf_hash() ?>'
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (btnEl) {
+                btnEl.disabled = false;
+                btnEl.innerHTML = originalHtml;
+            }
+            if (data.status === 'success') {
+                if (alertBox) {
+                    alertBox.className = 'alert alert-success alert-sm mb-3';
+                    alertBox.innerText = data.message;
+                    alertBox.style.display = 'block';
+                }
+                loadKnowledgeList(true);
+                loadDatabaseStats(true);
+            } else {
+                if (alertBox) {
+                    alertBox.className = 'alert alert-danger alert-sm mb-3';
+                    alertBox.innerText = data.message || 'ลบไม่สำเร็จ';
+                    alertBox.style.display = 'block';
+                }
+            }
+        })
+        .catch(() => {
+            if (btnEl) {
+                btnEl.disabled = false;
+                btnEl.innerHTML = originalHtml;
+            }
+            if (alertBox) {
+                alertBox.className = 'alert alert-danger alert-sm mb-3';
+                alertBox.innerText = 'เกิดข้อผิดพลาดในการเชื่อมต่อเครือข่าย';
+                alertBox.style.display = 'block';
+            }
+        });
+    }
+
+    async function batchDatabaseAction(action) {
+        const checkedBoxes = Array.from(document.querySelectorAll('.db-item-check:checked'));
+        if (checkedBoxes.length === 0) return;
+
+        const types = checkedBoxes.map(cb => cb.value);
+        const alertBox = document.getElementById('kbDbAlertBox');
+
+        if (action === 'delete') {
+            if (!confirm(`คุณต้องการลบข้อมูลฐานข้อมูลที่เลือก (${types.length} รายการ) ออกจากคลังความรู้ AI หรือไม่?\n\n(ข้อมูลจริงในระบบจะไม่ได้รับผลกระทบ)`)) {
+                return;
+            }
+        }
+
+        const btnSync = document.getElementById('btnBatchSyncDb');
+        const btnDel = document.getElementById('btnBatchDeleteDb');
+        if (btnSync) btnSync.disabled = true;
+        if (btnDel) btnDel.disabled = true;
+
+        if (alertBox) {
+            alertBox.className = 'alert alert-info alert-sm mb-3';
+            alertBox.innerHTML = `<div class="spinner-border spinner-border-sm me-2" role="status"></div> กำลังดำเนินการ ${action === 'sync' ? 'ซิงค์ข้อมูล' : 'ลบข้อมูล'} ${types.length} รายการ...`;
+            alertBox.style.display = 'block';
+        }
+
+        let successCount = 0;
+        let failCount = 0;
+
+        for (const type of types) {
+            try {
+                const endpoint = action === 'sync'
+                    ? `<?= site_url('admin/live-chat/knowledge/sync-db') ?>/${type}`
+                    : `<?= site_url('admin/live-chat/knowledge/delete-db') ?>/${type}`;
+
+                const res = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': '<?= csrf_hash() ?>'
+                    }
+                });
+                const data = await res.json();
+                if (data.status === 'success') {
+                    successCount++;
+                } else {
+                    failCount++;
+                }
+            } catch (err) {
+                failCount++;
+            }
+        }
+
+        if (alertBox) {
+            if (failCount === 0) {
+                alertBox.className = 'alert alert-success alert-sm mb-3';
+                alertBox.innerText = `ดำเนินการสำเร็จทั้งหมด ${successCount} รายการ!`;
+            } else {
+                alertBox.className = 'alert alert-warning alert-sm mb-3';
+                alertBox.innerText = `ดำเนินการสำเร็จ ${successCount} รายการ, ไม่สำเร็จ ${failCount} รายการ`;
+            }
+            alertBox.style.display = 'block';
+        }
+
+        loadKnowledgeList(true);
+        loadDatabaseStats(true);
+        const master = document.getElementById('masterDbCheck');
+        if (master) master.checked = false;
+        document.querySelectorAll('.db-item-check').forEach(cb => cb.checked = false);
+        updateDbSelectedCount();
     }
 </script>
 <?= $this->endSection() ?>
