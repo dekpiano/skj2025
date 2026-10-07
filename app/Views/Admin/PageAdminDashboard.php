@@ -86,9 +86,10 @@
                     <i class="bx bx-images text-info"></i>
                     <span>เปลี่ยนแบนเนอร์</span>
                 </a>
-                <a href="<?= base_url('Admin/LiveChat') ?>" class="quick-action-pill">
+                <a href="http://localhost:8070/" target="_blank" class="quick-action-pill">
                     <i class="bx bx-chat text-success"></i>
                     <span>ตอบแชทสด</span>
+                    <i class="bx bx-link-external small ms-1 opacity-50"></i>
                 </a>
                 <a href="<?= base_url('Admin/WelcomeModal') ?>" class="quick-action-pill">
                     <i class="bx bx-bell text-danger"></i>

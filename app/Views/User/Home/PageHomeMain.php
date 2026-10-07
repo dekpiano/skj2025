@@ -304,7 +304,7 @@
 
         <!-- EIS Link (Hidden as in previous state) -->
         <!-- <div class="text-center mt-5 wow fadeInUp" data-wow-delay="0.5s">
-            <a href="<?= base_url('Manager/Dashboard') ?>" class="eis-button">
+            <a href="<?= manager_url('Dashboard') ?>" class="eis-button">
                 <i class="bi bi-shield-lock-fill"></i> เข้าสู่ระบบ EIS
             </a>
         </div> -->

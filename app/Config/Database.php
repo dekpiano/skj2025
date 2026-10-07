@@ -50,6 +50,26 @@ class Database extends Config
         'port'     => 3306,
     ];
 
+    public $chatlive = [
+        'DSN'      => '',
+        'hostname' => 'db',
+        'username' => 'root',
+        'password' => 'rootpassword',
+        'database' => 'skjacth_chatlive',
+        'DBDriver' => 'MySQLi',
+        'DBPrefix' => '',
+        'pConnect' => false,
+        'DBDebug'  => (ENVIRONMENT !== 'production'),
+        'charset'  => 'utf8mb4',
+        'DBCollat' => 'utf8mb4_unicode_ci',
+        'swapPre'  => '',
+        'encrypt'  => false,
+        'compress' => false,
+        'strictOn' => false,
+        'failover' => [],
+        'port'     => 3306,
+    ];
+
     public $personnal = [
         'DSN'      => '',
         'hostname' => 'db',

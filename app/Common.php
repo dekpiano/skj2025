@@ -176,3 +176,19 @@ if (!function_exists('get_app_version')) {
         return $version;
     }
 }
+
+if (!function_exists('manager_url')) {
+    /**
+     * URL for the Executive Information System (EIS / Manager System)
+     */
+    function manager_url(string $uri = ''): string
+    {
+        $baseUrl = getenv('MANAGER_URL');
+        if (!$baseUrl) {
+            $isDev = (ENVIRONMENT === 'development' || (isset($_SERVER['HTTP_HOST']) && str_contains($_SERVER['HTTP_HOST'], 'localhost')));
+            $baseUrl = $isDev ? 'https://localhost:8095/' : 'https://manager.skj.ac.th/';
+        }
+        return rtrim($baseUrl, '/') . ($uri !== '' ? '/' . ltrim($uri, '/') : '/');
+    }
+}
+

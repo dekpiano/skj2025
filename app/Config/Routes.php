@@ -140,34 +140,15 @@ $routes->group('Admin', ['filter' => 'permission', 'namespace' => 'App\Controlle
 });
 
 
-$routes->group('Manager', ['filter' => 'permission:Manager,ผู้บริหาร,ผู้บริหารสถานศึกษา', 'namespace' => 'App\Controllers\Manager'], function ($routes) {
-    $routes->get('Dashboard', 'ConManagerDashboard::index');
-    $routes->get('Personnel', 'ConManagerPersonnel::index');
-    $routes->get('Personnel/Overview', 'ConManagerPersonnel::overview');
-    $routes->get('Academic/student', 'ConManagerAcademic::index');
-    $routes->get('Academic/Teacher', 'ConManagerAcademic::teacherIndex');
-    $routes->get('Personnel/Detail/(:any)', 'ConManagerPersonnel::getPersonnelDetail/$1');
-    $routes->get('Personnel/AttendanceAnalysis', 'ConManagerPersonnel::getAttendanceAnalysis');
-    $routes->get('Academic/Analysis', 'ConManagerAcademic::getAcademicAnalysis');
-    $routes->get('Academic/StudentAnalysis', 'ConManagerAcademic::getStudentAnalysis');
-    $routes->get('Academic/TeacherAnalysis', 'ConManagerAcademic::getTeacherAnalysis');
-    $routes->get('General', 'ConManagerGeneral::index');
-    $routes->get('General/Analysis', 'ConManagerGeneral::getAnalysis');
-    
-    // Evaluation 
-    $routes->get('Evaluation', 'ConManagerEvaluation::index');
-    $routes->get('Evaluation/Submit', 'ConManagerEvaluation::submitForm');
-    $routes->post('Evaluation/Save', 'ConManagerEvaluation::saveEvaluation');
-    $routes->post('Evaluation/UploadChunk', 'ConManagerEvaluation::uploadChunk');
-    $routes->get('Evaluation/Delete/(:num)', 'ConManagerEvaluation::deleteEvaluation/$1');
-    $routes->post('Evaluation/UpdateStatus', 'ConManagerEvaluation::updateStatus');
-
-    // Executive Attendance
-    $routes->get('ManagerAttendance', 'ConManagerAttendance::index');
-    $routes->post('ManagerAttendance/checkin', 'ConManagerAttendance::checkInsert');
-    $routes->post('ManagerAttendance/checkout', 'ConManagerAttendance::checkOut');
-    $routes->get('ManagerAttendance/History', 'ConManagerAttendance::history');
-    $routes->get('ManagerAttendance/Report', 'ConManagerAttendance::monthlyReport');
+// Redirect Manager routes to the separate Executive System (manager2026)
+$routes->get('Manager', function () {
+    return redirect()->to(manager_url('Dashboard'));
+});
+$routes->get('Manager/Dashboard', function () {
+    return redirect()->to(manager_url('Dashboard'));
+});
+$routes->get('Manager/(:any)', function ($sub = '') {
+    return redirect()->to(manager_url('Manager/' . $sub));
 });
 // 
 
@@ -199,70 +180,19 @@ if (is_file(APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php')) {
     require APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php';
 }
 
-// Live Chat Admin & API Routes (SKJ Main Website)
-$routes->get('Admin/LiveChat', 'Admin\AdminControlChat::index');
-$routes->get('Admin/live-chat', 'Admin\AdminControlChat::index');
-$routes->get('admin/live-chat', 'Admin\AdminControlChat::index');
-$routes->get('admin/LiveChat', 'Admin\AdminControlChat::index');
-
-$routes->get('admin/live-chat/sessions', 'Admin\AdminControlChat::getSessions');
-$routes->get('Admin/live-chat/sessions', 'Admin\AdminControlChat::getSessions');
-$routes->get('admin/live-chat/messages/(:num)', 'Admin\AdminControlChat::getSessionMessages/$1');
-$routes->get('Admin/live-chat/messages/(:num)', 'Admin\AdminControlChat::getSessionMessages/$1');
-$routes->post('admin/live-chat/reply', 'Admin\AdminControlChat::sendReply');
-$routes->post('Admin/live-chat/reply', 'Admin\AdminControlChat::sendReply');
-$routes->post('admin/live-chat/upload', 'Admin\AdminControlChat::uploadAttachment');
-$routes->post('Admin/live-chat/upload', 'Admin\AdminControlChat::uploadAttachment');
-$routes->post('admin/live-chat/toggle-status/(:num)', 'Admin\AdminControlChat::toggleStatus/$1');
-$routes->post('Admin/live-chat/toggle-status/(:num)', 'Admin\AdminControlChat::toggleStatus/$1');
-$routes->post('admin/live-chat/delete/(:num)', 'Admin\AdminControlChat::deleteSession/$1');
-$routes->post('Admin/live-chat/delete/(:num)', 'Admin\AdminControlChat::deleteSession/$1');
-
-$routes->get('admin/live-chat/telegram-config', 'Admin\AdminControlChat::getTelegramConfig');
-$routes->get('Admin/live-chat/telegram-config', 'Admin\AdminControlChat::getTelegramConfig');
-$routes->post('admin/live-chat/telegram-config', 'Admin\AdminControlChat::saveTelegramConfig');
-$routes->post('Admin/live-chat/telegram-config', 'Admin\AdminControlChat::saveTelegramConfig');
-$routes->post('admin/live-chat/telegram-test', 'Admin\AdminControlChat::testTelegramNotification');
-$routes->post('Admin/live-chat/telegram-test', 'Admin\AdminControlChat::testTelegramNotification');
-
-$routes->get('admin/live-chat/ai-config', 'Admin\AdminControlChat::getAiConfig');
-$routes->get('Admin/live-chat/ai-config', 'Admin\AdminControlChat::getAiConfig');
-$routes->post('admin/live-chat/ai-config', 'Admin\AdminControlChat::saveAiConfig');
-$routes->post('Admin/live-chat/ai-config', 'Admin\AdminControlChat::saveAiConfig');
-$routes->post('admin/live-chat/ai-test', 'Admin\AdminControlChat::testAiResponse');
-$routes->post('Admin/live-chat/ai-test', 'Admin\AdminControlChat::testAiResponse');
-$routes->post('admin/live-chat/toggle-bot/(:num)', 'Admin\AdminControlChat::toggleSessionBot/$1');
-$routes->post('Admin/live-chat/toggle-bot/(:num)', 'Admin\AdminControlChat::toggleSessionBot/$1');
-
-// Live Chat AI Knowledge Base Routes
-$routes->get('admin/live-chat/knowledge', 'Admin\AdminControlChat::getKnowledgeList');
-$routes->get('Admin/live-chat/knowledge', 'Admin\AdminControlChat::getKnowledgeList');
-$routes->post('admin/live-chat/knowledge/fetch-preview', 'Admin\AdminControlChat::fetchUrlPreview');
-$routes->post('Admin/live-chat/knowledge/fetch-preview', 'Admin\AdminControlChat::fetchUrlPreview');
-$routes->post('admin/live-chat/knowledge/discover-links', 'Admin\AdminControlChat::discoverSiteLinks');
-$routes->post('Admin/live-chat/knowledge/discover-links', 'Admin\AdminControlChat::discoverSiteLinks');
-$routes->post('admin/live-chat/knowledge/save-url', 'Admin\AdminControlChat::saveKnowledgeUrl');
-$routes->post('Admin/live-chat/knowledge/save-url', 'Admin\AdminControlChat::saveKnowledgeUrl');
-$routes->post('admin/live-chat/knowledge/upload-file', 'Admin\AdminControlChat::uploadKnowledgeFile');
-$routes->post('Admin/live-chat/knowledge/upload-file', 'Admin\AdminControlChat::uploadKnowledgeFile');
-$routes->post('admin/live-chat/knowledge/save-text', 'Admin\AdminControlChat::saveKnowledgeText');
-$routes->post('Admin/live-chat/knowledge/save-text', 'Admin\AdminControlChat::saveKnowledgeText');
-$routes->post('admin/live-chat/knowledge/toggle/(:num)', 'Admin\AdminControlChat::toggleKnowledgeStatus/$1');
-$routes->post('Admin/live-chat/knowledge/toggle/(:num)', 'Admin\AdminControlChat::toggleKnowledgeStatus/$1');
-$routes->post('admin/live-chat/knowledge/sync/(:num)', 'Admin\AdminControlChat::syncKnowledgeUrl/$1');
-$routes->post('Admin/live-chat/knowledge/sync/(:num)', 'Admin\AdminControlChat::syncKnowledgeUrl/$1');
-$routes->post('admin/live-chat/knowledge/delete/(:num)', 'Admin\AdminControlChat::deleteKnowledge/$1');
-$routes->post('Admin/live-chat/knowledge/delete/(:num)', 'Admin\AdminControlChat::deleteKnowledge/$1');
-$routes->get('admin/live-chat/knowledge/get/(:num)', 'Admin\AdminControlChat::getKnowledgeDetail/$1');
-$routes->get('Admin/live-chat/knowledge/get/(:num)', 'Admin\AdminControlChat::getKnowledgeDetail/$1');
-$routes->post('admin/live-chat/knowledge/update/(:num)', 'Admin\AdminControlChat::updateKnowledgeDetail/$1');
-$routes->post('Admin/live-chat/knowledge/update/(:num)', 'Admin\AdminControlChat::updateKnowledgeDetail/$1');
-$routes->get('admin/live-chat/knowledge/db-stats', 'Admin\AdminControlChat::getDatabaseStats');
-$routes->get('Admin/live-chat/knowledge/db-stats', 'Admin\AdminControlChat::getDatabaseStats');
-$routes->post('admin/live-chat/knowledge/sync-db/(:segment)', 'Admin\AdminControlChat::syncFromDatabase/$1');
-$routes->post('Admin/live-chat/knowledge/sync-db/(:segment)', 'Admin\AdminControlChat::syncFromDatabase/$1');
-$routes->post('admin/live-chat/knowledge/delete-db/(:segment)', 'Admin\AdminControlChat::deleteDatabaseKnowledge/$1');
-$routes->post('Admin/live-chat/knowledge/delete-db/(:segment)', 'Admin\AdminControlChat::deleteDatabaseKnowledge/$1');
+// Live Chat Redirect to Standalone Portal (Port 8070)
+$routes->get('Admin/LiveChat', static function() {
+    return redirect()->to('http://localhost:8070/');
+});
+$routes->get('Admin/live-chat', static function() {
+    return redirect()->to('http://localhost:8070/');
+});
+$routes->get('admin/live-chat', static function() {
+    return redirect()->to('http://localhost:8070/');
+});
+$routes->get('admin/LiveChat', static function() {
+    return redirect()->to('http://localhost:8070/');
+});
 
 $routes->post('api/chat/init', 'Api\ChatApi::initSession');
 $routes->post('api/chat/send', 'Api\ChatApi::sendMessage');

@@ -66,4 +66,4 @@ require rtrim($paths->systemDirectory, '\\/ ') . DIRECTORY_SEPARATOR . 'Boot.php
 
 // Launch the application!
 // (All of the dirty work is done here).
-CodeIgniter\Boot::bootCli($paths);
+exit(CodeIgniter\Boot::bootSpark($paths));

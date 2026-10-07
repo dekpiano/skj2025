@@ -122,7 +122,7 @@
             </a>
 
             <!-- Manager System -->
-            <a href="<?= base_url('Manager/Dashboard') ?>" class="system-card manager">
+            <a href="<?= manager_url('Dashboard') ?>" class="system-card manager">
                 <div class="icon"><i class="bx bx-bar-chart-alt-2"></i></div>
                 <h3>ระบบผู้บริหาร</h3>
                 <p>ดูภาพรวมบุคลากร วิชาการ และงานบริหารทั่วไป</p>

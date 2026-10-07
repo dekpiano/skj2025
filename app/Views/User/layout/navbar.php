@@ -193,7 +193,7 @@
                                             class="bi bi-person-fill me-2"></i>สำหรับนักเรียน</a></li>
                                 <li><a href="https://teacher.skj.ac.th/"><i
                                             class="bi bi-person-workspace me-2"></i>สำหรับครูผู้สอน</a></li>
-                                <li><a href="<?= base_url('Manager/Dashboard') ?>"><i
+                                <li><a href="https://eis.skj.ac.th/login"><i
                                             class="bi bi-bar-chart-line-fill me-2"></i>สำหรับผู้บริหาร</a></li>
                                 <li><a href="<?= base_url('Support/SupportAttendance') ?>"><i
                                             class="bi bi-person-gear me-2"></i>สำหรับฝ่ายสนับสนุน</a></li>
@@ -211,7 +211,8 @@
             <!-- Mobile Header (Modern App Bar) -->
             <div class="mobile-header d-flex d-lg-none align-items-center justify-content-between py-2 px-3">
                 <a href="<?= base_url('/'); ?>" class="mobile-brand d-flex align-items-center text-decoration-none">
-                    <img src="<?= base_url('uploads/logoSchool/LogoSKJ_4.png') ?>" alt="SKJ Logo" class="mobile-logo-img">
+                    <img src="<?= base_url('uploads/logoSchool/LogoSKJ_4.png') ?>" alt="SKJ Logo"
+                        class="mobile-logo-img">
                     <div class="ms-2 brand-text-wrap">
                         <div class="mobile-brand-text">สวนกุหลาบวิทยาลัย (จิรประวัติ)</div>
                         <div class="mobile-brand-sub">SUANKULARB WITTAYALAI NAKHON SAWAN</div>
@@ -395,7 +396,8 @@
                                 class="bi bi-car-front me-2"></i>จองยานพาหนะ</a></li>
                     <li><a href="https://general.skj.ac.th/Repair"><i class="bi bi-tools me-2"></i>แจ้งซ่อมออนไลน์</a>
                     </li>
-                    <li><a href="https://general.skj.ac.th/Equipment" target="_blank"><i class="bi bi-box-seam me-2"></i>ยืม-คืนพัสดุอุปกรณ์</a>
+                    <li><a href="https://general.skj.ac.th/Equipment" target="_blank"><i
+                                class="bi bi-box-seam me-2"></i>ยืม-คืนพัสดุอุปกรณ์</a>
                     </li>
                     <li><a href="https://general.skj.ac.th/FoodReport"><i
                                 class="bi bi-pie-chart me-2"></i>รายงานอาหาร</a></li>
@@ -433,7 +435,7 @@
                     </li>
                     <li><a href="https://teacher.skj.ac.th/"><i
                                 class="bi bi-person-workspace me-2"></i>สำหรับครูผู้สอน</a></li>
-                    <li><a href="<?= base_url('Manager/Dashboard') ?>"><i
+                    <li><a href="https://eis.skj.ac.th/login"><i
                                 class="bi bi-bar-chart-line-fill me-2"></i>สำหรับผู้บริหาร</a></li>
                     <li><a href="<?= base_url('Support/SupportAttendance') ?>"><i
                                 class="bi bi-person-gear me-2"></i>สำหรับฝ่ายสนับสนุน</a></li>

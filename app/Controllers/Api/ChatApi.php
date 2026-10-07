@@ -10,7 +10,7 @@ class ChatApi extends BaseController
 
     public function __construct()
     {
-        $this->db = \Config\Database::connect();
+        $this->db = \Config\Database::connect('chatlive');
         $this->setCorsHeaders();
         $this->ensureChatTablesExist();
     }
@@ -307,7 +307,7 @@ class ChatApi extends BaseController
         $newName = $file->getRandomName();
         $file->move($uploadPath, $newName);
 
-        $fileUrl = 'uploads/chat/' . $newName;
+        $fileUrl = base_url('uploads/chat/' . $newName);
         $isImage = strpos($mime, 'image/') === 0;
 
         return $this->response->setJSON([

@@ -32,14 +32,14 @@
             </a>
         </li>
 
-        <!-- Live Chat -->
-        <li class="menu-item <?= in_array(strtolower($uri->getSegment(2) ?? ''), ['livechat', 'live-chat']) ? "active" : "" ?>">
-            <a href="<?= base_url('Admin/LiveChat'); ?>" class="menu-link d-flex justify-content-between align-items-center">
+        <!-- Live Chat (Standalone System) -->
+        <li class="menu-item">
+            <a href="http://localhost:8070/" target="_blank" class="menu-link d-flex justify-content-between align-items-center">
                 <div class="d-flex align-items-center">
                     <i class="menu-icon tf-icons bx bx-chat"></i>
-                    <div data-i18n="Analytics">ศูนย์สนทนาสด</div>
+                    <div data-i18n="Analytics">ศูนย์สนทนาสด (Live Chat)</div>
                 </div>
-                <span class="badge bg-label-info rounded-pill px-2 py-1 ms-auto" style="font-size: 0.68rem;">Live</span>
+                <span class="badge bg-label-primary rounded-pill px-2 py-1 ms-auto" style="font-size: 0.68rem;"><i class="bx bx-link-external me-1"></i>Portal</span>
             </a>
         </li>
 
