@@ -157,6 +157,8 @@
                                     <div class="col-lg-3">
                                         <h6 class="mega-title"><i class="bi bi-folder2-open me-2"></i>ข้อมูล & เอกสาร
                                         </h6>
+                                        <a href="https://sitkao.skj.ac.th/" target="_blank"><i
+                                                class="bi bi-mortarboard me-2"></i>ระบบศิษย์เก่า</a>
                                         <a href="<?= base_url('Yearbook') ?>"><i
                                                 class="bi bi-book me-2"></i>หนังสือรุ่นดิจิทัล</a>
                                         <a href="<?= base_url('PageGroup') ?>"><i
@@ -403,6 +405,7 @@
                                 class="bi bi-pie-chart me-2"></i>รายงานอาหาร</a></li>
 
                     <li class="mob-sub-header"><i class="bi bi-folder2-open me-2"></i>ข้อมูล & เอกสาร</li>
+                    <li><a href="https://sitkao.skj.ac.th/" target="_blank"><i class="bi bi-mortarboard me-2"></i>ระบบศิษย์เก่า</a></li>
                     <li><a href="<?= base_url('Yearbook') ?>"><i class="bi bi-book me-2"></i>หนังสือรุ่นดิจิทัล</a></li>
                     <li><a href="<?= base_url('PageGroup') ?>"><i class="bi bi-facebook me-2"></i>Facebook กลุ่ม</a>
                     </li>
@@ -512,13 +515,11 @@ $curSeg = $uriObj->getSegment(1);
         <span>บริการ</span>
     </a>
 
-    <a href="javascript:void(0);" class="bottom-nav-item"
-        onclick="if(typeof toggleChatWindow === 'function'){toggleChatWindow();}else{window.location.href='<?= base_url('Contact') ?>';}"
-        title="ช่องแชท">
+    <a href="<?= base_url('Course') ?>" class="bottom-nav-item <?= ($curSeg == 'Course') ? 'active' : '' ?>" title="หลักสูตร">
         <div class="nav-icon-box">
-            <i class="bi bi-chat-dots-fill"></i>
+            <i class="bi bi-mortarboard-fill"></i>
         </div>
-        <span>ช่องแชท</span>
+        <span>หลักสูตร</span>
     </a>
 
     <a href="javascript:void(0);" class="bottom-nav-item" data-bs-toggle="offcanvas"
@@ -600,6 +601,10 @@ $curSeg = $uriObj->getSegment(1);
         <!-- หมวด 3: ข้อมูล & เอกสาร -->
         <div class="sheet-category-title"><i class="bi bi-folder2-open text-info me-1"></i> ข้อมูล & เอกสาร</div>
         <div class="services-app-grid mb-3">
+            <a href="https://sitkao.skj.ac.th/" target="_blank" class="service-app-card">
+                <div class="service-icon-circle bg-purple-grad"><i class="bi bi-mortarboard-fill"></i></div>
+                <div class="service-label">ระบบศิษย์เก่า</div>
+            </a>
             <a href="<?= base_url('Yearbook') ?>" class="service-app-card">
                 <div class="service-icon-circle bg-blue-grad"><i class="bi bi-book-half"></i></div>
                 <div class="service-label">หนังสือรุ่นดิจิทัล</div>

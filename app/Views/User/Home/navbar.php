@@ -895,6 +895,8 @@
                             </div>
                             <div class="col-lg-3">
                                 <h6 class="mega-column-title">ข้อมูล & เอกสาร</h6>
+                                <a href="https://sitkao.skj.ac.th/" target="_blank" class="dropdown-item dropdown-item-skj"><i
+                                        class="bi bi-mortarboard"></i> ระบบศิษย์เก่า</a>
                                 <a href="<?= base_url('Yearbook') ?>" class="dropdown-item dropdown-item-skj"><i
                                         class="bi bi-book"></i> หนังสือรุ่นดิจิทัล</a>
                                 <a href="<?= base_url('PageGroup') ?>" class="dropdown-item dropdown-item-skj"><i

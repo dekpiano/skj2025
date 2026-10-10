@@ -179,6 +179,7 @@
                 <h5 class="footer-title">ติดต่อเรา</h5>
                 <p class="mb-3 text-white-50"><i class="bi bi-geo-alt-fill text-primary me-2"></i> 160 ม.1
                     ต.นครสวรรค์ออก อ.เมือง จ.นครสวรรค์ 60000</p>
+
                 <p class="mb-3 text-white-50"><i class="bi bi-telephone-fill text-primary me-2"></i> 056-200-765</p>
                 <p class="mb-4 text-white-50"><i class="bi bi-envelope-fill text-primary me-2"></i> skjns160@skj.ac.th
                 </p>
@@ -285,8 +286,10 @@
                         <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal"
                             class="text-white-50 text-decoration-none">Admin Login</a>
                         <span class="text-white-50">|</span>
-                        <a href="javascript:void(0);" onclick="window.SKJCookieConsent && window.SKJCookieConsent.openSettings();"
-                            class="text-white-50 text-decoration-none" title="ตั้งค่าความเป็นส่วนตัวและคุกกี้"><i class="bi bi-shield-check me-1"></i>ตั้งค่าคุกกี้</a>
+                        <a href="javascript:void(0);"
+                            onclick="window.SKJCookieConsent && window.SKJCookieConsent.openSettings();"
+                            class="text-white-50 text-decoration-none" title="ตั้งค่าความเป็นส่วนตัวและคุกกี้"><i
+                                class="bi bi-shield-check me-1"></i>ตั้งค่าคุกกี้</a>
                         <span class="text-white-50">|</span>
                         <span class="text-white-50"><?= get_app_version() ?></span>
                     </div>
@@ -321,6 +324,8 @@
 <?php if ($uri->getSegment(1) === "News"): ?>
     <script src="<?= base_url() ?>/assets/js/News/News.js?v=10.2"></script>
 <?php endif; ?>
+
+
 
 <script>
     $(document).ready(function () {
@@ -548,9 +553,6 @@
         </div>
     </div>
 </div>
-
-<!-- SKJ Live Chat Floating Widget -->
-<?= view('Components/ChatWidget') ?>
 
 <!-- SKJ Cookie Consent (PDPA Compliant) System -->
 <?= view('Components/CookieConsent') ?>

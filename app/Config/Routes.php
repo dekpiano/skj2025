@@ -180,23 +180,6 @@ if (is_file(APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php')) {
     require APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php';
 }
 
-// Live Chat Redirect to Standalone Portal (Port 8070)
-$routes->get('Admin/LiveChat', static function() {
-    return redirect()->to('http://localhost:8070/');
-});
-$routes->get('Admin/live-chat', static function() {
-    return redirect()->to('http://localhost:8070/');
-});
-$routes->get('admin/live-chat', static function() {
-    return redirect()->to('http://localhost:8070/');
-});
-$routes->get('admin/LiveChat', static function() {
-    return redirect()->to('http://localhost:8070/');
-});
 
-$routes->post('api/chat/init', 'Api\ChatApi::initSession');
-$routes->post('api/chat/send', 'Api\ChatApi::sendMessage');
-$routes->post('api/chat/upload', 'Api\ChatApi::uploadAttachment');
-$routes->get('api/chat/messages', 'Api\ChatApi::getMessages');
 
 
