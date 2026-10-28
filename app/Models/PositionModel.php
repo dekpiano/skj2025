@@ -8,5 +8,5 @@ class PositionModel extends Model
     protected $table = 'tb_position';
     protected $primaryKey = 'posi_id';
     
-    protected $allowedFields = ['posi_id', 'posi_name'];
+    protected $allowedFields = ['posi_id', 'posi_name', 'posi_slug'];
 }

@@ -397,9 +397,13 @@
         <div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 800px;">
             <h6 class="section-title bg-white text-center text-primary px-3">แผนกงาน / กลุ่มสาระ</h6>
             <h1 class="display-6 mb-4"><?php 
-                $title = str_replace("-", " ", urldecode($uri->getSegment(3)));
-                if(empty($title) && urldecode($uri->getSegment(2)) === "Executive") $title = "ผู้บริหารสถานศึกษา";
-                echo $title;
+                if (!empty($page_title_th)) {
+                    echo $page_title_th;
+                } else {
+                    $title = str_replace("-", " ", urldecode($uri->getSegment(3)));
+                    if(empty($title) && urldecode($uri->getSegment(2)) === "Executive") $title = "ผู้บริหารสถานศึกษา";
+                    echo !empty($title) ? $title : "บุคลากร";
+                }
             ?></h1>
             <div class="section-divider"></div>
         </div>

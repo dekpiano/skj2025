@@ -830,7 +830,7 @@
                                     class="dropdown-item dropdown-item-skj"><b><i class="bi bi-people-fill"></i>
                                         บุคลากรทั้งหมด</b></a>
                                 <?php foreach ($Lear as $key => $v_Lear): ?>
-                                    <a href="<?= base_url('Personnal/' . urlencode("สายการสอน") . '/' . str_replace(" ", "-", urlencode($v_Lear->lear_namethai))) ?>"
+                                    <a href="<?= base_url('Personnal/Teaching/' . personnel_teaching_slug($v_Lear)) ?>"
                                         class="dropdown-item dropdown-item-skj">
                                         <i class="bi bi-chevron-right small"></i> <?= $v_Lear->lear_namethai; ?>
                                     </a>
@@ -838,11 +838,11 @@
                             </div>
                             <div class="col-lg-3">
                                 <h6 class="mega-column-title"><i class="bi bi-tools"></i> สายสนับสนุน</h6>
-                                <a href="<?= base_url('Personnal/' . urlencode("สายสนับสนุน")) ?>"
+                                <a href="<?= base_url('Personnal/Support') ?>"
                                     class="dropdown-item dropdown-item-skj"><b><i class="bi bi-person-gear"></i>
                                         สายสนับสนุนทั้งหมด</b></a>
                                 <?php foreach ($PosiOther as $key => $v_PosiOther): ?>
-                                    <a href="<?= base_url('Personnal/' . urlencode("สายสนับสนุน") . '/' . str_replace(" ", "-", urlencode($v_PosiOther->posi_name))) ?>"
+                                    <a href="<?= base_url('Personnal/Support/' . personnel_support_slug($v_PosiOther)) ?>"
                                         class="dropdown-item dropdown-item-skj">
                                         <i class="bi bi-chevron-right small"></i> <?= $v_PosiOther->posi_name; ?>
                                     </a>

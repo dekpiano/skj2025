@@ -34,7 +34,7 @@ class ConAboutSchool extends BaseController
         $data['full_url'] = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
         $data['dateThai'] = new Datethai();
         $data['Lear'] = $this->LearModel->get()->getResult();
-        $data['PosiOther'] = $this->PosiModel->where(array('posi_id >='=>'posi_007','posi_id <='=>'posi_012'))->get()->getResult();
+        $data['PosiOther'] = $this->PosiModel->where('posi_id >=', 'posi_007')->orderBy('posi_id', 'ASC')->get()->getResult();
         $data['AboutSchool'] = $this->AboutModel->get()->getResult();
         $data['uri'] = service('uri'); 
         // $data['v'] = $this->VisitorsUser(); // REMOVED

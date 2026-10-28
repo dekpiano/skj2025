@@ -151,10 +151,7 @@ abstract class BaseController extends Controller
         $posiModel = new PositionModel();
         
         $this->data['Lear'] = $learModel->get()->getResult();
-        $this->data['PosiOther'] = $posiModel->where([
-            'posi_id >=' => 'posi_007',
-            'posi_id <=' => 'posi_012'
-        ])->get()->getResult();
+        $this->data['PosiOther'] = $posiModel->where('posi_id >=', 'posi_007')->orderBy('posi_id', 'ASC')->get()->getResult();
 
         // --- Common Global Data ---
         $this->data['full_url'] = current_url();

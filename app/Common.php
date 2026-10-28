@@ -192,3 +192,163 @@ if (!function_exists('manager_url')) {
     }
 }
 
+if (!function_exists('personnel_support_slug')) {
+    /**
+     * Map position object or ID to a clean English URL slug
+     */
+    function personnel_support_slug($posi): string
+    {
+        if (is_object($posi) && !empty($posi->posi_slug)) {
+            return $posi->posi_slug;
+        }
+
+        $id = is_object($posi) ? ($posi->posi_id ?? '') : (string)$posi;
+        $map = [
+            'posi_007' => 'office-staff',
+            'posi_008' => 'contract-staff',
+            'posi_009' => 'sports-supervisor',
+            'posi_010' => 'general-staff',
+            'posi_011' => 'driver',
+            'posi_012' => 'security-guard',
+            'posi_013' => 'sports-scientist',
+        ];
+        return $map[$id] ?? strtolower($id);
+    }
+}
+
+if (!function_exists('personnel_teaching_slug')) {
+    /**
+     * Map learning group object or ID to a clean English URL slug
+     */
+    function personnel_teaching_slug($lear): string
+    {
+        if (is_object($lear) && !empty($lear->lear_slug)) {
+            return $lear->lear_slug;
+        }
+
+        $id = is_object($lear) ? ($lear->lear_id ?? '') : (string)$lear;
+        $map = [
+            'lear_001' => 'thai-language',
+            'lear_002' => 'mathematics',
+            'lear_003' => 'science-and-technology',
+            'lear_004' => 'social-studies',
+            'lear_005' => 'health-and-physical-education',
+            'lear_006' => 'arts',
+            'lear_007' => 'occupations',
+            'lear_008' => 'foreign-languages',
+            'lear_009' => 'guidance',
+        ];
+        return $map[$id] ?? strtolower($id);
+    }
+}
+
+if (!function_exists('personnel_resolve_support_key')) {
+    /**
+     * Resolve a key (slug, posi_id, or Thai name) to position ID and Thai name
+     */
+    function personnel_resolve_support_key(string $key): ?array
+    {
+        $cleanKey = strtolower(trim(urldecode($key)));
+        $slugMap = [
+            'office-staff'       => ['posi_id' => 'posi_007', 'name_th' => 'พนักงานช่วยปฏิบัติงานสำนักงาน'],
+            'office-assistant'   => ['posi_id' => 'posi_007', 'name_th' => 'พนักงานช่วยปฏิบัติงานสำนักงาน'],
+            'contract-staff'     => ['posi_id' => 'posi_008', 'name_th' => 'พนักงานจ้างเหมาตามภารกิจ'],
+            'mission-contractor' => ['posi_id' => 'posi_008', 'name_th' => 'พนักงานจ้างเหมาตามภารกิจ'],
+            'mission-staff'      => ['posi_id' => 'posi_008', 'name_th' => 'พนักงานจ้างเหมาตามภารกิจ'],
+            'sports-supervisor'  => ['posi_id' => 'posi_009', 'name_th' => 'ผู้กำกับดูแลกีฬา'],
+            'general-staff'      => ['posi_id' => 'posi_010', 'name_th' => 'พนักงานทั่วไป'],
+            'driver'             => ['posi_id' => 'posi_011', 'name_th' => 'พนักงานขับรถ'],
+            'security-guard'     => ['posi_id' => 'posi_012', 'name_th' => 'พนักงานรักษาความปลอดภัย'],
+            'security'           => ['posi_id' => 'posi_012', 'name_th' => 'พนักงานรักษาความปลอดภัย'],
+            'sports-scientist'   => ['posi_id' => 'posi_013', 'name_th' => 'นักวิทยาศาสตร์การกีฬา'],
+        ];
+
+        if (isset($slugMap[$cleanKey])) {
+            return $slugMap[$cleanKey];
+        }
+
+        // Check if matching posi_id directly in the known map
+        foreach ($slugMap as $item) {
+            if (strtolower($item['posi_id']) === $cleanKey) {
+                return $item;
+            }
+        }
+
+        // Query database dynamically for any newly added position
+        try {
+            $db = \Config\Database::connect();
+            $row = $db->table('tb_position')
+                      ->groupStart()
+                          ->where('posi_slug', $cleanKey)
+                          ->orWhere('posi_id', $cleanKey)
+                      ->groupEnd()
+                      ->get()
+                      ->getRow();
+            if ($row) {
+                return ['posi_id' => $row->posi_id, 'name_th' => $row->posi_name];
+            }
+        } catch (\Throwable $e) {}
+
+        return null;
+    }
+}
+
+if (!function_exists('personnel_resolve_teaching_key')) {
+    /**
+     * Resolve a key (slug, lear_id, or Thai name) to learning group ID and Thai name
+     */
+    function personnel_resolve_teaching_key(string $key): ?array
+    {
+        $cleanKey = strtolower(trim(urldecode($key)));
+        $slugMap = [
+            'thai'                            => ['lear_id' => 'lear_001', 'name_th' => 'ภาษาไทย'],
+            'thai-language'                   => ['lear_id' => 'lear_001', 'name_th' => 'ภาษาไทย'],
+            'math'                            => ['lear_id' => 'lear_002', 'name_th' => 'คณิตศาสตร์'],
+            'mathematics'                     => ['lear_id' => 'lear_002', 'name_th' => 'คณิตศาสตร์'],
+            'science'                         => ['lear_id' => 'lear_003', 'name_th' => 'วิทยาศาสตร์และเทคโนโลยี'],
+            'science-and-technology'          => ['lear_id' => 'lear_003', 'name_th' => 'วิทยาศาสตร์และเทคโนโลยี'],
+            'social'                          => ['lear_id' => 'lear_004', 'name_th' => 'สังคมศึกษา ศาสนา และวัฒนธรรม'],
+            'social-studies'                  => ['lear_id' => 'lear_004', 'name_th' => 'สังคมศึกษา ศาสนา และวัฒนธรรม'],
+            'pe'                              => ['lear_id' => 'lear_005', 'name_th' => 'สุขศึกษา และพลศึกษา'],
+            'physical-education'              => ['lear_id' => 'lear_005', 'name_th' => 'สุขศึกษา และพลศึกษา'],
+            'health-and-physical-education'   => ['lear_id' => 'lear_005', 'name_th' => 'สุขศึกษา และพลศึกษา'],
+            'art'                             => ['lear_id' => 'lear_006', 'name_th' => 'ศิลปะ'],
+            'arts'                            => ['lear_id' => 'lear_006', 'name_th' => 'ศิลปะ'],
+            'career'                          => ['lear_id' => 'lear_007', 'name_th' => 'การงานอาชีพ'],
+            'occupations'                     => ['lear_id' => 'lear_007', 'name_th' => 'การงานอาชีพ'],
+            'english'                         => ['lear_id' => 'lear_008', 'name_th' => 'ภาษาต่างประเทศ'],
+            'foreign-languages'               => ['lear_id' => 'lear_008', 'name_th' => 'ภาษาต่างประเทศ'],
+            'guidance'                        => ['lear_id' => 'lear_009', 'name_th' => 'งานแนะแนว'],
+        ];
+
+        if (isset($slugMap[$cleanKey])) {
+            return $slugMap[$cleanKey];
+        }
+
+        // Check if matching lear_id directly in the known map
+        foreach ($slugMap as $item) {
+            if (strtolower($item['lear_id']) === $cleanKey) {
+                return $item;
+            }
+        }
+
+        // Query database dynamically for any newly added learning group
+        try {
+            $db = \Config\Database::connect();
+            $row = $db->table('tb_learning')
+                      ->groupStart()
+                          ->where('lear_slug', $cleanKey)
+                          ->orWhere('lear_id', $cleanKey)
+                      ->groupEnd()
+                      ->get()
+                      ->getRow();
+            if ($row) {
+                return ['lear_id' => $row->lear_id, 'name_th' => $row->lear_namethai];
+            }
+        } catch (\Throwable $e) {}
+
+        return null;
+    }
+}
+
+

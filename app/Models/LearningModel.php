@@ -8,5 +8,5 @@ class LearningModel extends Model
     protected $table = 'tb_learning';
     protected $primaryKey = 'lear_id';
     
-    protected $allowedFields = ['lear_id', 'lear_namethai'];
+    protected $allowedFields = ['lear_id', 'lear_namethai', 'lear_nameeng', 'lear_slug', 'lear_icon', 'lear_link'];
 }

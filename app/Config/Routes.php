@@ -55,6 +55,7 @@ $routes->match(['GET', 'POST'],'CountReadNews','User\ConNews::NewsCountRead');
 $routes->get('news-suggestions', 'User\ConNews::newsSuggestions');
 $routes->get('pr', 'User\ConNews::pr');
 
+$routes->get('Personnal', 'User\ConPersonnal::PersonnalMain/Executive');
 $routes->get('Personnal/Executive', 'User\ConPersonnal::PersonnalMain/Management/ผู้บริหารสถานศึกษา');
 $routes->get('Personnal/(:any)/(:any)','User\ConPersonnal::PersonnalMain/$1/$2');
 $routes->get('Personnal/(:any)','User\ConPersonnal::PersonnalMain/$1');

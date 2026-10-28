@@ -86,18 +86,18 @@
                                                     class="bi bi-people-fill me-2"></i>บุคลากรทั้งหมด</b></a>
                                         <?php foreach ($Lear as $key => $v_Lear): ?>
                                             <a
-                                                href="<?= base_url('Personnal/' . urlencode("สายการสอน") . '/' . str_replace(" ", "-", urlencode($v_Lear->lear_namethai))) ?>"><i
+                                                href="<?= base_url('Personnal/Teaching/' . personnel_teaching_slug($v_Lear)) ?>"><i
                                                     class="bi bi-book-half me-1 small"></i><?= $v_Lear->lear_namethai; ?></a>
                                         <?php endforeach; ?>
                                     </div>
                                     <div class="col-lg-3">
                                         <h6 class="mega-title"><i
                                                 class="bi bi-wrench-adjustable-circle me-2"></i>สายสนับสนุน</h6>
-                                        <a href="<?= base_url('Personnal/' . urlencode("สายสนับสนุน")) ?>"><b><i
+                                        <a href="<?= base_url('Personnal/Support') ?>"><b><i
                                                     class="bi bi-person-gear me-2"></i>สายสนับสนุนทั้งหมด</b></a>
                                         <?php foreach ($PosiOther as $key => $v_PosiOther): ?>
                                             <a
-                                                href="<?= base_url('Personnal/' . urlencode("สายสนับสนุน") . '/' . str_replace(" ", "-", urlencode($v_PosiOther->posi_name))) ?>"><i
+                                                href="<?= base_url('Personnal/Support/' . personnel_support_slug($v_PosiOther)) ?>"><i
                                                     class="bi bi-shield-check me-1 small"></i><?= $v_PosiOther->posi_name; ?></a>
                                         <?php endforeach; ?>
                                     </div>
@@ -337,7 +337,7 @@
                                             class="bi bi-people-fill me-2"></i>บุคลากรทั้งหมด</b></a></li>
                             <?php foreach ($Lear as $key => $v_Lear): ?>
                                 <li><a
-                                        href="<?= base_url('Personnal/' . urlencode("สายการสอน") . '/' . str_replace(" ", "-", urlencode($v_Lear->lear_namethai))) ?>"><i
+                                        href="<?= base_url('Personnal/Teaching/' . personnel_teaching_slug($v_Lear)) ?>"><i
                                             class="bi bi-book-half me-1 small"></i><?= $v_Lear->lear_namethai; ?></a></li>
                             <?php endforeach; ?>
                         </ul>
@@ -348,11 +348,11 @@
                         <a href="#" class="mob-toggle"><i
                                 class="bi bi-wrench-adjustable-circle me-2"></i>สายสนับสนุน</a>
                         <ul class="mob-sub">
-                            <li><a href="<?= base_url('Personnal/' . urlencode("สายสนับสนุน")) ?>"><b><i
+                            <li><a href="<?= base_url('Personnal/Support') ?>"><b><i
                                             class="bi bi-person-gear me-2"></i>สายสนับสนุนทั้งหมด</b></a></li>
                             <?php foreach ($PosiOther as $key => $v_PosiOther): ?>
                                 <li><a
-                                        href="<?= base_url('Personnal/' . urlencode("สายสนับสนุน") . '/' . str_replace(" ", "-", urlencode($v_PosiOther->posi_name))) ?>"><i
+                                        href="<?= base_url('Personnal/Support/' . personnel_support_slug($v_PosiOther)) ?>"><i
                                             class="bi bi-shield-check me-1 small"></i><?= $v_PosiOther->posi_name; ?></a>
                                 </li>
                             <?php endforeach; ?>
