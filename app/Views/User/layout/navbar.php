@@ -129,57 +129,65 @@
                             <div class="mega-menu mega-menu-right">
                                 <div class="row">
                                     <div class="col-lg-3">
-                                        <h6 class="mega-title"><i class="bi bi-book-half me-2"></i>นักเรียน & การเรียน
-                                        </h6>
-                                        <a href="https://admission.skj.ac.th/"><i
+                                        <h6 class="mega-title"><i
+                                                class="bi bi-journal-bookmark-fill me-2"></i>กลุ่มบริหารวิชาการ</h6>
+                                        <a href="https://admission.skj.ac.th/" target="_blank"><i
                                                 class="bi bi-person-plus me-2"></i>รับสมัครนักเรียน</a>
-                                        <a href="https://academic.skj.ac.th/LearningOnline"><i
+                                        <a href="https://academic.skj.ac.th/LearningOnline" target="_blank"><i
                                                 class="bi bi-globe me-2"></i>ห้องเรียนออนไลน์</a>
-                                        <a href="https://learnsuan.skj.ac.th/"><i
+                                        <a href="https://learnsuan.skj.ac.th/" target="_blank"><i
                                                 class="bi bi-journal-text me-2"></i>สวนกุหลาบศึกษา</a>
                                         <a href="<?= base_url('guidance') ?>"><i
                                                 class="bi bi-mortarboard me-2"></i>ทุนการศึกษา</a>
+                                        <a href="<?= base_url('Yearbook') ?>"><i
+                                                class="bi bi-book me-2"></i>หนังสือรุ่นดิจิทัล</a>
+                                        <a href="https://documentcenter.skj.ac.th/" target="_blank"><i
+                                                class="bi bi-file-earmark-arrow-down me-2"></i>คลังดาวน์โหลดเอกสาร</a>
                                     </div>
                                     <div class="col-lg-3">
-                                        <h6 class="mega-title"><i class="bi bi-wrench-adjustable me-2"></i>ระบบจอง &
-                                            แจ้งซ่อม</h6>
-                                        <a href="https://general.skj.ac.th/Booking"><i
+                                        <h6 class="mega-title"><i
+                                                class="bi bi-gear-wide-connected me-2"></i>กลุ่มบริหารทั่วไป</h6>
+                                        <a href="https://guardcheck.skj.ac.th/" target="_blank"
+                                            ><i class="bi bi-shield-check me-2"></i>Guard
+                                            Check (ระบบตรวจเวร)</a>
+                                        <a href="https://kruwean.skj.ac.th/" target="_blank"><i
+                                                class="bi bi-person-check me-2"></i>ระบบครูเวร</a>
+                                        <a href="https://general.skj.ac.th/Booking" target="_blank"><i
                                                 class="bi bi-building-up me-2"></i>จองอาคารสถานที่</a>
-                                        <a href="https://general.skj.ac.th/CarBooking"><i
+                                        <a href="https://general.skj.ac.th/CarBooking" target="_blank"><i
                                                 class="bi bi-car-front me-2"></i>จองยานพาหนะ</a>
-                                        <a href="https://general.skj.ac.th/Repair"><i
+                                        <a href="https://general.skj.ac.th/Repair" target="_blank"><i
                                                 class="bi bi-tools me-2"></i>แจ้งซ่อมออนไลน์</a>
                                         <a href="https://general.skj.ac.th/Equipment" target="_blank"><i
                                                 class="bi bi-box-seam me-2"></i>ยืม-คืนพัสดุอุปกรณ์</a>
-                                        <a href="https://general.skj.ac.th/FoodReport"><i
+                                        <a href="https://general.skj.ac.th/FoodReport" target="_blank"><i
                                                 class="bi bi-pie-chart me-2"></i>รายงานอาหาร</a>
-                                    </div>
-                                    <div class="col-lg-3">
-                                        <h6 class="mega-title"><i class="bi bi-folder2-open me-2"></i>ข้อมูล & เอกสาร
-                                        </h6>
-                                        <a href="https://sitkao.skj.ac.th/" target="_blank"><i
-                                                class="bi bi-mortarboard me-2"></i>ระบบศิษย์เก่า</a>
-                                        <a href="<?= base_url('Yearbook') ?>"><i
-                                                class="bi bi-book me-2"></i>หนังสือรุ่นดิจิทัล</a>
-                                        <a href="<?= base_url('PageGroup') ?>"><i
-                                                class="bi bi-facebook me-2"></i>Facebook กลุ่ม</a>
-                                        <a href="<?= base_url('Email') ?>"><i
-                                                class="bi bi-envelope-at me-2"></i>อีเมลโรงเรียน</a>
-                                        <a href="https://documentcenter.skj.ac.th/"><i
-                                                class="bi bi-file-earmark-arrow-down me-2"></i>โหลดเอกสาร</a>
-                                        <a href="https://botany.skj.ac.th/"><i
+                                        <a href="https://botany.skj.ac.th/" target="_blank"><i
                                                 class="bi bi-tree-fill me-2"></i>งานสวนพฤกษศาสตร์</a>
                                     </div>
                                     <div class="col-lg-3">
-                                        <h6 class="mega-title"><i class="bi bi-trophy me-2"></i>กีฬา & อื่นๆ</h6>
+                                        <h6 class="mega-title"><i class="bi bi-people-fill me-2"></i>กลุ่มบริหารงานบุคคล
+                                        </h6>
+                                        <a href="<?= base_url('Email') ?>"><i
+                                                class="bi bi-envelope-at me-2"></i>อีเมลโรงเรียน</a>
+                                        <a href="<?= base_url('PageGroup') ?>"><i
+                                                class="bi bi-facebook me-2"></i>Facebook กลุ่ม</a>
+                                        <a href="https://sitkao.skj.ac.th/" target="_blank"><i
+                                                class="bi bi-mortarboard me-2"></i>ระบบศิษย์เก่า</a>
+                                        <a href="https://sportbase.skj.ac.th/User/Match" target="_blank"><i
+                                                class="bi bi-calendar-event me-2"></i>ตารางแข่งขันกีฬา</a>
+                                        <a href="https://sportbase.skj.ac.th/User/Athlete" target="_blank"><i
+                                                class="bi bi-person-badge me-2"></i>ทำเนียบนักกีฬา</a>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <h6 class="mega-title"><i
+                                                class="bi bi-graph-up-arrow me-2"></i>กลุ่มบริหารงบประมาณและแผน</h6>
                                         <a href="<?= base_url('Procurements') ?>"><i
                                                 class="bi bi-cart-check me-2"></i>จัดซื้อจัดจ้าง</a>
-                                        <a href="https://sites.google.com/skj.ac.th/skj68/home"><i
+                                        <a href="https://sites.google.com/skj.ac.th/skj68/home" target="_blank"><i
                                                 class="bi bi-shield-check me-2"></i>ประกันคุณภาพฯ</a>
-                                        <a href="https://sportbase.skj.ac.th/User/Match"><i
-                                                class="bi bi-calendar-event me-2"></i>ตารางแข่งขันกีฬา</a>
-                                        <a href="https://sportbase.skj.ac.th/User/Athlete"><i
-                                                class="bi bi-people me-2"></i>ทำเนียบนักกีฬา</a>
+                                        <a href="https://budgetplan.skj.ac.th/" target="_blank"><i
+                                                class="bi bi-cash-coin me-2"></i>ระบบงบประมาณและแผนงาน</a>
                                     </div>
                                 </div>
                             </div>
@@ -336,8 +344,7 @@
                             <li><a href="https://personnel.skj.ac.th/directory"><b><i
                                             class="bi bi-people-fill me-2"></i>บุคลากรทั้งหมด</b></a></li>
                             <?php foreach ($Lear as $key => $v_Lear): ?>
-                                <li><a
-                                        href="<?= base_url('Personnal/Teaching/' . personnel_teaching_slug($v_Lear)) ?>"><i
+                                <li><a href="<?= base_url('Personnal/Teaching/' . personnel_teaching_slug($v_Lear)) ?>"><i
                                             class="bi bi-book-half me-1 small"></i><?= $v_Lear->lear_namethai; ?></a></li>
                             <?php endforeach; ?>
                         </ul>
@@ -351,8 +358,7 @@
                             <li><a href="<?= base_url('Personnal/Support') ?>"><b><i
                                             class="bi bi-person-gear me-2"></i>สายสนับสนุนทั้งหมด</b></a></li>
                             <?php foreach ($PosiOther as $key => $v_PosiOther): ?>
-                                <li><a
-                                        href="<?= base_url('Personnal/Support/' . personnel_support_slug($v_PosiOther)) ?>"><i
+                                <li><a href="<?= base_url('Personnal/Support/' . personnel_support_slug($v_PosiOther)) ?>"><i
                                             class="bi bi-shield-check me-1 small"></i><?= $v_PosiOther->posi_name; ?></a>
                                 </li>
                             <?php endforeach; ?>
@@ -382,48 +388,55 @@
                     <span>SKJ บริการออนไลน์</span>
                 </a>
                 <ul class="mob-sub">
-                    <li class="mob-sub-header"><i class="bi bi-book-half me-2"></i>นักเรียน & การเรียน</li>
-                    <li><a href="https://admission.skj.ac.th/"><i
+                    <li class="mob-sub-header"><i class="bi bi-journal-bookmark-fill me-2"></i>กลุ่มบริหารวิชาการ</li>
+                    <li><a href="https://admission.skj.ac.th/" target="_blank"><i
                                 class="bi bi-person-plus me-2"></i>รับสมัครนักเรียน</a></li>
-                    <li><a href="https://academic.skj.ac.th/LearningOnline"><i
+                    <li><a href="https://academic.skj.ac.th/LearningOnline" target="_blank"><i
                                 class="bi bi-globe me-2"></i>ห้องเรียนออนไลน์</a></li>
-                    <li><a href="https://learnsuan.skj.ac.th/"><i class="bi bi-journal-text me-2"></i>สวนกุหลาบศึกษา</a>
+                    <li><a href="https://learnsuan.skj.ac.th/" target="_blank"><i
+                                class="bi bi-journal-text me-2"></i>สวนกุหลาบศึกษา</a>
                     </li>
                     <li><a href="<?= base_url('guidance') ?>"><i class="bi bi-mortarboard me-2"></i>ทุนการศึกษา</a></li>
-
-                    <li class="mob-sub-header"><i class="bi bi-wrench-adjustable me-2"></i>ระบบจอง & แจ้งซ่อม</li>
-                    <li><a href="https://general.skj.ac.th/Booking"><i
-                                class="bi bi-building-up me-2"></i>จองอาคารสถานที่</a></li>
-                    <li><a href="https://general.skj.ac.th/CarBooking"><i
-                                class="bi bi-car-front me-2"></i>จองยานพาหนะ</a></li>
-                    <li><a href="https://general.skj.ac.th/Repair"><i class="bi bi-tools me-2"></i>แจ้งซ่อมออนไลน์</a>
-                    </li>
-                    <li><a href="https://general.skj.ac.th/Equipment" target="_blank"><i
-                                class="bi bi-box-seam me-2"></i>ยืม-คืนพัสดุอุปกรณ์</a>
-                    </li>
-                    <li><a href="https://general.skj.ac.th/FoodReport"><i
-                                class="bi bi-pie-chart me-2"></i>รายงานอาหาร</a></li>
-
-                    <li class="mob-sub-header"><i class="bi bi-folder2-open me-2"></i>ข้อมูล & เอกสาร</li>
-                    <li><a href="https://sitkao.skj.ac.th/" target="_blank"><i class="bi bi-mortarboard me-2"></i>ระบบศิษย์เก่า</a></li>
                     <li><a href="<?= base_url('Yearbook') ?>"><i class="bi bi-book me-2"></i>หนังสือรุ่นดิจิทัล</a></li>
+                    <li><a href="https://documentcenter.skj.ac.th/" target="_blank"><i
+                                class="bi bi-file-earmark-arrow-down me-2"></i>คลังดาวน์โหลดเอกสาร</a></li>
+
+                    <li class="mob-sub-header"><i class="bi bi-gear-wide-connected me-2"></i>กลุ่มบริหารทั่วไป</li>
+                    <li><a href="https://guardcheck.skj.ac.th/" target="_blank" ><i
+                                class="bi bi-shield-check me-2 "></i>Guard Check (ระบบตรวจเวร)</a></li>
+                    <li><a href="https://kruwean.skj.ac.th/" target="_blank"><i
+                                class="bi bi-person-check me-2"></i>ระบบครูเวร</a></li>
+                    <li><a href="https://general.skj.ac.th/Booking" target="_blank"><i
+                                class="bi bi-building-up me-2"></i>จองอาคารสถานที่</a></li>
+                    <li><a href="https://general.skj.ac.th/CarBooking" target="_blank"><i
+                                class="bi bi-car-front me-2"></i>จองยานพาหนะ</a></li>
+                    <li><a href="https://general.skj.ac.th/Repair" target="_blank"><i
+                                class="bi bi-tools me-2"></i>แจ้งซ่อมออนไลน์</a></li>
+                    <li><a href="https://general.skj.ac.th/Equipment" target="_blank"><i
+                                class="bi bi-box-seam me-2"></i>ยืม-คืนพัสดุอุปกรณ์</a></li>
+                    <li><a href="https://general.skj.ac.th/FoodReport" target="_blank"><i
+                                class="bi bi-pie-chart me-2"></i>รายงานอาหาร</a></li>
+                    <li><a href="https://botany.skj.ac.th/" target="_blank"><i
+                                class="bi bi-tree-fill me-2"></i>งานสวนพฤกษศาสตร์</a></li>
+
+                    <li class="mob-sub-header"><i class="bi bi-people-fill me-2"></i>กลุ่มบริหารงานบุคคล</li>
+                    <li><a href="<?= base_url('Email') ?>"><i class="bi bi-envelope-at me-2"></i>อีเมลโรงเรียน</a></li>
                     <li><a href="<?= base_url('PageGroup') ?>"><i class="bi bi-facebook me-2"></i>Facebook กลุ่ม</a>
                     </li>
-                    <li><a href="<?= base_url('Email') ?>"><i class="bi bi-envelope-at me-2"></i>อีเมลโรงเรียน</a></li>
-                    <li><a href="https://documentcenter.skj.ac.th/"><i
-                                class="bi bi-file-earmark-arrow-down me-2"></i>โหลดเอกสาร</a></li>
-                    <li><a href="https://botany.skj.ac.th/"><i class="bi bi-tree-fill me-2"></i>งานสวนพฤกษศาสตร์</a>
-                    </li>
+                    <li><a href="https://sitkao.skj.ac.th/" target="_blank"><i
+                                class="bi bi-mortarboard me-2"></i>ระบบศิษย์เก่า</a></li>
+                    <li><a href="https://sportbase.skj.ac.th/User/Match" target="_blank"><i
+                                class="bi bi-calendar-event me-2"></i>ตารางแข่งขันกีฬา</a></li>
+                    <li><a href="https://sportbase.skj.ac.th/User/Athlete" target="_blank"><i
+                                class="bi bi-person-badge me-2"></i>ทำเนียบนักกีฬา</a></li>
 
-                    <li class="mob-sub-header"><i class="bi bi-trophy me-2"></i>กีฬา & อื่นๆ</li>
+                    <li class="mob-sub-header"><i class="bi bi-graph-up-arrow me-2"></i>กลุ่มบริหารงบประมาณและแผน</li>
                     <li><a href="<?= base_url('Procurements') ?>"><i
                                 class="bi bi-cart-check me-2"></i>จัดซื้อจัดจ้าง</a></li>
-                    <li><a href="https://sites.google.com/skj.ac.th/skj68/home"><i
+                    <li><a href="https://sites.google.com/skj.ac.th/skj68/home" target="_blank"><i
                                 class="bi bi-shield-check me-2"></i>ประกันคุณภาพฯ</a></li>
-                    <li><a href="https://sportbase.skj.ac.th/User/Match"><i
-                                class="bi bi-calendar-event me-2"></i>ตารางแข่งขันกีฬา</a></li>
-                    <li><a href="https://sportbase.skj.ac.th/User/Athlete"><i
-                                class="bi bi-people me-2"></i>ทำเนียบนักกีฬา</a></li>
+                    <li><a href="https://budgetplan.skj.ac.th/" target="_blank"><i
+                                class="bi bi-cash-coin me-2"></i>ระบบงบประมาณและแผนงาน</a></li>
                 </ul>
             </li>
 
@@ -515,7 +528,8 @@ $curSeg = $uriObj->getSegment(1);
         <span>บริการ</span>
     </a>
 
-    <a href="<?= base_url('Course') ?>" class="bottom-nav-item <?= ($curSeg == 'Course') ? 'active' : '' ?>" title="หลักสูตร">
+    <a href="<?= base_url('Course') ?>" class="bottom-nav-item <?= ($curSeg == 'Course') ? 'active' : '' ?>"
+        title="หลักสูตร">
         <div class="nav-icon-box">
             <i class="bi bi-mortarboard-fill"></i>
         </div>
@@ -550,9 +564,8 @@ $curSeg = $uriObj->getSegment(1);
     </div>
     <div class="offcanvas-body px-3 py-3" style="overflow-y: auto;">
 
-        <!-- หมวด 1: นักเรียน & การเรียน -->
-        <div class="sheet-category-title"><i class="bi bi-mortarboard-fill text-primary me-1"></i> นักเรียน & การเรียน
-        </div>
+        <!-- หมวด 1: กลุ่มบริหารวิชาการ -->
+        <div class="sheet-category-title"><i class="bi bi-journal-bookmark-fill text-primary me-1"></i> กลุ่มบริหารวิชาการ</div>
         <div class="services-app-grid mb-3">
             <a href="https://admission.skj.ac.th/" target="_blank" class="service-app-card">
                 <div class="service-icon-circle bg-pink-grad"><i class="bi bi-person-plus-fill"></i></div>
@@ -570,12 +583,27 @@ $curSeg = $uriObj->getSegment(1);
                 <div class="service-icon-circle bg-indigo-grad"><i class="bi bi-mortarboard"></i></div>
                 <div class="service-label">ทุนการศึกษา</div>
             </a>
+            <a href="<?= base_url('Yearbook') ?>" class="service-app-card">
+                <div class="service-icon-circle bg-blue-grad"><i class="bi bi-book-half"></i></div>
+                <div class="service-label">หนังสือรุ่นดิจิทัล</div>
+            </a>
+            <a href="https://documentcenter.skj.ac.th/" target="_blank" class="service-app-card">
+                <div class="service-icon-circle bg-rose-grad"><i class="bi bi-file-earmark-arrow-down-fill"></i></div>
+                <div class="service-label">คลังโหลดเอกสาร</div>
+            </a>
         </div>
 
-        <!-- หมวด 2: ระบบจอง & แจ้งซ่อม -->
-        <div class="sheet-category-title"><i class="bi bi-wrench-adjustable text-warning me-1"></i> ระบบจอง & แจ้งซ่อม
-        </div>
+        <!-- หมวด 2: กลุ่มบริหารทั่วไป -->
+        <div class="sheet-category-title"><i class="bi bi-gear-wide-connected text-warning me-1"></i> กลุ่มบริหารทั่วไป</div>
         <div class="services-app-grid mb-3">
+            <a href="https://guardcheck.skj.ac.th/" target="_blank" class="service-app-card">
+                <div class="service-icon-circle bg-blue-grad"><i class="bi bi-shield-check"></i></div>
+                <div class="service-label">ระบบตรวจเวร</div>
+            </a>
+            <a href="https://kruwean.skj.ac.th/" target="_blank" class="service-app-card">
+                <div class="service-icon-circle bg-indigo-grad"><i class="bi bi-person-check-fill"></i></div>
+                <div class="service-label">ระบบครูเวร</div>
+            </a>
             <a href="https://general.skj.ac.th/Booking" target="_blank" class="service-app-card">
                 <div class="service-icon-circle bg-purple-grad"><i class="bi bi-building-up"></i></div>
                 <div class="service-label">จองอาคารสถานที่</div>
@@ -596,47 +624,26 @@ $curSeg = $uriObj->getSegment(1);
                 <div class="service-icon-circle bg-emerald-grad"><i class="bi bi-pie-chart-fill"></i></div>
                 <div class="service-label">รายงานอาหาร</div>
             </a>
-        </div>
-
-        <!-- หมวด 3: ข้อมูล & เอกสาร -->
-        <div class="sheet-category-title"><i class="bi bi-folder2-open text-info me-1"></i> ข้อมูล & เอกสาร</div>
-        <div class="services-app-grid mb-3">
-            <a href="https://sitkao.skj.ac.th/" target="_blank" class="service-app-card">
-                <div class="service-icon-circle bg-purple-grad"><i class="bi bi-mortarboard-fill"></i></div>
-                <div class="service-label">ระบบศิษย์เก่า</div>
-            </a>
-            <a href="<?= base_url('Yearbook') ?>" class="service-app-card">
-                <div class="service-icon-circle bg-blue-grad"><i class="bi bi-book-half"></i></div>
-                <div class="service-label">หนังสือรุ่นดิจิทัล</div>
-            </a>
-            <a href="<?= base_url('PageGroup') ?>" class="service-app-card">
-                <div class="service-icon-circle bg-indigo-grad"><i class="bi bi-facebook"></i></div>
-                <div class="service-label">Facebook กลุ่ม</div>
-            </a>
-            <a href="<?= base_url('Email') ?>" class="service-app-card">
-                <div class="service-icon-circle bg-pink-grad"><i class="bi bi-envelope-at-fill"></i></div>
-                <div class="service-label">อีเมลโรงเรียน</div>
-            </a>
-            <a href="https://documentcenter.skj.ac.th/" target="_blank" class="service-app-card">
-                <div class="service-icon-circle bg-rose-grad"><i class="bi bi-file-earmark-arrow-down-fill"></i></div>
-                <div class="service-label">โหลดเอกสาร</div>
-            </a>
-            <a href="https://botany.skj.ac.th/" class="service-app-card">
+            <a href="https://botany.skj.ac.th/" target="_blank" class="service-app-card">
                 <div class="service-icon-circle bg-emerald-grad"><i class="bi bi-tree-fill"></i></div>
                 <div class="service-label">สวนพฤกษศาสตร์</div>
             </a>
         </div>
 
-        <!-- หมวด 4: กีฬา & งานบริการอื่นๆ -->
-        <div class="sheet-category-title"><i class="bi bi-trophy-fill text-danger me-1"></i> กีฬา & บริการอื่นๆ</div>
-        <div class="services-app-grid">
-            <a href="<?= base_url('Procurements') ?>" class="service-app-card">
-                <div class="service-icon-circle bg-amber-grad"><i class="bi bi-cart-check-fill"></i></div>
-                <div class="service-label">จัดซื้อจัดจ้าง</div>
+        <!-- หมวด 3: กลุ่มบริหารงานบุคคล -->
+        <div class="sheet-category-title"><i class="bi bi-people-fill text-info me-1"></i> กลุ่มบริหารงานบุคคล</div>
+        <div class="services-app-grid mb-3">
+            <a href="<?= base_url('Email') ?>" class="service-app-card">
+                <div class="service-icon-circle bg-pink-grad"><i class="bi bi-envelope-at-fill"></i></div>
+                <div class="service-label">อีเมลโรงเรียน</div>
             </a>
-            <a href="https://sites.google.com/skj.ac.th/skj68/home" target="_blank" class="service-app-card">
-                <div class="service-icon-circle bg-teal-grad"><i class="bi bi-shield-check"></i></div>
-                <div class="service-label">ประกันคุณภาพฯ</div>
+            <a href="<?= base_url('PageGroup') ?>" class="service-app-card">
+                <div class="service-icon-circle bg-indigo-grad"><i class="bi bi-facebook"></i></div>
+                <div class="service-label">Facebook กลุ่ม</div>
+            </a>
+            <a href="https://sitkao.skj.ac.th/" target="_blank" class="service-app-card">
+                <div class="service-icon-circle bg-purple-grad"><i class="bi bi-mortarboard-fill"></i></div>
+                <div class="service-label">ระบบศิษย์เก่า</div>
             </a>
             <a href="https://sportbase.skj.ac.th/User/Match" target="_blank" class="service-app-card">
                 <div class="service-icon-circle bg-purple-grad"><i class="bi bi-calendar-event"></i></div>
@@ -648,6 +655,22 @@ $curSeg = $uriObj->getSegment(1);
             </a>
         </div>
 
+        <!-- หมวด 4: กลุ่มบริหารงบประมาณและแผน -->
+        <div class="sheet-category-title"><i class="bi bi-graph-up-arrow text-danger me-1"></i> กลุ่มบริหารงบประมาณและแผน</div>
+        <div class="services-app-grid">
+            <a href="<?= base_url('Procurements') ?>" class="service-app-card">
+                <div class="service-icon-circle bg-amber-grad"><i class="bi bi-cart-check-fill"></i></div>
+                <div class="service-label">จัดซื้อจัดจ้าง</div>
+            </a>
+            <a href="https://sites.google.com/skj.ac.th/skj68/home" target="_blank" class="service-app-card">
+                <div class="service-icon-circle bg-teal-grad"><i class="bi bi-shield-check"></i></div>
+                <div class="service-label">ประกันคุณภาพฯ</div>
+            </a>
+            <a href="https://budgetplan.skj.ac.th/" target="_blank" class="service-app-card">
+                <div class="service-icon-circle bg-emerald-grad"><i class="bi bi-cash-coin"></i></div>
+                <div class="service-label">งบประมาณและแผน</div>
+            </a>
+        </div>
     </div>
 </div>
 

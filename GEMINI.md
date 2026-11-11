@@ -47,3 +47,14 @@ The primary goal is to maintain and extend the existing visual style for a consi
 - **Routing:** Define all new routes in `app/Config/Routes.php`. Do not use auto-routing.
 - **Database Interaction:** When interacting with a specific database, ensure the correct database group (`default`, `personnal`, `academic`) is used in the model.
 - **Security:** Apply standard security practices, including CSRF protection and input validation as already implemented in the project.
+
+## 6. Automatic AI Skill Usage (Superpowers Integration)
+
+Always check and invoke appropriate skills automatically before taking action:
+- **New Features / Architectural Changes:** Automatically invoke `brainstorming` before planning or modifying code.
+- **Multi-step Tasks:** Automatically invoke `writing-plans` to outline steps, then `executing-plans` to implement.
+- **Bugs & Issues:** Automatically invoke `systematic-debugging` to trace the root cause before attempting fixes.
+- **Implementation & Testing:** Automatically follow `test-driven-development` (TDD) where relevant.
+- **Work Completion:** Automatically invoke `verification-before-completion` to verify changes and test evidence before claiming completion.
+- **Execution Rule:** Adhere strictly to `.agents/skills/using-superpowers/SKILL.md` — if a skill applies to the task, use it automatically without skipping.
+

@@ -866,69 +866,91 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-skj mega-menu-premium">
                         <div class="row">
+                            <!-- 1. กลุ่มบริหารวิชาการ -->
                             <div class="col-lg-3">
-                                <h6 class="mega-column-title">นักเรียน & การเรียน</h6>
-                                <a href="https://admission.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i
-                                        class="bi bi-person-plus"></i> รับสมัครนักเรียน</a>
-                                <a href="https://academic.skj.ac.th/LearningOnline"
+                                <h6 class="mega-column-title"><i
+                                        class="bi bi-journal-bookmark me-1"></i>กลุ่มบริหารวิชาการ</h6>
+                                <a href="https://admission.skj.ac.th/" target="_blank"
+                                    class="dropdown-item dropdown-item-skj"><i class="bi bi-person-plus"></i>
+                                    รับสมัครนักเรียน</a>
+                                <a href="https://academic.skj.ac.th/LearningOnline" target="_blank"
                                     class="dropdown-item dropdown-item-skj"><i class="bi bi-globe"></i>
                                     ห้องเรียนออนไลน์</a>
-                                <a href="https://learnsuan.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i
-                                        class="bi bi-journal-text"></i> สวนกุหลาบศึกษา</a>
+                                <a href="https://learnsuan.skj.ac.th/" target="_blank"
+                                    class="dropdown-item dropdown-item-skj"><i class="bi bi-journal-text"></i>
+                                    สวนกุหลาบศึกษา</a>
                                 <a href="<?= base_url('guidance') ?>" class="dropdown-item dropdown-item-skj"><i
                                         class="bi bi-mortarboard"></i> ทุนการศึกษา</a>
-                            </div>
-                            <div class="col-lg-3">
-                                <h6 class="mega-column-title">ระบบจอง & แจ้งซ่อม</h6>
-                                <a href="https://general.skj.ac.th/Booking" class="dropdown-item dropdown-item-skj"><i
-                                        class="bi bi-building-up"></i> จองอาคารสถานที่</a>
-                                <a href="https://general.skj.ac.th/CarBooking"
-                                    class="dropdown-item dropdown-item-skj"><i class="bi bi-car-front"></i>
-                                    จองยานพาหนะ</a>
-                                <a href="https://general.skj.ac.th/Repair" class="dropdown-item dropdown-item-skj"><i
-                                        class="bi bi-tools"></i> แจ้งซ่อมออนไลน์</a>
-                                <a href="https://general.skj.ac.th/Equipment" class="dropdown-item dropdown-item-skj" target="_blank"><i
-                                        class="bi bi-box-seam"></i> ยืม-คืนพัสดุอุปกรณ์</a>
-                                <a href="https://general.skj.ac.th/FoodReport"
-                                    class="dropdown-item dropdown-item-skj"><i class="bi bi-pie-chart"></i>
-                                    รายงานอาหาร</a>
-                            </div>
-                            <div class="col-lg-3">
-                                <h6 class="mega-column-title">ข้อมูล & เอกสาร</h6>
-                                <a href="https://sitkao.skj.ac.th/" target="_blank" class="dropdown-item dropdown-item-skj"><i
-                                        class="bi bi-mortarboard"></i> ระบบศิษย์เก่า</a>
                                 <a href="<?= base_url('Yearbook') ?>" class="dropdown-item dropdown-item-skj"><i
                                         class="bi bi-book"></i> หนังสือรุ่นดิจิทัล</a>
-                                <a href="<?= base_url('PageGroup') ?>" class="dropdown-item dropdown-item-skj"><i
-                                        class="bi bi-facebook"></i> Facebook กลุ่ม</a>
+                                <a href="https://documentcenter.skj.ac.th/" target="_blank"
+                                    class="dropdown-item dropdown-item-skj"><i
+                                        class="bi bi-file-earmark-arrow-down"></i> คลังดาวน์โหลดเอกสาร</a>
+                            </div>
+
+                            <!-- 2. กลุ่มบริหารทั่วไป -->
+                            <div class="col-lg-3">
+                                <h6 class="mega-column-title"><i
+                                        class="bi bi-gear-wide-connected me-1"></i>กลุ่มบริหารทั่วไป</h6>
+                                <a href="https://guardcheck.skj.ac.th/" target="_blank"
+                                    class="dropdown-item dropdown-item-skj"><i
+                                        class="bi bi-shield-check"></i> Guard Check (ระบบตรวจเวร)</a>
+                                <a href="https://kruwean.skj.ac.th/" target="_blank"
+                                    class="dropdown-item dropdown-item-skj"><i
+                                        class="bi bi-person-check"></i> ระบบครูเวร</a>
+                                <a href="https://general.skj.ac.th/Booking" target="_blank"
+                                    class="dropdown-item dropdown-item-skj"><i class="bi bi-building-up"></i>
+                                    จองอาคารสถานที่</a>
+                                <a href="https://general.skj.ac.th/CarBooking" target="_blank"
+                                    class="dropdown-item dropdown-item-skj"><i class="bi bi-car-front"></i>
+                                    จองยานพาหนะ</a>
+                                <a href="https://general.skj.ac.th/Repair" target="_blank"
+                                    class="dropdown-item dropdown-item-skj"><i class="bi bi-tools"></i>
+                                    แจ้งซ่อมออนไลน์</a>
+                                <a href="https://general.skj.ac.th/Equipment" target="_blank"
+                                    class="dropdown-item dropdown-item-skj"><i class="bi bi-box-seam"></i>
+                                    ยืม-คืนพัสดุอุปกรณ์</a>
+                                <a href="https://general.skj.ac.th/FoodReport" target="_blank"
+                                    class="dropdown-item dropdown-item-skj"><i class="bi bi-pie-chart"></i>
+                                    รายงานอาหาร</a>
+                                <a href="https://botany.skj.ac.th/" target="_blank"
+                                    class="dropdown-item dropdown-item-skj"><i class="bi bi-tree-fill"></i>
+                                    งานสวนพฤกษศาสตร์</a>
+                            </div>
+
+                            <!-- 3. กลุ่มบริหารงานบุคคล -->
+                            <div class="col-lg-3">
+                                <h6 class="mega-column-title"><i class="bi bi-people me-1"></i>กลุ่มบริหารงานบุคคล</h6>
                                 <a href="<?= base_url('Email') ?>" class="dropdown-item dropdown-item-skj"><i
                                         class="bi bi-envelope-at"></i> อีเมลโรงเรียน</a>
-                                <a href="https://documentcenter.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i
-                                        class="bi bi-file-earmark-arrow-down"></i> โหลดเอกสาร</a>
-                                <a href="https://botany.skj.ac.th/" class="dropdown-item dropdown-item-skj"><i
-                                        class="bi bi-tree-fill"></i> งานสวนพฤกษศาสตร์</a>
+                                <a href="<?= base_url('PageGroup') ?>" class="dropdown-item dropdown-item-skj"><i
+                                        class="bi bi-facebook"></i> Facebook กลุ่ม</a>
+                                <a href="https://sitkao.skj.ac.th/" target="_blank"
+                                    class="dropdown-item dropdown-item-skj"><i class="bi bi-mortarboard"></i>
+                                    ระบบศิษย์เก่า</a>
+                                <a href="https://sportbase.skj.ac.th/User/Match" target="_blank"
+                                    class="dropdown-item dropdown-item-skj"><i class="bi bi-calendar-event"></i>
+                                    ตารางแข่งขันกีฬา</a>
+                                <a href="https://sportbase.skj.ac.th/User/Athlete" target="_blank"
+                                    class="dropdown-item dropdown-item-skj"><i class="bi bi-person-badge"></i>
+                                    ทำเนียบนักกีฬา</a>
+                                <a href="https://sportbase.skj.ac.th/User/Attendance" target="_blank"
+                                    class="dropdown-item dropdown-item-skj"><i class="bi bi-clipboard-check"></i>
+                                    สถานภาพนักกีฬา</a>
                             </div>
+
+                            <!-- 4. กลุ่มบริหารงบประมาณและแผน -->
                             <div class="col-lg-3">
-                                <h6 class="mega-column-title">อื่นๆ</h6>
+                                <h6 class="mega-column-title"><i
+                                        class="bi bi-graph-up-arrow me-1"></i>กลุ่มบริหารงบประมาณและแผน</h6>
                                 <a href="<?= base_url('Procurements') ?>" class="dropdown-item dropdown-item-skj"><i
                                         class="bi bi-cart-check"></i> จัดซื้อจัดจ้าง</a>
-                                <a href="https://sites.google.com/skj.ac.th/skj68/home"
+                                <a href="https://sites.google.com/skj.ac.th/skj68/home" target="_blank"
                                     class="dropdown-item dropdown-item-skj"><i class="bi bi-shield-check"></i>
                                     ประกันคุณภาพฯ</a>
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-lg-3">
-                                <h6 class="mega-column-title">กีฬา</h6>
-                                <a href="https://sportbase.skj.ac.th/User/Match"
-                                    class="dropdown-item dropdown-item-skj"><i class="bi bi-calendar-event"></i>
-                                    ตารางแข่งขัน</a>
-                                <a href="https://sportbase.skj.ac.th/User/Athlete"
-                                    class="dropdown-item dropdown-item-skj"><i class="bi bi-people"></i>
-                                    ทำเนียบนักกีฬา</a>
-                                <a href="https://sportbase.skj.ac.th/User/Attendance"
-                                    class="dropdown-item dropdown-item-skj"><i class="bi bi-clipboard-check"></i>
-                                    สถานะภาพนักกีฬาประจำวัน</a>
+                                <a href="https://budgetplan.skj.ac.th/" target="_blank"
+                                    class="dropdown-item dropdown-item-skj"><i class="bi bi-cash-coin"></i>
+                                    ระบบงบประมาณและแผนงาน</a>
                             </div>
                         </div>
                     </div>
