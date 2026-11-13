@@ -42,6 +42,30 @@
 <!-- Page JS -->
 <script src="<?=base_url('assets/admin/assets/js/dashboards-analytics.js')?>"></script>
 
+<!-- Mobile-First Interactive Handlers -->
+<script>
+$(document).ready(function() {
+    // Mobile Bottom Nav: Menu Drawer Toggle (triggers Sneat Sidebar)
+    $('#btn-toggle-mobile-menu').on('click', function(e) {
+        e.preventDefault();
+        if (typeof Helpers !== 'undefined' && typeof Helpers.toggleCollapsed === 'function') {
+            Helpers.toggleCollapsed();
+        } else {
+            $('a.layout-menu-toggle, .layout-menu-toggle a').first().trigger('click');
+        }
+    });
+
+    // Handle Quick Action modal shortcuts from hash
+    if (window.location.hash === '#add' && $('#ModalNews').length) {
+        var modalAdd = bootstrap.Modal.getInstance(document.getElementById('ModalNews')) || new bootstrap.Modal(document.getElementById('ModalNews'));
+        modalAdd.show();
+    } else if (window.location.hash === '#facebook' && $('#ModalFacebook').length) {
+        var modalFb = bootstrap.Modal.getInstance(document.getElementById('ModalFacebook')) || new bootstrap.Modal(document.getElementById('ModalFacebook'));
+        modalFb.show();
+    }
+});
+</script>
+
 <?= $this->renderSection('scripts') ?>
 </body>
 </html>

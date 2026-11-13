@@ -1,8 +1,8 @@
 <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
     id="layout-navbar">
-    <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
-        <a class="nav-item nav-link px-0 me-xl-4 text-primary" href="javascript:void(0)">
-            <i class="bx bx-menu bx-sm"></i>
+    <div class="layout-menu-toggle navbar-nav align-items-xl-center me-2 me-xl-0 d-xl-none">
+        <a class="nav-item nav-link px-2 me-xl-4 text-primary d-flex align-items-center justify-content-center rounded-3" href="javascript:void(0)" style="min-width: 44px; min-height: 44px;" aria-label="เปิดเมนู">
+            <i class="bx bx-menu fs-4"></i>
         </a>
     </div>
 
@@ -11,8 +11,9 @@
         <div class="navbar-nav align-items-center">
             <div class="nav-item d-flex align-items-center">
                 <div class="search-wrapper">
-                    <i class="bx bx-search text-muted me-2 fs-5"></i>
+                    <i class="bx bx-search text-muted me-1.5" style="font-size: 1.05rem;"></i>
                     <input type="text" placeholder="ค้นหาเมนูหรือฟังก์ชัน..." aria-label="Search..." />
+                    <span class="badge bg-white text-muted border px-1.5 py-0.5 rounded d-none d-md-inline ms-1 shadow-2xs font-monospace" style="font-size: 0.62rem; letter-spacing: 0.02em;">Ctrl K</span>
                 </div>
             </div>
         </div>
@@ -49,7 +50,7 @@
                         <i class="bx bx-chevron-down text-muted d-none d-lg-block small"></i>
                     </div>
                 </a>
-                <ul class="dropdown-menu dropdown-menu-end shadow-lg mt-2" style="min-width: 230px;">
+                <ul class="dropdown-menu dropdown-menu-end shadow-lg mt-2 border-0 rounded-3" style="min-width: 230px; max-width: calc(100vw - 30px);">
                     <li>
                         <div class="dropdown-item py-2 px-3">
                             <div class="d-flex align-items-center">

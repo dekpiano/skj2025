@@ -10,7 +10,7 @@
             </div>
         </a>
 
-        <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none text-muted">
+        <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-flex align-items-center justify-content-center d-xl-none text-muted p-2 rounded-circle" style="min-width: 44px; min-height: 44px;" aria-label="ปิดเมนู">
             <i class="bx bx-chevron-left bx-sm align-middle"></i>
         </a>
     </div>

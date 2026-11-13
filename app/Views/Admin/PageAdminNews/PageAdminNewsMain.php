@@ -7,42 +7,55 @@
 <script src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"></script>
 
 <div class="container-xxl flex-grow-1 container-p-y">
-    <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h4 class="fw-bold py-3 mb-0">
-            <span class="text-muted fw-light">แดชบอร์ด /</span> ข่าวประชาสัมพันธ์
-        </h4>
-        <div class="d-flex gap-2">
-            <button class="btn btn-outline-info" id="BtnOpenSyncModal" type="button" data-bs-toggle="modal" data-bs-target="#ModalSyncNewsImages" title="ซิงค์รูปภาพเก่าขึ้น Cloud Server">
-                <i class="bx bx-cloud-upload me-1"></i> ซิงค์รูปขึ้น Cloud
+    <!-- Header with Mobile-First Responsive Action Buttons -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
+        <div>
+            <h4 class="fw-bold mb-1">
+                <span class="text-muted fw-light">แดชบอร์ด /</span> ข่าวประชาสัมพันธ์
+            </h4>
+            <small class="text-muted d-block d-md-none">จัดการข่าวสาร นำเข้าโพสต์ และซิงค์รูปภาพ</small>
+        </div>
+        <div class="d-flex flex-wrap gap-2 w-100 w-md-auto">
+            <button class="btn btn-outline-info flex-fill flex-md-grow-0 d-inline-flex align-items-center justify-content-center" id="BtnOpenSyncModal" type="button" data-bs-toggle="modal" data-bs-target="#ModalSyncNewsImages" title="ซิงค์รูปภาพเก่าขึ้น Cloud Server">
+                <i class="bx bx-cloud-upload me-1"></i> <span>ซิงค์ขึ้น Cloud</span>
             </button>
-            <button class="btn btn-outline-danger" id="CleanImages" type="button" data-bs-toggle="tooltip" title="ลบรูปภาพที่ไม่ได้ใช้งาน">
-                <i class="bx bx-trash me-1"></i> ล้างไฟล์ขยะ
+            <button class="btn btn-outline-danger flex-fill flex-md-grow-0 d-inline-flex align-items-center justify-content-center" id="CleanImages" type="button" data-bs-toggle="tooltip" title="ลบรูปภาพที่ไม่ได้ใช้งาน">
+                <i class="bx bx-trash me-1"></i> <span>ล้างขยะ</span>
             </button>
-            <button class="btn btn-outline-primary" id="AddFacebook" type="button" data-bs-toggle="modal" data-bs-target="#ModalFacebook">
-                <i class="bx bxl-facebook-circle me-1"></i> ดึงข่าวจาก Facebook
+            <button class="btn btn-outline-primary flex-fill flex-md-grow-0 d-inline-flex align-items-center justify-content-center" id="AddFacebook" type="button" data-bs-toggle="modal" data-bs-target="#ModalFacebook">
+                <i class="bx bxl-facebook-circle me-1"></i> <span>ดึง Facebook</span>
             </button>
-            <button class="btn btn-primary" id="AddNews">
-                <i class="bx bx-plus me-1"></i> เพิ่มข่าวสารใหม่
+            <button class="btn btn-primary flex-fill flex-md-grow-0 d-inline-flex align-items-center justify-content-center" id="AddNews">
+                <i class="bx bx-plus me-1"></i> <span>เพิ่มข่าวใหม่</span>
             </button>
         </div>
     </div>
 
-    <!-- News List Card -->
-    <div class="card shadow-sm border-0">
-        <div class="card-header bg-white py-3 d-flex align-items-center justify-content-between border-bottom">
-            <h5 class="mb-0 text-primary fw-bold">ตารางข่าวประชาสัมพันธ์</h5>
-            <small class="text-muted">รายการข่าวทั้งหมดที่แสดงบนเว็บไซต์</small>
+    <!-- News List Card (Streamlined Modern SaaS Table) -->
+    <div class="card border-0 shadow-xs mb-4" style="border-radius: 16px;">
+        <div class="card-header bg-white py-3 px-3 px-md-4 d-flex align-items-center justify-content-between border-bottom">
+            <div class="d-flex align-items-center gap-2.5">
+                <div class="avatar avatar-xs" style="width: 32px; height: 32px;">
+                    <span class="avatar-initial rounded-circle bg-label-primary"><i class="bx bx-news fs-6"></i></span>
+                </div>
+                <div>
+                    <h6 class="mb-0 text-dark fw-bold" style="font-size: 0.95rem;">ตารางข่าวประชาสัมพันธ์</h6>
+                    <small class="text-muted" style="font-size: 0.75rem;">จัดการข่าวสารทั้งหมด <?= count($news) ?> รายการที่แสดงบนเว็บไซต์</small>
+                </div>
+            </div>
+            <span class="badge bg-label-secondary d-none d-sm-inline-block rounded-pill px-2.5 py-1" style="font-size: 0.72rem;">
+                <i class="bx bx-check-circle me-1 text-success"></i>สถานะ: ปกติ
+            </span>
         </div>
         <div class="card-body p-0">
             <div class="table-responsive text-nowrap">
-                <table class="table table-hover align-middle mb-0" id="myTable">
+                <table class="table table-hover align-middle mb-0" id="myTable" style="font-size: 0.85rem;">
                     <thead class="table-light">
                         <tr>
-                            <th width="45%">หัวข้อข่าว</th>
-                            <th width="20%">ประเภทข่าว</th>
-                            <th width="20%">วันที่สร้าง</th>
-                            <th width="15%">การจัดการ</th>
+                            <th width="45%" class="py-2.5 text-uppercase text-muted" style="font-size: 0.72rem; letter-spacing: 0.04em;">หัวข้อข่าว</th>
+                            <th width="20%" class="py-2.5 text-uppercase text-muted" style="font-size: 0.72rem; letter-spacing: 0.04em;">ประเภทข่าว</th>
+                            <th width="20%" class="py-2.5 text-uppercase text-muted" style="font-size: 0.72rem; letter-spacing: 0.04em;">วันที่สร้าง</th>
+                            <th width="15%" class="py-2.5 text-uppercase text-muted" style="font-size: 0.72rem; letter-spacing: 0.04em;">การจัดการ</th>
                         </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">
