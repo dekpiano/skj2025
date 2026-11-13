@@ -36,6 +36,10 @@ Options All -Indexes
 	RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
 	RewriteRule ^ http://%1%{REQUEST_URI} [R=301,L]
 
+	# Fallback to Remote Cloud Server for synced news images that no longer exist locally
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteRule ^uploads/news/(.+)$ https://skj.nsnpao.go.th/uploads/news/$1 [R=302,L]
+
 	# Checks to see if the user is attempting to access a valid file,
 	# such as an image or css document, if this isn't true it sends the
 	# request to the front controller, index.php

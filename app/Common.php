@@ -351,4 +351,60 @@ if (!function_exists('personnel_resolve_teaching_key')) {
     }
 }
 
+if (!function_exists('news_image_url')) {
+    /**
+     * Get URL for news image (cover, album, or content)
+     * Backward-compatible: checks local storage first, then falls back to remote server.
+     *
+     * @param string|null $filename File name, relative path, or full URL
+     * @param string $type 'cover', 'album', or 'content'
+     * @return string
+     */
+    function news_image_url(?string $filename, string $type = 'cover'): string
+    {
+        if (empty($filename)) {
+            return '';
+        }
+        if (preg_match('#^https?://#i', $filename)) {
+            return $filename;
+        }
+
+        $clean = ltrim($filename, '/');
+
+        $remoteBase = (function_exists('env') ? env('upload.server.baseurl') : '') ?: 'https://skj.nsnpao.go.th/uploads/';
+        $remoteBase = rtrim($remoteBase, '/') . '/';
+
+        $subDir = match ($type) {
+            'album'   => 'news/album/',
+            'content' => 'news/content/',
+            default   => 'news/',
+        };
+
+        // If $clean starts with 'uploads/news/...'
+        if (str_starts_with($clean, 'uploads/news/')) {
+            $relativeUnderUploads = substr($clean, strlen('uploads/'));
+            if (is_file(FCPATH . $clean)) {
+                return base_url($clean);
+            }
+            return $remoteBase . $relativeUnderUploads;
+        }
+
+        // If $clean starts with 'news/'
+        if (str_starts_with($clean, 'news/')) {
+            if (is_file(FCPATH . 'uploads/' . $clean)) {
+                return base_url('uploads/' . $clean);
+            }
+            return $remoteBase . $clean;
+        }
+
+        // Normal filename (e.g. "fb_673...jpg" or "16578...jpg")
+        $localPath = FCPATH . 'uploads/' . $subDir . $clean;
+        if (is_file($localPath)) {
+            return base_url('uploads/' . $subDir . $clean);
+        }
+
+        return $remoteBase . $subDir . $clean;
+    }
+}
+
 

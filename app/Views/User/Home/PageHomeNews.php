@@ -110,18 +110,35 @@
     position: relative;
     height: 175px;
     overflow: hidden;
+    background: linear-gradient(90deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%);
+    background-size: 200% 100%;
+    animation: img-skeleton-shimmer 1.6s infinite ease-in-out;
+}
+
+.skj-news-card .post-img.is-loaded {
+    animation: none;
     background: #f1f5f9;
+}
+
+@keyframes img-skeleton-shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
 }
 
 .skj-news-card .post-img img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity: 0;
+    transition: opacity 0.45s ease, transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
     display: block;
 }
 
-.skj-news-card:hover .post-img img {
+.skj-news-card .post-img img.is-loaded {
+    opacity: 1;
+}
+
+.skj-news-card:hover .post-img img.is-loaded {
     transform: scale(1.08);
 }
 
@@ -307,8 +324,9 @@
                     <div class="skj-news-card">
                         <!-- Image Container with Badges -->
                         <div class="post-img">
-                            <img src="<?=base_url('uploads/news/'.$v_news->news_img)?>" alt="<?= $v_news->news_topic ?>" loading="lazy"
-                                onerror="this.onerror=null;this.src='https://placehold.co/400x250/fb7e9c/white?text=SKJ+News';">
+                            <img src="<?=news_image_url($v_news->news_img, 'cover')?>" alt="<?= $v_news->news_topic ?>" loading="lazy"
+                                onload="this.classList.add('is-loaded'); if(this.parentElement) this.parentElement.classList.add('is-loaded');"
+                                onerror="this.onerror=null;this.src='https://placehold.co/400x250/fb7e9c/white?text=SKJ+News'; this.classList.add('is-loaded'); if(this.parentElement) this.parentElement.classList.add('is-loaded');">
                             <div class="post-img-fade"></div>
                             
                             <!-- News Tag Badge -->

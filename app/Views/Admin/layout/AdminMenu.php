@@ -32,18 +32,6 @@
             </a>
         </li>
 
-        <!-- Live Chat (Standalone System) -->
-        <li class="menu-item">
-            <a href="http://localhost:8070/" target="_blank" class="menu-link d-flex justify-content-between align-items-center">
-                <div class="d-flex align-items-center">
-                    <i class="menu-icon tf-icons bx bx-chat"></i>
-                    <div data-i18n="Analytics">ศูนย์สนทนาสด (Live Chat)</div>
-                </div>
-                <span class="badge bg-label-primary rounded-pill px-2 py-1 ms-auto" style="font-size: 0.68rem;"><i class="bx bx-link-external me-1"></i>Portal</span>
-            </a>
-        </li>
-
-
         <!-- ==================== หมวดหมู่: จัดการเนื้อหาเว็บไซต์ ==================== -->
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">จัดการเนื้อหาเว็บไซต์</span>
@@ -106,19 +94,6 @@
                 <?php endif; ?>
             </ul>
         </li>
-
-
-        <!-- ==================== หมวดหมู่: บริการนักเรียน & ไอที ==================== -->
-        <li class="menu-header small text-uppercase">
-            <span class="menu-header-text">งานสารสนเทศ & ไอที</span>
-        </li>
-        <li class="menu-item <?= $uri->getSegment(2) == 'Student' ? "active" : "" ?>">
-            <a href="<?= base_url('Admin/Student'); ?>" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-wifi"></i>
-                <div data-i18n="Analytics">ข้อมูลนักเรียน (Wifi / Email)</div>
-            </a>
-        </li>
-
 
         <!-- ==================== หมวดหมู่: ดูแลระบบ (Super Admin) ==================== -->
         <?php if (in_array('Super Admin', session('roles') ?? [])): ?>

@@ -58,6 +58,14 @@
     <link href="<?=base_url()?>/assets/css/style.css?v=11" rel="stylesheet">
     <link href="<?=base_url()?>/assets/css/media.css?v=7" rel="stylesheet">
     
+    <script>
+        const BASE_URL = '<?= rtrim(base_url(), '/') ?>';
+        // Disable CI4 Debug Toolbar Hot Reload to prevent EventSource errors in Apache/Docker
+        if (document.cookie.indexOf('debug-hot-reload') !== -1) {
+            document.cookie = 'debug-hot-reload=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; samesite=Lax;';
+        }
+    </script>
+    
     <?php if(isset($festival_status) && $festival_status == 'on'): ?>
     <!-- New Year Theme -->
     <link href="<?=base_url()?>/assets/css/newyear_snow.css" rel="stylesheet">

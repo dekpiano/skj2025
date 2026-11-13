@@ -28,15 +28,6 @@
                 </a>
             </li>
 
-            <!-- Quick Link: Live Chat (Standalone Portal) -->
-            <li class="nav-item d-none d-sm-block">
-                <a href="http://localhost:8070/" target="_blank" class="nav-quick-btn" title="ศูนย์สนทนาสด (ระบบแยก)">
-                    <i class="bx bx-chat text-info"></i>
-                    <span>Live Chat</span>
-                    <i class="bx bx-link-external small text-muted ms-1" style="font-size: 0.75rem;"></i>
-                </a>
-            </li>
-
             <div class="vr mx-2 text-muted opacity-25 d-none d-sm-block" style="height: 24px;"></div>
 
             <!-- User Menu -->

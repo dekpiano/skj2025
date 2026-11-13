@@ -322,7 +322,7 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 <script src="<?= base_url() ?>/assets/js/main.js?v=3"></script>
 <?php if ($uri->getSegment(1) === "News"): ?>
-    <script src="<?= base_url() ?>/assets/js/News/News.js?v=10.2"></script>
+    <script src="<?= base_url() ?>/assets/js/News/News.js?v=<?= file_exists(FCPATH . 'assets/js/News/News.js') ? filemtime(FCPATH . 'assets/js/News/News.js') : '10.3' ?>"></script>
 <?php endif; ?>
 
 

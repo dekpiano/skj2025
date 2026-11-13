@@ -88,9 +88,13 @@ $routes->group('Admin', ['filter' => 'permission', 'namespace' => 'App\Controlle
     $routes->match(['POST'], 'News/deleteImage', 'ConAdminNews::deleteImage', ['filter' => 'permission:Admin']);
     $routes->match(['GET', 'POST'], 'News/View/Facebook', 'ConAdminNews::ViewNewsFormFacebook', ['filter' => 'permission:Admin']);
     $routes->match(['GET', 'POST'], 'News/Select/Facebook', 'ConAdminNews::SelectNewsFormFacebook', ['filter' => 'permission:Admin']);
+    $routes->match(['GET', 'POST'], 'News/FetchFacebookByUrl', 'ConAdminNews::FetchFacebookByUrl', ['filter' => 'permission:Admin']);
+    $routes->match(['GET', 'POST'], 'News/ImageProxy', 'ConAdminNews::ImageProxy');
     $routes->match(['POST'], 'News/Album/Get', 'ConAdminNews::NewsAlbumGet', ['filter' => 'permission:Admin']);
     $routes->match(['POST'], 'News/Album/Delete', 'ConAdminNews::NewsAlbumDelete', ['filter' => 'permission:Admin']);
     $routes->match(['GET', 'POST'], 'News/CleanUnusedImages', 'ConAdminNews::CleanUnusedImages', ['filter' => 'permission:Admin']);
+    $routes->match(['GET', 'POST'], 'News/SyncImagesStatus', 'ConAdminNews::SyncImagesStatus', ['filter' => 'permission:Admin']);
+    $routes->match(['POST'], 'News/SyncImagesBatch', 'ConAdminNews::SyncImagesBatch', ['filter' => 'permission:Admin']);
     
     // Admin Banner
     $routes->get('Banner','ConAdminBanner::BannerMain', ['filter' => 'permission:Admin']);
@@ -135,9 +139,6 @@ $routes->group('Admin', ['filter' => 'permission', 'namespace' => 'App\Controlle
     // Admin Welcome Modal
     $routes->get('WelcomeModal', 'ConAdminWelcomeModal::index', ['filter' => 'permission:Admin']);
     $routes->match(['GET', 'POST'], 'WelcomeModal/Update', 'ConAdminWelcomeModal::updateSetting', ['filter' => 'permission:Admin']);
-
-    // Admin Student List
-    $routes->get('Student', 'ConAdminStudent::index', ['filter' => 'permission:Admin']);
 });
 
 

@@ -78,7 +78,21 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
 
     <!-- Modern Luxury Theme Extension -->
-    <link rel="stylesheet" href="<?=base_url('assets/admin/assets/css/admin-luxury-theme.css?v=1.0')?>" />
+    <link rel="stylesheet" href="<?=base_url('assets/admin/assets/css/admin-luxury-theme.css?v=1.4')?>" />
+
+    <style>
+        /* Ensure SweetAlert2 is always on top */
+        .swal2-container {
+            z-index: 999999 !important;
+        }
+    </style>
+
+    <script>
+        // Disable CI4 Debug Toolbar Hot Reload to prevent EventSource errors in Apache/Docker
+        if (document.cookie.indexOf('debug-hot-reload') !== -1) {
+            document.cookie = 'debug-hot-reload=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; samesite=Lax;';
+        }
+    </script>
 
     <?= $this->renderSection('styles') ?>
     <?= $this->renderSection('css') ?>

@@ -26,7 +26,7 @@
         position: relative;
         padding: 60px 0 75px;
         background: linear-gradient(135deg, rgba(26, 42, 77, 0.94) 0%, rgba(13, 30, 65, 0.9) 100%), 
-                    url(<?= base_url('uploads/news/'.$news->news_img) ?>) center center no-repeat;
+                    url(<?= news_image_url($news->news_img, 'cover') ?>) center center no-repeat;
         background-size: cover;
         border-radius: 0 0 36px 36px;
         color: #fff;
@@ -799,7 +799,7 @@
                 <?php if (!empty($news->news_img)): ?>
                     <div class="news-feature-img-wrapper">
                         <img class="news-feature-img" 
-                             src="<?= base_url('uploads/news/'.$news->news_img) ?>" 
+                             src="<?= news_image_url($news->news_img, 'cover') ?>" 
                              onerror="this.onerror=null;this.src='https://placehold.co/1200x630?text=SKJ+NEWS'; this.classList.add('d-none');" 
                              alt="<?= esc($news->news_topic) ?>">
                     </div>
@@ -810,6 +810,26 @@
                     <div class="ql-editor p-0">
                         <?php 
                             $content = $news->news_content;
+
+                            // 0. Auto-rewrite local uploads/news images to remote cloud server if deleted locally
+                            $remoteBase = (function_exists('env') ? env('upload.server.baseurl') : '') ?: 'https://skj.nsnpao.go.th/uploads/';
+                            $remoteBase = rtrim($remoteBase, '/') . '/';
+                            $content = preg_replace_callback('/<img\s+[^>]*src=[\'"]([^\'"]+)[\'"][^>]*>/i', function($m) use ($remoteBase) {
+                                $imgTag = $m[0];
+                                $src = $m[1];
+                                if (strpos($src, 'uploads/news/') !== false) {
+                                    $parts = explode('uploads/news/', $src);
+                                    $rel = end($parts);
+                                    $rel = explode('?', $rel)[0];
+                                    $rel = explode('#', $rel)[0];
+                                    $localPath = FCPATH . 'uploads/news/' . $rel;
+                                    if (!is_file($localPath)) {
+                                        $newSrc = $remoteBase . 'news/' . ltrim($rel, '/');
+                                        return str_replace($src, $newSrc, $imgTag);
+                                    }
+                                }
+                                return $imgTag;
+                            }, $content);
 
                             // 1. Remove all redundant empty paragraphs (<p><br></p> or <p>&nbsp;</p>)
                             $content = preg_replace('/<p[^>]*>(\s*<br\s*\/?>|\s*&nbsp;|\s*)*<\/p>/i', '', $content);
@@ -946,12 +966,12 @@
                     <div class="row g-2 g-md-3">
                         <?php foreach ($NewsAlbum as $img): ?>
                             <div class="col-6 col-md-4">
-                                <a href="<?= base_url('uploads/news/album/'.$img['news_img_name']) ?>" 
+                                <a href="<?= news_image_url($img['news_img_name'], 'album') ?>" 
                                    data-lightbox="news-album" 
                                    data-title="<?= esc($news->news_topic) ?>"
                                    class="text-decoration-none">
                                     <div class="album-item">
-                                        <img src="<?= base_url('uploads/news/album/'.$img['news_img_name']) ?>" 
+                                        <img src="<?= news_image_url($img['news_img_name'], 'album') ?>" 
                                              loading="lazy"
                                              alt="<?= esc($news->news_topic) ?>">
                                         <div class="album-overlay">
@@ -999,7 +1019,7 @@
                         <?php foreach ($NewsLatest as $v_NewsLatest):?>
                             <div class="recent-news-item">
                                 <img class="recent-news-img" 
-                                     src="<?= base_url('uploads/news/'.$v_NewsLatest->news_img) ?>" 
+                                     src="<?= news_image_url($v_NewsLatest->news_img, 'cover') ?>" 
                                      onerror="this.onerror=null;this.src='https://placehold.co/150x150?text=SKJ';"
                                      alt="<?= esc($v_NewsLatest->news_topic) ?>">
                                 <div class="recent-news-info">

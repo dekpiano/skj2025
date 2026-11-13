@@ -89,17 +89,35 @@ class ConNews extends BaseController
 
     public function loadMoreNews(){
         $perPage = 10; // จำนวนข้อมูลต่อหน้า
-        $page = $this->request->getVar('page') ? $this->request->getVar('page') : 1;
+        $page = max(1, (int)($this->request->getVar('page') ?: 1));
+        $search = trim((string)($this->request->getVar('search') ?? ''));
 
         // คำนวณ offset สำหรับ pagination
         $offset = ($page - 1) * $perPage;
 
-        // ดึงข้อมูลจากฐานข้อมูล
-       
-        $items = $this->NewsModel->limit($perPage, $offset)->orderBy('news_date', 'DESC')->get()->getResultArray();
+        // Query ข้อมูล
+        $builder = $this->NewsModel->orderBy('news_date', 'DESC');
+        if ($search !== '') {
+            $builder->groupStart()
+                ->like('news_topic', $search)
+                ->orLike('news_category', $search)
+                ->orLike('news_content', $search)
+                ->groupEnd();
+        }
+
+        // นับจำนวนทั้งหมดตามเงื่อนไขค้นหา
+        $countBuilder = clone $builder;
+        $totalItems = $countBuilder->countAllResults(false);
+
+        $items = $builder->limit($perPage, $offset)->get()->getResultArray();
         
-        // นับจำนวนทั้งหมดในตาราง
-        $totalItems =$this->NewsModel->countAllResults();
+        $dateThai = new \App\Libraries\Datethai();
+        foreach ($items as &$item) {
+            $item['news_img_url'] = news_image_url($item['news_img'] ?? '', 'cover');
+            $item['detail_url']   = base_url('News/Detail/' . $item['news_id']);
+            $item['formatted_date'] = !empty($item['news_date']) ? $dateThai->thai_date_fullmonth(strtotime($item['news_date'])) : '';
+        }
+        unset($item);
 
         $data = [
             'items' => $items,
@@ -143,7 +161,7 @@ class ConNews extends BaseController
 
         $page_data['title'] = $page_data['news']->news_topic ." | สกจ. ประชาสัมพันธ์";
         $page_data['description'] = mb_strimwidth(strip_tags($page_data['news']->news_content),0,100,'...');
-        $page_data['banner'] = base_url('uploads/news/'.$page_data['news']->news_img);
+        $page_data['banner'] = news_image_url($page_data['news']->news_img, 'cover');
 
         $dataUpdate = [
             'news_view' => ($page_data['news']->news_view + 1)
@@ -174,6 +192,12 @@ class ConNews extends BaseController
     {
         $searchTerm = $this->request->getGet('term');
         $suggestions = $this->NewsModel->getNewsSuggestions($searchTerm);
+        if (!empty($suggestions)) {
+            foreach ($suggestions as &$item) {
+                $item['detail_url'] = base_url('News/Detail/' . $item['news_id']);
+            }
+            unset($item);
+        }
         return $this->response->setJSON($suggestions);
     }
 

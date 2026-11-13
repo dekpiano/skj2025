@@ -94,17 +94,71 @@
                 position: relative;
                 height: 240px;
                 overflow: hidden;
+                background-color: #f1f5f9;
+            }
+
+            /* Skeleton Shimmer when image is downloading */
+            .news-card-img-wrapper.is-loading {
+                background: linear-gradient(90deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%);
+                background-size: 200% 100%;
+                animation: img-skeleton-shimmer 1.6s infinite ease-in-out;
+            }
+
+            @keyframes img-skeleton-shimmer {
+                0% { background-position: 200% 0; }
+                100% { background-position: -200% 0; }
+            }
+
+            /* Modern centered loading placeholder */
+            .news-card-img-loader {
+                position: absolute;
+                inset: 0;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                background: rgba(248, 249, 250, 0.7);
+                backdrop-filter: blur(4px);
+                z-index: 1;
+                pointer-events: none;
+                transition: opacity 0.35s ease, visibility 0.35s ease;
+            }
+
+            .news-card-img-loader .loader-spinner {
+                width: 34px;
+                height: 34px;
+                border: 3px solid rgba(36, 159, 253, 0.18);
+                border-top-color: var(--primary, #249ffd);
+                border-radius: 50%;
+                animation: img-spin 0.8s linear infinite;
+            }
+
+            .news-card-img-loader .loader-text {
+                font-size: 0.72rem;
+                font-weight: 600;
+                color: #64748b;
+                letter-spacing: 0.5px;
+            }
+
+            @keyframes img-spin {
+                to { transform: rotate(360deg); }
             }
 
             .news-card-img {
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
-                transition: transform 0.6s ease;
+                opacity: 0;
+                transition: opacity 0.45s ease, transform 0.6s ease;
             }
 
-            .news-card:hover .news-card-img {
-                transform: scale(1.1);
+            .news-card-img.is-loaded {
+                opacity: 1;
+            }
+
+            .news-card:hover .news-card-img.is-loaded {
+                transform: scale(1.08);
             }
 
             .news-card-badge {

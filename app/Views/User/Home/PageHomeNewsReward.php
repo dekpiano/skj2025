@@ -325,7 +325,7 @@
                     <div class="reward-glass-card">
                         <!-- Image Container with Badges -->
                         <div class="reward-img-wrap">
-                            <img src="<?=base_url('uploads/news/'.$v_newsReward->news_img)?>" alt="<?= $v_newsReward->news_topic ?>" loading="lazy">
+                            <img src="<?=news_image_url($v_newsReward->news_img, 'cover')?>" alt="<?= $v_newsReward->news_topic ?>" loading="lazy">
                             <div class="reward-img-fade"></div>
                             
                             <!-- Trophy Badge -->
